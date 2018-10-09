@@ -1,0 +1,736 @@
+REMARK   1 PARSED BY ALIMAP 0.78 (Apr 2001)
+REMARK   1  FILTERS APPLIED:  (1 -- ENABLED, 0 -- DISABLED)
+REMARK   1   ANISOU     RECORD      FILTER -- 1
+REMARK   1   ALTERNATE  LOCATION    FILTER -- 1
+REMARK   1   INCOMPLETE MAINCHAIN   FILTER -- 1
+REMARK   1   HYDROGEN   COORDINATES FILTER -- 1
+REMARK   1   STRANGE    COORDINATES FILTER -- 1
+REMARK   1   PCA ACE FOR TITLE CONV FILTER -- 1
+REMARK   1   HET_Before_ATOM_Remove FILTER -- 0
+HEADER    ELECTRON TRANSPORT                      14-NOV-94   1FXR      1FXR   2
+COMPND    FERREDOXIN I (4FE-4S)                                         1FXR   3
+SOURCE    SULFATE-REDUCING BACTERIA (DESULFOVIBRIO AFRICANUS)           1FXR   4
+SOURCE   2 STRAIN: BENGHAZI                                             1FXR   5
+AUTHOR    M.FREY,M.ROTH                                                 1FXR   6
+REVDAT   1   26-JAN-95 1FXR    0                                        1FXR   7
+JRNL        AUTH   A.SERY,D.HOUSSET,L.SERRE,J.BONICEL,C.HATCHIKIAN,     1FXR   8
+JRNL        AUTH 2 M.FREY,M.ROTH                                        1FXR   9
+JRNL        TITL   CRYSTAL STRUCTURE OF THE FERREDOXIN I FROM           1FXR  10
+JRNL        TITL 2 DESULFOVIBRIO AFRICANUS AT 2.3 ANGSTROMS RESOLUTION  1FXR  11
+JRNL        REF    TO BE PUBLISHED                                      1FXR  12
+JRNL        REFN   ASTM                                           0353  1FXR  13
+REMARK   1                                                              1FXR  14
+REMARK   2                                                              1FXR  15
+REMARK   2 RESOLUTION. 2.3  ANGSTROMS.                                  1FXR  16
+REMARK   3                                                              1FXR  17
+REMARK   3 REFINEMENT.                                                  1FXR  18
+REMARK   3   PROGRAM                    X-PLOR                          1FXR  19
+REMARK   3   AUTHORS                    BRUNGER                         1FXR  20
+REMARK   3   R VALUE                    0.182                           1FXR  21
+REMARK   3   FREE R VALUE               0.227                           1FXR  22
+REMARK   3   ESD FROM LUZZATI PLOT      0.22   ANGSTROMS                1FXR  23
+REMARK   3   RMSD BOND DISTANCES        0.013  ANGSTROMS                1FXR  24
+REMARK   3   RMSD BOND ANGLES           2.93   DEGREES                  1FXR  25
+REMARK   3   RMSD PLANE RESTRAINT       1.22   DEGREES                  1FXR  26
+REMARK   3                                                              1FXR  27
+REMARK   3   NUMBER OF REFLECTIONS      4815                            1FXR  28
+REMARK   3   RESOLUTION RANGE      10.0 - 2.3  ANGSTROMS                1FXR  29
+REMARK   3   DATA CUTOFF                2.     SIGMA(F)                 1FXR  30
+REMARK   3                                                              1FXR  31
+REMARK   3   NUMBER OF PROTEIN ATOMS                       1000         1FXR  32
+REMARK   3   NUMBER OF NUCLEIC ACID ATOMS                     0         1FXR  33
+REMARK   3   NUMBER OF SOLVENT ATOMS                         70         1FXR  34
+REMARK   3   NUMBER OF HETEROGEN ATOMS                       21         1FXR  35
+REMARK   3                                                              1FXR  36
+REMARK   3 THE ANOMALOUS SIGNAL FROM IRON WAS USED IN ORDER TO IMPROVE  1FXR  37
+REMARK   3 THE PHASES FROM MOLECULAR REPLACEMENT SOLUTION.              1FXR  38
+REMARK   4                                                              1FXR  39
+REMARK   4 THE TRANSFORMATION PRESENTED ON *MTRIX* RECORDS BELOW WILL   1FXR  40
+REMARK   4 YIELD APPROXIMATE COORDINATES FOR CHAIN *B* WHEN APPLIED TO  1FXR  41
+REMARK   4 CHAIN *A* RESIDUES 4 - 60 WITH AN RMSD OF 0.23 ANGSTROMS.    1FXR  42
+REMARK   5                                                              1FXR  43
+REMARK   5 ORIGINAL DEPOSITION REVISED PRIOR TO RELEASE                 1FXR  44
+REMARK   5    TRACKING NUMBER: T5568, DATE REVISED: 18-NOV-94           1FXR  45
+REMARK   5                                                              1FXR  46
+REMARK   5 CROSS REFERENCE TO SEQUENCE DATABASE                         1FXR  47
+REMARK   5 SWISS-PROT ENTRY NAME       PDB ENTRY CHAIN NAME             1FXR  48
+REMARK   5    FER1_DESAF                       A                        1FXR  49
+REMARK   5    FER1_DESAF                       B                        1FXR  50
+REMARK   5                                                              1FXR  51
+REMARK   5 C-TERMINUS RESIDUES OF CHAIN A NOT FOUND IN THE SEQUENCE     1FXR  52
+REMARK   5        GLU  A     62                                         1FXR  53
+REMARK   5        ASP  A     63                                         1FXR  54
+REMARK   5        GLU  A     64                                         1FXR  55
+REMARK   5        GLU  B     62                                         1FXR  56
+REMARK   5        ASP  B     63                                         1FXR  57
+REMARK   5        GLU  B     64                                         1FXR  58
+REMARK   5                                                              1FXR  59
+REMARK   5 SEQUENCE ADVISORY NOTICE                                     1FXR  60
+REMARK   5      DIFFERENCE BETWEEN SWISS-PROT AND PDB SEQUENCE.         1FXR  61
+REMARK   5                                                              1FXR  62
+REMARK   5      SWISS-PROT ENTRY NAME: FER1_DESAF                       1FXR  63
+REMARK   5                                                              1FXR  64
+REMARK   5      SWISS-PROT RESIDUE      PDB SEQRES                      1FXR  65
+REMARK   5                                                              1FXR  66
+REMARK   5        NAME   NUMBER         NAME   CHAIN  SEQ/INSERT CODE   1FXR  67
+REMARK   5        SER       58          CYS     A       58              1FXR  68
+REMARK   5        GLU       60          HIS     A       60              1FXR  69
+REMARK   5        GLU       61          TRP     A       61              1FXR  70
+REMARK   5        SER       58          CYS     B       58              1FXR  71
+REMARK   5        GLU       60          HIS     B       60              1FXR  72
+REMARK   5        GLU       61          TRP     B       61              1FXR  73
+REMARK   5                                                              1FXR  74
+REMARK   5 THE DIFFERENCES BETWEEN THE SEQUENCE PRESENTED IN THIS       1FXR  75
+REMARK   5 ENTRY AND THAT PRESENTED IN SWISS-PROT ENTRY FER1_DESAF      1FXR  76
+REMARK   5 REPRESENTS A REDETERMINATION OF THE SEQUENCE IN PARALLEL     1FXR  77
+REMARK   5 WITH THE SOLUTION OF THE STRUCTURE DESCRIBED IN THE JRNL     1FXR  78
+REMARK   5 REFERENCE ABOVE.                                             1FXR  79
+SEQRES   1 A   64  ALA ARG LYS PHE TYR VAL ASP GLN ASP GLU CYS ILE ALA  1FXR  80
+SEQRES   2 A   64  CYS GLU SER CYS VAL GLU ILE ALA PRO GLY ALA PHE ALA  1FXR  81
+SEQRES   3 A   64  MET ASP PRO GLU ILE GLU LYS ALA TYR VAL LYS ASP VAL  1FXR  82
+SEQRES   4 A   64  GLU GLY ALA SER GLN GLU GLU VAL GLU GLU ALA MET ASP  1FXR  83
+SEQRES   5 A   64  THR CYS PRO VAL GLN CYS ILE HIS TRP GLU ASP GLU      1FXR  84
+SEQRES   1 B   64  ALA ARG LYS PHE TYR VAL ASP GLN ASP GLU CYS ILE ALA  1FXR  85
+SEQRES   2 B   64  CYS GLU SER CYS VAL GLU ILE ALA PRO GLY ALA PHE ALA  1FXR  86
+SEQRES   3 B   64  MET ASP PRO GLU ILE GLU LYS ALA TYR VAL LYS ASP VAL  1FXR  87
+SEQRES   4 B   64  GLU GLY ALA SER GLN GLU GLU VAL GLU GLU ALA MET ASP  1FXR  88
+SEQRES   5 B   64  THR CYS PRO VAL GLN CYS ILE HIS TRP GLU ASP GLU      1FXR  89
+HET    FS4  A  65       8     IRON/SULFUR CLUSTER                       1FXR  90
+HET    FS4  B  65       8     IRON/SULFUR CLUSTER                       1FXR  91
+HET    SO4      1       5     SULFATE                                   1FXR  92
+FORMUL   3  FS4    2(FE4 S4)                                            1FXR  93
+FORMUL   4  SO4    O4 S1 --                                             1FXR  94
+FORMUL   5  HOH   *70(H2 O1)                                            1FXR  95
+CRYST1   96.600   58.100   20.700  90.00  90.00  90.00 P 21 21 2     8  1FXR  96
+ORIGX1      1.000000  0.000000  0.000000        0.00000                 1FXR  97
+ORIGX2      0.000000  1.000000  0.000000        0.00000                 1FXR  98
+ORIGX3      0.000000  0.000000  1.000000        0.00000                 1FXR  99
+SCALE1      0.010352  0.000000  0.000000        0.00000                 1FXR 100
+SCALE2      0.000000  0.017212  0.000000        0.00000                 1FXR 101
+SCALE3      0.000000  0.000000  0.048309        0.00000                 1FXR 102
+MTRIX1   1 -0.999092  0.042575  0.001410      -21.23436    1            1FXR 103
+MTRIX2   1  0.042595  0.998872  0.020999        0.23631    1            1FXR 104
+MTRIX3   1 -0.000514  0.021040 -0.999779       20.56958    1            1FXR 105
+ATOM      1  N   ALA A   1      -5.183   4.912  16.158  1.00  7.03      1FXR 106
+ATOM      2  CA  ALA A   1      -4.909   5.261  14.785  1.00  7.27      1FXR 107
+ATOM      3  C   ALA A   1      -3.462   4.829  14.608  1.00  6.95      1FXR 108
+ATOM      4  O   ALA A   1      -2.679   4.968  15.551  1.00  8.51      1FXR 109
+ATOM      5  CB  ALA A   1      -4.951   6.768  14.532  1.00  5.35      1FXR 110
+ATOM      6  N   ARG A   2      -3.094   4.296  13.451  1.00  6.90      1FXR 111
+ATOM      7  CA  ARG A   2      -1.720   3.913  13.164  1.00  6.13      1FXR 112
+ATOM      8  C   ARG A   2      -0.957   5.237  13.268  1.00  6.76      1FXR 113
+ATOM      9  O   ARG A   2      -1.534   6.252  12.861  1.00  8.10      1FXR 114
+ATOM     10  CB  ARG A   2      -1.700   3.299  11.744  1.00  4.59      1FXR 115
+ATOM     11  CG  ARG A   2      -0.473   2.517  11.315  1.00  2.35      1FXR 116
+ATOM     12  CD  ARG A   2      -0.643   2.167   9.842  1.00  3.56      1FXR 117
+ATOM     13  NE  ARG A   2       0.623   1.700   9.273  1.00  4.11      1FXR 118
+ATOM     14  CZ  ARG A   2       0.827   1.478   7.960  1.00  5.12      1FXR 119
+ATOM     15  NH1 ARG A   2      -0.134   1.700   7.042  1.00  6.17      1FXR 120
+ATOM     16  NH2 ARG A   2       2.005   0.971   7.569  1.00  3.20      1FXR 121
+ATOM     17  N   LYS A   3       0.238   5.337  13.845  1.00  6.86      1FXR 122
+ATOM     18  CA  LYS A   3       0.889   6.639  14.009  1.00  7.25      1FXR 123
+ATOM     19  C   LYS A   3       1.542   7.108  12.711  1.00  5.97      1FXR 124
+ATOM     20  O   LYS A   3       2.000   6.285  11.906  1.00  5.62      1FXR 125
+ATOM     21  CB  LYS A   3       1.974   6.585  15.076  1.00  9.03      1FXR 126
+ATOM     22  CG  LYS A   3       1.957   7.810  15.972  1.00 15.86      1FXR 127
+ATOM     23  CD  LYS A   3       3.327   8.094  16.597  1.00 20.70      1FXR 128
+ATOM     24  CE  LYS A   3       4.156   8.911  15.578  1.00 25.07      1FXR 129
+ATOM     25  NZ  LYS A   3       5.307   9.583  16.165  1.00 24.92      1FXR 130
+ATOM     26  N   PHE A   4       1.593   8.431  12.522  1.00  4.06      1FXR 131
+ATOM     27  CA  PHE A   4       2.185   9.066  11.366  1.00  2.29      1FXR 132
+ATOM     28  C   PHE A   4       2.726  10.386  11.856  1.00  2.00      1FXR 133
+ATOM     29  O   PHE A   4       2.313  10.850  12.914  1.00  2.00      1FXR 134
+ATOM     30  CB  PHE A   4       1.154   9.299  10.244  1.00  2.00      1FXR 135
+ATOM     31  CG  PHE A   4      -0.176   9.988  10.592  1.00  2.92      1FXR 136
+ATOM     32  CD1 PHE A   4      -1.228   9.264  11.118  1.00  2.00      1FXR 137
+ATOM     33  CD2 PHE A   4      -0.343  11.344  10.377  1.00  3.62      1FXR 138
+ATOM     34  CE1 PHE A   4      -2.420   9.878  11.431  1.00  3.83      1FXR 139
+ATOM     35  CE2 PHE A   4      -1.545  11.954  10.695  1.00  4.24      1FXR 140
+ATOM     36  CZ  PHE A   4      -2.584  11.226  11.225  1.00  3.96      1FXR 141
+ATOM     37  N   TYR A   5       3.661  10.983  11.123  1.00  2.58      1FXR 142
+ATOM     38  CA  TYR A   5       4.309  12.244  11.480  1.00  3.12      1FXR 143
+ATOM     39  C   TYR A   5       4.927  12.910  10.227  1.00  2.00      1FXR 144
+ATOM     40  O   TYR A   5       5.238  12.195   9.254  1.00  2.00      1FXR 145
+ATOM     41  CB  TYR A   5       5.406  11.952  12.576  1.00  2.00      1FXR 146
+ATOM     42  CG  TYR A   5       6.584  11.127  12.081  1.00  2.00      1FXR 147
+ATOM     43  CD1 TYR A   5       6.551   9.740  12.115  1.00  2.47      1FXR 148
+ATOM     44  CD2 TYR A   5       7.660  11.796  11.525  1.00  3.56      1FXR 149
+ATOM     45  CE1 TYR A   5       7.599   9.031  11.556  1.00  3.60      1FXR 150
+ATOM     46  CE2 TYR A   5       8.709  11.094  10.973  1.00  3.47      1FXR 151
+ATOM     47  CZ  TYR A   5       8.663   9.722  10.993  1.00  4.98      1FXR 152
+ATOM     48  OH  TYR A   5       9.701   9.049  10.397  1.00  4.33      1FXR 153
+ATOM     49  N   VAL A   6       5.100  14.240  10.215  1.00  2.00      1FXR 154
+ATOM     50  CA  VAL A   6       5.770  14.942   9.130  1.00  2.83      1FXR 155
+ATOM     51  C   VAL A   6       7.274  15.013   9.407  1.00  3.98      1FXR 156
+ATOM     52  O   VAL A   6       7.685  15.246  10.550  1.00  5.37      1FXR 157
+ATOM     53  CB  VAL A   6       5.205  16.373   8.986  1.00  2.54      1FXR 158
+ATOM     54  CG1 VAL A   6       5.991  17.222   7.977  1.00  2.00      1FXR 159
+ATOM     55  CG2 VAL A   6       3.762  16.248   8.487  1.00  2.00      1FXR 160
+ATOM     56  N   ASP A   7       8.152  14.771   8.436  1.00  3.11      1FXR 161
+ATOM     57  CA  ASP A   7       9.584  14.964   8.625  1.00  2.42      1FXR 162
+ATOM     58  C   ASP A   7       9.706  16.376   8.081  1.00  2.86      1FXR 163
+ATOM     59  O   ASP A   7       9.716  16.663   6.872  1.00  2.00      1FXR 164
+ATOM     60  CB  ASP A   7      10.415  13.973   7.781  1.00  4.00      1FXR 165
+ATOM     61  CG  ASP A   7      11.920  14.227   7.617  1.00  2.63      1FXR 166
+ATOM     62  OD1 ASP A   7      12.502  15.043   8.315  1.00  2.20      1FXR 167
+ATOM     63  OD2 ASP A   7      12.528  13.591   6.770  1.00  2.00      1FXR 168
+ATOM     64  N   GLN A   8       9.743  17.280   9.050  1.00  3.47      1FXR 169
+ATOM     65  CA  GLN A   8       9.779  18.704   8.796  1.00  4.80      1FXR 170
+ATOM     66  C   GLN A   8      11.068  19.180   8.159  1.00  4.94      1FXR 171
+ATOM     67  O   GLN A   8      11.020  20.189   7.465  1.00  5.28      1FXR 172
+ATOM     68  CB  GLN A   8       9.517  19.476  10.096  1.00  3.84      1FXR 173
+ATOM     69  CG  GLN A   8       8.013  19.407  10.398  1.00  6.96      1FXR 174
+ATOM     70  CD  GLN A   8       7.594  20.081  11.683  1.00  7.51      1FXR 175
+ATOM     71  OE1 GLN A   8       8.314  20.019  12.663  1.00 13.29      1FXR 176
+ATOM     72  NE2 GLN A   8       6.467  20.754  11.800  1.00  8.78      1FXR 177
+ATOM     73  N   ASP A   9      12.185  18.442   8.264  1.00  5.77      1FXR 178
+ATOM     74  CA  ASP A   9      13.413  18.823   7.571  1.00  6.33      1FXR 179
+ATOM     75  C   ASP A   9      13.268  18.949   6.065  1.00  7.61      1FXR 180
+ATOM     76  O   ASP A   9      13.878  19.816   5.435  1.00  9.40      1FXR 181
+ATOM     77  CB  ASP A   9      14.529  17.822   7.786  1.00  7.01      1FXR 182
+ATOM     78  CG  ASP A   9      15.422  18.120   8.970  1.00  8.68      1FXR 183
+ATOM     79  OD1 ASP A   9      15.858  19.252   9.093  1.00 14.24      1FXR 184
+ATOM     80  OD2 ASP A   9      15.694  17.225   9.760  1.00 13.34      1FXR 185
+ATOM     81  N   GLU A  10      12.415  18.057   5.571  1.00  7.37      1FXR 186
+ATOM     82  CA  GLU A  10      12.167  17.835   4.178  1.00  7.71      1FXR 187
+ATOM     83  C   GLU A  10      10.976  18.604   3.619  1.00  9.70      1FXR 188
+ATOM     84  O   GLU A  10      10.937  18.911   2.421  1.00 11.28      1FXR 189
+ATOM     85  CB  GLU A  10      12.037  16.339   4.119  1.00  6.75      1FXR 190
+ATOM     86  CG  GLU A  10      12.168  15.701   2.772  1.00  6.66      1FXR 191
+ATOM     87  CD  GLU A  10      13.474  15.932   2.034  1.00  9.32      1FXR 192
+ATOM     88  OE1 GLU A  10      14.535  16.011   2.655  1.00 10.36      1FXR 193
+ATOM     89  OE2 GLU A  10      13.428  15.988   0.807  1.00  8.24      1FXR 194
+ATOM     90  N   CYS A  11      10.037  18.966   4.507  1.00  9.38      1FXR 195
+ATOM     91  CA  CYS A  11       8.794  19.630   4.142  1.00  6.08      1FXR 196
+ATOM     92  C   CYS A  11       8.957  20.893   3.295  1.00  6.53      1FXR 197
+ATOM     93  O   CYS A  11       9.512  21.871   3.770  1.00  6.14      1FXR 198
+ATOM     94  CB  CYS A  11       8.010  19.990   5.432  1.00  2.71      1FXR 199
+ATOM     95  SG  CYS A  11       6.363  20.725   5.140  1.00  2.00      1FXR 200
+ATOM     96  N   ILE A  12       8.343  20.966   2.112  1.00  6.34      1FXR 201
+ATOM     97  CA  ILE A  12       8.419  22.136   1.246  1.00  4.64      1FXR 202
+ATOM     98  C   ILE A  12       7.286  23.162   1.422  1.00  5.49      1FXR 203
+ATOM     99  O   ILE A  12       7.088  24.067   0.613  1.00  7.49      1FXR 204
+ATOM    100  CB  ILE A  12       8.565  21.426  -0.131  1.00  3.73      1FXR 205
+ATOM    101  CG1 ILE A  12       9.963  21.828  -0.530  1.00  5.35      1FXR 206
+ATOM    102  CG2 ILE A  12       7.540  21.726  -1.216  1.00  3.42      1FXR 207
+ATOM    103  CD1 ILE A  12      11.118  21.059   0.149  1.00  2.27      1FXR 208
+ATOM    104  N   ALA A  13       6.540  23.118   2.527  1.00  4.58      1FXR 209
+ATOM    105  CA  ALA A  13       5.351  23.939   2.755  1.00  4.49      1FXR 210
+ATOM    106  C   ALA A  13       4.318  24.089   1.648  1.00  6.29      1FXR 211
+ATOM    107  O   ALA A  13       3.584  25.074   1.608  1.00  8.78      1FXR 212
+ATOM    108  CB  ALA A  13       5.757  25.351   3.177  1.00  3.73      1FXR 213
+ATOM    109  N   CYS A  14       4.198  23.162   0.685  1.00  6.37      1FXR 214
+ATOM    110  CA  CYS A  14       3.131  23.271  -0.324  1.00  6.42      1FXR 215
+ATOM    111  C   CYS A  14       1.682  23.441   0.151  1.00  7.30      1FXR 216
+ATOM    112  O   CYS A  14       0.816  23.848  -0.617  1.00  5.96      1FXR 217
+ATOM    113  CB  CYS A  14       3.117  22.037  -1.242  1.00  5.87      1FXR 218
+ATOM    114  SG  CYS A  14       2.786  20.496  -0.335  1.00  5.32      1FXR 219
+ATOM    115  N   GLU A  15       1.391  23.027   1.394  1.00  8.78      1FXR 220
+ATOM    116  CA  GLU A  15       0.064  23.012   1.995  1.00  8.44      1FXR 221
+ATOM    117  C   GLU A  15      -0.941  21.986   1.509  1.00  6.20      1FXR 222
+ATOM    118  O   GLU A  15      -2.052  21.950   2.065  1.00  5.03      1FXR 223
+ATOM    119  CB  GLU A  15      -0.565  24.407   1.870  1.00 11.23      1FXR 224
+ATOM    120  CG  GLU A  15       0.247  25.477   2.598  1.00 11.54      1FXR 225
+ATOM    121  CD  GLU A  15      -0.157  26.904   2.299  1.00 15.01      1FXR 226
+ATOM    122  OE1 GLU A  15      -1.338  27.182   2.063  1.00 17.69      1FXR 227
+ATOM    123  OE2 GLU A  15       0.737  27.745   2.307  1.00 16.34      1FXR 228
+ATOM    124  N   SER A  16      -0.621  21.093   0.559  1.00  4.20      1FXR 229
+ATOM    125  CA  SER A  16      -1.555  20.054   0.118  1.00  4.95      1FXR 230
+ATOM    126  C   SER A  16      -2.159  19.167   1.200  1.00  3.62      1FXR 231
+ATOM    127  O   SER A  16      -3.337  18.833   1.121  1.00  3.32      1FXR 232
+ATOM    128  CB  SER A  16      -0.835  19.216  -0.905  1.00  4.76      1FXR 233
+ATOM    129  OG  SER A  16      -0.251  20.207  -1.756  1.00 12.30      1FXR 234
+ATOM    130  N   CYS A  17      -1.407  18.770   2.239  1.00  3.00      1FXR 235
+ATOM    131  CA  CYS A  17      -1.923  17.986   3.371  1.00  3.55      1FXR 236
+ATOM    132  C   CYS A  17      -2.926  18.670   4.283  1.00  5.06      1FXR 237
+ATOM    133  O   CYS A  17      -3.811  18.029   4.849  1.00  5.17      1FXR 238
+ATOM    134  CB  CYS A  17      -0.773  17.494   4.264  1.00  5.01      1FXR 239
+ATOM    135  SG  CYS A  17       0.419  18.761   4.829  1.00  3.12      1FXR 240
+ATOM    136  N   VAL A  18      -2.768  19.981   4.424  1.00  5.23      1FXR 241
+ATOM    137  CA  VAL A  18      -3.655  20.791   5.239  1.00  8.09      1FXR 242
+ATOM    138  C   VAL A  18      -4.926  20.973   4.392  1.00  9.28      1FXR 243
+ATOM    139  O   VAL A  18      -6.034  21.057   4.931  1.00  8.92      1FXR 244
+ATOM    140  CB  VAL A  18      -2.956  22.147   5.558  1.00  8.51      1FXR 245
+ATOM    141  CG1 VAL A  18      -3.924  23.037   6.304  1.00 10.42      1FXR 246
+ATOM    142  CG2 VAL A  18      -1.726  21.954   6.441  1.00  5.84      1FXR 247
+ATOM    143  N   GLU A  19      -4.810  21.040   3.055  1.00  9.84      1FXR 248
+ATOM    144  CA  GLU A  19      -5.991  21.057   2.196  1.00 10.44      1FXR 249
+ATOM    145  C   GLU A  19      -6.718  19.707   2.192  1.00  7.95      1FXR 250
+ATOM    146  O   GLU A  19      -7.941  19.662   2.287  1.00  7.09      1FXR 251
+ATOM    147  CB  GLU A  19      -5.628  21.370   0.766  1.00 14.07      1FXR 252
+ATOM    148  CG  GLU A  19      -5.211  22.820   0.567  1.00 25.23      1FXR 253
+ATOM    149  CD  GLU A  19      -4.822  23.119  -0.887  1.00 31.89      1FXR 254
+ATOM    150  OE1 GLU A  19      -5.698  23.049  -1.773  1.00 33.74      1FXR 255
+ATOM    151  OE2 GLU A  19      -3.641  23.437  -1.114  1.00 34.13      1FXR 256
+ATOM    152  N   ILE A  20      -6.036  18.569   2.084  1.00  4.71      1FXR 257
+ATOM    153  CA  ILE A  20      -6.702  17.274   2.035  1.00  4.45      1FXR 258
+ATOM    154  C   ILE A  20      -7.230  16.799   3.392  1.00  6.08      1FXR 259
+ATOM    155  O   ILE A  20      -8.317  16.203   3.457  1.00  6.46      1FXR 260
+ATOM    156  CB  ILE A  20      -5.696  16.253   1.447  1.00  3.92      1FXR 261
+ATOM    157  CG1 ILE A  20      -5.359  16.629   0.000  1.00  3.28      1FXR 262
+ATOM    158  CG2 ILE A  20      -6.279  14.858   1.528  1.00  2.24      1FXR 263
+ATOM    159  CD1 ILE A  20      -4.153  15.880  -0.598  1.00  2.00      1FXR 264
+ATOM    160  N   ALA A  21      -6.465  17.047   4.477  1.00  4.56      1FXR 265
+ATOM    161  CA  ALA A  21      -6.768  16.518   5.789  1.00  3.16      1FXR 266
+ATOM    162  C   ALA A  21      -6.653  17.589   6.890  1.00  3.59      1FXR 267
+ATOM    163  O   ALA A  21      -5.743  17.554   7.733  1.00  2.01      1FXR 268
+ATOM    164  CB  ALA A  21      -5.798  15.362   6.025  1.00  2.00      1FXR 269
+ATOM    165  N   PRO A  22      -7.567  18.574   6.916  1.00  2.59      1FXR 270
+ATOM    166  CA  PRO A  22      -7.466  19.745   7.757  1.00  2.00      1FXR 271
+ATOM    167  C   PRO A  22      -7.685  19.459   9.218  1.00  2.00      1FXR 272
+ATOM    168  O   PRO A  22      -7.349  20.298  10.036  1.00  2.80      1FXR 273
+ATOM    169  CB  PRO A  22      -8.482  20.717   7.184  1.00  3.16      1FXR 274
+ATOM    170  CG  PRO A  22      -9.548  19.805   6.601  1.00  2.58      1FXR 275
+ATOM    171  CD  PRO A  22      -8.730  18.673   6.020  1.00  2.00      1FXR 276
+ATOM    172  N   GLY A  23      -8.272  18.349   9.631  1.00  2.00      1FXR 277
+ATOM    173  CA  GLY A  23      -8.382  18.033  11.045  1.00  3.14      1FXR 278
+ATOM    174  C   GLY A  23      -7.131  17.334  11.567  1.00  2.00      1FXR 279
+ATOM    175  O   GLY A  23      -6.929  17.248  12.768  1.00  2.00      1FXR 280
+ATOM    176  N   ALA A  24      -6.260  16.833  10.701  1.00  2.73      1FXR 281
+ATOM    177  CA  ALA A  24      -5.042  16.130  11.086  1.00  3.27      1FXR 282
+ATOM    178  C   ALA A  24      -3.794  16.977  10.881  1.00  3.02      1FXR 283
+ATOM    179  O   ALA A  24      -2.883  16.879  11.707  1.00  3.38      1FXR 284
+ATOM    180  CB  ALA A  24      -4.857  14.860  10.273  1.00  2.00      1FXR 285
+ATOM    181  N   PHE A  25      -3.711  17.849   9.862  1.00  3.26      1FXR 286
+ATOM    182  CA  PHE A  25      -2.510  18.626   9.579  1.00  2.08      1FXR 287
+ATOM    183  C   PHE A  25      -2.738  20.098   9.740  1.00  2.15      1FXR 288
+ATOM    184  O   PHE A  25      -3.846  20.558   9.458  1.00  3.40      1FXR 289
+ATOM    185  CB  PHE A  25      -2.023  18.396   8.138  1.00  2.00      1FXR 290
+ATOM    186  CG  PHE A  25      -1.603  16.959   7.871  1.00  2.93      1FXR 291
+ATOM    187  CD1 PHE A  25      -0.303  16.565   8.152  1.00  2.00      1FXR 292
+ATOM    188  CD2 PHE A  25      -2.528  16.063   7.366  1.00  2.00      1FXR 293
+ATOM    189  CE1 PHE A  25       0.059  15.257   7.921  1.00  2.21      1FXR 294
+ATOM    190  CE2 PHE A  25      -2.145  14.758   7.143  1.00  2.00      1FXR 295
+ATOM    191  CZ  PHE A  25      -0.856  14.350   7.417  1.00  2.00      1FXR 296
+ATOM    192  N   ALA A  26      -1.728  20.855  10.170  1.00  2.81      1FXR 297
+ATOM    193  CA  ALA A  26      -1.811  22.319  10.223  1.00  4.56      1FXR 298
+ATOM    194  C   ALA A  26      -0.414  22.866   9.913  1.00  6.76      1FXR 299
+ATOM    195  O   ALA A  26       0.586  22.141  10.027  1.00  6.89      1FXR 300
+ATOM    196  CB  ALA A  26      -2.187  22.838  11.603  1.00  2.00      1FXR 301
+ATOM    197  N   MET A  27      -0.287  24.105   9.451  1.00  9.14      1FXR 302
+ATOM    198  CA  MET A  27       1.006  24.756   9.230  1.00 11.42      1FXR 303
+ATOM    199  C   MET A  27       1.537  25.422  10.509  1.00 13.43      1FXR 304
+ATOM    200  O   MET A  27       0.766  26.062  11.240  1.00 12.46      1FXR 305
+ATOM    201  CB  MET A  27       0.878  25.838   8.158  1.00 10.98      1FXR 306
+ATOM    202  CG  MET A  27       0.625  25.334   6.746  1.00 12.14      1FXR 307
+ATOM    203  SD  MET A  27       1.940  24.181   6.291  1.00 15.84      1FXR 308
+ATOM    204  CE  MET A  27       3.326  25.275   6.310  1.00 10.88      1FXR 309
+ATOM    205  N   ASP A  28       2.818  25.288  10.865  1.00 16.03      1FXR 310
+ATOM    206  CA  ASP A  28       3.376  26.000  12.009  1.00 19.80      1FXR 311
+ATOM    207  C   ASP A  28       3.790  27.413  11.572  1.00 19.90      1FXR 312
+ATOM    208  O   ASP A  28       4.817  27.580  10.888  1.00 18.83      1FXR 313
+ATOM    209  CB  ASP A  28       4.612  25.260  12.578  1.00 24.78      1FXR 314
+ATOM    210  CG  ASP A  28       5.296  25.820  13.848  1.00 28.82      1FXR 315
+ATOM    211  OD1 ASP A  28       5.458  27.041  14.033  1.00 30.90      1FXR 316
+ATOM    212  OD2 ASP A  28       5.717  24.985  14.649  1.00 31.66      1FXR 317
+ATOM    213  N   PRO A  29       3.117  28.464  12.070  1.00 20.79      1FXR 318
+ATOM    214  CA  PRO A  29       3.132  29.795  11.488  1.00 22.73      1FXR 319
+ATOM    215  C   PRO A  29       4.534  30.395  11.454  1.00 24.98      1FXR 320
+ATOM    216  O   PRO A  29       4.851  31.219  10.577  1.00 25.18      1FXR 321
+ATOM    217  CB  PRO A  29       2.172  30.589  12.345  1.00 20.84      1FXR 322
+ATOM    218  CG  PRO A  29       2.406  30.003  13.717  1.00 19.33      1FXR 323
+ATOM    219  CD  PRO A  29       2.455  28.520  13.376  1.00 20.47      1FXR 324
+ATOM    220  N   GLU A  30       5.378  29.921  12.393  1.00 25.63      1FXR 325
+ATOM    221  CA  GLU A  30       6.690  30.494  12.510  1.00 26.58      1FXR 326
+ATOM    222  C   GLU A  30       7.848  29.638  12.019  1.00 25.86      1FXR 327
+ATOM    223  O   GLU A  30       8.962  30.161  11.926  1.00 27.02      1FXR 328
+ATOM    224  CB  GLU A  30       6.833  30.916  13.974  1.00 28.54      1FXR 329
+ATOM    225  CG  GLU A  30       7.060  32.441  14.112  1.00 30.80      1FXR 330
+ATOM    226  CD  GLU A  30       6.034  33.369  13.455  1.00 30.64      1FXR 331
+ATOM    227  OE1 GLU A  30       5.012  33.666  14.085  1.00 32.35      1FXR 332
+ATOM    228  OE2 GLU A  30       6.273  33.806  12.324  1.00 28.97      1FXR 333
+ATOM    229  N   ILE A  31       7.693  28.343  11.717  1.00 23.75      1FXR 334
+ATOM    230  CA  ILE A  31       8.800  27.663  11.031  1.00 22.98      1FXR 335
+ATOM    231  C   ILE A  31       8.424  27.317   9.589  1.00 22.80      1FXR 336
+ATOM    232  O   ILE A  31       9.263  26.823   8.842  1.00 22.68      1FXR 337
+ATOM    233  CB  ILE A  31       9.269  26.337  11.734  1.00 22.14      1FXR 338
+ATOM    234  CG1 ILE A  31       8.128  25.362  11.996  1.00 19.53      1FXR 339
+ATOM    235  CG2 ILE A  31      10.031  26.770  12.983  1.00 22.98      1FXR 340
+ATOM    236  CD1 ILE A  31       8.506  24.039  12.685  1.00 19.51      1FXR 341
+ATOM    237  N   GLU A  32       7.161  27.562   9.191  1.00 22.46      1FXR 342
+ATOM    238  CA  GLU A  32       6.648  27.283   7.864  1.00 21.16      1FXR 343
+ATOM    239  C   GLU A  32       6.794  25.844   7.401  1.00 17.94      1FXR 344
+ATOM    240  O   GLU A  32       7.132  25.529   6.263  1.00 18.07      1FXR 345
+ATOM    241  CB  GLU A  32       7.317  28.199   6.863  1.00 24.83      1FXR 346
+ATOM    242  CG  GLU A  32       6.873  29.643   7.032  1.00 32.99      1FXR 347
+ATOM    243  CD  GLU A  32       5.366  29.840   6.970  1.00 35.91      1FXR 348
+ATOM    244  OE1 GLU A  32       4.693  29.123   6.217  1.00 38.16      1FXR 349
+ATOM    245  OE2 GLU A  32       4.884  30.726   7.681  1.00 37.68      1FXR 350
+ATOM    246  N   LYS A  33       6.483  24.926   8.297  1.00 14.15      1FXR 351
+ATOM    247  CA  LYS A  33       6.535  23.510   8.001  1.00 10.72      1FXR 352
+ATOM    248  C   LYS A  33       5.180  23.009   8.459  1.00  9.45      1FXR 353
+ATOM    249  O   LYS A  33       4.555  23.624   9.330  1.00  8.52      1FXR 354
+ATOM    250  CB  LYS A  33       7.621  22.846   8.807  1.00 11.10      1FXR 355
+ATOM    251  CG  LYS A  33       9.033  23.432   8.721  1.00 13.48      1FXR 356
+ATOM    252  CD  LYS A  33       9.649  23.262   7.325  1.00 17.73      1FXR 357
+ATOM    253  CE  LYS A  33      11.099  23.753   7.306  1.00 17.73      1FXR 358
+ATOM    254  NZ  LYS A  33      11.911  22.894   6.463  1.00 16.02      1FXR 359
+ATOM    255  N   ALA A  34       4.675  21.927   7.888  1.00  7.08      1FXR 360
+ATOM    256  CA  ALA A  34       3.408  21.361   8.337  1.00  4.98      1FXR 361
+ATOM    257  C   ALA A  34       3.662  20.448   9.535  1.00  4.80      1FXR 362
+ATOM    258  O   ALA A  34       4.801  19.994   9.711  1.00  5.19      1FXR 363
+ATOM    259  CB  ALA A  34       2.781  20.530   7.246  1.00  4.96      1FXR 364
+ATOM    260  N   TYR A  35       2.725  20.172  10.440  1.00  4.65      1FXR 365
+ATOM    261  CA  TYR A  35       2.959  19.181  11.493  1.00  4.49      1FXR 366
+ATOM    262  C   TYR A  35       1.636  18.475  11.789  1.00  2.62      1FXR 367
+ATOM    263  O   TYR A  35       0.575  18.986  11.411  1.00  2.36      1FXR 368
+ATOM    264  CB  TYR A  35       3.531  19.863  12.784  1.00  6.02      1FXR 369
+ATOM    265  CG  TYR A  35       2.605  20.859  13.459  1.00  6.14      1FXR 370
+ATOM    266  CD1 TYR A  35       2.524  22.155  13.003  1.00  9.26      1FXR 371
+ATOM    267  CD2 TYR A  35       1.799  20.431  14.493  1.00  8.67      1FXR 372
+ATOM    268  CE1 TYR A  35       1.618  23.026  13.578  1.00 10.52      1FXR 373
+ATOM    269  CE2 TYR A  35       0.890  21.290  15.070  1.00  9.60      1FXR 374
+ATOM    270  CZ  TYR A  35       0.804  22.578  14.602  1.00 11.02      1FXR 375
+ATOM    271  OH  TYR A  35      -0.152  23.407  15.137  1.00 13.75      1FXR 376
+ATOM    272  N   VAL A  36       1.621  17.324  12.448  1.00  2.00      1FXR 377
+ATOM    273  CA  VAL A  36       0.373  16.655  12.751  1.00  2.42      1FXR 378
+ATOM    274  C   VAL A  36      -0.276  17.331  13.961  1.00  2.00      1FXR 379
+ATOM    275  O   VAL A  36       0.275  17.312  15.060  1.00  2.00      1FXR 380
+ATOM    276  CB  VAL A  36       0.650  15.142  13.028  1.00  3.04      1FXR 381
+ATOM    277  CG1 VAL A  36      -0.590  14.426  13.580  1.00  2.00      1FXR 382
+ATOM    278  CG2 VAL A  36       1.072  14.489  11.717  1.00  2.29      1FXR 383
+ATOM    279  N   LYS A  37      -1.428  17.972  13.813  1.00  2.00      1FXR 384
+ATOM    280  CA  LYS A  37      -2.084  18.509  14.990  1.00  2.39      1FXR 385
+ATOM    281  C   LYS A  37      -3.010  17.474  15.646  1.00  2.86      1FXR 386
+ATOM    282  O   LYS A  37      -3.392  17.638  16.816  1.00  3.83      1FXR 387
+ATOM    283  CB  LYS A  37      -2.872  19.745  14.631  1.00  2.00      1FXR 388
+ATOM    284  CG  LYS A  37      -4.056  19.515  13.713  1.00  5.44      1FXR 389
+ATOM    285  CD  LYS A  37      -4.906  20.736  13.916  1.00  6.82      1FXR 390
+ATOM    286  CE  LYS A  37      -6.240  20.550  13.282  1.00  8.79      1FXR 391
+ATOM    287  NZ  LYS A  37      -7.140  21.551  13.822  1.00 11.09      1FXR 392
+ATOM    288  N   ASP A  38      -3.443  16.404  14.953  1.00  2.30      1FXR 393
+ATOM    289  CA  ASP A  38      -4.238  15.372  15.583  1.00  2.00      1FXR 394
+ATOM    290  C   ASP A  38      -4.156  14.085  14.780  1.00  2.00      1FXR 395
+ATOM    291  O   ASP A  38      -4.616  14.003  13.648  1.00  2.00      1FXR 396
+ATOM    292  CB  ASP A  38      -5.690  15.854  15.701  1.00  2.29      1FXR 397
+ATOM    293  CG  ASP A  38      -6.641  14.962  16.496  1.00  4.99      1FXR 398
+ATOM    294  OD1 ASP A  38      -6.197  13.974  17.085  1.00  3.70      1FXR 399
+ATOM    295  OD2 ASP A  38      -7.837  15.262  16.527  1.00  2.21      1FXR 400
+ATOM    296  N   VAL A  39      -3.619  13.029  15.397  1.00  2.39      1FXR 401
+ATOM    297  CA  VAL A  39      -3.444  11.707  14.800  1.00  2.49      1FXR 402
+ATOM    298  C   VAL A  39      -4.790  10.994  14.477  1.00  3.14      1FXR 403
+ATOM    299  O   VAL A  39      -4.893  10.115  13.611  1.00  2.00      1FXR 404
+ATOM    300  CB  VAL A  39      -2.521  10.968  15.813  1.00  4.15      1FXR 405
+ATOM    301  CG1 VAL A  39      -3.280   9.987  16.720  1.00  3.24      1FXR 406
+ATOM    302  CG2 VAL A  39      -1.427  10.314  15.006  1.00  5.22      1FXR 407
+ATOM    303  N   GLU A  40      -5.852  11.412  15.185  1.00  2.00      1FXR 408
+ATOM    304  CA  GLU A  40      -7.202  10.955  14.974  1.00  2.00      1FXR 409
+ATOM    305  C   GLU A  40      -8.047  11.914  14.126  1.00  2.74      1FXR 410
+ATOM    306  O   GLU A  40      -9.247  11.665  13.918  1.00  2.00      1FXR 411
+ATOM    307  CB  GLU A  40      -7.922  10.774  16.297  1.00  3.74      1FXR 412
+ATOM    308  CG  GLU A  40      -7.389   9.732  17.282  1.00  7.37      1FXR 413
+ATOM    309  CD  GLU A  40      -7.394   8.255  16.873  1.00 10.59      1FXR 414
+ATOM    310  OE1 GLU A  40      -8.094   7.854  15.945  1.00 10.42      1FXR 415
+ATOM    311  OE2 GLU A  40      -6.693   7.471  17.519  1.00 13.79      1FXR 416
+ATOM    312  N   GLY A  41      -7.461  12.982  13.575  1.00  2.18      1FXR 417
+ATOM    313  CA  GLY A  41      -8.210  14.018  12.884  1.00  2.00      1FXR 418
+ATOM    314  C   GLY A  41      -8.504  13.727  11.428  1.00  2.00      1FXR 419
+ATOM    315  O   GLY A  41      -8.866  14.628  10.680  1.00  4.09      1FXR 420
+ATOM    316  N   ALA A  42      -8.312  12.528  10.920  1.00  2.00      1FXR 421
+ATOM    317  CA  ALA A  42      -8.653  12.200   9.541  1.00  2.24      1FXR 422
+ATOM    318  C   ALA A  42      -8.753  10.678   9.563  1.00  2.87      1FXR 423
+ATOM    319  O   ALA A  42      -8.192  10.037  10.470  1.00  2.00      1FXR 424
+ATOM    320  CB  ALA A  42      -7.546  12.643   8.560  1.00  2.00      1FXR 425
+ATOM    321  N   SER A  43      -9.525  10.072   8.665  1.00  3.20      1FXR 426
+ATOM    322  CA  SER A  43      -9.600   8.625   8.622  1.00  3.96      1FXR 427
+ATOM    323  C   SER A  43      -8.259   8.138   8.082  1.00  2.01      1FXR 428
+ATOM    324  O   SER A  43      -7.478   8.921   7.515  1.00  2.00      1FXR 429
+ATOM    325  CB  SER A  43     -10.716   8.152   7.692  1.00  2.00      1FXR 430
+ATOM    326  OG  SER A  43     -10.351   8.280   6.321  1.00  2.00      1FXR 431
+ATOM    327  N   GLN A  44      -7.989   6.845   8.177  1.00  3.17      1FXR 432
+ATOM    328  CA  GLN A  44      -6.750   6.303   7.687  1.00  5.16      1FXR 433
+ATOM    329  C   GLN A  44      -6.683   6.495   6.174  1.00  5.80      1FXR 434
+ATOM    330  O   GLN A  44      -5.606   6.819   5.677  1.00  3.80      1FXR 435
+ATOM    331  CB  GLN A  44      -6.672   4.848   8.057  1.00  3.74      1FXR 436
+ATOM    332  CG  GLN A  44      -5.227   4.475   7.891  1.00  8.25      1FXR 437
+ATOM    333  CD  GLN A  44      -4.889   3.095   8.384  1.00  9.72      1FXR 438
+ATOM    334  OE1 GLN A  44      -4.212   2.343   7.692  1.00 12.93      1FXR 439
+ATOM    335  NE2 GLN A  44      -5.322   2.718   9.580  1.00  9.70      1FXR 440
+ATOM    336  N   GLU A  45      -7.775   6.393   5.395  1.00  7.28      1FXR 441
+ATOM    337  CA  GLU A  45      -7.666   6.612   3.945  1.00 10.62      1FXR 442
+ATOM    338  C   GLU A  45      -7.378   8.062   3.547  1.00  8.02      1FXR 443
+ATOM    339  O   GLU A  45      -6.684   8.316   2.552  1.00  7.55      1FXR 444
+ATOM    340  CB  GLU A  45      -8.932   6.174   3.203  1.00 13.69      1FXR 445
+ATOM    341  CG  GLU A  45      -9.277   4.679   3.354  1.00 28.59      1FXR 446
+ATOM    342  CD  GLU A  45      -8.128   3.658   3.206  1.00 36.17      1FXR 447
+ATOM    343  OE1 GLU A  45      -7.472   3.644   2.152  1.00 41.75      1FXR 448
+ATOM    344  OE2 GLU A  45      -7.887   2.878   4.148  1.00 38.20      1FXR 449
+ATOM    345  N   GLU A  46      -7.859   9.040   4.320  1.00  5.27      1FXR 450
+ATOM    346  CA  GLU A  46      -7.593  10.426   4.040  1.00  3.08      1FXR 451
+ATOM    347  C   GLU A  46      -6.149  10.746   4.405  1.00  3.01      1FXR 452
+ATOM    348  O   GLU A  46      -5.510  11.591   3.766  1.00  2.00      1FXR 453
+ATOM    349  CB  GLU A  46      -8.580  11.285   4.834  1.00  3.39      1FXR 454
+ATOM    350  CG  GLU A  46      -8.441  12.769   4.534  1.00  2.49      1FXR 455
+ATOM    351  CD  GLU A  46      -9.622  13.625   4.962  1.00  4.56      1FXR 456
+ATOM    352  OE1 GLU A  46     -10.627  13.613   4.251  1.00  5.85      1FXR 457
+ATOM    353  OE2 GLU A  46      -9.535  14.319   5.975  1.00  2.02      1FXR 458
+ATOM    354  N   VAL A  47      -5.613  10.088   5.437  1.00  2.53      1FXR 459
+ATOM    355  CA  VAL A  47      -4.217  10.285   5.789  1.00  2.91      1FXR 460
+ATOM    356  C   VAL A  47      -3.365   9.788   4.629  1.00  2.00      1FXR 461
+ATOM    357  O   VAL A  47      -2.474  10.505   4.145  1.00  2.00      1FXR 462
+ATOM    358  CB  VAL A  47      -3.853   9.516   7.089  1.00  2.71      1FXR 463
+ATOM    359  CG1 VAL A  47      -2.350   9.542   7.324  1.00  2.00      1FXR 464
+ATOM    360  CG2 VAL A  47      -4.586  10.171   8.269  1.00  2.00      1FXR 465
+ATOM    361  N   GLU A  48      -3.677   8.587   4.138  1.00  2.00      1FXR 466
+ATOM    362  CA  GLU A  48      -2.934   7.988   3.040  1.00  3.17      1FXR 467
+ATOM    363  C   GLU A  48      -2.987   8.862   1.809  1.00  2.00      1FXR 468
+ATOM    364  O   GLU A  48      -1.948   9.074   1.184  1.00  2.00      1FXR 469
+ATOM    365  CB  GLU A  48      -3.480   6.597   2.718  1.00  7.52      1FXR 470
+ATOM    366  CG  GLU A  48      -3.008   5.617   3.796  1.00 15.65      1FXR 471
+ATOM    367  CD  GLU A  48      -3.651   4.219   3.872  1.00 21.68      1FXR 472
+ATOM    368  OE1 GLU A  48      -4.860   4.068   3.628  1.00 23.22      1FXR 473
+ATOM    369  OE2 GLU A  48      -2.927   3.274   4.223  1.00 22.92      1FXR 474
+ATOM    370  N   GLU A  49      -4.141   9.443   1.494  1.00  2.00      1FXR 475
+ATOM    371  CA  GLU A  49      -4.269  10.355   0.378  1.00  2.00      1FXR 476
+ATOM    372  C   GLU A  49      -3.257  11.503   0.518  1.00  2.94      1FXR 477
+ATOM    373  O   GLU A  49      -2.510  11.810  -0.428  1.00  2.00      1FXR 478
+ATOM    374  CB  GLU A  49      -5.689  10.899   0.361  1.00  2.64      1FXR 479
+ATOM    375  CG  GLU A  49      -6.025  11.922  -0.740  1.00  2.00      1FXR 480
+ATOM    376  CD  GLU A  49      -7.411  12.547  -0.676  1.00  3.61      1FXR 481
+ATOM    377  OE1 GLU A  49      -8.143  12.360   0.296  1.00  6.13      1FXR 482
+ATOM    378  OE2 GLU A  49      -7.763  13.271  -1.590  1.00  2.00      1FXR 483
+ATOM    379  N   ALA A  50      -3.159  12.075   1.727  1.00  2.00      1FXR 484
+ATOM    380  CA  ALA A  50      -2.276  13.203   1.953  1.00  2.00      1FXR 485
+ATOM    381  C   ALA A  50      -0.813  12.788   1.862  1.00  2.90      1FXR 486
+ATOM    382  O   ALA A  50       0.012  13.497   1.283  1.00  2.29      1FXR 487
+ATOM    383  CB  ALA A  50      -2.578  13.801   3.326  1.00  2.33      1FXR 488
+ATOM    384  N   MET A  51      -0.498  11.599   2.370  1.00  2.72      1FXR 489
+ATOM    385  CA  MET A  51       0.824  11.010   2.275  1.00  4.85      1FXR 490
+ATOM    386  C   MET A  51       1.261  10.706   0.848  1.00  4.85      1FXR 491
+ATOM    387  O   MET A  51       2.423  10.890   0.487  1.00  4.31      1FXR 492
+ATOM    388  CB  MET A  51       0.912   9.685   3.020  1.00  5.83      1FXR 493
+ATOM    389  CG  MET A  51       1.035   9.815   4.514  1.00  9.77      1FXR 494
+ATOM    390  SD  MET A  51       1.063   8.201   5.334  1.00 16.18      1FXR 495
+ATOM    391  CE  MET A  51       2.329   7.421   4.374  1.00  8.64      1FXR 496
+ATOM    392  N   ASP A  52       0.353  10.191   0.027  1.00  5.37      1FXR 497
+ATOM    393  CA  ASP A  52       0.661   9.844  -1.353  1.00  6.37      1FXR 498
+ATOM    394  C   ASP A  52       0.784  11.085  -2.195  1.00  5.40      1FXR 499
+ATOM    395  O   ASP A  52       1.472  11.051  -3.203  1.00  7.79      1FXR 500
+ATOM    396  CB  ASP A  52      -0.432   8.943  -1.951  1.00  5.83      1FXR 501
+ATOM    397  CG  ASP A  52      -0.495   7.538  -1.379  1.00  8.12      1FXR 502
+ATOM    398  OD1 ASP A  52       0.436   7.118  -0.695  1.00  5.02      1FXR 503
+ATOM    399  OD2 ASP A  52      -1.487   6.850  -1.631  1.00 10.67      1FXR 504
+ATOM    400  N   THR A  53       0.087  12.159  -1.839  1.00  4.53      1FXR 505
+ATOM    401  CA  THR A  53       0.204  13.448  -2.493  1.00  3.37      1FXR 506
+ATOM    402  C   THR A  53       1.447  14.247  -2.116  1.00  3.89      1FXR 507
+ATOM    403  O   THR A  53       1.916  14.975  -2.990  1.00  2.99      1FXR 508
+ATOM    404  CB  THR A  53      -1.047  14.253  -2.167  1.00  2.00      1FXR 509
+ATOM    405  OG1 THR A  53      -2.106  13.467  -2.675  1.00  2.00      1FXR 510
+ATOM    406  CG2 THR A  53      -1.066  15.649  -2.741  1.00  2.00      1FXR 511
+ATOM    407  N   CYS A  54       2.007  14.140  -0.897  1.00  2.44      1FXR 512
+ATOM    408  CA  CYS A  54       3.168  14.911  -0.531  1.00  2.00      1FXR 513
+ATOM    409  C   CYS A  54       4.267  14.921  -1.588  1.00  3.13      1FXR 514
+ATOM    410  O   CYS A  54       4.900  13.883  -1.778  1.00  2.00      1FXR 515
+ATOM    411  CB  CYS A  54       3.739  14.377   0.763  1.00  2.00      1FXR 516
+ATOM    412  SG  CYS A  54       4.960  15.553   1.404  1.00  2.00      1FXR 517
+ATOM    413  N   PRO A  55       4.593  16.051  -2.251  1.00  3.03      1FXR 518
+ATOM    414  CA  PRO A  55       5.567  16.099  -3.331  1.00  3.32      1FXR 519
+ATOM    415  C   PRO A  55       6.946  15.643  -2.899  1.00  2.89      1FXR 520
+ATOM    416  O   PRO A  55       7.698  15.138  -3.729  1.00  2.59      1FXR 521
+ATOM    417  CB  PRO A  55       5.515  17.553  -3.829  1.00  4.40      1FXR 522
+ATOM    418  CG  PRO A  55       5.026  18.320  -2.618  1.00  3.86      1FXR 523
+ATOM    419  CD  PRO A  55       3.953  17.354  -2.118  1.00  3.90      1FXR 524
+ATOM    420  N   VAL A  56       7.321  15.834  -1.636  1.00  2.00      1FXR 525
+ATOM    421  CA  VAL A  56       8.606  15.348  -1.183  1.00  2.41      1FXR 526
+ATOM    422  C   VAL A  56       8.509  14.090  -0.311  1.00  3.72      1FXR 527
+ATOM    423  O   VAL A  56       9.471  13.671   0.331  1.00  2.53      1FXR 528
+ATOM    424  CB  VAL A  56       9.351  16.489  -0.412  1.00  4.42      1FXR 529
+ATOM    425  CG1 VAL A  56       9.599  17.644  -1.366  1.00  2.00      1FXR 530
+ATOM    426  CG2 VAL A  56       8.556  16.975   0.791  1.00  4.96      1FXR 531
+ATOM    427  N   GLN A  57       7.353  13.419  -0.248  1.00  4.07      1FXR 532
+ATOM    428  CA  GLN A  57       7.186  12.207   0.567  1.00  5.21      1FXR 533
+ATOM    429  C   GLN A  57       7.789  12.229   1.986  1.00  4.77      1FXR 534
+ATOM    430  O   GLN A  57       8.580  11.362   2.381  1.00  4.85      1FXR 535
+ATOM    431  CB  GLN A  57       7.749  10.996  -0.248  1.00  6.46      1FXR 536
+ATOM    432  CG  GLN A  57       6.921  10.647  -1.491  1.00  9.18      1FXR 537
+ATOM    433  CD  GLN A  57       5.463  10.328  -1.137  1.00 13.60      1FXR 538
+ATOM    434  OE1 GLN A  57       5.181   9.390  -0.380  1.00 16.04      1FXR 539
+ATOM    435  NE2 GLN A  57       4.465  11.083  -1.590  1.00 10.55      1FXR 540
+ATOM    436  N   CYS A  58       7.426  13.260   2.768  1.00  4.35      1FXR 541
+ATOM    437  CA  CYS A  58       7.930  13.437   4.131  1.00  3.35      1FXR 542
+ATOM    438  C   CYS A  58       6.972  13.047   5.258  1.00  2.62      1FXR 543
+ATOM    439  O   CYS A  58       7.348  13.086   6.434  1.00  3.53      1FXR 544
+ATOM    440  CB  CYS A  58       8.371  14.891   4.345  1.00  3.80      1FXR 545
+ATOM    441  SG  CYS A  58       7.204  16.263   4.090  1.00  2.00      1FXR 546
+ATOM    442  N   ILE A  59       5.774  12.555   4.969  1.00  2.00      1FXR 547
+ATOM    443  CA  ILE A  59       4.862  12.114   6.008  1.00  2.22      1FXR 548
+ATOM    444  C   ILE A  59       5.050  10.591   5.991  1.00  2.84      1FXR 549
+ATOM    445  O   ILE A  59       4.965   9.917   4.951  1.00  2.00      1FXR 550
+ATOM    446  CB  ILE A  59       3.406  12.497   5.660  1.00  2.00      1FXR 551
+ATOM    447  CG1 ILE A  59       3.351  13.965   5.239  1.00  2.00      1FXR 552
+ATOM    448  CG2 ILE A  59       2.501  12.220   6.867  1.00  2.00      1FXR 553
+ATOM    449  CD1 ILE A  59       2.077  14.378   4.509  1.00  2.00      1FXR 554
+ATOM    450  N   HIS A  60       5.389  10.058   7.156  1.00  2.97      1FXR 555
+ATOM    451  CA  HIS A  60       5.737   8.657   7.278  1.00  2.00      1FXR 556
+ATOM    452  C   HIS A  60       4.869   8.005   8.329  1.00  2.92      1FXR 557
+ATOM    453  O   HIS A  60       4.423   8.653   9.275  1.00  4.21      1FXR 558
+ATOM    454  CB  HIS A  60       7.182   8.448   7.735  1.00  2.00      1FXR 559
+ATOM    455  CG  HIS A  60       8.220   9.169   6.906  1.00  3.28      1FXR 560
+ATOM    456  ND1 HIS A  60       8.725  10.384   7.125  1.00  3.28      1FXR 561
+ATOM    457  CD2 HIS A  60       8.782   8.680   5.750  1.00  2.82      1FXR 562
+ATOM    458  CE1 HIS A  60       9.551  10.627   6.147  1.00  2.00      1FXR 563
+ATOM    459  NE2 HIS A  60       9.580   9.612   5.330  1.00  2.22      1FXR 564
+ATOM    460  N   TRP A  61       4.638   6.713   8.199  1.00  4.86      1FXR 565
+ATOM    461  CA  TRP A  61       3.955   5.947   9.213  1.00  5.95      1FXR 566
+ATOM    462  C   TRP A  61       5.043   5.611  10.221  1.00  8.41      1FXR 567
+ATOM    463  O   TRP A  61       6.238   5.570   9.900  1.00  9.45      1FXR 568
+ATOM    464  CB  TRP A  61       3.401   4.675   8.634  1.00  2.70      1FXR 569
+ATOM    465  CG  TRP A  61       2.173   4.845   7.758  1.00  3.55      1FXR 570
+ATOM    466  CD1 TRP A  61       2.233   4.436   6.460  1.00  2.05      1FXR 571
+ATOM    467  CD2 TRP A  61       0.915   5.302   8.114  1.00  2.25      1FXR 572
+ATOM    468  NE1 TRP A  61       1.015   4.610   5.992  1.00  3.67      1FXR 573
+ATOM    469  CE2 TRP A  61       0.209   5.118   6.933  1.00  2.89      1FXR 574
+ATOM    470  CE3 TRP A  61       0.251   5.816   9.199  1.00  2.00      1FXR 575
+ATOM    471  CZ2 TRP A  61      -1.132   5.434   6.812  1.00  2.88      1FXR 576
+ATOM    472  CZ3 TRP A  61      -1.092   6.134   9.092  1.00  2.00      1FXR 577
+ATOM    473  CH2 TRP A  61      -1.787   5.948   7.911  1.00  2.82      1FXR 578
+ATOM    474  N   GLU A  62       4.645   5.363  11.457  1.00 11.80      1FXR 579
+ATOM    475  CA  GLU A  62       5.554   5.012  12.521  1.00 14.81      1FXR 580
+ATOM    476  C   GLU A  62       4.795   3.936  13.251  1.00 17.15      1FXR 581
+ATOM    477  O   GLU A  62       3.791   4.161  13.931  1.00 16.15      1FXR 582
+ATOM    478  CB  GLU A  62       5.779   6.197  13.409  1.00 15.84      1FXR 583
+ATOM    479  CG  GLU A  62       6.390   5.862  14.762  1.00 19.96      1FXR 584
+ATOM    480  CD  GLU A  62       7.693   6.591  15.043  1.00 22.97      1FXR 585
+ATOM    481  OE1 GLU A  62       7.628   7.729  15.522  1.00 23.94      1FXR 586
+ATOM    482  OE2 GLU A  62       8.759   6.016  14.779  1.00 24.11      1FXR 587
+ATOM    483  N   ASP A  63       5.174   2.754  12.802  1.00 20.68      1FXR 588
+ATOM    484  CA  ASP A  63       4.722   1.484  13.390  1.00 26.65      1FXR 589
+ATOM    485  C   ASP A  63       5.795   1.053  14.382  1.00 30.41      1FXR 590
+ATOM    486  O   ASP A  63       5.579   0.379  15.400  1.00 31.24      1FXR 591
+ATOM    487  CB  ASP A  63       4.599   0.353  12.347  1.00 24.28      1FXR 592
+ATOM    488  CG  ASP A  63       3.725   0.714  11.160  1.00 22.54      1FXR 593
+ATOM    489  OD1 ASP A  63       2.521   0.875  11.367  1.00 19.58      1FXR 594
+ATOM    490  OD2 ASP A  63       4.258   0.840  10.053  1.00 20.82      1FXR 595
+ATOM    491  N   GLU A  64       6.958   1.335  13.761  1.00 35.59      1FXR 596
+ATOM    492  CA  GLU A  64       8.313   1.234  14.276  1.00 39.75      1FXR 597
+ATOM    493  C   GLU A  64       8.610   2.324  15.319  1.00 40.60      1FXR 598
+ATOM    494  O   GLU A  64       7.692   3.004  15.739  1.00 41.41      1FXR 599
+ATOM    495  CB  GLU A  64       9.316   1.350  13.078  1.00 43.05      1FXR 600
+ATOM    496  CG  GLU A  64       9.660   2.807  12.636  1.00 46.82      1FXR 601
+ATOM    497  CD  GLU A  64       9.738   3.155  11.142  1.00 49.79      1FXR 602
+ATOM    498  OE1 GLU A  64      10.506   2.524  10.398  1.00 51.35      1FXR 603
+ATOM    499  OE2 GLU A  64       9.047   4.104  10.737  1.00 51.99      1FXR 604
+ATOM    500  OXT GLU A  64       9.808   2.494  15.622  0.00 41.41      1FXR 605
+TER     501      GLU A  64                                              1FXR 606
+HETATM  502 FE1  FS4 A  65       4.950  19.578   3.724  1.00  4.98      1FXR 607
+HETATM  503 FE2  FS4 A  65       2.361  18.719   3.744  1.00  5.64      1FXR 608
+HETATM  504 FE3  FS4 A  65       3.418  19.685   1.389  1.00  5.68      1FXR 609
+HETATM  505 FE4  FS4 A  65       4.293  17.362   2.329  1.00  4.59      1FXR 610
+HETATM  506  S1  FS4 A  65       4.189  17.626   4.626  1.00  2.82      1FXR 611
+HETATM  507  S2  FS4 A  65       3.093  20.893   3.285  1.00  5.29      1FXR 612
+HETATM  508  S3  FS4 A  65       5.639  19.094   1.572  1.00  2.00      1FXR 613
+HETATM  509  S4  FS4 A  65       2.107  17.805   1.651  1.00  2.00      1FXR 614
+HETATM 1011 FE1  FS4 B  65     -25.366  20.097  17.227  1.00  5.39      1FXR1116
+HETATM 1012 FE2  FS4 B  65     -22.854  19.103  17.187  1.00  4.66      1FXR1117
+HETATM 1013 FE3  FS4 B  65     -23.811  20.120  19.565  1.00  5.67      1FXR1118
+HETATM 1014 FE4  FS4 B  65     -24.754  17.833  18.642  1.00  5.17      1FXR1119
+HETATM 1015  S1  FS4 B  65     -24.718  18.101  16.346  1.00  2.00      1FXR1120
+HETATM 1016  S2  FS4 B  65     -23.445  21.292  17.626  1.00  3.58      1FXR1121
+HETATM 1017  S3  FS4 B  65     -26.053  19.612  19.379  1.00  2.00      1FXR1122
+HETATM 1018  S4  FS4 B  65     -22.555  18.234  19.299  1.00  3.39      1FXR1123
+HETATM 1019  S   SO4     1     -10.413   4.885  10.408  1.00  8.69      1FXR1124
+HETATM 1020  O1  SO4     1      -9.164   5.529  10.366  1.00 10.82      1FXR1125
+HETATM 1021  O2  SO4     1     -11.393   5.887  10.469  1.00 13.80      1FXR1126
+HETATM 1022  O3  SO4     1     -10.588   4.133   9.232  1.00 11.10      1FXR1127
+HETATM 1023  O4  SO4     1     -10.472   4.068  11.543  1.00  8.16      1FXR1128
+HETATM 1024  O   HOH     2       4.715  11.259   2.242  1.00  2.00      1FXR1129
+HETATM 1025  O   HOH     3      11.162  12.321   4.672  1.00  2.00      1FXR1130
+HETATM 1026  O   HOH     4       3.626  14.555  14.921  1.00 20.27      1FXR1131
+HETATM 1027  O   HOH     5      13.354  18.712   0.307  1.00 21.58      1FXR1132
+HETATM 1028  O   HOH     6       6.487   5.289   5.696  1.00  9.77      1FXR1133
+HETATM 1029  O   HOH     7      -9.196  16.111   8.197  1.00  3.60      1FXR1134
+HETATM 1030  O   HOH     8      -6.090   8.455  11.630  1.00 19.97      1FXR1135
+HETATM 1031  O   HOH     9      -8.622  17.353  15.008  1.00  7.40      1FXR1136
+HETATM 1032  O   HOH    10      -4.193   6.685  10.493  1.00 11.17      1FXR1137
+HETATM 1033  O   HOH    11       5.802  22.070  14.575  1.00 26.27      1FXR1138
+HETATM 1034  O   HOH    12       6.915  16.167  13.364  1.00 26.03      1FXR1139
+HETATM 1035  O   HOH    13       2.285  29.421   7.351  1.00 20.68      1FXR1140
+HETATM 1036  O   HOH    14      16.086  17.966   1.358  1.00 25.05      1FXR1141
+HETATM 1037  O   HOH    15       2.989   7.627   0.036  1.00 20.75      1FXR1142
+HETATM 1038  O   HOH    16      -6.351   7.074  20.419  1.00 11.84      1FXR1143
+HETATM 1039  O   HOH    17      -7.342   5.663  12.472  1.00 10.23      1FXR1144
+HETATM 1040  O   HOH    18      -4.145   7.390  18.872  1.00 19.97      1FXR1145
+HETATM 1041  O   HOH    19      -3.715  21.751  17.349  1.00 32.12      1FXR1146
+HETATM 1042  O   HOH    20      -8.796  22.186  11.755  1.00 19.32      1FXR1147
+HETATM 1043  O   HOH    21       1.606   0.396  13.962  1.00 24.39      1FXR1148
+HETATM 1044  O   HOH    22      -9.842  16.112  18.864  1.00  9.09      1FXR1149
+HETATM 1045  O   HOH    23      10.877  16.373  11.974  1.00 32.57      1FXR1150
+HETATM 1046  O   HOH    24       5.051  -2.222  16.592  1.00 30.99      1FXR1151
+HETATM 1047  O   HOH    25       3.297  11.893  -5.234  1.00 24.52      1FXR1152
+HETATM 1048  O   HOH    26       4.275  16.090  12.941  1.00  3.42      1FXR1153
+HETATM 1049  O   HOH    27       2.617  32.402   9.268  1.00 22.85      1FXR1154
+HETATM 1050  O   HOH    28      -6.059  22.781   9.585  1.00 13.48      1FXR1155
+HETATM 1051  O   HOH    29      -5.526  19.815  18.088  1.00 20.93      1FXR1156
+HETATM 1052  O   HOH    30       1.708   3.103  14.986  1.00 16.94      1FXR1157
+HETATM 1053  O   HOH    31      16.188  21.314   6.628  1.00 40.09      1FXR1158
+HETATM 1054  O   HOH    32       9.871   6.142   8.366  1.00 28.06      1FXR1159
+HETATM 1055  O   HOH    33      -8.857   5.370  19.388  1.00 34.47      1FXR1160
+HETATM 1056  O   HOH    34      -3.802  25.704   0.673  1.00 22.22      1FXR1161
+HETATM 1057  O   HOH    35      12.638  13.736  -0.628  1.00 30.03      1FXR1162
+HETATM 1058  O   HOH    36      12.110  22.209  12.012  1.00 23.99      1FXR1163
+HETATM 1059  O   HOH    37      -7.846  23.289   5.050  1.00 25.09      1FXR1164
+HETATM 1060  O   HOH    38      -7.969   1.469   9.034  1.00 35.53      1FXR1165
+HETATM 1061  O   HOH    39     -25.375  11.877  18.500  1.00  2.00      1FXR1166
+HETATM 1062  O   HOH    40     -11.292  16.187  12.629  1.00  3.75      1FXR1167
+HETATM 1063  O   HOH    41     -24.697  16.538   7.973  1.00  2.00      1FXR1168
+HETATM 1064  O   HOH    42     -32.014  13.124  15.913  1.00  2.03      1FXR1169
+HETATM 1065  O   HOH    43     -14.830  23.244  11.664  1.00 11.30      1FXR1170
+HETATM 1066  O   HOH    44     -17.239  25.452  11.924  1.00 22.09      1FXR1171
+HETATM 1067  O   HOH    45     -26.084  22.658   6.016  1.00  6.92      1FXR1172
+HETATM 1068  O   HOH    46     -11.670  17.411   6.106  1.00 17.11      1FXR1173
+HETATM 1069  O   HOH    47     -10.195   4.932   6.687  1.00  5.09      1FXR1174
+HETATM 1070  O   HOH    48     -23.939  15.509  26.302  1.00  7.48      1FXR1175
+HETATM 1071  O   HOH    49     -14.619   8.903   9.545  1.00  9.66      1FXR1176
+HETATM 1072  O   HOH    50     -28.907  22.664   5.628  1.00 14.74      1FXR1177
+HETATM 1073  O   HOH    51     -18.835  22.467   3.018  1.00 13.78      1FXR1178
+HETATM 1074  O   HOH    52     -27.146  17.591   7.954  1.00 14.24      1FXR1179
+HETATM 1075  O   HOH    53     -14.453   7.455  21.026  1.00 10.81      1FXR1180
+HETATM 1076  O   HOH    54     -33.421  19.411  20.546  1.00  8.04      1FXR1181
+HETATM 1077  O   HOH    55     -31.040  17.868   8.777  1.00  6.54      1FXR1182
+HETATM 1078  O   HOH    56     -32.846  14.468  21.274  1.00  8.65      1FXR1183
+HETATM 1079  O   HOH    57     -16.816   7.787  22.621  1.00 19.24      1FXR1184
+HETATM 1080  O   HOH    58     -14.584  24.750   8.368  1.00 18.39      1FXR1185
+HETATM 1081  O   HOH    59     -21.048   5.785  18.657  1.00 36.04      1FXR1186
+HETATM 1082  O   HOH    60     -10.276  14.105  -0.029  1.00  7.22      1FXR1187
+HETATM 1083  O   HOH    61     -33.338  23.088  18.245  1.00 12.60      1FXR1188
+HETATM 1084  O   HOH    62     -10.707  15.620   2.145  1.00 12.25      1FXR1189
+HETATM 1085  O   HOH    63     -26.015  12.429  25.421  1.00 17.57      1FXR1190
+HETATM 1086  O   HOH    64      -9.981  21.566  18.073  1.00 29.04      1FXR1191
+HETATM 1087  O   HOH    65     -11.605  22.234   8.870  1.00 27.27      1FXR1192
+HETATM 1088  O   HOH    66     -31.529  11.405   6.643  1.00 25.59      1FXR1193
+HETATM 1089  O   HOH    67     -11.674   6.562   1.245  1.00 27.34      1FXR1194
+HETATM 1090  O   HOH    68     -33.122  26.217  11.281  1.00 40.32      1FXR1195
+HETATM 1091  O   HOH    69     -16.593   6.927  11.228  1.00 36.57      1FXR1196
+HETATM 1092  O   HOH    70     -36.813  21.185  17.818  1.00 36.36      1FXR1197
+HETATM 1093  O   HOH    71     -16.406  26.584  16.210  1.00 40.45      1FXR1198
+CONECT   95   94  502                                                   1FXR1199
+CONECT  114  113  504                                                   1FXR1200
+CONECT  135  134  503                                                   1FXR1201
+CONECT  412  411  505                                                   1FXR1202
+CONECT  502   95  506  507  508                                         1FXR1203
+CONECT  503  135  506  507  509                                         1FXR1204
+CONECT  504  114  507  508  509                                         1FXR1205
+CONECT  505  412  506  508  509                                         1FXR1206
+CONECT  506  502  503  505                                              1FXR1207
+CONECT  507  502  503  504                                              1FXR1208
+CONECT  508  502  504  505                                              1FXR1209
+CONECT  509  503  504  505                                              1FXR1210
+CONECT  604  603 1011                                                   1FXR1211
+CONECT  623  622 1013                                                   1FXR1212
+CONECT  644  643 1012                                                   1FXR1213
+CONECT  921  920 1014                                                   1FXR1214
+CONECT 1011  604 1015 1016 1017                                         1FXR1215
+CONECT 1012  644 1015 1016 1018                                         1FXR1216
+CONECT 1013  623 1016 1017 1018                                         1FXR1217
+CONECT 1014  921 1015 1017 1018                                         1FXR1218
+CONECT 1015 1011 1012 1014                                              1FXR1219
+CONECT 1016 1011 1012 1013                                              1FXR1220
+CONECT 1017 1011 1013 1014                                              1FXR1221
+CONECT 1018 1012 1013 1014                                              1FXR1222
+CONECT 1019 1020 1021 1022 1023                                         1FXR1223
+CONECT 1020 1019                                                        1FXR1224
+CONECT 1021 1019                                                        1FXR1225
+CONECT 1022 1019                                                        1FXR1226
+CONECT 1023 1019                                                        1FXR1227
+MASTER       66    0    3    0    0    0    0    9 1091    2   29   10  1FXR1228
+END                                                                     1FXR1229
