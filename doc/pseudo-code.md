@@ -3,15 +3,16 @@
 
 ## Ligne de commande
 ```
-options : -i, --input : FILE foldrec
-		  -o, --output : FILE filname.out
-		  -n, --nbPDB : INT
+options :
+	-i, --input : FILE foldrec
+	-o, --output : FILE filname.out
+	-n, --nbPDB : INT
 ______________________________________________
 (scores implémentés)
-		  --coev : true/false
-		  --physics : true/false
-		  --acc : true/false
-		  ...
+	--coev : true/false
+	--physics : true/false
+	--acc : true/false
+	...
 ```
 
 ## Classes
