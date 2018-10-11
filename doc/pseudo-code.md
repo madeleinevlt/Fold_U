@@ -22,8 +22,6 @@ class Alignment:
 	ppalign_score : int
 	query : liste d'instances de la classe residue
 	template : liste d'instances de la classe residue
-	
-	def threading_score(self):
 
 class Residue:
 	self.resNum = resNum
@@ -38,38 +36,15 @@ def parsing_foldrec:
 	entrée : Fichier foldrec, nombre de templates à générer
 	sortie : liste d'instances de la classe alignment
 
-	boucle des residus dans le fichier pdb: (voir récupérer données pdb/residus)
-		si gap dans template:
-			résidue = '-'
-		sinon:
-			récupérer les données du résidu i
-	
-	boucle 
+def parsing_DOPE:
+	entrée : DOPE file
+	sortie : matrice DOPE = matrice de listes des valeurs DOPE pour chaque couple d'acides aminés (Carbones alpha (CA))
 
+def calc_threading_score:
+	1) matrice séquence cible / séquence cible
+	2) calcul des distances entre chaque aa
+	3) sélection des distances entre 5 et 10 A
+	4) transformer les distances en energie (utiliser matrice DOPE)
+	sortie : somme de la matrice
 
-
-```
-
-## Récupérer données pdb/residus
-```python
-from Bio.PDB import *
-
-p = PDBParser(QUIET=True) # QUIET=T : Warnings issued are suppressed
-pdb = p.get_structure(opt.input,opt.input)
-
-resList = [] # List of Residue instances
-
-for chain in pdb.get_chains():
-        # First residue of the current chain
-        first = next(res.id[1] for res in chain.get_residues() if (res.id[1] < 99999))
-
-        # Last residue of the current chain
-        for res in chain.get_residues():
-            if (res.get_id()[0] != ' '):
-                break
-			last = res.get_id()[1]
-
-			for resNum in range(first,last+1):
-				r = classes.Residue(chain, resNum)
-				resList.append(r)
 ```

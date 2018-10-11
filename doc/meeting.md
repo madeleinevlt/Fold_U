@@ -67,23 +67,28 @@ helper = cache --timeout=28800
 
 ---
 
-# Meeting 2 : mardi 9 octobre
+# Meeting 2 : jeudi 11 octobre
 
-## Ajout des datas :
+## Ajout des datas
+data test : Agglutini
 
-```shell
-git add data/
-git commit -m "Add data"
-git push
-
-git checkout dev
-git merge dev_helene
-git push
+## Pseudo-code et répartition du code
+```
+génération des classes ~ Tom
+parsing_folrec ~ Hélène
+parsing_DOPE ~ Arnold
+calc_threading_score
+ - calc_dist : Gabriel
+ - transf_dist_E : FLora
 ```
 
-Compare and pull request
-dev / dev_function
-titre pull request
-Reviewers, Assignees
-Create merge commit
+## Git pull request
+1. Création d'une branche :
+Une branche = une feature
+```shell
+git checkout -b dev_feature
+```
+2. Merge
+Le merge se fait une fois le pull request accepté par tout le monde
+
 
