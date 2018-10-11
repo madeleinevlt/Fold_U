@@ -1,5 +1,4 @@
 # Meeting 1 : lundi 1/10
----
 
 ## Répartition des rôles :
 
@@ -65,3 +64,26 @@ Dans le ~/.gitconfig :
 [credential]
 helper = cache --timeout=28800
 ```
+
+---
+
+# Meeting 2 : mardi 9 octobre
+
+## Ajout des datas :
+
+```shell
+git add data/
+git commit -m "Add data"
+git push
+
+git checkout dev
+git merge dev_helene
+git push
+```
+
+Compare and pull request
+dev / dev_function
+titre pull request
+Reviewers, Assignees
+Create merge commit
+
