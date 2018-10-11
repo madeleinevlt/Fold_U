@@ -40,6 +40,11 @@ def parsing_DOPE:
 	entrée : DOPE file
 	sortie : matrice DOPE = matrice de listes des valeurs DOPE pour chaque couple d'acides aminés (Carbones alpha (CA))
 
+def parsing_metafold:
+	entrée : metafold file
+	sortie: dictionnaire { metafold_1 : pdb , metafold_2 : pdb, ... }
+
+
 def calc_threading_score:
 	1) matrice séquence cible / séquence cible
 	2) calcul des distances entre chaque aa
