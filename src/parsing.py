@@ -4,11 +4,12 @@ import re
 
 def parsing_foldrec():
     score_templateName = re.compile("^\s+[0-9]+\s+([0-9]+\.[0-9]+)(\s|[0-9]|\.|E|-|\+)+([A-Za-z].*):")
+    query = re.compile("^Query\s*[0-9]+\s*([A-Z-]+)")
     aligmentList = []
     with open("data/Agglutinin.foldrec","r") as f:
         for line in f:
             for i in re.finditer(score_templateName,line):
-                a = Alignment(i.group(1),i.group(3).strip(),template,cible)
+                a = Alignment(i.group(1),i.group(3).strip())
                 aligmentList.append(a)
 
 if __name__ == "__main__":
@@ -34,3 +35,6 @@ if __name__ == "__main__":
             r = classes.Residue(chain, index, chain.id, resNum)
             resList.append(r)
 """
+
+        #"^\s+[0-9]+\s+([0-9]+\.[0-9]+)(\s|[0-9]|\.|E|-|\+)+([A-Za-z].*):"
+        #"^Query\s*[0-9]\s*([A-Z]+)"
