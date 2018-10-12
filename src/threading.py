@@ -2,6 +2,30 @@
 # -*- coding: utf-8 -*-
 
 import numpy as np
+import test_pdb_parse
+
+
+def get_pdb(pdb):
+    p = PDBParser(QUIET=True) # QUIET=T : Warnings issued are suppressed
+    pdb = p.get_structure(pdb,pdb)
+
+    resList = [] # List of Residue instances
+
+    for chain in pdb.get_chains():
+        # First residue of the current chain
+        first = next(res.id[1] for res in chain.get_residues() if (res.id[1] < 99999))
+
+        # Last residue of the current chain
+        for res in chain.get_residues():
+            if (res.get_id()[0] != ' '):
+                break
+            last = res.get_id()[1]
+
+        for resNum in range(first,last+1):
+            r = Residue(chain, resNum)
+            resList.append(r)
+    return resList
+
 
 def calc_dist_matrix(query, template, dist_range, gap_penalty):
     """
@@ -23,6 +47,7 @@ def calc_dist_matrix(query, template, dist_range, gap_penalty):
 
     size = len(query)
     matrix = np.empty((size, size), np.float)
+    # use the query only for indexes
     for i, res_row in enumerate(query):
         for j, res_col in enumerate(query):
             # Penalize gaps
@@ -32,8 +57,9 @@ def calc_dist_matrix(query, template, dist_range, gap_penalty):
             # The method here is a more efficient way of calculating the
             # distance then the numpy function np.linalg.norm(A-B)
             # https://stackoverflow.com/a/47775357/6401758
-            a_min_b = template[i].coords - template[j].coords
-            dist = np.sqrt(np.einsum('ij,ij->i', a_min_b, a_min_b))
+            print(template[i].CA_coords, template[j].CA_coords)
+            a_min_b = template[i].CA_coords - template[j].CA_coords
+            dist = np.sqrt(np.einsum('ij,ij', a_min_b, a_min_b))
             # Keep distances only in a defined range
             if dist_range[0] <= dist <= dist_range[1]:
                 matrix[i, j] = dist
@@ -46,4 +72,7 @@ def calc_dist_matrix(query, template, dist_range, gap_penalty):
 
 if __name__ == '__main__':
 
-    dist_matrix = calc_dist_matrix(query, template, dist_range)
+    query = "AGLPVIMCLKSNNHQKYLRYQSDNIQQYGLLQFSADKILDPLAQFEVEPSKTYDGLVHIKSRYTNKYLVRWSPNHYWITASANEPDENKSNWACTLFKPLYVEEGNMKKVRLLHVQLGHYTQNYTVGGSFVSYLFAESSQIDTGSKDVFHVID"
+    template = get_pdb("../data/1jlxa1.atm")
+    dist_range = [5, 10]
+    gap_penalty = -3
