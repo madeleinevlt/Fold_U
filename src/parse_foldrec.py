@@ -1,6 +1,19 @@
 from Bio.PDB import *
+import re
+
+def parsing_foldrec(foldrec,top):
+    pattn = re.compile('Query')
+    for q in re.finditer(pattn,foldrec):
+        print(q)
+
+
 
 if __name__ == "__main__":
+    with open("data/Agglutinin.foldrec","r") as f:
+        foldrec = f.read()
+
+
+'''
 
     p = PDBParser(QUIET=True) # QUIET=T : Warnings issued are suppressed
     pdb = p.get_structure(opt.input,opt.input+".H")
@@ -21,3 +34,4 @@ if __name__ == "__main__":
             r = classes.Residue(chain, index, chain.id, resNum)
             resList.append(r)
 
+'''
