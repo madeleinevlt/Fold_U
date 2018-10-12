@@ -4,5 +4,5 @@ class Alignment:
         """The constructor of an instance of the Alignment class."""
         self.score = score
         self.templateName = templateName
-        #self.query = query
-        #self.template = template
+        self.query = None
+        self.template = None

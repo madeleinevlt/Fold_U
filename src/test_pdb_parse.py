@@ -25,5 +25,5 @@ for chain in pdb.get_chains():
         last = res.get_id()[1]
 
     for resNum in range(first,last+1):
-        r = classes.Residue(chain, index, resNum)
+        r = classes.Residue(chain, resNum)
         resList.append(r)
