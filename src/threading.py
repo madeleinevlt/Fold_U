@@ -35,8 +35,8 @@ def calc_dist_matrix(query, template, dist_range, gap_penalty):
             a_min_b = template[i].coords - template[j].coords
             dist = np.sqrt(np.einsum('ij,ij->i', a_min_b, a_min_b))
             # Keep distances only in a defined range
-            if range[0] <= dist <= range[1]
-            matrix[i, j] = dist
+            if dist_range[0] <= dist <= dist_range[1]:
+                matrix[i, j] = dist
     return matrix
 
 
