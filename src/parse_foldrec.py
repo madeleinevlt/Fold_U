@@ -6,6 +6,8 @@ def parsing_foldrec(foldrec,top):
     for q in re.finditer(pattn,foldrec):
         print(q)
 
+        #"^\s+[0-9]+\s+([0-9]+\.[0-9]+)(\s|[0-9]|\.|E|-|\+)+([A-Za-z].*):"
+
 
 
 if __name__ == "__main__":
