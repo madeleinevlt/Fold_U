@@ -1,22 +1,20 @@
 from Bio.PDB import *
 import re
+# import alignment as ali
 
-def parsing_foldrec(foldrec,top):
-    pattn = re.compile('Query')
-    for q in re.finditer(pattn,foldrec):
-        print(q)
-
-        #"^\s+[0-9]+\s+([0-9]+\.[0-9]+)(\s|[0-9]|\.|E|-|\+)+([A-Za-z].*):"
-
-
+def parsing_foldrec():
+    score_templateName = re.compile("^\s+[0-9]+\s+([0-9]+\.[0-9]+)(\s|[0-9]|\.|E|-|\+)+([A-Za-z].*):")
+    aligmentList = []
+    with open("data/Agglutinin.foldrec","r") as f:
+        for line in f:
+            for i in re.finditer(score_templateName,line):
+                a = Alignment(i.group(1),i.group(3).strip(),template,cible)
+                aligmentList.append(a)
 
 if __name__ == "__main__":
-    with open("data/Agglutinin.foldrec","r") as f:
-        foldrec = f.read()
+    parsing_foldrec()
 
-
-'''
-
+"""
     p = PDBParser(QUIET=True) # QUIET=T : Warnings issued are suppressed
     pdb = p.get_structure(opt.input,opt.input+".H")
 
@@ -35,5 +33,4 @@ if __name__ == "__main__":
         for resNum in range(first,last+1):
             r = classes.Residue(chain, index, chain.id, resNum)
             resList.append(r)
-
-'''
+"""
