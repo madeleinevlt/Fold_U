@@ -73,7 +73,6 @@ helper = cache --timeout=28800
 data test : Agglutini
 
 ## Pseudo-code et répartition du code
-```
 génération des classes ~ Hélène
 parsing_folrec ~ Hélène
 parsing_metafold ~ Tom
@@ -81,7 +80,7 @@ parsing_DOPE ~ Arnold
 calc_threading_score
  - calc_dist : Gabriel
  - transf_dist_E : FLora
-```
+
 
 ## Git pull request
 1. Création d'une branche :
