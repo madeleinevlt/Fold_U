@@ -1,8 +1,11 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
+"""
+    .. module:: threading
+      :synopsis: This module implements all the functions to make the threading of
+                    the query sequence on the templates.
+"""
+
 
 import numpy as np
-import test_pdb_parse
 
 
 def get_pdb(pdb):
@@ -31,18 +34,18 @@ def calc_dist_matrix(query, template, dist_range, gap_penalty):
     """
         Calculate the matrix of distances between the residues of the query sequence.
         Using the coordinates of the template sequence: threading of the query
-        on the template sequence.
-        The distance calculation is optimized.
+        on the template sequence. The distance calculation is optimized.
 
         Args:
             query: List of residues of the query sequence
             template: List of residues of the template sequence
-            dist_range: Range of distances in angströms. Distances within this
-                        range only are taken into account
+            dist_range: Range of distances in angströms.
+                        Distances within this range only are taken into account
             gap_penalty: Penalization of gaps (integer)
+
         Returns:
-            matrix: The distance matrix between pairs of residues of the query
-                     sequence after being threaded on the template sequence.
+            2D numpy matrix: The distance matrix between pairs of residues of the
+            query sequence after being threaded on the template sequence.
     """
 
     size = len(query)
@@ -57,7 +60,6 @@ def calc_dist_matrix(query, template, dist_range, gap_penalty):
             # The method here is a more efficient way of calculating the
             # distance then the numpy function np.linalg.norm(A-B)
             # https://stackoverflow.com/a/47775357/6401758
-            print(template[i].CA_coords, template[j].CA_coords)
             a_min_b = template[i].CA_coords - template[j].CA_coords
             dist = np.sqrt(np.einsum('i,j->j', a_min_b, a_min_b))
             # Keep distances only in a defined range
