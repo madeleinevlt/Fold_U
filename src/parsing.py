@@ -1,5 +1,5 @@
 import re
-import alignment as ali
+import src.alignment as ali
 
 def parsing_foldrec(nb_template):
     """
@@ -38,11 +38,32 @@ def parsing_foldrec(nb_template):
                         alignment_list[cpt].query = reg2.group(1)
                 if (reg3):
                     if (prev_line == '\n'):
-                        alignment_list[cpt].query = reg3.group(1)
-                        cpt = cpt + 1      
+                        alignment_list[cpt].template = reg3.group(1)
+                        cpt = cpt + 1
             prev_line = line
     return(alignment_list)
 
+
+def get_pdb(pdb):
+    p = PDBParser(QUIET=True) # QUIET=T : Warnings issued are suppressed
+    pdb = p.get_structure(pdb,pdb)
+
+    residues_list = [] # List of Residue instances
+
+    for chain in pdb.get_chains():
+        # First residue of the current chain
+        first = next(res.id[1] for res in chain.get_residues() if (res.id[1] < 99999))
+
+        # Last residue of the current chain
+        for res in chain.get_residues():
+            if (res.get_id()[0] != ' '):
+                break
+            last = res.get_id()[1]
+
+        for resNum in range(first,last+1):
+            r = Residue(chain, resNum)
+            residues_list.append(r)
+    return(residues_list)
 
 if __name__ == "__main__":
     nb_template = 10
