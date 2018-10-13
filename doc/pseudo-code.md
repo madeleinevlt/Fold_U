@@ -53,3 +53,30 @@ def calc_threading_score:
 	sortie : somme de la matrice
 
 ```
+
+## Documentation
+
+* Nous allons générer la documentation avec Sphinx avec le thème Read The Docs (exemple: https://docs.readthedocs.io/en/latest/)
+
+
+### Docstrings
+
+
+* Les docstrings doivent être écrites en reStructuredText et formatées de la façon suivante pour être *parsées* automatiquement par Sphinx:  
+```python
+def fonction_utile(arg1, arg2, ...):
+    """
+        Petite description de la fonction
+
+        Args:
+	    arg1: description de l'argument 1
+	    arg2: description de l'argument 2
+	    ...
+
+        Returns:
+	    variable_retournée: description de la variable retournée (type de structure ...)
+    """
+```
+
+
+
