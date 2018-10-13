@@ -1,6 +1,14 @@
+"""
+.. module:: parsing
+   :synopsis: This module implements all the functions to parse either input
+                or additional necessary files.
+"""
+
+
+
 def metafold(metafold_file):
     """
-        Extract the name of the meatafold as a key and the associated pdb as a value in a dictionary
+        Extract the name of the metafold as a key and the associated pdb as a value in a dictionary
 
         Args:
             metafold_file: the file METAFOLD.list containing this information
