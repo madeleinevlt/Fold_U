@@ -69,14 +69,11 @@ def fonction_utile(arg1, arg2, ...):
         Petite description de la fonction
 
         Args:
-	    arg1: description de l'argument 1
-	    arg2: description de l'argument 2
-	    ...
+    	    arg1: description de l'argument 1
+    	    arg2: description de l'argument 2
+    	    ...
 
         Returns:
-	    variable_retournée: description de la variable retournée (type de structure ...)
+	       type_de_la_variable_retournée: description de la variable retournée
     """
 ```
-
-
-
