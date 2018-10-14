@@ -17,8 +17,8 @@ class Template:
         """The constructor of an instance of the Template class."""
         self.name = name
         self.seq = seq
-        self.pdbID = None
-
+        self.pdb = None
+        self.resList = None
 
 class Residue:
     """Class that groups informations about a residue."""
