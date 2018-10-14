@@ -64,3 +64,17 @@ Dans le ~/.gitconfig :
 [credential]
 helper = cache --timeout=28800
 ```
+
+
+### Pour générer la documentation
+
+Si vous avez codé des fonctions et que vous avez fais des jolies *docstrings*,
+ou même si vous avez modifié le README ou que vous voulez expliquer des choses
+dans la doc il suffit de la mettre à jour en exécutant dans un terminal:
+```
+cd docs
+make html
+google-chrome-stable build/html/index.html
+ou
+firefox build/html/index.html
+```
