@@ -74,6 +74,6 @@ def fonction_utile(arg1, arg2, ...):
     	    ...
 
         Returns:
-	       type_de_la_variable_retournée: description de la variable retournée
+	    type_de_la_variable_retournée: description de la variable retournée
     """
 ```
