@@ -11,7 +11,7 @@ def parsing_dope(dope_file):
         Args:
             dope file.par
 	    example 1 line
-            "aa1 atom aa2 atom 10 values of energy for each amino acids pair at distance intervalles [0.25,15] with a step of 0.5
+            "aa1 atom aa2 atom 10 values of energy for each amino acids pair at distance intervalles [0.25,15] with a step of 0.5"
             ...
         Returns:
             matrix of lists for each amino acids pair
