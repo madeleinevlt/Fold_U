@@ -1,7 +1,6 @@
-# Meeting 1 : lundi 1/10
----
+# Meeting 1 : lundi 1/10  
 
-## Répartition des rôles :
+## Répartition des rôles  
 
 * **Manager** ~ Hélène
  - Organisation des meetings
@@ -21,7 +20,7 @@
  - Bon niveau en anglais / correction anglais
  - Gestion du rapport en latex (overleaf)
  - Gestion présentation diapos
-  
+
 ## Commandes GitHub
 
 #### Cloner le repository
@@ -64,4 +63,18 @@ Dans le ~/.gitconfig :
 	insteadOf = https://github.com
 [credential]
 helper = cache --timeout=28800
+```
+
+
+### Pour générer la documentation
+
+Si vous avez codé des fonctions et que vous avez fais des jolies *docstrings*,
+ou même si vous avez modifié le README ou que vous voulez expliquer des choses
+dans la doc il suffit de la mettre à jour en exécutant dans un terminal:
+```
+cd docs
+make html
+google-chrome-stable build/html/index.html
+ou
+firefox build/html/index.html
 ```
