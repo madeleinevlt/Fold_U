@@ -43,7 +43,7 @@ def get_dopetab(Path_file):
                             columns = dope_data.loc[:19,1]).astype(str)
     #...transforming values of energy into list of string !
     list_test = dope_data_nums.iloc[:,:].values.tolist()
-    list_test = map('**'.join, list_test) #separator of values ~ "**"
+    list_test = list(map('**'.join, list_test)) #separator of values ~ "**"
 
     #filling dope_tab
     start = 0
