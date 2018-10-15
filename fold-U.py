@@ -1,16 +1,15 @@
 #! /usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-# IMPORT
+# IMPORTS
 import src.parsing as parse
+import src.threading as threading
 
 if __name__ == "__main__":
 
-    metafold_dict = parse.metafold("data/METAFOLD.list")
     nb_templates = 10
-    alignment_list = parse.foldrec(nb_templates, metafold_dict)
-    for i in alignment_list:
-        print(i.template.pdb)
-        for j in i.template.seq:
-            print(j.res_name)
-            print(j.CA_coords)
+    dist_range = [5, 10]
+    alignment_list = parse.foldrec(nb_templates)
+    for ali in alignment_list:
+        matrix = threading.calc_dist_matrix(ali.query_seq, ali.template.seq, dist_range)
+    print(matrix)
