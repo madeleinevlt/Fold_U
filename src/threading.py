@@ -8,26 +8,7 @@
 import numpy as np
 
 
-def get_pdb(pdb):
-    p = PDBParser(QUIET=True) # QUIET=T : Warnings issued are suppressed
-    pdb = p.get_structure(pdb,pdb)
 
-    resList = [] # List of Residue instances
-
-    for chain in pdb.get_chains():
-        # First residue of the current chain
-        first = next(res.id[1] for res in chain.get_residues() if (res.id[1] < 99999))
-
-        # Last residue of the current chain
-        for res in chain.get_residues():
-            if (res.get_id()[0] != ' '):
-                break
-            last = res.get_id()[1]
-
-        for resNum in range(first,last+1):
-            r = Residue(chain, resNum)
-            resList.append(r)
-    return resList
 
 
 def calc_dist_matrix(query, template, dist_range, gap_penalty):
@@ -51,8 +32,8 @@ def calc_dist_matrix(query, template, dist_range, gap_penalty):
     size = len(query)
     matrix = np.empty((size, size), np.float)
     # use the query only for indexes
-    for i, res_row in enumerate(query):
-        for j, res_col in enumerate(query):
+    for i, _ in enumerate(query):
+        for j, _ in enumerate(query):
             # Penalize gaps
             if template[i] == "X" or template[j] == "X":
                 matrix[i, j] = gap_penalty
@@ -65,15 +46,3 @@ def calc_dist_matrix(query, template, dist_range, gap_penalty):
             if dist_range[0] <= dist <= dist_range[1]:
                 matrix[i, j] = dist
     return matrix
-
-
-
-
-
-
-if __name__ == '__main__':
-
-    query = "AGLPVIMCLKSNNHQKYLRYQSDNIQQYGLLQFSADKILDPLAQFEVEPSKTYDGLVHIKSRYTNKYLVRWSPNHYWITASANEPDENKSNWACTLFKPLYVEEGNMKKVRLLHVQLGHYTQNYTVGGSFVSYLFAESSQIDTGSKDVFHVID"
-    template = get_pdb("../data/1jlxa1.atm")
-    dist_range = [5, 10]
-    gap_penalty = -3
