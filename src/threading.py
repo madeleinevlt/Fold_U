@@ -29,20 +29,26 @@ def calc_dist_matrix(query, template, dist_range):
     """
 
     query_size = len(query)
-    matrix = np.empty((query_size, query_size))
+    matrix = np.full((query_size, query_size), fill_value=np.inf, dtype=object)
     # Use the query only for indexes
-    for i, _ in enumerate(query):
-        for j, _ in enumerate(query):
-            # Write a "*" if a gap is found in either query or template sequence
-            # The gap will be penalized later in processing
-            if template[i] == "X" or template[j] == "X":
-                matrix[i, j] = "*"
-            # One of the most efficient method to calculate the distances
-            # https://stackoverflow.com/a/47775357/6401758
-            # distance = sqrt((xa-xb)**2 + (ya-yb)**2 + (za-zb)**2)
-            dist = np.linalg.norm(template[i].CA_coords - template[j].CA_coords)
-            # Keep distances only in a defined range because we don't want to
-            # take into account directly bonded residues (dist < ~5) and too far residues
-            if dist_range[0] <= dist <= dist_range[1]:
-                matrix[i, j] = dist
+    for i, row_res in enumerate(query):
+        for j, col_res in enumerate(query):
+            # A gap represented by "-" = no distance calculation.
+            # The whole line / row in the matrix will necessarily be "*"
+            # This saves computation time
+            if row_res.name == "-" or template[i].name == "-":
+                matrix[i, :] = "*"
+                break
+            elif col_res.name == "-" or template[j].name == "-":
+                matrix[:, j] = "*"
+                break
+            else:
+                # One of the most efficient method to calculate the distances
+                # https://stackoverflow.com/a/47775357/6401758
+                # distance = sqrt((xa-xb)**2 + (ya-yb)**2 + (za-zb)**2)
+                dist = np.linalg.norm(template[i].CA_coords - template[j].CA_coords)
+                # Keep distances only in a defined range because we don't want to
+                # take into account directly bonded residues (dist < ~5 A) and too far residues
+                if dist_range[0] <= dist <= dist_range[1]:
+                    matrix[i, j] = dist
     return matrix
