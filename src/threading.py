@@ -11,10 +11,10 @@ import numpy as np
 
 
 
-def calc_dist_matrix(query, template, dist_range, gap_penalty):
+def calc_dist_matrix(query, template, dist_range):
     """
-        Calculate the matrix of distances between the residues of the query sequence.
-        Using the coordinates of the template sequence: threading of the query
+        Calculate the matrix of distances of pair residues of the query sequence,
+        using the coordinates of the template sequence: threading of the query
         on the template sequence. The distance calculation is optimized.
 
         Args:
@@ -29,14 +29,15 @@ def calc_dist_matrix(query, template, dist_range, gap_penalty):
             query sequence after being threaded on the template sequence.
     """
 
-    size = len(query)
-    matrix = np.empty((size, size), np.float)
+    query_size = len(query)
+    matrix = np.empty((query_size, query_size), np.float)
     # use the query only for indexes
     for i, _ in enumerate(query):
         for j, _ in enumerate(query):
-            # Penalize gaps
+            # Write a "*" if a gap is found in either query or template sequence
+            # The gap will be penalized later in processing
             if template[i] == "X" or template[j] == "X":
-                matrix[i, j] = gap_penalty
+                matrix[i, j] = "*"
             # One of the most efficient method to calculate the distances
             # https://stackoverflow.com/a/47775357/6401758
             # distance = sqrt((xa-xb)**2 + (ya-yb)**2 + (za-zb)**2)
