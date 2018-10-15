@@ -18,7 +18,7 @@ def metafold(metafold_file):
             dictionary: The dictionary with key = metafold and value = pdb file
     """
     metafold_dict = {}
-    with open(metafold_file,"r") as f:
-        for line in f:
+    with open(metafold_file, "r") as f_in:
+        for line in f_in:
             metafold_dict[line.split()[0]] = line.split()[1]
-    return(metafold_dict)
+    return metafold_dict
