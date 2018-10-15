@@ -18,9 +18,9 @@ def calc_dist_matrix(query, template, dist_range):
         on the template sequence. The distance calculation is optimized.
 
         Args:
-            query: List of residues of the query sequence
-            template: List of residues of the template sequence
-            dist_range: Range of distances in angströms.
+            query (list of Residue): List of residues of the query sequence
+            template (list of Residue): List of residues of the template sequence
+            dist_range (list of int): Range of distances in angströms.
                         Distances within this range only are taken into account
 
         Returns:

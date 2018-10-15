@@ -87,6 +87,7 @@
 <li class="toctree-l1"><a class="reference internal" href="meeting.html">Meeting</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Parsing module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="threading.html">Threading module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classes.html">Classes module</a></li>
 </ul>
 
             
@@ -154,10 +155,47 @@
   <div class="section" id="module-src.parsing">
 <span id="parsing-module"></span><h1>Parsing module<a class="headerlink" href="#module-src.parsing" title="Permalink to this headline">¶</a></h1>
 <span class="target" id="module-parsing"></span><dl class="function">
+<dt id="src.parsing.foldrec">
+<code class="descclassname">src.parsing.</code><code class="descname">foldrec</code><span class="sig-paren">(</span><em>nb_templates</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/parsing.html#foldrec"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.parsing.foldrec" title="Permalink to this definition">¶</a></dt>
+<dd><p>Extracts the score, the template name, the query sequence and the query template for each alignment
+and creates a list of alignment objects.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>nb_template</strong> – Number of templates chosen</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A list of alignment objects</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">alignment_list</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="src.parsing.get_CA_coords">
+<code class="descclassname">src.parsing.</code><code class="descname">get_CA_coords</code><span class="sig-paren">(</span><em>alignment_list</em>, <em>count</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/parsing.html#get_CA_coords"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.parsing.get_CA_coords" title="Permalink to this definition">¶</a></dt>
+<dd><p>Takes a pdb file and creates a list of Residue objects.
+Each Residue object contains the number the name and the CA coordinates.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>pdb</strong> – The name of a pdb file</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A list of Residue objects</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">residues_list</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
 <dt id="src.parsing.metafold">
 <code class="descclassname">src.parsing.</code><code class="descname">metafold</code><span class="sig-paren">(</span><em>metafold_file</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/parsing.html#metafold"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.parsing.metafold" title="Permalink to this definition">¶</a></dt>
-<dd><p>Extract the name of the metafold as a key and the associated pdb as a
-value in a dictionary</p>
+<dd><p>Extracts the name of the metafold as a key and the associated pdb as a value in a dictionary</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -166,7 +204,7 @@ value in a dictionary</p>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The dictionary with key = metafold and value = pdb file</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">dictionary</td>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">metafold_dict</td>
 </tr>
 </tbody>
 </table>
@@ -194,7 +232,7 @@ value in a dictionary</p>
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2018, Gabriel Cretin, Hélène Kabbech, Tom Gutman, Flora Mikaeloff, Franz Arnold.
+        &copy; Copyright 2018, Gabriel Cretin, Hélène Kabbech, Tom Gutman, Flora Mikaeloff, Franz Arnold
 
     </p>
   </div>
@@ -213,21 +251,14 @@ value in a dictionary</p>
 
   
 
-    <script type="text/javascript">
-        var DOCUMENTATION_OPTIONS = {
-            URL_ROOT:'./',
-            VERSION:'0.0.1',
-            LANGUAGE:'None',
-            COLLAPSE_INDEX:false,
-            FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true,
-            SOURCELINK_SUFFIX: '.txt'
-        };
-    </script>
-      <script type="text/javascript" src="_static/jquery.js"></script>
-      <script type="text/javascript" src="_static/underscore.js"></script>
-      <script type="text/javascript" src="_static/doctools.js"></script>
-      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
 
   
 

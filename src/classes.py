@@ -12,9 +12,8 @@ class Alignment:
     Attributes:
         score: Alignment score
         query_seq: Query sequence
-        template: Instance of a Template object.
-        .. code-block:: python
-            Template(template_name, template_seq)
+        template: Instance of a Template object as
+                  ``Template(template_name, template_seq)``
     """
 
     def __init__(self, score, query_seq, template_name, template_seq):

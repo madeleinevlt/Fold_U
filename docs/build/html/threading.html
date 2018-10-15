@@ -28,6 +28,7 @@
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Classes module" href="classes.html" />
     <link rel="prev" title="Parsing module" href="parsing.html" /> 
 
   
@@ -86,6 +87,7 @@
 <li class="toctree-l1"><a class="reference internal" href="meeting.html">Meeting</a></li>
 <li class="toctree-l1"><a class="reference internal" href="parsing.html">Parsing module</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Threading module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classes.html">Classes module</a></li>
 </ul>
 
             
@@ -154,20 +156,19 @@
 <span id="threading-module"></span><h1>Threading module<a class="headerlink" href="#module-src.threading" title="Permalink to this headline">¶</a></h1>
 <span class="target" id="module-threading"></span><dl class="function">
 <dt id="src.threading.calc_dist_matrix">
-<code class="descclassname">src.threading.</code><code class="descname">calc_dist_matrix</code><span class="sig-paren">(</span><em>query</em>, <em>template</em>, <em>dist_range</em>, <em>gap_penalty</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/threading.html#calc_dist_matrix"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.threading.calc_dist_matrix" title="Permalink to this definition">¶</a></dt>
-<dd><p>Calculate the matrix of distances between the residues of the query sequence.
-Using the coordinates of the template sequence: threading of the query
+<code class="descclassname">src.threading.</code><code class="descname">calc_dist_matrix</code><span class="sig-paren">(</span><em>query</em>, <em>template</em>, <em>dist_range</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/threading.html#calc_dist_matrix"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.threading.calc_dist_matrix" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the matrix of distances of pair residues of the query sequence,
+using the coordinates of the template sequence: threading of the query
 on the template sequence. The distance calculation is optimized.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>query</strong> – List of residues of the query sequence</li>
-<li><strong>template</strong> – List of residues of the template sequence</li>
-<li><strong>dist_range</strong> – Range of distances in angströms.
+<li><strong>query</strong> (<em>list of Residue</em>) – List of residues of the query sequence</li>
+<li><strong>template</strong> (<em>list of Residue</em>) – List of residues of the template sequence</li>
+<li><strong>dist_range</strong> (<em>list of int</em>) – Range of distances in angströms.
 Distances within this range only are taken into account</li>
-<li><strong>gap_penalty</strong> – Penalization of gaps (integer)</li>
 </ul>
 </td>
 </tr>
@@ -192,6 +193,8 @@ query sequence after being threaded on the template sequence.</p>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
+        <a href="classes.html" class="btn btn-neutral float-right" title="Classes module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
       
         <a href="parsing.html" class="btn btn-neutral" title="Parsing module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
@@ -202,7 +205,7 @@ query sequence after being threaded on the template sequence.</p>
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2018, Gabriel Cretin, Hélène Kabbech, Tom Gutman, Flora Mikaeloff, Franz Arnold.
+        &copy; Copyright 2018, Gabriel Cretin, Hélène Kabbech, Tom Gutman, Flora Mikaeloff, Franz Arnold
 
     </p>
   </div>
@@ -221,21 +224,14 @@ query sequence after being threaded on the template sequence.</p>
 
   
 
-    <script type="text/javascript">
-        var DOCUMENTATION_OPTIONS = {
-            URL_ROOT:'./',
-            VERSION:'0.0.1',
-            LANGUAGE:'None',
-            COLLAPSE_INDEX:false,
-            FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true,
-            SOURCELINK_SUFFIX: '.txt'
-        };
-    </script>
-      <script type="text/javascript" src="_static/jquery.js"></script>
-      <script type="text/javascript" src="_static/underscore.js"></script>
-      <script type="text/javascript" src="_static/doctools.js"></script>
-      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
 
   
 

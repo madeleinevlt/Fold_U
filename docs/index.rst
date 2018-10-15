@@ -13,3 +13,4 @@ Welcome to fold-U's documentation!
    meeting
    parsing
    threading
+   classes
