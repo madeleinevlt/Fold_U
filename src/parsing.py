@@ -41,12 +41,12 @@ def get_CA_coords(alignment_list,count):
     res_num = 0
     for atom in pdb.get_atoms():
         if atom.name == "CA":
-            while alignment_list[count].template.seq[res_num].res_name == '-':
+            while alignment_list[count].template.seq[res_num].name == '-':
                 res_num = res_num + 1
             alignment_list[count].template.seq[res_num].CA_coords = atom.get_vector()
             res_num = res_num + 1
 
-def foldrec(nb_templates, metafold_dict):
+def foldrec(nb_templates):
     """
         Extracts the score, the template name, the query sequence and the query template for each alignment
         and creates a list of alignment objects.
@@ -57,6 +57,8 @@ def foldrec(nb_templates, metafold_dict):
         Returns:
             alignment_list : A list of alignment objects
     """
+    metafold_dict = metafold("data/METAFOLD.list")
+
     # Regex :
     template_name_reg = re.compile("Alignment :.*vs\s+([A-Za-z0-9-_]+)")
     score_reg = re.compile("^Score :\s+([-0-9\.]+)")
@@ -85,10 +87,10 @@ def foldrec(nb_templates, metafold_dict):
                 score = float(score_found.group(1))
             # A query sequence is found :
             if (query_seq_found and prev_line == '\n'):
-                query_seq = [cl.Residue(res_name) for res_name in list(query_seq_found.group(1))]
+                query_seq = [cl.Residue(name) for name in list(query_seq_found.group(1))]
             # A template sequence is founds :
             if (template_seq_found and prev_line == '\n'):
-                template_seq = [cl.Residue(res_name) for res_name in list(template_seq_found.group(1))]
+                template_seq = [cl.Residue(name) for name in list(template_seq_found.group(1))]
                 # Add a new alignment object in the list :
                 alignment_list.append(cl.Alignment(score, query_seq, template_name, template_seq))
                 alignment_list[count].template.pdb = metafold_dict[template_name]
