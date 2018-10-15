@@ -1,7 +1,7 @@
 """
     .. module:: threading
       :synopsis: This module implements all the functions to make the threading of
-                    the query sequence on the templates.
+                 the query sequence on the templates.
 """
 
 
@@ -30,17 +30,20 @@ def calc_dist_matrix(query, template, dist_range):
 
     query_size = len(query)
     matrix = np.full((query_size, query_size), fill_value=np.inf, dtype=object)
-    # Use the query only for indexes
-    for i, row_res in enumerate(query):
-        for j, col_res in enumerate(query):
+    # The distance matrix is symmetric so we make the calculations only for
+    # the upper right triangular matrix. This saves have computation time.
+    for i in range(len(query)):
+        for j in range(i, len(query)):
+            row_res = query[i]
+            col_res = query[j]
             # A gap represented by "-" = no distance calculation.
             # The whole line / row in the matrix will necessarily be "*"
             # This saves computation time
             if row_res.name == "-" or template[i].name == "-":
-                matrix[i, :] = "*"
+                matrix[i, j:] = "*"
                 break
             elif col_res.name == "-" or template[j].name == "-":
-                matrix[:, j] = "*"
+                matrix[:i, j] = "*"
                 break
             else:
                 # One of the most efficient method to calculate the distances
