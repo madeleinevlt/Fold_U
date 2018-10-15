@@ -3,8 +3,20 @@
    :synopsis: This module implements Alignment, Template and Residue classes
 """
 
+
 class Alignment:
-    """Class that groups informations about an alignment."""
+    """
+    .. class:: Alignment
+      This class groups informations about an alignment.
+
+    Attributes:
+        score: Alignment score
+        query_seq: Query sequence
+        template: Instance of a Template object.
+        .. code-block:: python
+            Template(template_name, template_seq)
+    """
+
     def __init__(self, score, query_seq, template_name, template_seq):
         """The constructor of an instance of the Alignment class."""
         self.score = score
@@ -12,7 +24,16 @@ class Alignment:
         self.template = Template(template_name, template_seq)
 
 class Template:
-    """Class that groups informations about a template."""
+    """
+    .. class:: Template
+      This class groups informations about a template sequence/structure.
+
+    Attributes:
+        name: Name of the template
+        seq: Template's sequence of residues as list of Residues objects
+        pdb: PDB code of the template
+    """
+
     def __init__(self, name, seq):
         """The constructor of an instance of the Template class."""
         self.name = name
@@ -20,7 +41,15 @@ class Template:
         self.pdb = None
 
 class Residue:
-    """Class that groups informations about a residue."""
+    """
+    .. class:: Residue
+      This class groups informations about a residue.
+
+    Attributes:
+        name: Name of the residue (3 letters code)
+        CA_coords: 3D coordinates of the residues
+    """
+
     def __init__(self, name):
         """The constructor of an instance of the Residue class."""
         self.name = name
