@@ -11,13 +11,6 @@ class Alignment:
         self.query_seq = query_seq
         self.template = Template(template_name, template_seq)
 
-class Query:
-    """Class that groups informations about a template."""
-    def __init__(self, name, seq):
-        """The constructor of an instance of the Template class."""
-
-
-
 class Template:
     """Class that groups informations about a template."""
     def __init__(self, name, seq):
@@ -28,7 +21,7 @@ class Template:
 
 class Residue:
     """Class that groups informations about a residue."""
-    def __init__(self, res_name):
+    def __init__(self, name):
         """The constructor of an instance of the Residue class."""
-        self.res_name = res_name
+        self.name = name
         self.CA_coords = None
