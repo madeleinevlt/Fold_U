@@ -22,7 +22,6 @@ def calc_dist_matrix(query, template, dist_range):
             template: List of residues of the template sequence
             dist_range: Range of distances in angströms.
                         Distances within this range only are taken into account
-            gap_penalty: Penalization of gaps (integer)
 
         Returns:
             2D numpy matrix: The distance matrix between pairs of residues of the
@@ -30,8 +29,8 @@ def calc_dist_matrix(query, template, dist_range):
     """
 
     query_size = len(query)
-    matrix = np.empty((query_size, query_size), np.float)
-    # use the query only for indexes
+    matrix = np.empty((query_size, query_size))
+    # Use the query only for indexes
     for i, _ in enumerate(query):
         for j, _ in enumerate(query):
             # Write a "*" if a gap is found in either query or template sequence
