@@ -56,13 +56,12 @@ def calc_dist_matrix(query, template, dist_range, gap_penalty):
             # Penalize gaps
             if template[i] == "X" or template[j] == "X":
                 matrix[i, j] = gap_penalty
-            # distance = sqrt((xa-xb)**2 + (ya-yb)**2 + (za-zb)**2)
-            # The method here is a more efficient way of calculating the
-            # distance then the numpy function np.linalg.norm(A-B)
+            # One of the most efficient method to calculate the distances
             # https://stackoverflow.com/a/47775357/6401758
-            a_min_b = template[i].CA_coords - template[j].CA_coords
-            dist = np.sqrt(np.einsum('i,j->j', a_min_b, a_min_b))
-            # Keep distances only in a defined range
+            # distance = sqrt((xa-xb)**2 + (ya-yb)**2 + (za-zb)**2)
+            dist = np.linalg.norm(template[i].CA_coords - template[j].CA_coords)
+            # Keep distances only in a defined range because we don't want to
+            # take into account directly bonded residues (dist < ~5) and too far residues
             if dist_range[0] <= dist <= dist_range[1]:
                 matrix[i, j] = dist
     return matrix
