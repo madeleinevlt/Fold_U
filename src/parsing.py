@@ -23,9 +23,9 @@ def metafold(metafold_file):
     with open(metafold_file,"r") as f:
         for line in f:
             metafold_dict[line.split()[0]] = line.split()[1]
-    return(metafold_dict)
+    return metafold_dict
 
-def get_resList(pdb):
+def get_CA_coords(alignment_list,count):
     """
         Takes a pdb file and creates a list of Residue objects.
         Each Residue object contains the number the name and the CA coordinates.
@@ -37,25 +37,14 @@ def get_resList(pdb):
             residues_list: A list of Residue objects
     """
     p = PDBParser(QUIET=True) # QUIET = True : Warnings issued are suppressed
-    pdb = p.get_structure(pdb, 'data/pdb'+pdb)
-
-    # List of Residue objects :
-    residues_list = []
-
-    for chain in pdb.get_chains():
-        # First residue of the current chain
-        first = next(res.id[1] for res in chain.get_residues() if (res.id[1] < 99999))
-
-        # Last residue of the current chain
-        for res in chain.get_residues():
-            if (res.get_id()[0] != ' '):
-                break
-            last = res.get_id()[1]
-
-        for resNum in range(first, last+1):
-            r = cl.Residue(chain, resNum)
-            residues_list.append(r)
-    return(residues_list)
+    pdb = p.get_structure(alignment_list[count].template.pdb, 'data/pdb/'+alignment_list[count].template.pdb)
+    res_num = 0
+    for atom in pdb.get_atoms():
+        if atom.name == "CA":
+            while alignment_list[count].template.seq[res_num].res_name == '-':
+                res_num = res_num + 1
+            alignment_list[count].template.seq[res_num].CA_coords = atom.get_vector()
+            res_num = res_num + 1
 
 def foldrec(nb_templates, metafold_dict):
     """
@@ -69,10 +58,10 @@ def foldrec(nb_templates, metafold_dict):
             alignment_list : A list of alignment objects
     """
     # Regex :
-    templateName_reg = re.compile("Alignment :.*vs\s+([A-Za-z0-9-_]+)")
+    template_name_reg = re.compile("Alignment :.*vs\s+([A-Za-z0-9-_]+)")
     score_reg = re.compile("^Score :\s+([-0-9\.]+)")
-    querySeq_reg = re.compile("^Query\s*[0-9]+\s*([A-Z-]+)")
-    templateSeq_reg = re.compile("^Template\s*[0-9]+\s*([A-Z-]+)")
+    query_seq_reg = re.compile("^Query\s*[0-9]+\s*([A-Z-]+)")
+    template_seq_reg = re.compile("^Template\s*[0-9]+\s*([A-Z-]+)")
 
     alignment_list = []
     count = 0
@@ -84,26 +73,26 @@ def foldrec(nb_templates, metafold_dict):
             if (count == nb_templates):
                 break
             # Search a regex for the current line :
-            templateName_found = re.search(templateName_reg,line)
+            template_name_found = re.search(template_name_reg,line)
             score_found = re.search(score_reg,line)
-            querySeq_found = re.search(querySeq_reg,line)
-            templateSeq_found = re.search(templateSeq_reg,line)
+            query_seq_found = re.search(query_seq_reg,line)
+            template_seq_found = re.search(template_seq_reg,line)
             # A template name is found :
-            if (templateName_found):
-                templateName = templateName_found.group(1)
+            if (template_name_found):
+                template_name = template_name_found.group(1)
             # A score is found :
             if (score_found):
                 score = float(score_found.group(1))
             # A query sequence is found :
-            if (querySeq_found and prev_line == '\n'):
-                querySeq = querySeq_found.group(1)
+            if (query_seq_found and prev_line == '\n'):
+                query_seq = [cl.Residue(res_name) for res_name in list(query_seq_found.group(1))]
             # A template sequence is founds :
-            if (templateSeq_found and prev_line == '\n'):
-                templateSeq = templateSeq_found.group(1)
+            if (template_seq_found and prev_line == '\n'):
+                template_seq = [cl.Residue(res_name) for res_name in list(template_seq_found.group(1))]
                 # Add a new alignment object in the list :
-                alignment_list.append(cl.Alignment(score, querySeq, templateName, templateSeq))
-                alignment_list[count].template.pdb = metafold_dict[templateName]
-                alignment_list[count].template.resList = get_resList(alignment_list[count].template.pdb)
+                alignment_list.append(cl.Alignment(score, query_seq, template_name, template_seq))
+                alignment_list[count].template.pdb = metafold_dict[template_name]
+                get_CA_coords(alignment_list,count)
                 count = count + 1
             prev_line = line
     return(alignment_list)
