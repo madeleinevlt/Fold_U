@@ -3,24 +3,23 @@
    :synopsis: This module implements Alignment, Template and Residue classes
 """
 
-
 class Alignment:
     """
     .. class:: Alignment
       This class groups informations about an alignment.
 
     Attributes:
-        score: Alignment score
-        query_seq: Query sequence
+        score: Score of the alignment
+        query_residues: Query's sequence of residues as list of Residues objects
         template: Instance of a Template object as
-                  ``Template(template_name, template_seq)``
+                  ``Template(template_name, template_residues)``
     """
 
-    def __init__(self, score, query_seq, template_name, template_seq):
+    def __init__(self, score, query_residues, template_name, template_residues):
         """The constructor of an instance of the Alignment class."""
         self.score = score
-        self.query_seq = query_seq
-        self.template = Template(template_name, template_seq)
+        self.query_residues = query_residues
+        self.template = Template(template_name, template_residues)
 
 class Template:
     """
@@ -29,14 +28,14 @@ class Template:
 
     Attributes:
         name: Name of the template
-        seq: Template's sequence of residues as list of Residues objects
+        residues: Template's sequence of residues as list of Residues objects
         pdb: PDB code of the template
     """
 
-    def __init__(self, name, seq):
+    def __init__(self, name, residues):
         """The constructor of an instance of the Template class."""
         self.name = name
-        self.seq = seq
+        self.residues = residues
         self.pdb = None
 
 class Residue:
@@ -45,11 +44,11 @@ class Residue:
       This class groups informations about a residue.
 
     Attributes:
-        name: Name of the residue (3 letters code)
-        CA_coords: 3D coordinates of the residues
+        name: Name of the residue (1 letter code)
+        CA_coords: 3D coordinates of the residue
     """
 
     def __init__(self, name):
         """The constructor of an instance of the Residue class."""
         self.name = name
-        self.CA_coords = None
+        self.ca_coords = None

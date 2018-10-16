@@ -4,12 +4,8 @@
                  the query sequence on the templates.
 """
 
-
+# IMPORTS
 import numpy as np
-
-
-
-
 
 def calc_dist_matrix(query, template, dist_range):
     """
