@@ -58,6 +58,8 @@ def calc_dist_matrix(query, template, dist_range):
     # The distance matrix is symmetric so we make the calculations only for
     # the upper right triangular matrix. This saves have computation time.
     for i in range(len(query)):
+        # We do not calculate distances between bonded residues and between
+        # themselves so the 2nd loop starts at i+2
         for j in range(i+2, len(query)):
             row_res = query[i]
             col_res = query[j]
