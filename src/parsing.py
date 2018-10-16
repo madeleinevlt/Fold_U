@@ -42,6 +42,8 @@ def get_ca_coords(alignment):
         res_num = 0
         for atom in structure.get_atoms():
             if atom.name == "CA":
+                if res_num >= len(alignment.template.residues):
+                    break
                 while alignment.template.residues[res_num].name == '-':
                     res_num = res_num + 1
                 alignment.template.residues[res_num].ca_coords = atom.get_vector()

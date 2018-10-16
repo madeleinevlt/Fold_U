@@ -7,6 +7,20 @@
 # IMPORTS
 import numpy as np
 
+def display_matrix(matrix):
+    rows = matrix.shape[0]
+    cols = matrix.shape[1]
+    for i in range(0,40):
+        for j in range(0,40):
+            if matrix[i][j] == "inf":
+                print("{:6}".format(matrix[i][j]),end=" ")
+            elif matrix[i][j] == "*":
+                print("{:^4.5}".format(matrix[i][j]),end=" ")
+            else:
+                print("{:^4.1f}".format(matrix[i][j]),end=" ")
+        print("\n")
+    print("\n\n\n")
+
 def calc_dist_matrix(query, template, dist_range):
     """
         Calculate the matrix of distances of pair residues of the query sequence,
