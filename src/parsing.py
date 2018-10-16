@@ -4,10 +4,12 @@
                 or additional necessary files.
 """
 
+
 # IMPORTS
 import re
 from Bio.PDB import PDBParser
 import src.classes as cl
+
 
 
 def metafold(metafold_file):
