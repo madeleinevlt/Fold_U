@@ -8,11 +8,22 @@
 import numpy as np
 
 
-def display_matrix(matrix, query_len):
+def display_matrix(matrix):
+    """
+        Display the distance matrix in the terminal.
+
+        Args:
+            matrix (numpy ndarray): Matrix of shape query_length * query_length
+                                    containing distances and gaps represented as
+                                    "*".
+
+        Returns:
+            void
+    """
     rows = matrix.shape[0]
     cols = matrix.shape[1]
-    for i in range(0, query_len):
-        for j in range(0, query_len):
+    for i in range(0, rows):
+        for j in range(0, cols):
             if matrix[i][j] == "inf":
                 print("{:6}".format(matrix[i][j]), end=" ")
             elif matrix[i][j] == "*":
@@ -41,6 +52,8 @@ def calc_dist_matrix(query, template, dist_range):
     """
 
     query_size = len(query)
+    # This matrix holds distances and gaps ("*") for all pairs of residues of
+    # the query sequence after being threaded on the template sequence
     matrix = np.full((query_size, query_size), fill_value=np.inf, dtype=object)
     # The distance matrix is symmetric so we make the calculations only for
     # the upper right triangular matrix. This saves have computation time.
@@ -57,7 +70,7 @@ def calc_dist_matrix(query, template, dist_range):
             elif col_res.name == "-" or template[j].name == "-":
                 matrix[:i, j] = "*"
                 break
-            # One of the most efficient method to calculate the distances
+            # One of the most efficient method to calculate the distances.
             # https://stackoverflow.com/a/47775357/6401758
             # distance = sqrt((xa-xb)**2 + (ya-yb)**2 + (za-zb)**2)
             dist = np.linalg.norm(template[i].ca_coords - template[j].ca_coords)
