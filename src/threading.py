@@ -29,7 +29,7 @@ def calc_dist_matrix(query, template, dist_range):
     # The distance matrix is symmetric so we make the calculations only for
     # the upper right triangular matrix. This saves have computation time.
     for i in range(len(query)):
-        for j in range(i, len(query)):
+        for j in range(i+2, len(query)):
             row_res = query[i]
             col_res = query[j]
             # A gap represented by "-" = no distance calculation.
@@ -44,9 +44,7 @@ def calc_dist_matrix(query, template, dist_range):
             # One of the most efficient method to calculate the distances
             # https://stackoverflow.com/a/47775357/6401758
             # distance = sqrt((xa-xb)**2 + (ya-yb)**2 + (za-zb)**2)
-            print(template[i].ca_coords, template[j].ca_coords)
             dist = np.linalg.norm(template[i].ca_coords - template[j].ca_coords)
-            print(dist)
             # Keep distances only in a defined range because we don't want to
             # take into account directly bonded residues (dist < ~5 A) and too far residues
             if dist_range[0] <= dist <= dist_range[1]:

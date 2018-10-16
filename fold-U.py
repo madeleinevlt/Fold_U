@@ -8,7 +8,7 @@ import numpy as np
 
 METAFOLD_FILE = "data/METAFOLD.list"
 FOLDREC_FILE = "data/foldrec/Agglutinin.foldrec"
-NB_TEMPLATES = 10
+NB_TEMPLATES = 1
 DIST_RANGE = [5, 10]
 
 if __name__ == "__main__":
@@ -16,8 +16,7 @@ if __name__ == "__main__":
     alignment_list = parse.foldrec(FOLDREC_FILE, NB_TEMPLATES, metafold_dict)
     for ali in alignment_list:
         matrix = threading.calc_dist_matrix(ali.query_residues, ali.template.residues, DIST_RANGE)
-
-for i in range(20):
-    for j in range(20):
-        print(matrix[i][j], end=" ")
-    print("\n")
+    for i in range(20):
+        for j in range(20):
+            print(round(matrix[i][j], 2),end=" ")
+        print("\n")
