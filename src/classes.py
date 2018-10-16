@@ -45,7 +45,7 @@ class Residue:
 
     Attributes:
         name: Name of the residue (1 letter code)
-        CA_coords: 3D coordinates of the residue
+        ca_coords: 3D coordinates of the residue
     """
 
     def __init__(self, name):
