@@ -37,16 +37,19 @@ def get_ca_coords(alignment):
         Returns:
             void:
     """
-    print(alignment.score)
-    pdb = PDBParser(PERMISSIVE=2, QUIET=True) # QUIET = True : Warnings issued are suppressed
 
-    structure = pdb.get_structure(alignment.template.pdb, 'data/pdb/'+alignment.template.pdb)
+    pdb = PDBParser(QUIET=True) # QUIET = True : Warnings issued are suppressed
 
-    for atom in structure.get_atoms():
-        if atom.name == "CA":
-            for res in alignment.template.residues:
-                if res != "-":
-                    res.ca_coords = atom.get_vector()
+    try:
+        structure = pdb.get_structure(alignment.template.pdb, 'data/pdb/'+alignment.template.pdb)
+        for atom in structure.get_atoms():
+            if atom.name == "CA":
+                for res in alignment.template.residues:
+                    if res != "-":
+                        res.ca_coords = atom.get_vector()
+    except TypeError:
+        print("Silent Warning: The PDB file \"" + alignment.template.pdb + "\" has no RESOLUTION field.")
+        pass
 
 
 def foldrec(foldrec_file, nb_templates, metafold_dict):
@@ -68,13 +71,14 @@ def foldrec(foldrec_file, nb_templates, metafold_dict):
     template_seq_reg = re.compile("^Template\s*[0-9]+\s*([A-Z-]+)")
 
     alignment_list = []
+    count_templates = 0
 
     with open(foldrec_file, "r") as file:
         prev_line = file.readline()
         for line in file:
             # The loop is break when the required nb of templates is reached :
-            # if count == nb_templates:
-            #     break
+            if count_templates == nb_templates:
+                break
             # Search a regex for the current line :
             template_name_found = re.search(template_name_reg, line)
             score_found = re.search(score_reg, line)
@@ -97,5 +101,6 @@ def foldrec(foldrec_file, nb_templates, metafold_dict):
                 ali.template.pdb = metafold_dict[template_name]
                 alignment_list.append(ali)
                 get_ca_coords(ali)
+                count_templates = count_templates + 1
             prev_line = line
     return alignment_list
