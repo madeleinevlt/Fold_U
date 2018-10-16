@@ -52,3 +52,9 @@ class Residue:
         """The constructor of an instance of the Residue class."""
         self.name = name
         self.ca_coords = None
+
+    def __str__(self):
+        if self.ca_coords == None:
+            return "<" + self.name + "  |  " + "empty coordinates>"
+        coords = [str(coord) for coord in self.ca_coords]
+        return "<" + self.name + "  |  " + str(coords) + ">"
