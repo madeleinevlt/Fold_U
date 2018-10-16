@@ -41,13 +41,14 @@ def calc_dist_matrix(query, template, dist_range):
             elif col_res.name == "-" or template[j].name == "-":
                 matrix[:i, j] = "*"
                 break
-            else:
-                # One of the most efficient method to calculate the distances
-                # https://stackoverflow.com/a/47775357/6401758
-                # distance = sqrt((xa-xb)**2 + (ya-yb)**2 + (za-zb)**2)
-                dist = np.linalg.norm(template[i].CA_coords - template[j].CA_coords)
-                # Keep distances only in a defined range because we don't want to
-                # take into account directly bonded residues (dist < ~5 A) and too far residues
-                if dist_range[0] <= dist <= dist_range[1]:
-                    matrix[i, j] = dist
+            # One of the most efficient method to calculate the distances
+            # https://stackoverflow.com/a/47775357/6401758
+            # distance = sqrt((xa-xb)**2 + (ya-yb)**2 + (za-zb)**2)
+            print(template[i].ca_coords, template[j].ca_coords)
+            dist = np.linalg.norm(template[i].ca_coords - template[j].ca_coords)
+            print(dist)
+            # Keep distances only in a defined range because we don't want to
+            # take into account directly bonded residues (dist < ~5 A) and too far residues
+            if dist_range[0] <= dist <= dist_range[1]:
+                matrix[i, j] = dist
     return matrix
