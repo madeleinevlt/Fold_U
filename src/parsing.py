@@ -9,6 +9,7 @@ import re
 from Bio.PDB import PDBParser
 import src.classes as cl
 
+
 def metafold(metafold_file):
     """
         Extracts the name of the metafold as a key and the associated pdb as a value in a dictionary
@@ -20,11 +21,12 @@ def metafold(metafold_file):
         Returns:
             dictionary: A dictionary with key = template name and value = pdb file
     """
-    metafold_dict = {} # Initalization of the dictionary
+    metafold_dict = {}  # Initalization of the dictionary
     with open(metafold_file, "r") as file:
         for line in file:
             metafold_dict[line.split()[0]] = line.split()[1]
     return metafold_dict
+
 
 def get_ca_coords(alignment):
     """
@@ -35,7 +37,7 @@ def get_ca_coords(alignment):
         Returns:
             residues_list: A list of Residue objects
     """
-    pdb = PDBParser(QUIET=True) # QUIET = True : Warnings issued are suppressed
+    pdb = PDBParser(QUIET=True)  # QUIET = True : Warnings issued are suppressed
 
     try:
         structure = pdb.get_structure(alignment.template.pdb, 'data/pdb/'+alignment.template.pdb)
@@ -49,7 +51,8 @@ def get_ca_coords(alignment):
                 alignment.template.residues[res_num].ca_coords = atom.get_vector()
                 res_num = res_num + 1
     except TypeError:
-        print("Silent Warning: The PDB file \"" + alignment.template.pdb + "\" has no RESOLUTION field.")
+        print("Silent Warning: The PDB file \"" +
+              alignment.template.pdb + "\" has no RESOLUTION field.")
         pass
 
 

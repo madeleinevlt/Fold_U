@@ -3,6 +3,7 @@
    :synopsis: This module implements Alignment, Template and Residue classes
 """
 
+
 class Alignment:
     """
     .. class:: Alignment
@@ -21,6 +22,7 @@ class Alignment:
         self.query_residues = query_residues
         self.template = Template(template_name, template_residues)
 
+
 class Template:
     """
     .. class:: Template
@@ -38,6 +40,7 @@ class Template:
         self.residues = residues
         self.pdb = None
 
+
 class Residue:
     """
     .. class:: Residue
@@ -54,7 +57,7 @@ class Residue:
         self.ca_coords = None
 
     def __str__(self):
-        if self.ca_coords == None:
+        if self.ca_coords is None:
             return "<" + self.name + "  |  " + "empty coordinates>"
         coords = [str(coord) for coord in self.ca_coords]
         return "<" + self.name + "  |  " + str(coords) + ">"
