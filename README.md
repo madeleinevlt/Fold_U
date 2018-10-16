@@ -1,4 +1,4 @@
-# Fold-U - Branch for parsing dope.par file
+# Fold-U
 Meet-U 2019
 
 ## Authors
@@ -8,28 +8,12 @@ Meet-U 2019
 - Flora Mikaeloff
 - Franz Arnold
 
-## Branche for develop 
+## Installation
 
 ### Requirements
-__pandas library__: 
-you can install it with command python-pip like that:
 
-``pip install pandas``
-
-
-#### input
-
-Path for the dope.par file
-
-#### ouptut
-
-Dataframe with the format 
-
-
-
-               |  ALA     |  VAL     |   HIS     |
-        ALA    |x0**x1**xn|x0**x1**xn|x0**x1**xn | 
-        VAL    |x0**x1**xn|x0**x1**xn|x0**x1**xn |  
-        HIS    |x0**x1**xn|x0**x1**xn|x0**x1**xn | 
-
-
+### Clone the repository
+```shell
+git clone https://github.com/meetU-MasterStudents/2018---2019-Equipe-4.git
+cd 2018---2019-Equipe-4
+```
