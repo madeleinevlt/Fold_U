@@ -24,14 +24,12 @@ def display_matrix(matrix):
     cols = matrix.shape[1]
     for i in range(0, rows):
         for j in range(0, cols):
-            if matrix[i][j] == "inf":
-                print("{:6}".format(matrix[i][j]), end=" ")
-            elif matrix[i][j] == "*":
-                print("{:^4.5}".format(matrix[i][j]), end=" ")
+            if (matrix[i][j] == "*"):
+                print("{:^4s}".format(matrix[i][j]), end="")
             else:
-                print("{:^4.1f}".format(matrix[i][j]), end=" ")
+                print("{:4.1f}".format(matrix[i][j]), end="")
         print("\n")
-    print("\n\n\n")
+    print("\n\n")
 
 
 def calc_dist_matrix(query, template, dist_range):
