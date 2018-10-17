@@ -55,18 +55,18 @@ def calc_dist_matrix(query, template, dist_range):
     # The distance matrix is symmetric so we make the calculations only for
     # the upper right triangular matrix. This saves have computation time.
     for i in range(len(query)):
+        row_res = query[i]
+        if row_res.name == "-" or template[i].name == "-":
+            matrix[i, (i+2):] = "*"
+            break
         # We do not calculate distances between bonded residues and between
         # themselves so the 2nd loop starts at i+2
         for j in range(i+2, len(query)):
-            row_res = query[i]
             col_res = query[j]
             # A gap represented by "-" = no distance calculation.
             # The whole line / row in the matrix will necessarily be "*"
             # This saves computation time
-            if row_res.name == "-" or template[i].name == "-":
-                matrix[i, j:] = "*"
-                break
-            elif col_res.name == "-" or template[j].name == "-":
+            if col_res.name == "-" or template[j].name == "-":
                 matrix[:i, j] = "*"
                 break
             # One of the most efficient method to calculate the distances.
