@@ -3,6 +3,9 @@
    :synopsis: This module implements Alignment, Template and Residue classes
 """
 
+# IMPORTS
+from Bio.PDB import PDBParser
+
 
 class Alignment:
     """
@@ -23,6 +26,7 @@ class Alignment:
         self.template = Template(template_name, template_residues)
 
 
+
 class Template:
     """
     .. class:: Template
@@ -39,6 +43,36 @@ class Template:
         self.name = name
         self.residues = residues
         self.pdb = None
+
+
+    def get_ca_coords(self):
+        """
+            Parse the PDB file and sets the coordinates of the alignment's template.
+
+            Args:
+                self: The alignment's template attribute.
+
+            Returns:
+                void
+        """
+        pdb = PDBParser(QUIET=True)  # QUIET = True : Warnings issued are suppressed
+
+        try:
+            structure = pdb.get_structure(self.pdb, 'data/pdb/'+self.pdb)
+            res_num = 0
+            for atom in structure.get_atoms():
+                if atom.name == "CA":
+                    if res_num >= len(self.residues):
+                        break
+                    # No coordinates for gaps in the template
+                    while self.residues[res_num].name == '-':
+                        res_num = res_num + 1
+                    self.residues[res_num].ca_coords = atom.get_vector()
+                    res_num = res_num + 1
+        except TypeError:
+            print("Silent Warning: The PDB file \"" +
+                  self.pdb + "\" has no RESOLUTION field.")
+            pass
 
 
 class Residue:

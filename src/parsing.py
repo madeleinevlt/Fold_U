@@ -6,8 +6,8 @@
 
 # IMPORTS
 import re
-from Bio.PDB import PDBParser
-import src.classes as cl
+
+from src.classes import *
 
 
 def metafold(metafold_file):
@@ -26,34 +26,6 @@ def metafold(metafold_file):
         for line in file:
             metafold_dict[line.split()[0]] = line.split()[1]
     return metafold_dict
-
-
-def get_ca_coords(alignment):
-    """
-        Takes a pdb file and creates a list of Residue objects.
-        Each Residue object contains the number the name and the CA coordinates.
-        Args:
-            pdb: The name of a pdb file
-        Returns:
-            residues_list: A list of Residue objects
-    """
-    pdb = PDBParser(QUIET=True)  # QUIET = True : Warnings issued are suppressed
-
-    try:
-        structure = pdb.get_structure(alignment.template.pdb, 'data/pdb/'+alignment.template.pdb)
-        res_num = 0
-        for atom in structure.get_atoms():
-            if atom.name == "CA":
-                if res_num >= len(alignment.template.residues):
-                    break
-                while alignment.template.residues[res_num].name == '-':
-                    res_num = res_num + 1
-                alignment.template.residues[res_num].ca_coords = atom.get_vector()
-                res_num = res_num + 1
-    except TypeError:
-        print("Silent Warning: The PDB file \"" +
-              alignment.template.pdb + "\" has no RESOLUTION field.")
-        pass
 
 
 def foldrec(foldrec_file, nb_templates, metafold_dict):
@@ -96,15 +68,15 @@ def foldrec(foldrec_file, nb_templates, metafold_dict):
                 score = float(score_found.group(1))
             # A query sequence is found :
             if query_seq_found and prev_line == '\n':
-                query_seq = [cl.Residue(name) for name in list(query_seq_found.group(1))]
+                query_seq = [Residue(name) for name in list(query_seq_found.group(1))]
             # A template sequence is founds :
             if template_seq_found and prev_line == '\n':
-                template_seq = [cl.Residue(name) for name in list(template_seq_found.group(1))]
+                template_seq = [Residue(name) for name in list(template_seq_found.group(1))]
                 # Add a new alignment object in the list :
-                ali = cl.Alignment(score, query_seq, template_name, template_seq)
+                ali = Alignment(score, query_seq, template_name, template_seq)
                 ali.template.pdb = metafold_dict[template_name]
+                ali.template.get_ca_coords()
                 alignment_list.append(ali)
-                get_ca_coords(alignment_list[count_templates])
                 count_templates = count_templates + 1
             prev_line = line
     return alignment_list
