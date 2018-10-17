@@ -4,8 +4,8 @@
 """
 
 # IMPORTS
+from subprocess import call
 from Bio.PDB import PDBParser
-
 
 class Alignment:
     """
@@ -58,21 +58,23 @@ class Template:
         pdb = PDBParser(QUIET=True)  # QUIET = True : Warnings issued are suppressed
 
         try:
-            structure = pdb.get_structure(self.pdb, 'data/pdb/'+self.pdb)
-            res_num = 0
-            for atom in structure.get_atoms():
-                if atom.name == "CA":
-                    if res_num >= len(self.residues):
-                        break
-                    # No coordinates for gaps in the template
-                    while self.residues[res_num].name == '-':
-                        res_num = res_num + 1
-                    self.residues[res_num].ca_coords = atom.get_vector()
-                    res_num = res_num + 1
+            structure = pdb.get_structure(self.pdb, "data/pdb/" + self.pdb)
         except TypeError:
             print("Silent Warning: The PDB file \"" +
-                  self.pdb + "\" has no RESOLUTION field.")
+                  self.pdb + "\" has no RESOLUTION field.")            
+            call(["sed -i 's/^.*NOT APPLICABLE\..*$//' data/pdb/" + self.pdb], shell=True)
+            structure = pdb.get_structure(self.pdb, "data/pdb/" + self.pdb)
             pass
+        res_num = 0
+        for atom in structure.get_atoms():
+            if atom.name == "CA":
+                if res_num >= len(self.residues):
+                    break
+                # No coordinates for gaps in the template
+                while self.residues[res_num].name == '-':
+                    res_num = res_num + 1
+                self.residues[res_num].ca_coords = atom.get_vector()
+                res_num = res_num + 1
 
 
 class Residue:
