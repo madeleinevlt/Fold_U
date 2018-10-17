@@ -54,13 +54,13 @@ def calc_dist_matrix(query, template, dist_range):
     matrix = np.full((query_size, query_size), fill_value=np.inf, dtype=object)
     # The distance matrix is symmetric so we make the calculations only for
     # the upper right triangular matrix. This saves have computation time.
+    # And we do not calculate distances between bonded residues and between
+    # themselves so the 2nd loop starts at i+2
     for i in range(len(query)):
         row_res = query[i]
         if row_res.name == "-" or template[i].name == "-":
             matrix[i, (i+2):] = "*"
             break
-        # We do not calculate distances between bonded residues and between
-        # themselves so the 2nd loop starts at i+2
         for j in range(i+2, len(query)):
             col_res = query[j]
             # A gap represented by "-" = no distance calculation.
