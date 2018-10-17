@@ -38,4 +38,4 @@ if __name__ == "__main__":
         print(ali.template.pdb)
         matrix = threading.calc_dist_matrix(
             ali.query_residues, ali.template.residues, DIST_RANGE)
-        #threading.display_matrix(matrix)
+    threading.display_matrix(matrix)

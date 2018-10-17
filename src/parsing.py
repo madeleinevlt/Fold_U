@@ -6,7 +6,6 @@
 
 # IMPORTS
 import re
-
 from src.classes import *
 
 
@@ -74,8 +73,8 @@ def foldrec(foldrec_file, nb_templates, metafold_dict):
                 template_seq = [Residue(name) for name in list(template_seq_found.group(1))]
                 # Add a new alignment object in the list :
                 ali = Alignment(score, query_seq, template_name, template_seq)
-                ali.template.pdb = metafold_dict[template_name]
-                ali.template.get_ca_coords()
+                ali.template.get_pdb(metafold_dict)
+                ali.template.get_all_ca_coords()
                 alignment_list.append(ali)
                 count_templates = count_templates + 1
             prev_line = line

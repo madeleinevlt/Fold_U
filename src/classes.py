@@ -44,13 +44,27 @@ class Template:
         self.residues = residues
         self.pdb = None
 
-
-    def get_ca_coords(self):
+    def get_pdb(self, metafold_dict):
         """
-            Parse the PDB file and sets the coordinates of the alignment's template.
+            Get the PDB file name of the current template from the template's name.
 
             Args:
-                self: The alignment's template attribute.
+                self: The current alignment's template.
+                dictionary: A dictionary with key = template name and value = pdb file
+
+            Returns:
+                void
+        """
+        self.pdb = metafold_dict[self.name]
+
+
+    def get_all_ca_coords(self):
+        """
+            Parse the PDB file and sets the coordinates of the residues list of 
+            the current template.
+
+            Args:
+                self: The current alignment's template.
 
             Returns:
                 void
@@ -75,7 +89,6 @@ class Template:
                     res_num = res_num + 1
                 self.residues[res_num].ca_coords = atom.get_vector()
                 res_num = res_num + 1
-
 
 class Residue:
     """
