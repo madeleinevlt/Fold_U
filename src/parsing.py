@@ -6,12 +6,11 @@
 
 # IMPORTS
 import re
+import pandas as pd
+
+# Third-party modules
 from src.classes import *
 
-# IMPORTS
-import re
-from Bio.PDB import PDBParser
-import src.classes as cl
 
 
 

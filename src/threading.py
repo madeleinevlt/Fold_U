@@ -4,7 +4,7 @@
                  the query sequence on the templates.
 """
 
-# IMPORTS
+# Third-party modules
 import numpy as np
 
 def display_matrix(matrix):

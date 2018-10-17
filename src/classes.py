@@ -3,7 +3,7 @@
    :synopsis: This module implements Alignment, Template and Residue classes
 """
 
-# IMPORTS
+# Third-party modules
 from subprocess import call
 from Bio.PDB import PDBParser
 
@@ -60,7 +60,7 @@ class Template:
 
     def get_all_ca_coords(self):
         """
-            Parse the PDB file and sets the coordinates of the residues list of 
+            Parse the PDB file and sets the coordinates of the residues list of
             the current template.
 
             Args:
@@ -75,7 +75,7 @@ class Template:
             structure = pdb.get_structure(self.pdb, "data/pdb/" + self.pdb)
         except TypeError:
             print("Silent Warning: The PDB file \"" +
-                  self.pdb + "\" has no RESOLUTION field.")            
+                  self.pdb + "\" has no RESOLUTION field.")
             call(["sed -i 's/^.*NOT APPLICABLE\..*$//' data/pdb/" + self.pdb], shell=True)
             structure = pdb.get_structure(self.pdb, "data/pdb/" + self.pdb)
             pass

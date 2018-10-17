@@ -3,22 +3,25 @@
 
 """
     Usage:
-        fold-U.py FILE [--nb_templates NUM]
+        fold-U.py FILE [--nb_templates NUM] [--metafold METAFOLD] [--dope DOPE]
 
     Options:
-        -h, --help                   Show this
-        -n NUM, --nb_templates NUM   First n templates to retrieve from
-                                     the foldrec file [default:100]
-
+        -h, --help                            Show this
+        -n NUM, --nb_templates NUM            First n templates to retrieve from
+                                              The foldrec file [default:100]
+        -m METAFOLD, --metafold METAFOLD      Path to the metafold.list file
+        -d DOPE, --dope DOPE                  Path to the dope.par file
 """
 
-# IMPORTS
-from docopt import docopt
+# Local modules
 import src.parsing as parse
 import src.threading as threading
-import numpy as np
 
-METAFOLD_FILE = "data/METAFOLD.list"
+# Third-party modules
+import numpy as np
+from docopt import docopt
+
+
 DIST_RANGE = [5, 10]
 
 if __name__ == "__main__":
@@ -32,10 +35,20 @@ if __name__ == "__main__":
     else:
         nb_templates = 100
 
-    metafold_dict = parse.metafold(METAFOLD_FILE)
+    if arguments["--metafold"]:
+        METAFOLD = arguments["--metafold"]
+    if arguments["--dope"]:
+        DOPE = arguments["--dope"]
+
+    # Parse Metafold file
+    metafold_dict = parse.metafold(METAFOLD)
+    # Parse Foldrec file
     alignment_list = parse.foldrec(foldrec_file, nb_templates, metafold_dict)
+    # Parse DOPE file
+    dope_df = parse.dope(DOPE)
+
     for ali in alignment_list:
         print(ali.template.pdb)
         matrix = threading.calc_dist_matrix(
             ali.query_residues, ali.template.residues, DIST_RANGE)
-    threading.display_matrix(matrix)
+    # threading.display_matrix(matrix)
