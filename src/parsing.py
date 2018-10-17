@@ -64,34 +64,6 @@ def dope(dope_file):
     return dope_df
 
 
-def get_ca_coords(alignment):
-    """
-        Takes a pdb file and creates a list of Residue objects.
-        Each Residue object contains the number the name and the CA coordinates.
-        Args:
-            pdb: The name of a pdb file
-        Returns:
-            residues_list: A list of Residue objects
-    """
-    pdb = PDBParser(QUIET=True)  # QUIET = True : Warnings issued are suppressed
-
-    try:
-        structure = pdb.get_structure(alignment.template.pdb, 'data/pdb/'+alignment.template.pdb)
-        res_num = 0
-        for atom in structure.get_atoms():
-            if atom.name == "CA":
-                if res_num >= len(alignment.template.residues):
-                    break
-                while alignment.template.residues[res_num].name == '-':
-                    res_num = res_num + 1
-                alignment.template.residues[res_num].ca_coords = atom.get_vector()
-                res_num = res_num + 1
-    except TypeError:
-        print("Silent Warning: The PDB file \"" +
-              alignment.template.pdb + "\" has no RESOLUTION field.")
-        pass
-
-
 def foldrec(foldrec_file, nb_templates, metafold_dict):
     """
         Extracts the score, the template name, the query sequence and the query template
