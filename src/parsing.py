@@ -8,6 +8,12 @@
 import re
 from src.classes import *
 
+# IMPORTS
+import re
+from Bio.PDB import PDBParser
+import src.classes as cl
+
+
 
 def metafold(metafold_file):
     """
@@ -25,6 +31,65 @@ def metafold(metafold_file):
         for line in file:
             metafold_dict[line.split()[0]] = line.split()[1]
     return metafold_dict
+
+
+def dope(dope_file):
+    """
+        Extracts 10 energy values for the 20*20 residus-CA pairs and stores it
+        in double indexed and labelled pandas DataFrame.
+
+        Args:
+            dope_file: The file dope_file.par containing energy values for each
+            amino acid pair.
+
+        Returns:
+            DataFrame : amino acids indexed matrix containing lists of energies
+
+     """
+    # set up aa liste for rownames & colnames of the DataFrame
+    aa3 = ['ALA', 'CYS', 'ASP', 'GLU', 'PHE', 'GLY', 'HIS', 'ILE', 'LYS', 'LEU',
+           'MET', 'ASN', 'PRO', 'GLN', 'ARG', 'SER', 'THR', 'VAL', 'TRP', 'TYR']
+
+    # set up matrix object 20*20
+    dope_df = pd.DataFrame(index=aa3, columns=aa3, dtype=object)
+
+    with open(dope_file, 'r') as dope_f:
+        for line in dope_f:
+            if line[4:6] == 'CA' and line[11:13] == 'CA':
+                # get the line with C-alpha for both amino acids
+                res_1 = line[0:3]
+                res_2 = line[7:10]
+                energy_res1_res2 = list(map(float, line[14:-1].split(" ")))
+                dope_df[res_1][res_2] = energy_res1_res2
+    return dope_df
+
+
+def get_ca_coords(alignment):
+    """
+        Takes a pdb file and creates a list of Residue objects.
+        Each Residue object contains the number the name and the CA coordinates.
+        Args:
+            pdb: The name of a pdb file
+        Returns:
+            residues_list: A list of Residue objects
+    """
+    pdb = PDBParser(QUIET=True)  # QUIET = True : Warnings issued are suppressed
+
+    try:
+        structure = pdb.get_structure(alignment.template.pdb, 'data/pdb/'+alignment.template.pdb)
+        res_num = 0
+        for atom in structure.get_atoms():
+            if atom.name == "CA":
+                if res_num >= len(alignment.template.residues):
+                    break
+                while alignment.template.residues[res_num].name == '-':
+                    res_num = res_num + 1
+                alignment.template.residues[res_num].ca_coords = atom.get_vector()
+                res_num = res_num + 1
+    except TypeError:
+        print("Silent Warning: The PDB file \"" +
+              alignment.template.pdb + "\" has no RESOLUTION field.")
+        pass
 
 
 def foldrec(foldrec_file, nb_templates, metafold_dict):
