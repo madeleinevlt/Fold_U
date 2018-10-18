@@ -1,0 +1,303 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>src.parsing &mdash; fold-U 0.0.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> fold-U
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.0.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../README.html">README</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../meeting.html">Meeting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../parsing.html">Parsing module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../threading.html">Threading module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../classes.html">Classes module</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">fold-U</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>src.parsing</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for src.parsing</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">.. module:: parsing</span>
+<span class="sd">   :synopsis: This module implements all the functions to parse either input</span>
+<span class="sd">                or additional necessary files.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="c1"># IMPORTS</span>
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">src.classes</span> <span class="k">as</span> <span class="nn">cl</span>
+<span class="kn">from</span> <span class="nn">Bio.PDB</span> <span class="k">import</span> <span class="o">*</span> <span class="c1"># Biopython</span>
+
+<div class="viewcode-block" id="metafold"><a class="viewcode-back" href="../../parsing.html#src.parsing.metafold">[docs]</a><span class="k">def</span> <span class="nf">metafold</span><span class="p">(</span><span class="n">metafold_file</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Extracts the name of the metafold as a key and the associated pdb as a value in a dictionary</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            metafold_file: The file METAFOLD.list containing this information</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            metafold_dict: The dictionary with key = metafold and value = pdb file</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">metafold_dict</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">metafold_file</span><span class="p">,</span><span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">metafold_dict</span><span class="p">[</span><span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="mi">0</span><span class="p">]]</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">metafold_dict</span></div>
+
+<div class="viewcode-block" id="get_CA_coords"><a class="viewcode-back" href="../../parsing.html#src.parsing.get_CA_coords">[docs]</a><span class="k">def</span> <span class="nf">get_CA_coords</span><span class="p">(</span><span class="n">alignment_list</span><span class="p">,</span><span class="n">count</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Takes a pdb file and creates a list of Residue objects.</span>
+<span class="sd">        Each Residue object contains the number the name and the CA coordinates.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            pdb: The name of a pdb file</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            residues_list: A list of Residue objects</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">p</span> <span class="o">=</span> <span class="n">PDBParser</span><span class="p">(</span><span class="n">QUIET</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="c1"># QUIET = True : Warnings issued are suppressed</span>
+    <span class="n">pdb</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">get_structure</span><span class="p">(</span><span class="n">alignment_list</span><span class="p">[</span><span class="n">count</span><span class="p">]</span><span class="o">.</span><span class="n">template</span><span class="o">.</span><span class="n">pdb</span><span class="p">,</span> <span class="s1">&#39;data/pdb/&#39;</span><span class="o">+</span><span class="n">alignment_list</span><span class="p">[</span><span class="n">count</span><span class="p">]</span><span class="o">.</span><span class="n">template</span><span class="o">.</span><span class="n">pdb</span><span class="p">)</span>
+    <span class="n">res_num</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="n">atom</span> <span class="ow">in</span> <span class="n">pdb</span><span class="o">.</span><span class="n">get_atoms</span><span class="p">():</span>
+        <span class="k">if</span> <span class="n">atom</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;CA&quot;</span><span class="p">:</span>
+            <span class="k">while</span> <span class="n">alignment_list</span><span class="p">[</span><span class="n">count</span><span class="p">]</span><span class="o">.</span><span class="n">template</span><span class="o">.</span><span class="n">seq</span><span class="p">[</span><span class="n">res_num</span><span class="p">]</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s1">&#39;-&#39;</span><span class="p">:</span>
+                <span class="n">res_num</span> <span class="o">=</span> <span class="n">res_num</span> <span class="o">+</span> <span class="mi">1</span>
+            <span class="n">alignment_list</span><span class="p">[</span><span class="n">count</span><span class="p">]</span><span class="o">.</span><span class="n">template</span><span class="o">.</span><span class="n">seq</span><span class="p">[</span><span class="n">res_num</span><span class="p">]</span><span class="o">.</span><span class="n">CA_coords</span> <span class="o">=</span> <span class="n">atom</span><span class="o">.</span><span class="n">get_vector</span><span class="p">()</span>
+            <span class="n">res_num</span> <span class="o">=</span> <span class="n">res_num</span> <span class="o">+</span> <span class="mi">1</span></div>
+
+<div class="viewcode-block" id="foldrec"><a class="viewcode-back" href="../../parsing.html#src.parsing.foldrec">[docs]</a><span class="k">def</span> <span class="nf">foldrec</span><span class="p">(</span><span class="n">nb_templates</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Extracts the score, the template name, the query sequence and the query template for each alignment</span>
+<span class="sd">        and creates a list of alignment objects.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            nb_template: Number of templates chosen</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            alignment_list : A list of alignment objects</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">metafold_dict</span> <span class="o">=</span> <span class="n">metafold</span><span class="p">(</span><span class="s2">&quot;data/METAFOLD.list&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Regex :</span>
+    <span class="n">template_name_reg</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s2">&quot;Alignment :.*vs\s+([A-Za-z0-9-_]+)&quot;</span><span class="p">)</span>
+    <span class="n">score_reg</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s2">&quot;^Score :\s+([-0-9\.]+)&quot;</span><span class="p">)</span>
+    <span class="n">query_seq_reg</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s2">&quot;^Query\s*[0-9]+\s*([A-Z-]+)&quot;</span><span class="p">)</span>
+    <span class="n">template_seq_reg</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s2">&quot;^Template\s*[0-9]+\s*([A-Z-]+)&quot;</span><span class="p">)</span>
+
+    <span class="n">alignment_list</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;data/Agglutinin.foldrec&quot;</span><span class="p">,</span><span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">prev_line</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">readline</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">f</span><span class="p">:</span>
+            <span class="c1"># The loop is break when the required nb of templates is reached :</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">count</span> <span class="o">==</span> <span class="n">nb_templates</span><span class="p">):</span>
+                <span class="k">break</span>
+            <span class="c1"># Search a regex for the current line :</span>
+            <span class="n">template_name_found</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">template_name_reg</span><span class="p">,</span><span class="n">line</span><span class="p">)</span>
+            <span class="n">score_found</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">score_reg</span><span class="p">,</span><span class="n">line</span><span class="p">)</span>
+            <span class="n">query_seq_found</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">query_seq_reg</span><span class="p">,</span><span class="n">line</span><span class="p">)</span>
+            <span class="n">template_seq_found</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">template_seq_reg</span><span class="p">,</span><span class="n">line</span><span class="p">)</span>
+            <span class="c1"># A template name is found :</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">template_name_found</span><span class="p">):</span>
+                <span class="n">template_name</span> <span class="o">=</span> <span class="n">template_name_found</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+            <span class="c1"># A score is found :</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">score_found</span><span class="p">):</span>
+                <span class="n">score</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">score_found</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+            <span class="c1"># A query sequence is found :</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">query_seq_found</span> <span class="ow">and</span> <span class="n">prev_line</span> <span class="o">==</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">):</span>
+                <span class="n">query_seq</span> <span class="o">=</span> <span class="p">[</span><span class="n">cl</span><span class="o">.</span><span class="n">Residue</span><span class="p">(</span><span class="n">name</span><span class="p">)</span> <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">query_seq_found</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">))]</span>
+            <span class="c1"># A template sequence is founds :</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">template_seq_found</span> <span class="ow">and</span> <span class="n">prev_line</span> <span class="o">==</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">):</span>
+                <span class="n">template_seq</span> <span class="o">=</span> <span class="p">[</span><span class="n">cl</span><span class="o">.</span><span class="n">Residue</span><span class="p">(</span><span class="n">name</span><span class="p">)</span> <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">template_seq_found</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">))]</span>
+                <span class="c1"># Add a new alignment object in the list :</span>
+                <span class="n">alignment_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cl</span><span class="o">.</span><span class="n">Alignment</span><span class="p">(</span><span class="n">score</span><span class="p">,</span> <span class="n">query_seq</span><span class="p">,</span> <span class="n">template_name</span><span class="p">,</span> <span class="n">template_seq</span><span class="p">))</span>
+                <span class="n">alignment_list</span><span class="p">[</span><span class="n">count</span><span class="p">]</span><span class="o">.</span><span class="n">template</span><span class="o">.</span><span class="n">pdb</span> <span class="o">=</span> <span class="n">metafold_dict</span><span class="p">[</span><span class="n">template_name</span><span class="p">]</span>
+                <span class="n">get_CA_coords</span><span class="p">(</span><span class="n">alignment_list</span><span class="p">,</span><span class="n">count</span><span class="p">)</span>
+                <span class="n">count</span> <span class="o">=</span> <span class="n">count</span> <span class="o">+</span> <span class="mi">1</span>
+            <span class="n">prev_line</span> <span class="o">=</span> <span class="n">line</span>
+    <span class="k">return</span><span class="p">(</span><span class="n">alignment_list</span><span class="p">)</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Gabriel Cretin, Hélène Kabbech, Tom Gutman, Flora Mikaeloff, Franz Arnold
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+
+  
+
+  <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

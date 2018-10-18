@@ -4,11 +4,14 @@
                 or additional necessary files.
 """
 
-
-# IMPORTS
+# Third-party modules
 import re
-from Bio.PDB import PDBParser
-import src.classes as cl
+import pandas as pd
+from Bio.Data.IUPACData import protein_letters_3to1
+
+# Local modules
+from src.classes import Residue
+from src.classes import Alignment
 
 
 
@@ -44,68 +47,47 @@ def dope(dope_file):
 
      """
     # set up aa liste for rownames & colnames of the DataFrame
-    aa3 = ['ALA', 'CYS', 'ASP', 'GLU', 'PHE', 'GLY', 'HIS', 'ILE', 'LYS', 'LEU',
-           'MET', 'ASN', 'PRO', 'GLN', 'ARG', 'SER', 'THR', 'VAL', 'TRP', 'TYR']
+    aa1 = ['A', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'K', 'L', 'M', 'N', 'P', 'Q', 'R',\
+    'S', 'T', 'V', 'W', 'Y']
 
     # set up matrix object 20*20
-    dope_df = pd.DataFrame(index=aa3, columns=aa3, dtype=object)
+    dope_df = pd.DataFrame(index=aa1, columns=aa1, dtype=object)
 
-    with open(dope_file, 'r') as dope_f:
-        for line in dope_f:
+    with open(dope_file, 'r') as file:
+        for line in file:
             if line[4:6] == 'CA' and line[11:13] == 'CA':
                 # get the line with C-alpha for both amino acids
-                res_1 = line[0:3]
-                res_2 = line[7:10]
+                res_1 = protein_letters_3to1[line[0:3].title()]
+                res_2 = protein_letters_3to1[line[7:10].title()]
                 energy_res1_res2 = list(map(float, line[14:-1].split(" ")))
                 dope_df[res_1][res_2] = energy_res1_res2
     return dope_df
 
 
-def get_ca_coords(alignment):
-    """
-        Takes a pdb file and creates a list of Residue objects.
-        Each Residue object contains the number the name and the CA coordinates.
-        Args:
-            pdb: The name of a pdb file
-        Returns:
-            residues_list: A list of Residue objects
-    """
-    pdb = PDBParser(QUIET=True)  # QUIET = True : Warnings issued are suppressed
-
-    try:
-        structure = pdb.get_structure(alignment.template.pdb, 'data/pdb/'+alignment.template.pdb)
-        res_num = 0
-        for atom in structure.get_atoms():
-            if atom.name == "CA":
-                if res_num >= len(alignment.template.residues):
-                    break
-                while alignment.template.residues[res_num].name == '-':
-                    res_num = res_num + 1
-                alignment.template.residues[res_num].ca_coords = atom.get_vector()
-                res_num = res_num + 1
-    except TypeError:
-        print("Silent Warning: The PDB file \"" +
-              alignment.template.pdb + "\" has no RESOLUTION field.")
-        pass
-
-
 def foldrec(foldrec_file, nb_templates, metafold_dict):
     """
-        Extracts the score, the template name, the query sequence and the query template
-        for each alignment and creates a list of alignment objects.
+        Extracts the score, the template name, the query and template sequences for
+        the first n alignments from a file containing N profil-profil alignments and
+        creates a list of Alignment objects. It also gives the template's pdb file name
+        and gets all the coordinates of the CA atoms in the template's Residue list.
 
         Args:
-            nb_template: Number of templates chosen
+            foldrec_file (file): The file containing N profil-profil alignments and their
+            corresponding scores.
+            nb_templates (int): Number of alignments to retrieve from the file and chosen
+            by the user.
+            metafold_dict (dictionary): A dictionary with key = template name and
+            value = pdb file.
 
         Returns:
-            list of Alignment: A list of alignment objects
+            alignment_list (list of Alignment): A list of Alignment objects.
     """
 
     # Regex :
-    template_name_reg = re.compile("Alignment :.*vs\s+([A-Za-z0-9-_]+)")
-    score_reg = re.compile("^Score :\s+([-0-9\.]+)")
-    query_seq_reg = re.compile("^Query\s*[0-9]+\s*([A-Z-]+)")
-    template_seq_reg = re.compile("^Template\s*[0-9]+\s*([A-Z-]+)")
+    template_name_reg = re.compile("Alignment :.*vs\\s+([A-Za-z0-9-_]+)")
+    score_reg = re.compile("^Score :\\s+([-0-9\\.]+)")
+    query_seq_reg = re.compile("^Query\\s*[0-9]+\\s*([A-Z-]+)")
+    template_seq_reg = re.compile("^Template\\s*[0-9]+\\s*([A-Z-]+)")
 
     alignment_list = []
     count_templates = 0
@@ -129,15 +111,15 @@ def foldrec(foldrec_file, nb_templates, metafold_dict):
                 score = float(score_found.group(1))
             # A query sequence is found :
             if query_seq_found and prev_line == '\n':
-                query_seq = [cl.Residue(name) for name in list(query_seq_found.group(1))]
+                query_seq = [Residue(name) for name in list(query_seq_found.group(1))]
             # A template sequence is founds :
             if template_seq_found and prev_line == '\n':
-                template_seq = [cl.Residue(name) for name in list(template_seq_found.group(1))]
+                template_seq = [Residue(name) for name in list(template_seq_found.group(1))]
                 # Add a new alignment object in the list :
-                ali = cl.Alignment(score, query_seq, template_name, template_seq)
-                ali.template.pdb = metafold_dict[template_name]
+                ali = Alignment(score, query_seq, template_name, template_seq)
+                ali.template.get_pdb(metafold_dict)
+                ali.template.get_all_ca_coords()
                 alignment_list.append(ali)
-                get_ca_coords(alignment_list[count_templates])
                 count_templates = count_templates + 1
             prev_line = line
     return alignment_list
