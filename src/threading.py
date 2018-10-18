@@ -107,9 +107,10 @@ def calc_dist_matrix(query, template, dist_range):
         #size of the dist_matrix (ncol ~ nrow)
         size = shape(dist_matrix)[0]
         for i in range(size):
-            for j in range(size):
-                tuple_residues = dist_position_dict[(i,j)]
-                round_value = round((dist_matrix[i,j] * 30) / 15)
-                dist_matrix[i,j] = dope_df[tuple_residues[0]][tuple_residues[1]][round_value]
+            for j in range(i+2 ,size):
+                if isinstance(dist_matrix[i,j], float):
+                    tuple_residues = dist_position_dict[(i,j)]
+                    round_value = round((dist_matrix[i,j] * 30) / 15)
+                    dist_matrix[i,j] = dope_df[tuple_residues[0]][tuple_residues[1]][round_value]
 
         return dist_matrix
