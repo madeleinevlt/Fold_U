@@ -49,6 +49,8 @@ def calc_dist_matrix(query, template, dist_range):
     """
 
     query_size = len(query)
+    # Dictionnary with key = (i, j) : ("res_i", "res_j")
+    dist_dict = {}
     # This matrix holds distances and gaps ("*") for all pairs of residues of
     # the query sequence after being threaded on the template sequence
     matrix = np.full((query_size, query_size), fill_value=np.inf, dtype=object)
@@ -78,4 +80,5 @@ def calc_dist_matrix(query, template, dist_range):
             # take into account directly bonded residues (dist < ~5 A) and too far residues
             if dist_range[0] <= dist <= dist_range[1]:
                 matrix[i, j] = dist
-    return matrix
+            dist_dict[(i, j)] = (row_res.name, col_res.name)
+    return matrix, dist_dict
