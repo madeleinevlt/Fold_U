@@ -7,6 +7,9 @@
 from subprocess import call
 from Bio.PDB import PDBParser
 
+
+
+
 class Alignment:
     """
     .. class:: Alignment
@@ -24,7 +27,6 @@ class Alignment:
         self.score = score
         self.query_residues = query_residues
         self.template = Template(template_name, template_residues)
-
 
 
 class Template:
@@ -76,9 +78,9 @@ class Template:
         except TypeError:
             print("Silent Warning: The PDB file \"" +
                   self.pdb + "\" has no RESOLUTION field.")
-            call(["sed -i 's/^.*NOT APPLICABLE\..*$//' data/pdb/" + self.name + "/" + self.pdb], shell=True)
+            call(["sed -i 's/^.*NOT APPLICABLE.*$//' data/pdb/" + \
+                self.name + "/" + self.pdb], shell=True)
             structure = pdb.get_structure(self.pdb, "data/pdb/" + self.name + "/" + self.pdb)
-            pass
         res_num = 0
         for atom in structure.get_atoms():
             if atom.name == "CA":
@@ -89,6 +91,7 @@ class Template:
                     res_num = res_num + 1
                 self.residues[res_num].ca_coords = atom.get_vector()
                 res_num = res_num + 1
+
 
 class Residue:
     """
