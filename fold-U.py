@@ -24,10 +24,26 @@ import src.threading as threading
 import numpy as np
 from docopt import docopt
 from multiprocessing import Pool, cpu_count
+from functools import partial
 from operator import itemgetter
 
 
 DIST_RANGE = [5, 15]
+
+
+
+def loop(dist_range, dope_df, alignement):
+    """
+    """
+    # Calculate the distance matrix
+    matrix, dist_dict = threading.calc_dist_matrix(
+        alignement.query_residues, alignement.template.residues, DIST_RANGE)
+    # Convert distances into energies based on DOPE energies
+    energy_matrix = threading.convert_dist_to_energy(matrix, dist_dict, DOPE_DF)
+    return alignement.template.name, np.nansum(energy_matrix)
+
+
+
 
 if __name__ == "__main__":
 
@@ -58,13 +74,17 @@ if __name__ == "__main__":
     DOPE_DF = parse.dope(DOPE)
 
 
-    scores = {}
+    # Parallelization of the main loop
+    pool = Pool(processes=cpu_count())
+    # Necessary to pass arguments to parallelized function
+    func = partial(loop, DIST_RANGE, DOPE_DF)
+    scores = pool.imap(func, ALIGNMENT_LIST)
+    pool.close()
+    pool.join()
 
-    for ali in ALIGNMENT_LIST:
-        matrix, dist_dict = threading.calc_dist_matrix(
-            ali.query_residues, ali.template.residues, DIST_RANGE)
-        energy_matrix = threading.convert_dist_to_energy(matrix, dist_dict, DOPE_DF)
-        scores[ali.template.name] = np.nansum(energy_matrix)
 
-    best_template, best_score = min(scores.items(), key=itemgetter(1))
+    ########## RESULTS ##########
+
+
+    best_template, best_score = min(scores, key=itemgetter(1))
     print("\n\nBest template: {}\nBest energy: {:.2f}".format(best_template, best_score))
