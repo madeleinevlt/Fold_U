@@ -67,12 +67,13 @@ def foldrec(foldrec_file, nb_templates, metafold_dict):
     """
         Extracts the score, the template name, the query and template sequences for
         the first n alignments from a file containing N profil-profil alignments and
-        creates a list of Alignment objects.
+        creates a list of Alignment objects. It also gives the template's pdb file name
+        and gets all the coordinates of the CA atoms in the template's Residue list.
 
         Args:
             foldrec_file (file): The file containing N profil-profil alignments and their 
             corresponding scores.
-            nb_template (int): Number of alignments to retrieve from the file and chosen
+            nb_templates (int): Number of alignments to retrieve from the file and chosen
             by the user.
             metafold_dict (dictionary): A dictionary with key = template name and
             value = pdb file.
