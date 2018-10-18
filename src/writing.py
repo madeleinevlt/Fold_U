@@ -20,4 +20,4 @@ def scores(filename, score_list):
     """
     with open(filename, "w") as file:
         for score, name in score_list:
-            file.write("{}\t{}\n".format(round(score, 1), name))
+            file.write("{:<5d}{}\n".format(int(score), name))
