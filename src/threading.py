@@ -7,6 +7,9 @@
 # Third-party modules
 import numpy as np
 
+
+
+
 def display_matrix(matrix):
     """
         Display the distance matrix in the terminal.
@@ -58,7 +61,7 @@ def calc_dist_matrix(query, template, dist_range):
     # the upper right triangular matrix. This saves have computation time.
     # And we do not calculate distances between bonded residues and between
     # themselves so the 2nd loop starts at i+2
-    for i in range(len(query)):
+    for i in enumerate(query):
         row_res = query[i]
         if row_res.name == "-" or template[i].name == "-":
             matrix[i, (i+2):] = "*"
