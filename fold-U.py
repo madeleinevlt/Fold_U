@@ -24,6 +24,7 @@ import src.threading as threading
 import numpy as np
 from docopt import docopt
 from multiprocessing import Pool, cpu_count
+from operator import itemgetter
 
 
 DIST_RANGE = [5, 15]
@@ -60,12 +61,10 @@ if __name__ == "__main__":
     scores = {}
 
     for ali in ALIGNMENT_LIST:
-        #print(ali.template.pdb)
         matrix, dist_dict = threading.calc_dist_matrix(
-            ali.query_residues[:30], ali.template.residues[:30], DIST_RANGE)
-        #threading.display_matrix(matrix)
-
+            ali.query_residues, ali.template.residues, DIST_RANGE)
         energy_matrix = threading.convert_dist_to_energy(matrix, dist_dict, DOPE_DF)
-        scores[ali.template.name] = np.sum(energy_matrix)
+        scores[ali.template.name] = np.nansum(energy_matrix)
 
-    print(max(scores))
+    best_template, best_score = min(scores.items(), key=itemgetter(1))
+    print("\n\nBest template: {}\nBest energy: {:.2f}".format(best_template, best_score))

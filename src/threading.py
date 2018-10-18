@@ -56,33 +56,37 @@ def calc_dist_matrix(query, template, dist_range):
     dist_dict = {}
     # This matrix holds distances and gaps ("*") for all pairs of residues of
     # the query sequence after being threaded on the template sequence
-    matrix = np.zeros((query_size, query_size), dtype=object)
+    matrix = np.empty((query_size, query_size), dtype=object)
+    matrix.fill(np.nan)
     # The distance matrix is symmetric so we make the calculations only for
     # the upper right triangular matrix. This saves have computation time.
     # And we do not calculate distances between bonded residues and between
     # themselves so the 2nd loop starts at i+2
-    for i, _ in enumerate(query):
-        row_res = query[i]
+    # A gap represented by "-" = no distance calculation.
+    # The whole line / row in the matrix will necessarily be "*"
+    for i, row_res in enumerate(query):
         if row_res.name == "-" or template[i].name == "-":
-            #matrix[i, (i+2):] = "*"
+            matrix[i, (i+2):] = "*"
+            for j in range(i+2, query_size):
+                dist_dict[(i, j)] = (row_res.name, query[j])
             break
-        for j in range(i+2, len(query)):
+        for j in range(i+2, query_size):
             col_res = query[j]
-            # A gap represented by "-" = no distance calculation.
-            # The whole line / row in the matrix will necessarily be "*"
-            # This saves computation time
             if col_res.name == "-" or template[j].name == "-":
-                #matrix[:i, j] = "*"
+                matrix[:i, j] = "*"
+                for k in range(i):
+                    dist_dict[(k, j)] = (query[k], col_res.name)
                 break
             # One of the most efficient method to calculate the distances.
             # https://stackoverflow.com/a/47775357/6401758
             # distance = sqrt((xa-xb)**2 + (ya-yb)**2 + (za-zb)**2)
             #print(template[i].name,template[i].ca_coords,template[j].ca_coords,template[j].name)
-            dist = np.linalg.norm(template[i].ca_coords - template[j].ca_coords)
-            # Keep distances only in a defined range because we don't want to
-            # take into account directly bonded residues (dist < ~5 A) and too far residues
-            if dist_range[0] <= dist <= dist_range[1]:
-                matrix[i, j] = dist
+            else:
+                dist = np.linalg.norm(template[i].ca_coords - template[j].ca_coords)
+                # Keep distances only in a defined range because we don't want to
+                # take into account directly bonded residues (dist < ~5 A) and too far residues
+                if dist_range[0] <= dist <= dist_range[1]:
+                    matrix[i, j] = dist
             dist_dict[(i, j)] = (row_res.name, col_res.name)
     return matrix, dist_dict
 
@@ -114,9 +118,10 @@ def convert_dist_to_energy(dist_matrix, dist_position_dict, dope_df):
     size = dist_matrix.shape[0]
     for i in range(size):
         for j in range(i+2 ,size):
-            if dist_matrix[i,j] != 0:
-                tuple_residues = dist_position_dict[(i,j)]
-                round_value = round(int((dist_matrix[i,j] * 30) / 15))
-                dist_matrix[i,j] = dope_df[tuple_residues[0]][tuple_residues[1]][round_value]
-
+            if dist_matrix[i,j] != "*" and not np.isnan(dist_matrix[i,j]):
+                residues_tuple = dist_position_dict[(i,j)]
+                interval_index = round(int((dist_matrix[i,j] * 30) / 15))
+                dist_matrix[i,j] = dope_df[residues_tuple[0]][residues_tuple[1]][interval_index]
+            elif dist_matrix[i,j] == "*":
+                dist_matrix[i,j] = 10
     return dist_matrix
