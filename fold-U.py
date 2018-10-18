@@ -30,7 +30,7 @@ import src.threading as threading
 DIST_RANGE = [5, 15]
 
 
-def loop(alignement):
+def loop(DIST_RANGE, DOPE_DF, alignement):
     """
         blabla
 
