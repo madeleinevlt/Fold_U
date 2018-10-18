@@ -59,13 +59,13 @@ if __name__ == "__main__":
 
     scores = {}
 
-    for ali in alignment_list:
+    for ali in ALIGNMENT_LIST:
         #print(ali.template.pdb)
         matrix, dist_dict = threading.calc_dist_matrix(
             ali.query_residues[:30], ali.template.residues[:30], DIST_RANGE)
         #threading.display_matrix(matrix)
 
-        energy_matrix = threading.convert_dist_to_energy(matrix, dist_dict, dope_df)
+        energy_matrix = threading.convert_dist_to_energy(matrix, dist_dict, DOPE_DF)
         scores[ali.template.name] = np.sum(energy_matrix)
 
     print(max(scores))
