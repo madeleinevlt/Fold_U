@@ -10,7 +10,7 @@ import pandas as pd
 
 # Third-party modules
 from src.classes import *
-
+from Bio.Data.IUPACData import protein_letters_3to1
 
 
 
@@ -46,18 +46,17 @@ def dope(dope_file):
 
      """
     # set up aa liste for rownames & colnames of the DataFrame
-    aa3 = ['ALA', 'CYS', 'ASP', 'GLU', 'PHE', 'GLY', 'HIS', 'ILE', 'LYS', 'LEU',
-           'MET', 'ASN', 'PRO', 'GLN', 'ARG', 'SER', 'THR', 'VAL', 'TRP', 'TYR']
+    aa1 = ['A','C','D','E','F','G','H','I','K','L','M','N','P','Q','R','S','T','V','W','Y']
 
     # set up matrix object 20*20
-    dope_df = pd.DataFrame(index=aa3, columns=aa3, dtype=object)
+    dope_df = pd.DataFrame(index=aa1, columns=aa1, dtype=object)
 
     with open(dope_file, 'r') as dope_f:
         for line in dope_f:
             if line[4:6] == 'CA' and line[11:13] == 'CA':
                 # get the line with C-alpha for both amino acids
-                res_1 = line[0:3]
-                res_2 = line[7:10]
+                res_1 = protein_letters_3to1[line[0:3].title()]
+                res_2 = protein_letters_3to1[line[7:10].title()]
                 energy_res1_res2 = list(map(float, line[14:-1].split(" ")))
                 dope_df[res_1][res_2] = energy_res1_res2
     return dope_df
@@ -70,7 +69,7 @@ def foldrec(foldrec_file, nb_templates, metafold_dict):
         creates a list of Alignment objects.
 
         Args:
-            foldrec_file (file): The file containing N profil-profil alignments and their 
+            foldrec_file (file): The file containing N profil-profil alignments and their
             corresponding scores.
             nb_template (int): Number of alignments to retrieve from the file and chosen
             by the user.
