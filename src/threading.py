@@ -84,36 +84,36 @@ def calc_dist_matrix(query, template, dist_range):
     return matrix, dist_dict
 
 
-    def convert_dist_to_energy(dist_matrix, dist_position_dict, dope_df):
-        """
-            Convert the distance between residues to energy values based on
-            dope score table.
+def convert_dist_to_energy(dist_matrix, dist_position_dict, dope_df):
+    """
+        Convert the distance between residues to energy values based on
+        dope score table.
 
-            Args:
-                dist_matrix (numpy 2D array): 2D matrix containing distances between
-                                              pairs of residues of the query sequence
-                                              threaded on the template.
+        Args:
+            dist_matrix (numpy 2D array): 2D matrix containing distances between
+                                          pairs of residues of the query sequence
+                                          threaded on the template.
 
-                dist_position_dict (Dictionary): Dictionary containing as key a tuple of coord (i,j)
-                                                 describing the coords of residues associated (res1, res2)
-                                                 as values.
+            dist_position_dict (Dictionary): Dictionary containing as key a tuple of coord (i,j)
+                                             describing the coords of residues associated (res1, res2)
+                                             as values.
 
-                dope_df (panda DataFrame):    DataFrame (20x20) containing a list of
-                                              30 energy values for 30 interval of
-                                              distances between 0.25 to 15 with a step
-                                              of 0.50
-            Returns:
-                numpy 2D array:  2D matrix containing energy between
-                                 pairs of residues of the query sequence
-                                 threaded on the template.
-        """
-        #size of the dist_matrix (ncol ~ nrow)
-        size = shape(dist_matrix)[0]
-        for i in range(size):
-            for j in range(i+2 ,size):
-                if isinstance(dist_matrix[i,j], float):
-                    tuple_residues = dist_position_dict[(i,j)]
-                    round_value = round((dist_matrix[i,j] * 30) / 15)
-                    dist_matrix[i,j] = dope_df[tuple_residues[0]][tuple_residues[1]][round_value]
+            dope_df (panda DataFrame):    DataFrame (20x20) containing a list of
+                                          30 energy values for 30 interval of
+                                          distances between 0.25 to 15 with a step
+                                          of 0.50
+        Returns:
+            numpy 2D array:  2D matrix containing energy between
+                             pairs of residues of the query sequence
+                             threaded on the template.
+    """
+    #size of the dist_matrix (ncol ~ nrow)
+    size = shape(dist_matrix)[0]
+    for i in range(size):
+        for j in range(i+2 ,size):
+            if isinstance(dist_matrix[i,j], float):
+                tuple_residues = dist_position_dict[(i,j)]
+                round_value = round((dist_matrix[i,j] * 30) / 15)
+                dist_matrix[i,j] = dope_df[tuple_residues[0]][tuple_residues[1]][round_value]
 
-        return dist_matrix
+    return dist_matrix
