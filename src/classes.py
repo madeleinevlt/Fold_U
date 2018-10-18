@@ -8,8 +8,6 @@ from subprocess import call
 from Bio.PDB import PDBParser
 
 
-
-
 class Alignment:
     """
     .. class:: Alignment
@@ -59,7 +57,6 @@ class Template:
         """
         self.pdb = metafold_dict[self.name]
 
-
     def get_all_ca_coords(self):
         """
             Parse the PDB file and sets the coordinates of the residues list of
@@ -78,8 +75,8 @@ class Template:
         except TypeError:
             print("Silent Warning: The PDB file \"" +
                   self.pdb + "\" has no RESOLUTION field.")
-            call(["sed -i 's/^.*NOT APPLICABLE.*$//' data/pdb/" + \
-                self.name + "/" + self.pdb], shell=True)
+            call(["sed -i 's/^.*RESOLUTION.*$//' data/pdb/" +
+                  self.name + "/" + self.pdb], shell=True)
             structure = pdb.get_structure(self.pdb, "data/pdb/" + self.name + "/" + self.pdb)
         res_num = 0
         for atom in structure.get_atoms():
