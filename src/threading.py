@@ -53,7 +53,7 @@ def calc_dist_matrix(query, template, dist_range):
     dist_dict = {}
     # This matrix holds distances and gaps ("*") for all pairs of residues of
     # the query sequence after being threaded on the template sequence
-    matrix = np.full((query_size, query_size), fill_value=np.inf, dtype=object)
+    matrix = np.zeros((query_size, query_size), dtype=object)
     # The distance matrix is symmetric so we make the calculations only for
     # the upper right triangular matrix. This saves have computation time.
     # And we do not calculate distances between bonded residues and between
@@ -61,7 +61,7 @@ def calc_dist_matrix(query, template, dist_range):
     for i in range(len(query)):
         row_res = query[i]
         if row_res.name == "-" or template[i].name == "-":
-            matrix[i, (i+2):] = "*"
+            #matrix[i, (i+2):] = "*"
             break
         for j in range(i+2, len(query)):
             col_res = query[j]
@@ -69,7 +69,7 @@ def calc_dist_matrix(query, template, dist_range):
             # The whole line / row in the matrix will necessarily be "*"
             # This saves computation time
             if col_res.name == "-" or template[j].name == "-":
-                matrix[:i, j] = "*"
+                #matrix[:i, j] = "*"
                 break
             # One of the most efficient method to calculate the distances.
             # https://stackoverflow.com/a/47775357/6401758
@@ -108,12 +108,13 @@ def convert_dist_to_energy(dist_matrix, dist_position_dict, dope_df):
                              threaded on the template.
     """
     #size of the dist_matrix (ncol ~ nrow)
-    size = shape(dist_matrix)[0]
+    size = dist_matrix.shape[0]
     for i in range(size):
         for j in range(i+2 ,size):
-            if isinstance(dist_matrix[i,j], float):
+            if dist_matrix[i,j] != 0:
                 tuple_residues = dist_position_dict[(i,j)]
-                round_value = round((dist_matrix[i,j] * 30) / 15)
+                round_value = round(int((dist_matrix[i,j] * 30) / 15))
+                print(round_value)
                 dist_matrix[i,j] = dope_df[tuple_residues[0]][tuple_residues[1]][round_value]
 
     return dist_matrix
