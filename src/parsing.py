@@ -65,14 +65,20 @@ def dope(dope_file):
 
 def foldrec(foldrec_file, nb_templates, metafold_dict):
     """
-        Extracts the score, the template name, the query sequence and the query template
-        for each alignment and creates a list of alignment objects.
+        Extracts the score, the template name, the query and template sequences for
+        the first n alignments from a file containing N profil-profil alignments and
+        creates a list of Alignment objects.
 
         Args:
-            nb_template: Number of templates chosen
+            foldrec_file (file): The file containing N profil-profil alignments and their 
+            corresponding scores.
+            nb_template (int): Number of alignments to retrieve from the file and chosen
+            by the user.
+            metafold_dict (dictionary): A dictionary with key = template name and
+            value = pdb file.
 
         Returns:
-            list of Alignment: A list of alignment objects
+            alignment_list (list of Alignment): A list of Alignment objects.
     """
 
     # Regex :
