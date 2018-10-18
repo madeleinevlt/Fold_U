@@ -4,14 +4,14 @@
                 or additional necessary files.
 """
 
-# IMPORTS
+# Third-party modules
 import re
 import pandas as pd
+from Bio.Data.IUPACData import protein_letters_3to1
 
-# Third-party modules
+# Local modules
 from src.classes import Residue
 from src.classes import Alignment
-from Bio.Data.IUPACData import protein_letters_3to1
 
 
 
@@ -47,7 +47,8 @@ def dope(dope_file):
 
      """
     # set up aa liste for rownames & colnames of the DataFrame
-    aa1 = ['A','C','D','E','F','G','H','I','K','L','M','N','P','Q','R','S','T','V','W','Y']
+    aa1 = ['A', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'K', 'L', 'M', 'N', 'P', 'Q', 'R',\
+    'S', 'T', 'V', 'W', 'Y']
 
     # set up matrix object 20*20
     dope_df = pd.DataFrame(index=aa1, columns=aa1, dtype=object)

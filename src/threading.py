@@ -117,11 +117,11 @@ def convert_dist_to_energy(dist_matrix, dist_position_dict, dope_df):
     #size of the dist_matrix (ncol ~ nrow)
     size = dist_matrix.shape[0]
     for i in range(size):
-        for j in range(i+2 ,size):
-            if dist_matrix[i,j] != "*" and not np.isnan(dist_matrix[i,j]):
-                residues_tuple = dist_position_dict[(i,j)]
-                interval_index = round(int((dist_matrix[i,j] * 30) / 15))
-                dist_matrix[i,j] = dope_df[residues_tuple[0]][residues_tuple[1]][interval_index]
-            elif dist_matrix[i,j] == "*":
-                dist_matrix[i,j] = 10
+        for j in range(i+2, size):
+            if dist_matrix[i, j] != "*" and not np.isnan(dist_matrix[i, j]):
+                residues_tuple = dist_position_dict[(i, j)]
+                interval_index = round(int((dist_matrix[i, j] * 30) / 15))
+                dist_matrix[i, j] = dope_df[residues_tuple[0]][residues_tuple[1]][interval_index]
+            elif dist_matrix[i, j] == "*":
+                dist_matrix[i, j] = 10
     return dist_matrix

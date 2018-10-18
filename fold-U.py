@@ -14,26 +14,33 @@
 """
 
 # Third-party modules
+from multiprocessing import Pool, cpu_count
+from functools import partial
+from operator import itemgetter
+import numpy as np
 from docopt import docopt
 
 # Local modules
 import src.parsing as parse
 import src.threading as threading
 
-# Third-party modules
-import numpy as np
-from docopt import docopt
-from multiprocessing import Pool, cpu_count
-from functools import partial
-from operator import itemgetter
+
 
 
 DIST_RANGE = [5, 15]
 
 
-
-def loop(dist_range, dope_df, alignement):
+def loop(alignement):
     """
+        blabla
+
+        Args:
+            alignment:
+
+        Returns:
+            best template's name:
+            best template's score:
+
     """
     # Calculate the distance matrix
     matrix, dist_dict = threading.calc_dist_matrix(
@@ -75,16 +82,16 @@ if __name__ == "__main__":
 
 
     # Parallelization of the main loop
-    pool = Pool(processes=cpu_count())
+    POOL = Pool(processes=cpu_count())
     # Necessary to pass arguments to parallelized function
-    func = partial(loop, DIST_RANGE, DOPE_DF)
-    scores = pool.imap(func, ALIGNMENT_LIST)
-    pool.close()
-    pool.join()
+    FUNC = partial(loop, DIST_RANGE, DOPE_DF)
+    SCORES = POOL.imap(FUNC, ALIGNMENT_LIST)
+    POOL.close()
+    POOL.join()
 
 
     ########## RESULTS ##########
 
 
-    best_template, best_score = min(scores, key=itemgetter(1))
-    print("\n\nBest template: {}\nBest energy: {:.2f}".format(best_template, best_score))
+    BEST_TEMPLATE, BEST_SCORE = min(SCORES, key=itemgetter(1))
+    print("\n\nBest template: {}\nBest energy: {:.2f}".format(BEST_TEMPLATE, BEST_SCORE))
