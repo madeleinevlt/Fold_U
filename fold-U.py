@@ -16,7 +16,6 @@
 # Third-party modules
 from multiprocessing import Pool, cpu_count
 from functools import partial
-from operator import itemgetter
 import numpy as np
 from docopt import docopt
 
@@ -40,7 +39,7 @@ def loop(ali):
             alignment (object): An object of the class Alignment
 
         Returns:
-            threading's result for the current template (tupple): (template's score, template's name)
+            threading's result for the given alignment (tupple): (template's score, template's name)
 
     """
     # Calculate the distance matrix
