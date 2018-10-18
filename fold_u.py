@@ -3,18 +3,18 @@
 
 """
     Usage:
-        fold-U.py FILE [--nb_templates NUM] [--metafold METAFOLD] [--dope DOPE] [--scores SCORES]
+        fold_u.py FILE [--nb_templates NUM] [--metafold METAFOLD] [--dope DOPE] [--scores SCORES]
 
     Options:
         -h, --help                            Show this
         -n NUM, --nb_templates NUM            First n templates to retrieve from
-                                              The foldrec file [default:100]
+                                              The foldrec file [default: 100]
         -m METAFOLD, --metafold METAFOLD      Path to the metafold.list file
-                                              [default: "data/METAFOLD.list"]
+                                              [default: data/METAFOLD.list]
         -d DOPE, --dope DOPE                  Path to the dope.par file
-                                              [default: "data/dope.par"]
+                                              [default: data/dope.par]
         -s SCORES, --scores SCORES            Path to the results file
-                                              [default: "res/threading_scores.out"]
+                                              [default: res/threading_scores.out]
 """
 
 # Third-party modules
@@ -35,7 +35,7 @@ DIST_RANGE = [5, 15]
 
 
 
-def threading(ali):
+def process(ali):
     """
         Does the threading and gives the score for a given Alignment object.
 
@@ -89,11 +89,10 @@ if __name__ == "__main__":
     ### Main calculations
     ####################
 
-
     # Parallelization of the main loop: threading calculations
     POOL = Pool(processes=cpu_count())
     # Necessary to pass arguments to parallelized function
-    SCORES = POOL.imap(threading, ALIGNMENT_LIST)
+    SCORES = POOL.imap(process, ALIGNMENT_LIST)
     POOL.close()
     POOL.join()
 
