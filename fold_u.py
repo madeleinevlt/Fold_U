@@ -3,21 +3,25 @@
 
 """
     Usage:
-        fold-U.py FILE [--nb_templates NUM] [--metafold METAFOLD] [--dope DOPE]
+        fold-U.py FILE [--nb_templates NUM] [--metafold METAFOLD] [--dope DOPE] [--scores SCORES]
 
     Options:
         -h, --help                            Show this
         -n NUM, --nb_templates NUM            First n templates to retrieve from
                                               The foldrec file [default:100]
         -m METAFOLD, --metafold METAFOLD      Path to the metafold.list file
+                                              [default: "data/METAFOLD.list"]
         -d DOPE, --dope DOPE                  Path to the dope.par file
+                                              [default: "data/dope.par"]
+        -s SCORES, --scores SCORES            Path to the results file
+                                              [default: "res/threading_scores.out"]
 """
 
 # Third-party modules
 from multiprocessing import Pool, cpu_count
 from functools import partial
-import numpy as np
 from docopt import docopt
+import numpy as np
 
 # Local modules
 import src.parsing as parse
@@ -28,23 +32,25 @@ import src.writing as write
 
 
 DIST_RANGE = [5, 15]
-SCORES_FILE = "res/threading_scores.out"
 
 
-def loop(ali):
+
+def threading(ali):
     """
         Does the threading and gives the score for a given Alignment object.
 
         Args:
-            alignment (object): An object of the class Alignment
+            ali (alignment object): An object of the class Alignment
 
         Returns:
-            threading's result for the given alignment (tupple): (template's score, template's name)
+            tupple: threading's result for the given alignment as a tuple
+                    (template's score, template's name)
 
     """
     # Calculate the distance matrix
-    matrix, dist_dict = threading.calc_dist_matrix(
-        ali.query_residues, ali.template.residues, DIST_RANGE)
+    query = ali.query_residues
+    template = ali.template.residues
+    matrix, dist_dict = threading.calc_dist_matrix(query, template, DIST_RANGE)
     # Convert distances into energies based on DOPE energies
     energy_matrix = threading.convert_dist_to_energy(matrix, dist_dict, DOPE_DF)
     return np.nansum(energy_matrix), ali.template.name
@@ -54,24 +60,23 @@ def loop(ali):
 
 if __name__ == "__main__":
 
-    # Parse command line
+
+    ### Parse command line
+    ######################
+
     ARGUMENTS = docopt(__doc__, version='fold-U 1.0')
     FOLDREC_FILE = ARGUMENTS["FILE"]
-    # First n templates
-    if ARGUMENTS["--nb_templates"]:
-        NB_TEMPLATES = int(ARGUMENTS["--nb_templates"])
-    else:
-        NB_TEMPLATES = 100
+    # Process the first n templates only
+    NB_TEMPLATES = int(ARGUMENTS["--nb_templates"])
     # METAFOLD file
-    if ARGUMENTS["--metafold"]:
-        METAFOLD = ARGUMENTS["--metafold"]
-    else:
-        METAFOLD = "data/METAFOLD.list"
+    METAFOLD = ARGUMENTS["--metafold"]
     # DOPE file
-    if ARGUMENTS["--dope"]:
-        DOPE = ARGUMENTS["--dope"]
-    else:
-        DOPE = "data/dope.par"
+    DOPE = ARGUMENTS["--dope"]
+    # SCORES file
+    SCORES_FILE = ARGUMENTS["--scores"]
+
+    ### Parse data files
+    ####################
 
     # Parse Metafold file
     METAFOLD_DICT = parse.metafold(METAFOLD)
@@ -81,13 +86,17 @@ if __name__ == "__main__":
     DOPE_DF = parse.dope(DOPE)
 
 
-    # Parallelization of the main loop
+    ### Main calculations
+    ####################
+
+
+    # Parallelization of the main loop: threading calculations
     POOL = Pool(processes=cpu_count())
     # Necessary to pass arguments to parallelized function
-    FUNC = partial(loop)
-    SCORES = POOL.imap(FUNC, ALIGNMENT_LIST)
+    SCORES = POOL.imap(threading, ALIGNMENT_LIST)
     POOL.close()
     POOL.join()
 
-    ########## RESULTS ##########
+    ### Results
+    ###########
     write.scores(SCORES_FILE, sorted(SCORES))
