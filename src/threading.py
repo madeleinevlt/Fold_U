@@ -7,6 +7,9 @@
 # Third-party modules
 import numpy as np
 
+
+
+
 def display_matrix(matrix):
     """
         Display the distance matrix in the terminal.
@@ -23,7 +26,7 @@ def display_matrix(matrix):
     cols = matrix.shape[1]
     for i in range(0, rows):
         for j in range(0, cols):
-            if (matrix[i][j] == "*"):
+            if matrix[i][j] == "*":
                 print("{:^4s}".format(matrix[i][j]), end="")
             else:
                 print("{:4.1f}".format(matrix[i][j]), end="")
@@ -58,7 +61,7 @@ def calc_dist_matrix(query, template, dist_range):
     # the upper right triangular matrix. This saves have computation time.
     # And we do not calculate distances between bonded residues and between
     # themselves so the 2nd loop starts at i+2
-    for i in range(len(query)):
+    for i in enumerate(query):
         row_res = query[i]
         if row_res.name == "-" or template[i].name == "-":
             #matrix[i, (i+2):] = "*"
@@ -95,8 +98,8 @@ def convert_dist_to_energy(dist_matrix, dist_position_dict, dope_df):
                                           threaded on the template.
 
             dist_position_dict (Dictionary): Dictionary containing as key a tuple of coord (i,j)
-                                             describing the coords of residues associated (res1, res2)
-                                             as values.
+                                             describing the coords of residues associated
+                                             (res1, res2) as values.
 
             dope_df (panda DataFrame):    DataFrame (20x20) containing a list of
                                           30 energy values for 30 interval of
@@ -114,7 +117,6 @@ def convert_dist_to_energy(dist_matrix, dist_position_dict, dope_df):
             if dist_matrix[i,j] != 0:
                 tuple_residues = dist_position_dict[(i,j)]
                 round_value = round(int((dist_matrix[i,j] * 30) / 15))
-                print(round_value)
                 dist_matrix[i,j] = dope_df[tuple_residues[0]][tuple_residues[1]][round_value]
 
     return dist_matrix
