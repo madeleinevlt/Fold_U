@@ -9,7 +9,8 @@ import re
 import pandas as pd
 
 # Third-party modules
-from src.classes import *
+from src.classes import Residue
+from src.classes import Alignment
 
 
 
@@ -52,8 +53,8 @@ def dope(dope_file):
     # set up matrix object 20*20
     dope_df = pd.DataFrame(index=aa3, columns=aa3, dtype=object)
 
-    with open(dope_file, 'r') as dope_f:
-        for line in dope_f:
+    with open(dope_file, 'r') as file:
+        for line in file:
             if line[4:6] == 'CA' and line[11:13] == 'CA':
                 # get the line with C-alpha for both amino acids
                 res_1 = line[0:3]
@@ -71,7 +72,7 @@ def foldrec(foldrec_file, nb_templates, metafold_dict):
         and gets all the coordinates of the CA atoms in the template's Residue list.
 
         Args:
-            foldrec_file (file): The file containing N profil-profil alignments and their 
+            foldrec_file (file): The file containing N profil-profil alignments and their
             corresponding scores.
             nb_templates (int): Number of alignments to retrieve from the file and chosen
             by the user.
@@ -83,10 +84,10 @@ def foldrec(foldrec_file, nb_templates, metafold_dict):
     """
 
     # Regex :
-    template_name_reg = re.compile("Alignment :.*vs\s+([A-Za-z0-9-_]+)")
-    score_reg = re.compile("^Score :\s+([-0-9\.]+)")
-    query_seq_reg = re.compile("^Query\s*[0-9]+\s*([A-Z-]+)")
-    template_seq_reg = re.compile("^Template\s*[0-9]+\s*([A-Z-]+)")
+    template_name_reg = re.compile("Alignment :.*vs\\s+([A-Za-z0-9-_]+)")
+    score_reg = re.compile("^Score :\\s+([-0-9\\.]+)")
+    query_seq_reg = re.compile("^Query\\s*[0-9]+\\s*([A-Z-]+)")
+    template_seq_reg = re.compile("^Template\\s*[0-9]+\\s*([A-Z-]+)")
 
     alignment_list = []
     count_templates = 0
