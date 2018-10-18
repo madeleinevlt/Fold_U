@@ -23,31 +23,32 @@ from docopt import docopt
 # Local modules
 import src.parsing as parse
 import src.threading as threading
+import src.writing as write
 
 
 
 
 DIST_RANGE = [5, 15]
+SCORES_FILE = "res/threading_scores.out"
 
 
-def loop(DIST_RANGE, DOPE_DF, alignement):
+def loop(ali):
     """
-        blabla
+        Does the threading and gives the score for a given Alignment object.
 
         Args:
-            alignment:
+            alignment (object): An object of the class Alignment
 
         Returns:
-            best template's name:
-            best template's score:
+            threading's result for the current template (tupple): (template's score, template's name)
 
     """
     # Calculate the distance matrix
     matrix, dist_dict = threading.calc_dist_matrix(
-        alignement.query_residues, alignement.template.residues, DIST_RANGE)
+        ali.query_residues, ali.template.residues, DIST_RANGE)
     # Convert distances into energies based on DOPE energies
     energy_matrix = threading.convert_dist_to_energy(matrix, dist_dict, DOPE_DF)
-    return alignement.template.name, np.nansum(energy_matrix)
+    return np.nansum(energy_matrix), ali.template.name
 
 
 
@@ -84,14 +85,10 @@ if __name__ == "__main__":
     # Parallelization of the main loop
     POOL = Pool(processes=cpu_count())
     # Necessary to pass arguments to parallelized function
-    FUNC = partial(loop, DIST_RANGE, DOPE_DF)
+    FUNC = partial(loop)
     SCORES = POOL.imap(FUNC, ALIGNMENT_LIST)
     POOL.close()
     POOL.join()
 
-
     ########## RESULTS ##########
-
-
-    BEST_TEMPLATE, BEST_SCORE = min(SCORES, key=itemgetter(1))
-    print("\n\nBest template: {}\nBest energy: {:.2f}".format(BEST_TEMPLATE, BEST_SCORE))
+    write.scores(SCORES_FILE, sorted(SCORES))
