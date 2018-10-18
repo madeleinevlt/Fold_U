@@ -61,7 +61,7 @@ def calc_dist_matrix(query, template, dist_range):
     # the upper right triangular matrix. This saves have computation time.
     # And we do not calculate distances between bonded residues and between
     # themselves so the 2nd loop starts at i+2
-    for i in enumerate(query):
+    for i, _ in enumerate(query):
         row_res = query[i]
         if row_res.name == "-" or template[i].name == "-":
             #matrix[i, (i+2):] = "*"
