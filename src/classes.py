@@ -72,12 +72,12 @@ class Template:
         pdb = PDBParser(QUIET=True)  # QUIET = True : Warnings issued are suppressed
 
         try:
-            structure = pdb.get_structure(self.pdb, "data/pdb/" + self.pdb)
+            structure = pdb.get_structure(self.pdb, "data/pdb/" + self.name + "/" + self.pdb)
         except TypeError:
             print("Silent Warning: The PDB file \"" +
                   self.pdb + "\" has no RESOLUTION field.")
-            call(["sed -i 's/^.*NOT APPLICABLE\..*$//' data/pdb/" + self.pdb], shell=True)
-            structure = pdb.get_structure(self.pdb, "data/pdb/" + self.pdb)
+            call(["sed -i 's/^.*NOT APPLICABLE\..*$//' data/pdb/" + self.name + "/" + self.pdb], shell=True)
+            structure = pdb.get_structure(self.pdb, "data/pdb/" + self.name + "/" + self.pdb)
             pass
         res_num = 0
         for atom in structure.get_atoms():
