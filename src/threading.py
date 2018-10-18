@@ -23,7 +23,7 @@ def display_matrix(matrix):
     cols = matrix.shape[1]
     for i in range(0, rows):
         for j in range(0, cols):
-            if (matrix[i][j] == "*"):
+            if matrix[i][j] == "*":
                 print("{:^4s}".format(matrix[i][j]), end="")
             else:
                 print("{:4.1f}".format(matrix[i][j]), end="")
@@ -95,8 +95,8 @@ def convert_dist_to_energy(dist_matrix, dist_position_dict, dope_df):
                                           threaded on the template.
 
             dist_position_dict (Dictionary): Dictionary containing as key a tuple of coord (i,j)
-                                             describing the coords of residues associated (res1, res2)
-                                             as values.
+                                             describing the coords of residues associated
+                                             (res1, res2) as values.
 
             dope_df (panda DataFrame):    DataFrame (20x20) containing a list of
                                           30 energy values for 30 interval of
@@ -108,12 +108,12 @@ def convert_dist_to_energy(dist_matrix, dist_position_dict, dope_df):
                              threaded on the template.
     """
     #size of the dist_matrix (ncol ~ nrow)
-    size = shape(dist_matrix)[0]
+    size = dist_matrix.shape[0]
     for i in range(size):
-        for j in range(i+2 ,size):
-            if isinstance(dist_matrix[i,j], float):
-                tuple_residues = dist_position_dict[(i,j)]
-                round_value = round((dist_matrix[i,j] * 30) / 15)
-                dist_matrix[i,j] = dope_df[tuple_residues[0]][tuple_residues[1]][round_value]
+        for j in range(i+2, size):
+            if isinstance(dist_matrix[i, j], float):
+                tuple_residues = dist_position_dict[(i, j)]
+                round_value = round((dist_matrix[i, j] * 30) / 15)
+                dist_matrix[i, j] = dope_df[tuple_residues[0]][tuple_residues[1]][round_value]
 
     return dist_matrix
