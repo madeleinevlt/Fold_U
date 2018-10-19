@@ -6,6 +6,20 @@
 
 # Third-party modules
 import numpy as np
+import time
+from functools import wraps
+
+
+def fn_timer(function):
+    @wraps(function)
+    def function_timer(*args, **kwargs):
+        t0 = time.time()
+        result = function(*args, **kwargs)
+        t1 = time.time()
+        print("Total time running %s: %s seconds" %
+               (function.__name__, str(t1-t0)))
+        return result
+    return function_timer
 
 
 
@@ -33,6 +47,7 @@ def display_matrix(matrix):
     print("\n\n")
 
 
+#@fn_timer
 def calc_dist_matrix(query, template, dist_range):
     """
         Calculate the matrix of distances of pair residues of the query sequence,
@@ -89,8 +104,8 @@ def calc_dist_matrix(query, template, dist_range):
             dist_dict[(i, j)] = (row_res.name, col_res.name)
     return matrix, dist_dict
 
-
-def convert_dist_to_energy(dist_matrix, dist_position_dict, dope_df):
+#@fn_timer
+def convert_dist_to_energy(dist_matrix, dist_position_dict, dope):
     """
         Convert the distance between residues to energy values based on
         dope score table.
@@ -120,7 +135,7 @@ def convert_dist_to_energy(dist_matrix, dist_position_dict, dope_df):
             if dist_matrix[i, j] != "*" and not np.isnan(dist_matrix[i, j]):
                 residues_tuple = dist_position_dict[(i, j)]
                 interval_index = round(int((dist_matrix[i, j] * 30) / 15))
-                dist_matrix[i, j] = dope_df[residues_tuple[0]][residues_tuple[1]][interval_index]
+                dist_matrix[i, j] = dope_df[i+j][interval_index]
             elif dist_matrix[i, j] == "*":
                 dist_matrix[i, j] = 10
     return dist_matrix
