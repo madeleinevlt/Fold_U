@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>src.parsing &mdash; fold-U 0.0.1 documentation</title>
+  <title>src.parsing &mdash; fold-u 1.0 documentation</title>
   
 
   
@@ -46,7 +46,7 @@
           
 
           
-            <a href="../../index.html" class="icon icon-home"> fold-U
+            <a href="../../index.html" class="icon icon-home"> fold-u
           
 
           
@@ -56,7 +56,7 @@
             
             
               <div class="version">
-                0.0.1
+                1.0
               </div>
             
           
@@ -86,6 +86,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../parsing.html">Parsing module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../threading.html">Threading module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../classes.html">Classes module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../writing.html">Parsing writing</a></li>
 </ul>
 
             
@@ -100,7 +101,7 @@
       <nav class="wy-nav-top" aria-label="top navigation">
         
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../../index.html">fold-U</a>
+          <a href="../../index.html">fold-u</a>
         
       </nav>
 
@@ -155,100 +156,126 @@
 <span class="sd">                or additional necessary files.</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="c1"># IMPORTS</span>
+<span class="c1"># Third-party modules</span>
 <span class="kn">import</span> <span class="nn">re</span>
-<span class="kn">import</span> <span class="nn">src.classes</span> <span class="k">as</span> <span class="nn">cl</span>
-<span class="kn">from</span> <span class="nn">Bio.PDB</span> <span class="k">import</span> <span class="o">*</span> <span class="c1"># Biopython</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">from</span> <span class="nn">Bio.Data.IUPACData</span> <span class="k">import</span> <span class="n">protein_letters_3to1</span>
+
+<span class="c1"># Local modules</span>
+<span class="kn">from</span> <span class="nn">src.classes</span> <span class="k">import</span> <span class="n">Residue</span>
+<span class="kn">from</span> <span class="nn">src.classes</span> <span class="k">import</span> <span class="n">Alignment</span>
+
+
 
 <div class="viewcode-block" id="metafold"><a class="viewcode-back" href="../../parsing.html#src.parsing.metafold">[docs]</a><span class="k">def</span> <span class="nf">metafold</span><span class="p">(</span><span class="n">metafold_file</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Extracts the name of the metafold as a key and the associated pdb as a value in a dictionary</span>
+<span class="sd">        Extracts the name of the metafold as a key and the associated pdb as</span>
+<span class="sd">        a value in a dictionary</span>
 
 <span class="sd">        Args:</span>
-<span class="sd">            metafold_file: The file METAFOLD.list containing this information</span>
+<span class="sd">            metafold_file: A METAFOLD.list file containing for a given line a</span>
+<span class="sd">                           template name and a pdb file name associated</span>
 
 <span class="sd">        Returns:</span>
-<span class="sd">            metafold_dict: The dictionary with key = metafold and value = pdb file</span>
+<span class="sd">            dictionary: A dictionary with key = template name and value = pdb file</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">metafold_dict</span> <span class="o">=</span> <span class="p">{}</span>
-    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">metafold_file</span><span class="p">,</span><span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">f</span><span class="p">:</span>
+    <span class="n">metafold_dict</span> <span class="o">=</span> <span class="p">{}</span>  <span class="c1"># Initalization of the dictionary</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">metafold_file</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">file</span><span class="p">:</span>
             <span class="n">metafold_dict</span><span class="p">[</span><span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="mi">0</span><span class="p">]]</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="mi">1</span><span class="p">]</span>
     <span class="k">return</span> <span class="n">metafold_dict</span></div>
 
-<div class="viewcode-block" id="get_CA_coords"><a class="viewcode-back" href="../../parsing.html#src.parsing.get_CA_coords">[docs]</a><span class="k">def</span> <span class="nf">get_CA_coords</span><span class="p">(</span><span class="n">alignment_list</span><span class="p">,</span><span class="n">count</span><span class="p">):</span>
+
+<div class="viewcode-block" id="dope"><a class="viewcode-back" href="../../parsing.html#src.parsing.dope">[docs]</a><span class="k">def</span> <span class="nf">dope</span><span class="p">(</span><span class="n">dope_file</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Takes a pdb file and creates a list of Residue objects.</span>
-<span class="sd">        Each Residue object contains the number the name and the CA coordinates.</span>
+<span class="sd">        Extracts 10 energy values for the 20*20 residus-CA pairs and stores it</span>
+<span class="sd">        in double indexed and labelled pandas DataFrame.</span>
 
 <span class="sd">        Args:</span>
-<span class="sd">            pdb: The name of a pdb file</span>
+<span class="sd">            dope_file: The file dope_file.par containing energy values for each</span>
+<span class="sd">                    amino acid pair.</span>
 
 <span class="sd">        Returns:</span>
-<span class="sd">            residues_list: A list of Residue objects</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">p</span> <span class="o">=</span> <span class="n">PDBParser</span><span class="p">(</span><span class="n">QUIET</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="c1"># QUIET = True : Warnings issued are suppressed</span>
-    <span class="n">pdb</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">get_structure</span><span class="p">(</span><span class="n">alignment_list</span><span class="p">[</span><span class="n">count</span><span class="p">]</span><span class="o">.</span><span class="n">template</span><span class="o">.</span><span class="n">pdb</span><span class="p">,</span> <span class="s1">&#39;data/pdb/&#39;</span><span class="o">+</span><span class="n">alignment_list</span><span class="p">[</span><span class="n">count</span><span class="p">]</span><span class="o">.</span><span class="n">template</span><span class="o">.</span><span class="n">pdb</span><span class="p">)</span>
-    <span class="n">res_num</span> <span class="o">=</span> <span class="mi">0</span>
-    <span class="k">for</span> <span class="n">atom</span> <span class="ow">in</span> <span class="n">pdb</span><span class="o">.</span><span class="n">get_atoms</span><span class="p">():</span>
-        <span class="k">if</span> <span class="n">atom</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;CA&quot;</span><span class="p">:</span>
-            <span class="k">while</span> <span class="n">alignment_list</span><span class="p">[</span><span class="n">count</span><span class="p">]</span><span class="o">.</span><span class="n">template</span><span class="o">.</span><span class="n">seq</span><span class="p">[</span><span class="n">res_num</span><span class="p">]</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s1">&#39;-&#39;</span><span class="p">:</span>
-                <span class="n">res_num</span> <span class="o">=</span> <span class="n">res_num</span> <span class="o">+</span> <span class="mi">1</span>
-            <span class="n">alignment_list</span><span class="p">[</span><span class="n">count</span><span class="p">]</span><span class="o">.</span><span class="n">template</span><span class="o">.</span><span class="n">seq</span><span class="p">[</span><span class="n">res_num</span><span class="p">]</span><span class="o">.</span><span class="n">CA_coords</span> <span class="o">=</span> <span class="n">atom</span><span class="o">.</span><span class="n">get_vector</span><span class="p">()</span>
-            <span class="n">res_num</span> <span class="o">=</span> <span class="n">res_num</span> <span class="o">+</span> <span class="mi">1</span></div>
+<span class="sd">            pandas DataFrame : Amino acids indexed matrix containing lists of energies</span>
 
-<div class="viewcode-block" id="foldrec"><a class="viewcode-back" href="../../parsing.html#src.parsing.foldrec">[docs]</a><span class="k">def</span> <span class="nf">foldrec</span><span class="p">(</span><span class="n">nb_templates</span><span class="p">):</span>
+<span class="sd">     &quot;&quot;&quot;</span>
+    <span class="c1"># set up aa liste for rownames &amp; colnames of the DataFrame</span>
+    <span class="n">aa1</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;A&#39;</span><span class="p">,</span> <span class="s1">&#39;C&#39;</span><span class="p">,</span> <span class="s1">&#39;D&#39;</span><span class="p">,</span> <span class="s1">&#39;E&#39;</span><span class="p">,</span> <span class="s1">&#39;F&#39;</span><span class="p">,</span> <span class="s1">&#39;G&#39;</span><span class="p">,</span> <span class="s1">&#39;H&#39;</span><span class="p">,</span> <span class="s1">&#39;I&#39;</span><span class="p">,</span> <span class="s1">&#39;K&#39;</span><span class="p">,</span> <span class="s1">&#39;L&#39;</span><span class="p">,</span> <span class="s1">&#39;M&#39;</span><span class="p">,</span> <span class="s1">&#39;N&#39;</span><span class="p">,</span> <span class="s1">&#39;P&#39;</span><span class="p">,</span> <span class="s1">&#39;Q&#39;</span><span class="p">,</span> <span class="s1">&#39;R&#39;</span><span class="p">,</span>\
+    <span class="s1">&#39;S&#39;</span><span class="p">,</span> <span class="s1">&#39;T&#39;</span><span class="p">,</span> <span class="s1">&#39;V&#39;</span><span class="p">,</span> <span class="s1">&#39;W&#39;</span><span class="p">,</span> <span class="s1">&#39;Y&#39;</span><span class="p">]</span>
+
+    <span class="c1"># set up matrix object 20*20</span>
+    <span class="n">dope_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="n">aa1</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="n">aa1</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">object</span><span class="p">)</span>
+
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">dope_file</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">file</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">line</span><span class="p">[</span><span class="mi">4</span><span class="p">:</span><span class="mi">6</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;CA&#39;</span> <span class="ow">and</span> <span class="n">line</span><span class="p">[</span><span class="mi">11</span><span class="p">:</span><span class="mi">13</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;CA&#39;</span><span class="p">:</span>
+                <span class="c1"># get the line with C-alpha for both amino acids</span>
+                <span class="n">res_1</span> <span class="o">=</span> <span class="n">protein_letters_3to1</span><span class="p">[</span><span class="n">line</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">title</span><span class="p">()]</span>
+                <span class="n">res_2</span> <span class="o">=</span> <span class="n">protein_letters_3to1</span><span class="p">[</span><span class="n">line</span><span class="p">[</span><span class="mi">7</span><span class="p">:</span><span class="mi">10</span><span class="p">]</span><span class="o">.</span><span class="n">title</span><span class="p">()]</span>
+                <span class="n">energy_res1_res2</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">float</span><span class="p">,</span> <span class="n">line</span><span class="p">[</span><span class="mi">14</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">)))</span>
+                <span class="n">dope_df</span><span class="p">[</span><span class="n">res_1</span><span class="p">][</span><span class="n">res_2</span><span class="p">]</span> <span class="o">=</span> <span class="n">energy_res1_res2</span>
+    <span class="k">return</span> <span class="n">dope_df</span></div>
+
+
+<div class="viewcode-block" id="foldrec"><a class="viewcode-back" href="../../parsing.html#src.parsing.foldrec">[docs]</a><span class="k">def</span> <span class="nf">foldrec</span><span class="p">(</span><span class="n">foldrec_file</span><span class="p">,</span> <span class="n">nb_templates</span><span class="p">,</span> <span class="n">metafold_dict</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Extracts the score, the template name, the query sequence and the query template for each alignment</span>
-<span class="sd">        and creates a list of alignment objects.</span>
+<span class="sd">        Extracts the score, the template name, the query and template sequences for</span>
+<span class="sd">        the first n alignments from a file containing N profil-profil alignments and</span>
+<span class="sd">        creates a list of Alignment objects. It also gives the template&#39;s pdb file name</span>
+<span class="sd">        and gets all the coordinates of the CA atoms in the template&#39;s Residue list.</span>
 
 <span class="sd">        Args:</span>
-<span class="sd">            nb_template: Number of templates chosen</span>
+<span class="sd">            foldrec_file (file): The file containing N profil-profil alignments and their</span>
+<span class="sd">                                 corresponding scores.</span>
+<span class="sd">            nb_templates (int): Number of alignments to retrieve from the file and chosen</span>
+<span class="sd">                                by the user.</span>
+<span class="sd">            metafold_dict (dictionary): A dictionary with key = template name and</span>
+<span class="sd">                                        value = pdb file.</span>
 
 <span class="sd">        Returns:</span>
-<span class="sd">            alignment_list : A list of alignment objects</span>
+<span class="sd">            list of Alignment: A list of Alignment objects.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">metafold_dict</span> <span class="o">=</span> <span class="n">metafold</span><span class="p">(</span><span class="s2">&quot;data/METAFOLD.list&quot;</span><span class="p">)</span>
 
     <span class="c1"># Regex :</span>
-    <span class="n">template_name_reg</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s2">&quot;Alignment :.*vs\s+([A-Za-z0-9-_]+)&quot;</span><span class="p">)</span>
-    <span class="n">score_reg</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s2">&quot;^Score :\s+([-0-9\.]+)&quot;</span><span class="p">)</span>
-    <span class="n">query_seq_reg</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s2">&quot;^Query\s*[0-9]+\s*([A-Z-]+)&quot;</span><span class="p">)</span>
-    <span class="n">template_seq_reg</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s2">&quot;^Template\s*[0-9]+\s*([A-Z-]+)&quot;</span><span class="p">)</span>
+    <span class="n">template_name_reg</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s2">&quot;Alignment :.*vs</span><span class="se">\\</span><span class="s2">s+([A-Za-z0-9-_]+)&quot;</span><span class="p">)</span>
+    <span class="n">score_reg</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s2">&quot;^Score :</span><span class="se">\\</span><span class="s2">s+([-0-9</span><span class="se">\\</span><span class="s2">.]+)&quot;</span><span class="p">)</span>
+    <span class="n">query_seq_reg</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s2">&quot;^Query</span><span class="se">\\</span><span class="s2">s*[0-9]+</span><span class="se">\\</span><span class="s2">s*([A-Z-]+)&quot;</span><span class="p">)</span>
+    <span class="n">template_seq_reg</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s2">&quot;^Template</span><span class="se">\\</span><span class="s2">s*[0-9]+</span><span class="se">\\</span><span class="s2">s*([A-Z-]+)&quot;</span><span class="p">)</span>
 
     <span class="n">alignment_list</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">count_templates</span> <span class="o">=</span> <span class="mi">0</span>
 
-    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;data/Agglutinin.foldrec&quot;</span><span class="p">,</span><span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-        <span class="n">prev_line</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">readline</span><span class="p">()</span>
-        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">f</span><span class="p">:</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">foldrec_file</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+        <span class="n">prev_line</span> <span class="o">=</span> <span class="n">file</span><span class="o">.</span><span class="n">readline</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">file</span><span class="p">:</span>
             <span class="c1"># The loop is break when the required nb of templates is reached :</span>
-            <span class="k">if</span> <span class="p">(</span><span class="n">count</span> <span class="o">==</span> <span class="n">nb_templates</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">count_templates</span> <span class="o">==</span> <span class="n">nb_templates</span><span class="p">:</span>
                 <span class="k">break</span>
             <span class="c1"># Search a regex for the current line :</span>
-            <span class="n">template_name_found</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">template_name_reg</span><span class="p">,</span><span class="n">line</span><span class="p">)</span>
-            <span class="n">score_found</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">score_reg</span><span class="p">,</span><span class="n">line</span><span class="p">)</span>
-            <span class="n">query_seq_found</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">query_seq_reg</span><span class="p">,</span><span class="n">line</span><span class="p">)</span>
-            <span class="n">template_seq_found</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">template_seq_reg</span><span class="p">,</span><span class="n">line</span><span class="p">)</span>
+            <span class="n">template_name_found</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">template_name_reg</span><span class="p">,</span> <span class="n">line</span><span class="p">)</span>
+            <span class="n">score_found</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">score_reg</span><span class="p">,</span> <span class="n">line</span><span class="p">)</span>
+            <span class="n">query_seq_found</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">query_seq_reg</span><span class="p">,</span> <span class="n">line</span><span class="p">)</span>
+            <span class="n">template_seq_found</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">template_seq_reg</span><span class="p">,</span> <span class="n">line</span><span class="p">)</span>
             <span class="c1"># A template name is found :</span>
-            <span class="k">if</span> <span class="p">(</span><span class="n">template_name_found</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">template_name_found</span><span class="p">:</span>
                 <span class="n">template_name</span> <span class="o">=</span> <span class="n">template_name_found</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
             <span class="c1"># A score is found :</span>
-            <span class="k">if</span> <span class="p">(</span><span class="n">score_found</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">score_found</span><span class="p">:</span>
                 <span class="n">score</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">score_found</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
             <span class="c1"># A query sequence is found :</span>
-            <span class="k">if</span> <span class="p">(</span><span class="n">query_seq_found</span> <span class="ow">and</span> <span class="n">prev_line</span> <span class="o">==</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">):</span>
-                <span class="n">query_seq</span> <span class="o">=</span> <span class="p">[</span><span class="n">cl</span><span class="o">.</span><span class="n">Residue</span><span class="p">(</span><span class="n">name</span><span class="p">)</span> <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">query_seq_found</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">))]</span>
+            <span class="k">if</span> <span class="n">query_seq_found</span> <span class="ow">and</span> <span class="n">prev_line</span> <span class="o">==</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">:</span>
+                <span class="n">query_seq</span> <span class="o">=</span> <span class="p">[</span><span class="n">Residue</span><span class="p">(</span><span class="n">name</span><span class="p">)</span> <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">query_seq_found</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">))]</span>
             <span class="c1"># A template sequence is founds :</span>
-            <span class="k">if</span> <span class="p">(</span><span class="n">template_seq_found</span> <span class="ow">and</span> <span class="n">prev_line</span> <span class="o">==</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">):</span>
-                <span class="n">template_seq</span> <span class="o">=</span> <span class="p">[</span><span class="n">cl</span><span class="o">.</span><span class="n">Residue</span><span class="p">(</span><span class="n">name</span><span class="p">)</span> <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">template_seq_found</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">))]</span>
+            <span class="k">if</span> <span class="n">template_seq_found</span> <span class="ow">and</span> <span class="n">prev_line</span> <span class="o">==</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">:</span>
+                <span class="n">template_seq</span> <span class="o">=</span> <span class="p">[</span><span class="n">Residue</span><span class="p">(</span><span class="n">name</span><span class="p">)</span> <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">template_seq_found</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">))]</span>
                 <span class="c1"># Add a new alignment object in the list :</span>
-                <span class="n">alignment_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cl</span><span class="o">.</span><span class="n">Alignment</span><span class="p">(</span><span class="n">score</span><span class="p">,</span> <span class="n">query_seq</span><span class="p">,</span> <span class="n">template_name</span><span class="p">,</span> <span class="n">template_seq</span><span class="p">))</span>
-                <span class="n">alignment_list</span><span class="p">[</span><span class="n">count</span><span class="p">]</span><span class="o">.</span><span class="n">template</span><span class="o">.</span><span class="n">pdb</span> <span class="o">=</span> <span class="n">metafold_dict</span><span class="p">[</span><span class="n">template_name</span><span class="p">]</span>
-                <span class="n">get_CA_coords</span><span class="p">(</span><span class="n">alignment_list</span><span class="p">,</span><span class="n">count</span><span class="p">)</span>
-                <span class="n">count</span> <span class="o">=</span> <span class="n">count</span> <span class="o">+</span> <span class="mi">1</span>
+                <span class="n">ali</span> <span class="o">=</span> <span class="n">Alignment</span><span class="p">(</span><span class="n">score</span><span class="p">,</span> <span class="n">query_seq</span><span class="p">,</span> <span class="n">template_name</span><span class="p">,</span> <span class="n">template_seq</span><span class="p">)</span>
+                <span class="n">ali</span><span class="o">.</span><span class="n">template</span><span class="o">.</span><span class="n">get_pdb</span><span class="p">(</span><span class="n">metafold_dict</span><span class="p">)</span>
+                <span class="n">ali</span><span class="o">.</span><span class="n">template</span><span class="o">.</span><span class="n">get_all_ca_coords</span><span class="p">()</span>
+                <span class="n">alignment_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ali</span><span class="p">)</span>
+                <span class="n">count_templates</span> <span class="o">=</span> <span class="n">count_templates</span> <span class="o">+</span> <span class="mi">1</span>
             <span class="n">prev_line</span> <span class="o">=</span> <span class="n">line</span>
-    <span class="k">return</span><span class="p">(</span><span class="n">alignment_list</span><span class="p">)</span></div>
+    <span class="k">return</span> <span class="n">alignment_list</span></div>
 </pre></div>
 
            </div>

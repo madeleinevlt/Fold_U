@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Parsing module &mdash; fold-U 0.0.1 documentation</title>
+  <title>Parsing module &mdash; fold-u 1.0 documentation</title>
   
 
   
@@ -48,7 +48,7 @@
           
 
           
-            <a href="index.html" class="icon icon-home"> fold-U
+            <a href="index.html" class="icon icon-home"> fold-u
           
 
           
@@ -58,7 +58,7 @@
             
             
               <div class="version">
-                0.0.1
+                1.0
               </div>
             
           
@@ -88,6 +88,7 @@
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Parsing module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="threading.html">Threading module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="classes.html">Classes module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="writing.html">Parsing writing</a></li>
 </ul>
 
             
@@ -102,7 +103,7 @@
       <nav class="wy-nav-top" aria-label="top navigation">
         
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="index.html">fold-U</a>
+          <a href="index.html">fold-u</a>
         
       </nav>
 
@@ -155,38 +156,51 @@
   <div class="section" id="module-src.parsing">
 <span id="parsing-module"></span><h1>Parsing module<a class="headerlink" href="#module-src.parsing" title="Permalink to this headline">¶</a></h1>
 <span class="target" id="module-parsing"></span><dl class="function">
-<dt id="src.parsing.foldrec">
-<code class="descclassname">src.parsing.</code><code class="descname">foldrec</code><span class="sig-paren">(</span><em>nb_templates</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/parsing.html#foldrec"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.parsing.foldrec" title="Permalink to this definition">¶</a></dt>
-<dd><p>Extracts the score, the template name, the query sequence and the query template for each alignment
-and creates a list of alignment objects.</p>
+<dt id="src.parsing.dope">
+<code class="descclassname">src.parsing.</code><code class="descname">dope</code><span class="sig-paren">(</span><em>dope_file</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/parsing.html#dope"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.parsing.dope" title="Permalink to this definition">¶</a></dt>
+<dd><p>Extracts 10 energy values for the 20*20 residus-CA pairs and stores it
+in double indexed and labelled pandas DataFrame.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>nb_template</strong> – Number of templates chosen</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>dope_file</strong> – The file dope_file.par containing energy values for each
+amino acid pair.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A list of alignment objects</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Amino acids indexed matrix containing lists of energies</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">alignment_list</td>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">pandas DataFrame</td>
 </tr>
 </tbody>
 </table>
 </dd></dl>
 
 <dl class="function">
-<dt id="src.parsing.get_CA_coords">
-<code class="descclassname">src.parsing.</code><code class="descname">get_CA_coords</code><span class="sig-paren">(</span><em>alignment_list</em>, <em>count</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/parsing.html#get_CA_coords"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.parsing.get_CA_coords" title="Permalink to this definition">¶</a></dt>
-<dd><p>Takes a pdb file and creates a list of Residue objects.
-Each Residue object contains the number the name and the CA coordinates.</p>
+<dt id="src.parsing.foldrec">
+<code class="descclassname">src.parsing.</code><code class="descname">foldrec</code><span class="sig-paren">(</span><em>foldrec_file</em>, <em>nb_templates</em>, <em>metafold_dict</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/parsing.html#foldrec"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.parsing.foldrec" title="Permalink to this definition">¶</a></dt>
+<dd><p>Extracts the score, the template name, the query and template sequences for
+the first n alignments from a file containing N profil-profil alignments and
+creates a list of Alignment objects. It also gives the template’s pdb file name
+and gets all the coordinates of the CA atoms in the template’s Residue list.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>pdb</strong> – The name of a pdb file</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>foldrec_file</strong> (<em>file</em>) – The file containing N profil-profil alignments and their
+corresponding scores.</li>
+<li><strong>nb_templates</strong> (<em>int</em>) – Number of alignments to retrieve from the file and chosen
+by the user.</li>
+<li><strong>metafold_dict</strong> (<em>dictionary</em>) – A dictionary with key = template name and
+value = pdb file.</li>
+</ul>
+</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A list of Residue objects</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">A list of Alignment objects.</p>
+</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">residues_list</td>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">list of Alignment</p>
+</td>
 </tr>
 </tbody>
 </table>
@@ -195,16 +209,18 @@ Each Residue object contains the number the name and the CA coordinates.</p>
 <dl class="function">
 <dt id="src.parsing.metafold">
 <code class="descclassname">src.parsing.</code><code class="descname">metafold</code><span class="sig-paren">(</span><em>metafold_file</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/parsing.html#metafold"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.parsing.metafold" title="Permalink to this definition">¶</a></dt>
-<dd><p>Extracts the name of the metafold as a key and the associated pdb as a value in a dictionary</p>
+<dd><p>Extracts the name of the metafold as a key and the associated pdb as
+a value in a dictionary</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>metafold_file</strong> – The file METAFOLD.list containing this information</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>metafold_file</strong> – A METAFOLD.list file containing for a given line a
+template name and a pdb file name associated</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The dictionary with key = metafold and value = pdb file</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A dictionary with key = template name and value = pdb file</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">metafold_dict</td>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">dictionary</td>
 </tr>
 </tbody>
 </table>

@@ -15,9 +15,8 @@ def display_matrix(matrix):
         Display the distance matrix in the terminal.
 
         Args:
-            matrix (numpy ndarray): Matrix of shape query_length * query_length
-                                    containing distances and gaps represented as
-                                    "*".
+            matrix (numpy ndarray): Matrix of shape (query_length * query_length)
+                                    containing distances and gaps represented as "*".
 
         Returns:
             void
@@ -43,12 +42,12 @@ def calc_dist_matrix(query, template, dist_range):
         Args:
             query (list of Residue): List of residues of the query sequence
             template (list of Residue): List of residues of the template sequence
-            dist_range (list of int): Range of distances in angströms.
-                        Distances within this range only are taken into account
+            dist_range (list of int): Range of distances in angströms. Distances
+                                      within this range only are taken into account
 
         Returns:
             2D numpy matrix: The distance matrix between pairs of residues of the
-            query sequence after being threaded on the template sequence.
+                             query sequence after being threaded on the template sequence.
     """
 
     query_size = len(query)
@@ -101,18 +100,18 @@ def convert_dist_to_energy(dist_matrix, dist_position_dict, dope_df):
                                           pairs of residues of the query sequence
                                           threaded on the template.
 
-            dist_position_dict (Dictionary): Dictionary containing as key a tuple of coord (i,j)
-                                             describing the coords of residues associated
-                                             (res1, res2) as values.
+            dist_position_dict (Dictionary): Dictionary containing as key a tuple
+                                             of coord (i,j) describing the coords
+                                             of residues associated (res1, res2)
+                                             as values.
 
-            dope_df (panda DataFrame):    DataFrame (20x20) containing a list of
-                                          30 energy values for 30 interval of
-                                          distances between 0.25 to 15 with a step
-                                          of 0.50
+            dope_df (panda DataFrame): DataFrame (20x20) containing a list of
+                                       30 energy values for 30 interval of
+                                       distances between 0.25 to 15 with a step
+                                       of 0.50
         Returns:
-            numpy 2D array:  2D matrix containing energy between
-                             pairs of residues of the query sequence
-                             threaded on the template.
+            numpy 2D array: 2D matrix containing energy between pairs of residues
+                            of the query sequence threaded on the template.
     """
     #size of the dist_matrix (ncol ~ nrow)
     size = dist_matrix.shape[0]

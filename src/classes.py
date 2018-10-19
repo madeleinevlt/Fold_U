@@ -11,6 +11,7 @@ from Bio.PDB import PDBParser
 class Alignment:
     """
     .. class:: Alignment
+
       This class groups informations about an alignment.
 
     Attributes:
@@ -30,6 +31,7 @@ class Alignment:
 class Template:
     """
     .. class:: Template
+
       This class groups informations about a template sequence/structure.
 
     Attributes:
@@ -93,6 +95,7 @@ class Template:
 class Residue:
     """
     .. class:: Residue
+    
       This class groups informations about a residue.
 
     Attributes:

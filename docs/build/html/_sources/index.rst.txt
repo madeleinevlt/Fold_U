@@ -14,3 +14,4 @@ Welcome to fold-U's documentation!
    parsing
    threading
    classes
+   writing

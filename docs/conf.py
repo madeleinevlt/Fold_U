@@ -18,14 +18,14 @@ sys.path.append(os.path.abspath('../'))
 
 # -- Project information -----------------------------------------------------
 
-project = 'fold-U'
+project = 'fold-u'
 copyright = '2018, Gabriel Cretin, Hélène Kabbech, Tom Gutman, Flora Mikaeloff, Franz Arnold'
 author = 'Gabriel Cretin, Hélène Kabbech, Tom Gutman, Flora Mikaeloff, Franz Arnold'
 
 # The short X.Y version
-version = '0.0.1'
+version = '1.0'
 # The full version, including alpha/beta/rc tags
-release = '0.0.1'
+release = '1.0'
 
 
 # -- General configuration ---------------------------------------------------
@@ -44,7 +44,7 @@ extensions = [
     'sphinx.ext.ifconfig',
     'sphinx.ext.viewcode',
     'sphinx.ext.napoleon',
-    'm2r'    
+    'm2r'
     ]
 
 # Add any paths that contain templates here, relative to this directory.

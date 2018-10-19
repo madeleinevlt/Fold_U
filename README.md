@@ -6,7 +6,7 @@ Meet-U 2019
 - Hélène Kabbech
 - Tom Gutman
 - Flora Mikaeloff
-- Franz Arnold
+- Franz-Arnold Ake
 
 ## Installation
 

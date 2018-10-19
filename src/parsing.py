@@ -17,11 +17,12 @@ from src.classes import Alignment
 
 def metafold(metafold_file):
     """
-        Extracts the name of the metafold as a key and the associated pdb as a value in a dictionary
+        Extracts the name of the metafold as a key and the associated pdb as
+        a value in a dictionary
 
         Args:
-            file: A METAFOLD.list file containing for a given line a template name and a pdb file
-            name associated
+            metafold_file: A METAFOLD.list file containing for a given line a
+                           template name and a pdb file name associated
 
         Returns:
             dictionary: A dictionary with key = template name and value = pdb file
@@ -40,10 +41,10 @@ def dope(dope_file):
 
         Args:
             dope_file: The file dope_file.par containing energy values for each
-            amino acid pair.
+                    amino acid pair.
 
         Returns:
-            DataFrame : amino acids indexed matrix containing lists of energies
+            pandas DataFrame : Amino acids indexed matrix containing lists of energies
 
      """
     # set up aa liste for rownames & colnames of the DataFrame
@@ -73,14 +74,14 @@ def foldrec(foldrec_file, nb_templates, metafold_dict):
 
         Args:
             foldrec_file (file): The file containing N profil-profil alignments and their
-            corresponding scores.
+                                 corresponding scores.
             nb_templates (int): Number of alignments to retrieve from the file and chosen
-            by the user.
+                                by the user.
             metafold_dict (dictionary): A dictionary with key = template name and
-            value = pdb file.
+                                        value = pdb file.
 
         Returns:
-            alignment_list (list of Alignment): A list of Alignment objects.
+            list of Alignment: A list of Alignment objects.
     """
 
     # Regex :

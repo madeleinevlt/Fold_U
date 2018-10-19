@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>README &mdash; fold-u 1.0 documentation</title>
+  <title>Parsing writing &mdash; fold-u 1.0 documentation</title>
   
 
   
@@ -28,8 +28,7 @@
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Meeting" href="meeting.html" />
-    <link rel="prev" title="Welcome to fold-U’s documentation!" href="index.html" /> 
+    <link rel="prev" title="Classes module" href="classes.html" /> 
 
   
   <script src="_static/js/modernizr.min.js"></script>
@@ -83,24 +82,12 @@
             
             
               <ul class="current">
-<li class="toctree-l1 current"><a class="current reference internal" href="#">README</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#fold-u">Fold-U</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#authors">Authors</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#installation">Installation</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#requirements">Requirements</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#clone-the-repository">Clone the repository</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#documentation">Documentation</a></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="README.html">README</a></li>
 <li class="toctree-l1"><a class="reference internal" href="meeting.html">Meeting</a></li>
 <li class="toctree-l1"><a class="reference internal" href="parsing.html">Parsing module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="threading.html">Threading module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="classes.html">Classes module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="writing.html">Parsing writing</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Parsing writing</a></li>
 </ul>
 
             
@@ -146,13 +133,13 @@
     
       <li><a href="index.html">Docs</a> &raquo;</li>
         
-      <li>README</li>
+      <li>Parsing writing</li>
     
     
       <li class="wy-breadcrumbs-aside">
         
             
-            <a href="_sources/README.rst.txt" rel="nofollow"> View page source</a>
+            <a href="_sources/writing.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -165,44 +152,30 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="readme">
-<h1>README<a class="headerlink" href="#readme" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="fold-u">
-<h2>Fold-U<a class="headerlink" href="#fold-u" title="Permalink to this headline">¶</a></h2>
-<p>Meet-U 2019</p>
-<div class="section" id="authors">
-<h3>Authors<a class="headerlink" href="#authors" title="Permalink to this headline">¶</a></h3>
-<ul class="simple">
-<li>Gabriel Cretin</li>
-<li>Hélène Kabbech</li>
-<li>Tom Gutman</li>
-<li>Flora Mikaeloff</li>
-<li>Franz-Arnold Ake</li>
+  <div class="section" id="module-src.writing">
+<span id="parsing-writing"></span><h1>Parsing writing<a class="headerlink" href="#module-src.writing" title="Permalink to this headline">¶</a></h1>
+<span class="target" id="module-writing"></span><dl class="function">
+<dt id="src.writing.scores">
+<code class="descclassname">src.writing.</code><code class="descname">scores</code><span class="sig-paren">(</span><em>filename</em>, <em>score_list</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/writing.html#scores"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.writing.scores" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a file containing for each line a score and the template’s
+name associated.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>filename</strong> (<em>str</em>) – The path of the file to create</li>
+<li><strong>score_list</strong> (<em>list</em>) – A list of tupples (score, template’s name)</li>
 </ul>
-</div>
-<div class="section" id="installation">
-<h3>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h3>
-<div class="section" id="requirements">
-<h4>Requirements<a class="headerlink" href="#requirements" title="Permalink to this headline">¶</a></h4>
-</div>
-<div class="section" id="clone-the-repository">
-<h4>Clone the repository<a class="headerlink" href="#clone-the-repository" title="Permalink to this headline">¶</a></h4>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>git clone https://github.com/meetU-MasterStudents/2018---2019-Equipe-4.git
-<span class="nb">cd</span> <span class="m">2018</span>---2019-Equipe-4
-</pre></div>
-</div>
-</div>
-<div class="section" id="documentation">
-<h4>Documentation<a class="headerlink" href="#documentation" title="Permalink to this headline">¶</a></h4>
-<p>The documentation of the project was generated with Sphinx and Read The Docs theme.
-You can access it by opening the <code class="docutils literal notranslate"><span class="pre">docs/build/html/index.html</span></code> file
-with your favorite web browser.</p>
-<div class="highlight-guess notranslate"><div class="highlight"><pre><span></span>firefox docs/build/html/index.html
-</pre></div>
-</div>
-</div>
-</div>
-</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">void</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 </div>
 
 
@@ -213,10 +186,8 @@ with your favorite web browser.</p>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="meeting.html" class="btn btn-neutral float-right" title="Meeting" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
-      
-        <a href="index.html" class="btn btn-neutral" title="Welcome to fold-U’s documentation!" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="classes.html" class="btn btn-neutral" title="Classes module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

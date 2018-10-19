@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>src.classes &mdash; fold-U 0.0.1 documentation</title>
+  <title>src.classes &mdash; fold-u 1.0 documentation</title>
   
 
   
@@ -46,7 +46,7 @@
           
 
           
-            <a href="../../index.html" class="icon icon-home"> fold-U
+            <a href="../../index.html" class="icon icon-home"> fold-u
           
 
           
@@ -56,7 +56,7 @@
             
             
               <div class="version">
-                0.0.1
+                1.0
               </div>
             
           
@@ -86,6 +86,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../parsing.html">Parsing module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../threading.html">Threading module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../classes.html">Classes module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../writing.html">Parsing writing</a></li>
 </ul>
 
             
@@ -100,7 +101,7 @@
       <nav class="wy-nav-top" aria-label="top navigation">
         
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../../index.html">fold-U</a>
+          <a href="../../index.html">fold-u</a>
         
       </nav>
 
@@ -154,56 +155,116 @@
 <span class="sd">   :synopsis: This module implements Alignment, Template and Residue classes</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
+<span class="c1"># Third-party modules</span>
+<span class="kn">from</span> <span class="nn">subprocess</span> <span class="k">import</span> <span class="n">call</span>
+<span class="kn">from</span> <span class="nn">Bio.PDB</span> <span class="k">import</span> <span class="n">PDBParser</span>
+
 
 <div class="viewcode-block" id="Alignment"><a class="viewcode-back" href="../../classes.html#src.classes.Alignment">[docs]</a><span class="k">class</span> <span class="nc">Alignment</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    .. class:: Alignment</span>
+
 <span class="sd">      This class groups informations about an alignment.</span>
 
 <span class="sd">    Attributes:</span>
-<span class="sd">        score: Alignment score</span>
-<span class="sd">        query_seq: Query sequence</span>
+<span class="sd">        score: Score of the alignment</span>
+<span class="sd">        query_residues: Query&#39;s sequence of residues as list of Residues objects</span>
 <span class="sd">        template: Instance of a Template object as</span>
-<span class="sd">                  ``Template(template_name, template_seq)``</span>
+<span class="sd">                  ``Template(template_name, template_residues)``</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">score</span><span class="p">,</span> <span class="n">query_seq</span><span class="p">,</span> <span class="n">template_name</span><span class="p">,</span> <span class="n">template_seq</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">score</span><span class="p">,</span> <span class="n">query_residues</span><span class="p">,</span> <span class="n">template_name</span><span class="p">,</span> <span class="n">template_residues</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;The constructor of an instance of the Alignment class.&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">score</span> <span class="o">=</span> <span class="n">score</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">query_seq</span> <span class="o">=</span> <span class="n">query_seq</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">template</span> <span class="o">=</span> <span class="n">Template</span><span class="p">(</span><span class="n">template_name</span><span class="p">,</span> <span class="n">template_seq</span><span class="p">)</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">query_residues</span> <span class="o">=</span> <span class="n">query_residues</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">template</span> <span class="o">=</span> <span class="n">Template</span><span class="p">(</span><span class="n">template_name</span><span class="p">,</span> <span class="n">template_residues</span><span class="p">)</span></div>
+
 
 <div class="viewcode-block" id="Template"><a class="viewcode-back" href="../../classes.html#src.classes.Template">[docs]</a><span class="k">class</span> <span class="nc">Template</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    .. class:: Template</span>
+
 <span class="sd">      This class groups informations about a template sequence/structure.</span>
 
 <span class="sd">    Attributes:</span>
 <span class="sd">        name: Name of the template</span>
-<span class="sd">        seq: Template&#39;s sequence of residues as list of Residues objects</span>
+<span class="sd">        residues: Template&#39;s sequence of residues as list of Residues objects</span>
 <span class="sd">        pdb: PDB code of the template</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">seq</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">residues</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;The constructor of an instance of the Template class.&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">seq</span> <span class="o">=</span> <span class="n">seq</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">pdb</span> <span class="o">=</span> <span class="kc">None</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">residues</span> <span class="o">=</span> <span class="n">residues</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pdb</span> <span class="o">=</span> <span class="kc">None</span>
+
+<div class="viewcode-block" id="Template.get_pdb"><a class="viewcode-back" href="../../classes.html#src.classes.Template.get_pdb">[docs]</a>    <span class="k">def</span> <span class="nf">get_pdb</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">metafold_dict</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Get the PDB file name of the current template from the template&#39;s name.</span>
+
+<span class="sd">            Args:</span>
+<span class="sd">                self: The current alignment&#39;s template.</span>
+<span class="sd">                dictionary: A dictionary with key = template name and value = pdb file</span>
+
+<span class="sd">            Returns:</span>
+<span class="sd">                void</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pdb</span> <span class="o">=</span> <span class="n">metafold_dict</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="Template.get_all_ca_coords"><a class="viewcode-back" href="../../classes.html#src.classes.Template.get_all_ca_coords">[docs]</a>    <span class="k">def</span> <span class="nf">get_all_ca_coords</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Parse the PDB file and sets the coordinates of the residues list of</span>
+<span class="sd">            the current template.</span>
+
+<span class="sd">            Args:</span>
+<span class="sd">                self: The current alignment&#39;s template.</span>
+
+<span class="sd">            Returns:</span>
+<span class="sd">                void</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">pdb</span> <span class="o">=</span> <span class="n">PDBParser</span><span class="p">(</span><span class="n">QUIET</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>  <span class="c1"># QUIET = True : Warnings issued are suppressed</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">structure</span> <span class="o">=</span> <span class="n">pdb</span><span class="o">.</span><span class="n">get_structure</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pdb</span><span class="p">,</span> <span class="s2">&quot;data/pdb/&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="s2">&quot;/&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">pdb</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">TypeError</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Silent Warning: The PDB file </span><span class="se">\&quot;</span><span class="s2">&quot;</span> <span class="o">+</span>
+                  <span class="bp">self</span><span class="o">.</span><span class="n">pdb</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\&quot;</span><span class="s2"> has no RESOLUTION field.&quot;</span><span class="p">)</span>
+            <span class="n">call</span><span class="p">([</span><span class="s2">&quot;sed -i &#39;s/^.*RESOLUTION.*$//&#39; data/pdb/&quot;</span> <span class="o">+</span>
+                  <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="s2">&quot;/&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">pdb</span><span class="p">],</span> <span class="n">shell</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="n">structure</span> <span class="o">=</span> <span class="n">pdb</span><span class="o">.</span><span class="n">get_structure</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pdb</span><span class="p">,</span> <span class="s2">&quot;data/pdb/&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="s2">&quot;/&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">pdb</span><span class="p">)</span>
+        <span class="n">res_num</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">atom</span> <span class="ow">in</span> <span class="n">structure</span><span class="o">.</span><span class="n">get_atoms</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">atom</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;CA&quot;</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">res_num</span> <span class="o">&gt;=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">residues</span><span class="p">):</span>
+                    <span class="k">break</span>
+                <span class="c1"># No coordinates for gaps in the template</span>
+                <span class="k">while</span> <span class="bp">self</span><span class="o">.</span><span class="n">residues</span><span class="p">[</span><span class="n">res_num</span><span class="p">]</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s1">&#39;-&#39;</span><span class="p">:</span>
+                    <span class="n">res_num</span> <span class="o">=</span> <span class="n">res_num</span> <span class="o">+</span> <span class="mi">1</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">residues</span><span class="p">[</span><span class="n">res_num</span><span class="p">]</span><span class="o">.</span><span class="n">ca_coords</span> <span class="o">=</span> <span class="n">atom</span><span class="o">.</span><span class="n">get_vector</span><span class="p">()</span>
+                <span class="n">res_num</span> <span class="o">=</span> <span class="n">res_num</span> <span class="o">+</span> <span class="mi">1</span></div></div>
+
 
 <div class="viewcode-block" id="Residue"><a class="viewcode-back" href="../../classes.html#src.classes.Residue">[docs]</a><span class="k">class</span> <span class="nc">Residue</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    .. class:: Residue</span>
+<span class="sd">    </span>
 <span class="sd">      This class groups informations about a residue.</span>
 
 <span class="sd">    Attributes:</span>
-<span class="sd">        name: Name of the residue (3 letters code)</span>
-<span class="sd">        CA_coords: 3D coordinates of the residues</span>
+<span class="sd">        name: Name of the residue (1 letter code)</span>
+<span class="sd">        ca_coords: 3D coordinates of the residue</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;The constructor of an instance of the Residue class.&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">CA_coords</span> <span class="o">=</span> <span class="kc">None</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ca_coords</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">ca_coords</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">&quot;&lt;&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="s2">&quot;  |  &quot;</span> <span class="o">+</span> <span class="s2">&quot;empty coordinates&gt;&quot;</span>
+        <span class="n">coords</span> <span class="o">=</span> <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">coord</span><span class="p">)</span> <span class="k">for</span> <span class="n">coord</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">ca_coords</span><span class="p">]</span>
+        <span class="k">return</span> <span class="s2">&quot;&lt;&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="s2">&quot;  |  &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">coords</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;&gt;&quot;</span></div>
 </pre></div>
 
            </div>
