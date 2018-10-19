@@ -65,6 +65,34 @@ Dans le ~/.gitconfig :
 helper = cache --timeout=28800
 ```
 
+---
+
+# Meeting 2 : jeudi 11 octobre
+
+## Ajout des datas
+data test : Agglutini
+
+## Pseudo-code et répartition du code
+- génération des classes ~ Hélène
+- parsing_folrec ~ Hélène
+- parsing_metafold ~ Tom
+- parsing_DOPE ~ Arnold
+- calc_threading_score
+  - calc_dist : Gabriel
+  - transf_dist_E : FLora
+
+
+## Git pull request
+1. Création d'une branche :
+Une branche = une feature
+```shell
+git checkout -b dev_feature
+```
+2. Merge
+Le merge se fait une fois le pull request accepté par tout le monde
+
+
+
 
 ### Pour générer la documentation
 
