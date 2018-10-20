@@ -71,6 +71,7 @@ def calc_dist_matrix(query, template, dist_range):
     # This matrix holds distances and gaps ("*") for all pairs of residues of
     # the query sequence after being threaded on the template sequence
     matrix = np.empty((query_size, query_size), dtype=object)
+    # Faster to fill now than using np.full()
     matrix.fill(np.nan)
     # The distance matrix is symmetric so we make the calculations only for
     # the upper right triangular matrix. This saves have computation time.
@@ -87,16 +88,15 @@ def calc_dist_matrix(query, template, dist_range):
         for j in range(i+2, query_size):
             col_res = query[j]
             if col_res.name == "-" or template[j].name == "-":
-                matrix[:i, j] = "*"
+                matrix[:, j] = "*"
                 for k in range(i):
                     dist_dict[(k, j)] = (query[k], col_res.name)
                 break
-            # One of the most efficient method to calculate the distances.
-            # https://stackoverflow.com/a/47775357/6401758
-            # distance = sqrt((xa-xb)**2 + (ya-yb)**2 + (za-zb)**2)
-            #print(template[i].name,template[i].ca_coords,template[j].ca_coords,template[j].name)
             else:
-                dist = np.linalg.norm(template[i].ca_coords - template[j].ca_coords)
+                # THE most efficient method to calculate Euclidian distances.
+                # Formula: distance = sqrt((xa-xb)**2 + (ya-yb)**2 + (za-zb)**2)
+                a_min_b = template[j].ca_coords - template[i].ca_coords
+                dist = np.sqrt(np.einsum('i,i->', a_min_b, a_min_b))
                 # Keep distances only in a defined range because we don't want to
                 # take into account directly bonded residues (dist < ~5 A) and too far residues
                 if dist_range[0] <= dist <= dist_range[1]:
@@ -105,7 +105,7 @@ def calc_dist_matrix(query, template, dist_range):
     return matrix, dist_dict
 
 #@fn_timer
-def convert_dist_to_energy(dist_matrix, dist_position_dict, dope):
+def convert_dist_to_energy(dist_matrix, dist_position_dict, dope_matrix):
     """
         Convert the distance between residues to energy values based on
         dope score table.
@@ -120,10 +120,11 @@ def convert_dist_to_energy(dist_matrix, dist_position_dict, dope):
                                              of residues associated (res1, res2)
                                              as values.
 
-            dope_df (panda DataFrame): DataFrame (20x20) containing a list of
-                                       30 energy values for 30 interval of
-                                       distances between 0.25 to 15 with a step
-                                       of 0.50
+            dope_matrix (numpy array): Numpy ndarray 400 (20*20 residues) * 30
+                                       containing a list of 30 energy values for
+                                       30 interval of distances between 0.25 to
+                                       15 with a step of 0.50
+
         Returns:
             numpy 2D array: 2D matrix containing energy between pairs of residues
                             of the query sequence threaded on the template.
@@ -135,7 +136,7 @@ def convert_dist_to_energy(dist_matrix, dist_position_dict, dope):
             if dist_matrix[i, j] != "*" and not np.isnan(dist_matrix[i, j]):
                 residues_tuple = dist_position_dict[(i, j)]
                 interval_index = round(int((dist_matrix[i, j] * 30) / 15))
-                dist_matrix[i, j] = dope_df[i+j][interval_index]
+                dist_matrix[i, j] = dope_matrix[i+j][interval_index]
             elif dist_matrix[i, j] == "*":
                 dist_matrix[i, j] = 10
     return dist_matrix
