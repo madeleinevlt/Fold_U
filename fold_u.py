@@ -96,6 +96,6 @@ if __name__ == "__main__":
     POOL.close()
     POOL.join()
 
-    ### Results
-    ###########
+    ### Results : Score and PDB files
+    #################################
     write.scores_and_pdb(OUTPUT, sorted(SCORES), NB_PDB, ALIGNMENT_DICT)
