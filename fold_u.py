@@ -19,7 +19,6 @@
 
 # Third-party modules
 from multiprocessing import Pool, cpu_count
-from functools import partial
 from docopt import docopt
 import numpy as np
 
@@ -50,12 +49,8 @@ def process(ali):
     # Calculate the distance matrix
     query = ali.query_residues
     template = ali.template.residues
-    matrix, dist_dict = threading.calc_dist_matrix(query, template, DIST_RANGE)
-    # Convert distances into energies based on DOPE energies
-    energy_matrix = threading.convert_dist_to_energy(matrix, dist_dict, DOPE_DF)
+    energy_matrix = threading.calc_dist_convert_energy(query, template, DIST_RANGE, DOPE_DICT)
     return np.nansum(energy_matrix), ali.template.name
-
-
 
 
 if __name__ == "__main__":
@@ -83,11 +78,11 @@ if __name__ == "__main__":
     # Parse Foldrec file
     ALIGNMENT_LIST = parse.foldrec(FOLDREC_FILE, NB_TEMPLATES, METAFOLD_DICT)
     # Parse DOPE file
-    DOPE_DF = parse.dope(DOPE)
+    DOPE_DICT = parse.dope(DOPE)
 
 
     ### Main calculations
-    ####################
+    #####################
 
     # Parallelization of the main loop: threading calculations
     POOL = Pool(processes=cpu_count())

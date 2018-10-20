@@ -4,7 +4,7 @@
 """
 
 
-
+import os
 
 def scores(filename, score_list):
     """
@@ -19,6 +19,7 @@ def scores(filename, score_list):
             void
     """
     print("\nThe program ended successfully !\nThe results are stored in " + filename)
+    os.makedirs(os.path.dirname(filename), exist_ok=True)
     with open(filename, "w") as file:
         for score, name in score_list:
             file.write("{:<5d}{}\n".format(int(score), name))
