@@ -19,7 +19,6 @@
 
 # Third-party modules
 from multiprocessing import Pool, cpu_count
-from functools import partial
 from docopt import docopt
 import numpy as np
 
