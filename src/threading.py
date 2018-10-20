@@ -88,15 +88,14 @@ def calc_dist_matrix(query, template, dist_range):
         for j in range(i+2, query_size):
             col_res = query[j]
             if col_res.name == "-" or template[j].name == "-":
-                matrix[:, j] = "*"
+                matrix[:i, j] = "*"
                 for k in range(i):
                     dist_dict[(k, j)] = (query[k], col_res.name)
                 break
+            # THE most efficient method to calculate Euclidian distances.
+            # Formula: distance = sqrt((xa-xb)**2 + (ya-yb)**2 + (za-zb)**2)
             else:
-                # THE most efficient method to calculate Euclidian distances.
-                # Formula: distance = sqrt((xa-xb)**2 + (ya-yb)**2 + (za-zb)**2)
-                a_min_b = template[j].ca_coords - template[i].ca_coords
-                dist = np.sqrt(np.einsum('i,i->', a_min_b, a_min_b))
+                dist = np.linalg.norm(template[i].ca_coords - template[j].ca_coords)
                 # Keep distances only in a defined range because we don't want to
                 # take into account directly bonded residues (dist < ~5 A) and too far residues
                 if dist_range[0] <= dist <= dist_range[1]:
