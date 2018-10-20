@@ -3,23 +3,25 @@
 
 """
     Usage:
-        fold_u.py FILE [--nb_templates NUM] [--metafold METAFOLD] [--dope DOPE] [--scores SCORES]
+        fold_u.py FILE [--nb_templates NUM] [--nb_pdb NUM] [--metafold METAFOLD] [--dope DOPE] [--output OUTPUT]
 
     Options:
         -h, --help                            Show this
         -n NUM, --nb_templates NUM            First n templates to retrieve from
                                               The foldrec file [default: 100]
+        -p NUM, --nb_pdb NUM                  Number of pdb to create
+                                              [default: 10]
         -m METAFOLD, --metafold METAFOLD      Path to the metafold.list file
                                               [default: data/METAFOLD.list]
         -d DOPE, --dope DOPE                  Path to the dope.par file
                                               [default: data/dope.par]
-        -s SCORES, --scores SCORES            Path to the results file
-                                              [default: res/threading_scores.out]
+        -o PATH, --output PATH                Path to the directory containing
+                                              the result files (scores and pdb)
+                                              [default: res/threading]
 """
 
 # Third-party modules
 from multiprocessing import Pool, cpu_count
-from functools import partial
 from docopt import docopt
 import numpy as np
 
@@ -50,12 +52,8 @@ def process(ali):
     # Calculate the distance matrix
     query = ali.query_residues
     template = ali.template.residues
-    matrix, dist_dict = threading.calc_dist_matrix(query, template, DIST_RANGE)
-    # Convert distances into energies based on DOPE energies
-    energy_matrix = threading.convert_dist_to_energy(matrix, dist_dict, DOPE_DF)
+    energy_matrix = threading.calc_dist_convert_energy(query, template, DIST_RANGE, DOPE_DICT)
     return np.nansum(energy_matrix), ali.template.name
-
-
 
 
 if __name__ == "__main__":
@@ -68,12 +66,14 @@ if __name__ == "__main__":
     FOLDREC_FILE = ARGUMENTS["FILE"]
     # Process the first n templates only
     NB_TEMPLATES = int(ARGUMENTS["--nb_templates"])
+    # Create the first n pdb templates
+    NB_PDB = int(ARGUMENTS["--nb_pdb"])
     # METAFOLD file
     METAFOLD = ARGUMENTS["--metafold"]
     # DOPE file
     DOPE = ARGUMENTS["--dope"]
     # SCORES file
-    SCORES_FILE = ARGUMENTS["--scores"]
+    OUTPUT = ARGUMENTS["--output"]
 
     ### Parse data files
     ####################
@@ -81,21 +81,21 @@ if __name__ == "__main__":
     # Parse Metafold file
     METAFOLD_DICT = parse.metafold(METAFOLD)
     # Parse Foldrec file
-    ALIGNMENT_LIST = parse.foldrec(FOLDREC_FILE, NB_TEMPLATES, METAFOLD_DICT)
+    ALIGNMENT_DICT = parse.foldrec(FOLDREC_FILE, NB_TEMPLATES, METAFOLD_DICT)
     # Parse DOPE file
-    DOPE_DF = parse.dope(DOPE)
+    DOPE_DICT = parse.dope(DOPE)
 
 
     ### Main calculations
-    ####################
+    #####################
 
     # Parallelization of the main loop: threading calculations
     POOL = Pool(processes=cpu_count())
     # Necessary to pass arguments to parallelized function
-    SCORES = POOL.imap(process, ALIGNMENT_LIST)
+    SCORES = POOL.imap(process, ALIGNMENT_DICT.values())
     POOL.close()
     POOL.join()
 
-    ### Results
-    ###########
-    write.scores(SCORES_FILE, sorted(SCORES))
+    ### Results : Score and PDB files
+    #################################
+    write.scores_and_pdb(OUTPUT, sorted(SCORES), NB_PDB, ALIGNMENT_DICT)

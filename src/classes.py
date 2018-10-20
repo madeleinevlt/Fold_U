@@ -4,8 +4,8 @@
 """
 
 # Third-party modules
-from subprocess import call
-from Bio.PDB import PDBParser
+import numpy as np
+
 
 
 class Alignment:
@@ -70,32 +70,26 @@ class Template:
             Returns:
                 void
         """
-        pdb = PDBParser(QUIET=True)  # QUIET = True : Warnings issued are suppressed
-
-        try:
-            structure = pdb.get_structure(self.pdb, "data/pdb/" + self.name + "/" + self.pdb)
-        except TypeError:
-            print("Silent Warning: The PDB file \"" +
-                  self.pdb + "\" has no RESOLUTION field.")
-            call(["sed -i 's/^.*RESOLUTION.*$//' data/pdb/" +
-                  self.name + "/" + self.pdb], shell=True)
-            structure = pdb.get_structure(self.pdb, "data/pdb/" + self.name + "/" + self.pdb)
         res_num = 0
-        for atom in structure.get_atoms():
-            if atom.name == "CA":
-                if res_num >= len(self.residues):
-                    break
-                # No coordinates for gaps in the template
-                while self.residues[res_num].name == '-':
-                    res_num = res_num + 1
-                self.residues[res_num].ca_coords = atom.get_vector()
-                res_num = res_num + 1
+        with open("data/pdb/" + self.name + "/" + self.pdb, 'r') as file:
+            for line in file:
+                line_type = line[0:6].strip()
+                name_at = line[12:16].strip()
+                if line_type == "ATOM" and name_at == "CA":
+                    x_coord = float(line[30:38].strip())
+                    y_coord = float(line[38:46].strip())
+                    z_coord = float(line[46:54].strip())
+                    # Skip gaps in the template
+                    while self.residues[res_num].name == '-':
+                        res_num += 1
+                    self.residues[res_num].ca_coords = np.array([x_coord, y_coord, z_coord])
+                    res_num += 1
 
 
 class Residue:
     """
     .. class:: Residue
-    
+
       This class groups informations about a residue.
 
     Attributes:
@@ -110,6 +104,6 @@ class Residue:
 
     def __str__(self):
         if self.ca_coords is None:
-            return "<" + self.name + "  |  " + "empty coordinates>"
+            return "<" + self.name + " | " + "empty coordinates>"
         coords = [str(coord) for coord in self.ca_coords]
-        return "<" + self.name + "  |  " + str(coords) + ">"
+        return "<" + self.name + " | " + str(coords) + ">"
