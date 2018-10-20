@@ -60,7 +60,7 @@ def write_pdb(res_path, template_name, template_num, alignment_dict):
             if (res_q == "-" or res_t == "-"):
                 continue
             # An "ATOM" line of the created pdb file
-            file.write("{:6s}{:5d} {:^4s} {:>3s}{:2s}{:4d}{:>12.3f}{:8.3f}{:8.3f}{:6.2f}{:6.2f}{:>12s}\n"\
+            file.write("{:6s}{:5d} {:^4s} {:>3s}{:>2s}{:4d}{:>12.3f}{:8.3f}{:8.3f}{:6.2f}{:6.2f}{:>12s}\n"\
                 .format("ATOM", res_num+1, "CA", seq3(res_q.name).upper(), "A", res_num+1,\
                 res_t.ca_coords[0], res_t.ca_coords[1], res_t.ca_coords[2], 1.00, 0, "C"))
         # The two last lines of the created pdb file ("END" and "TER" lines)
