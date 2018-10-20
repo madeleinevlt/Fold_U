@@ -88,7 +88,7 @@
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Parsing module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="threading.html">Threading module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="classes.html">Classes module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="writing.html">Parsing writing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="writing.html">Writing module</a></li>
 </ul>
 
             
@@ -158,18 +158,22 @@
 <span class="target" id="module-parsing"></span><dl class="function">
 <dt id="src.parsing.dope">
 <code class="descclassname">src.parsing.</code><code class="descname">dope</code><span class="sig-paren">(</span><em>dope_file</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/parsing.html#dope"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.parsing.dope" title="Permalink to this definition">¶</a></dt>
-<dd><p>Extracts 10 energy values for the 20*20 residus-CA pairs and stores it
-in double indexed and labelled pandas DataFrame.</p>
+<dd><p>Extracts 30 dope energy values for the 20*20 residus-CA pairs and stores it
+in a dictionary with key = res_1-res_2 and value = an array of the 30 dope scores.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>dope_file</strong> – The file dope_file.par containing energy values for each
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>file</strong> (<em>dope</em>) – The file dope.par containing energy values for each
 amino acid pair.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Amino acids indexed matrix containing lists of energies</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><dl class="docutils">
+<dt>A dictionary with key = res_1-res_2</dt>
+<dd>and value = an array of the 30 dope energy values.</dd>
+</dl>
+</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">pandas DataFrame</td>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">dope dictionary</td>
 </tr>
 </tbody>
 </table>
@@ -196,10 +200,15 @@ value = pdb file.</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">A list of Alignment objects.</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><dl class="docutils">
+<dt>A dictionary with key = template name and</dt>
+<dd><p class="first last">value = an Alignment object.</p>
+</dd>
+</dl>
+</p>
 </td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">list of Alignment</p>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">Dictionary of Alignments</p>
 </td>
 </tr>
 </tbody>
@@ -248,7 +257,7 @@ template name and a pdb file name associated</td>
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2018, Gabriel Cretin, Hélène Kabbech, Tom Gutman, Flora Mikaeloff, Franz Arnold
+        &copy; Copyright 2018, Gabriel Cretin, Hélène Kabbech, Tom Gutman, Flora Mikaeloff, Franz Arnold.
 
     </p>
   </div>
@@ -267,14 +276,21 @@ template name and a pdb file name associated</td>
 
   
 
-    
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-        <script type="text/javascript" src="_static/jquery.js"></script>
-        <script type="text/javascript" src="_static/underscore.js"></script>
-        <script type="text/javascript" src="_static/doctools.js"></script>
-        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'1.0',
+            LANGUAGE:'None',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 
   
 

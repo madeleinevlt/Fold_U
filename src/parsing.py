@@ -77,7 +77,7 @@ def foldrec(foldrec_file, nb_templates, metafold_dict):
 
         Returns:
             Dictionary of Alignments: A dictionary with key = template name and
-            value = an Alignment object.
+                                      value = an Alignment object.
     """
 
     # Regex :

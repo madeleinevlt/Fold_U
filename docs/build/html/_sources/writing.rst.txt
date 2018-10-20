@@ -1,5 +1,5 @@
-Parsing writing
-***************
+Writing module
+**************
 
 .. automodule:: src.writing
    :members:

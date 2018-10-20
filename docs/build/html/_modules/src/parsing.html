@@ -86,7 +86,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../parsing.html">Parsing module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../threading.html">Threading module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../classes.html">Classes module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../writing.html">Parsing writing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../writing.html">Writing module</a></li>
 </ul>
 
             
@@ -158,8 +158,8 @@
 
 <span class="c1"># Third-party modules</span>
 <span class="kn">import</span> <span class="nn">re</span>
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="kn">from</span> <span class="nn">Bio.Data.IUPACData</span> <span class="k">import</span> <span class="n">protein_letters_3to1</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">Bio.SeqUtils</span> <span class="k">import</span> <span class="n">seq1</span>
 
 <span class="c1"># Local modules</span>
 <span class="kn">from</span> <span class="nn">src.classes</span> <span class="k">import</span> <span class="n">Residue</span>
@@ -188,33 +188,28 @@
 
 <div class="viewcode-block" id="dope"><a class="viewcode-back" href="../../parsing.html#src.parsing.dope">[docs]</a><span class="k">def</span> <span class="nf">dope</span><span class="p">(</span><span class="n">dope_file</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Extracts 10 energy values for the 20*20 residus-CA pairs and stores it</span>
-<span class="sd">        in double indexed and labelled pandas DataFrame.</span>
+<span class="sd">        Extracts 30 dope energy values for the 20*20 residus-CA pairs and stores it</span>
+<span class="sd">        in a dictionary with key = res_1-res_2 and value = an array of the 30 dope scores.</span>
 
 <span class="sd">        Args:</span>
-<span class="sd">            dope_file: The file dope_file.par containing energy values for each</span>
-<span class="sd">                    amino acid pair.</span>
+<span class="sd">            dope file: The file dope.par containing energy values for each</span>
+<span class="sd">                       amino acid pair.</span>
 
 <span class="sd">        Returns:</span>
-<span class="sd">            pandas DataFrame : Amino acids indexed matrix containing lists of energies</span>
+<span class="sd">            dope dictionary: A dictionary with key = res_1-res_2</span>
+<span class="sd">                             and value = an array of the 30 dope energy values.</span>
 
-<span class="sd">     &quot;&quot;&quot;</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># set up aa liste for rownames &amp; colnames of the DataFrame</span>
-    <span class="n">aa1</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;A&#39;</span><span class="p">,</span> <span class="s1">&#39;C&#39;</span><span class="p">,</span> <span class="s1">&#39;D&#39;</span><span class="p">,</span> <span class="s1">&#39;E&#39;</span><span class="p">,</span> <span class="s1">&#39;F&#39;</span><span class="p">,</span> <span class="s1">&#39;G&#39;</span><span class="p">,</span> <span class="s1">&#39;H&#39;</span><span class="p">,</span> <span class="s1">&#39;I&#39;</span><span class="p">,</span> <span class="s1">&#39;K&#39;</span><span class="p">,</span> <span class="s1">&#39;L&#39;</span><span class="p">,</span> <span class="s1">&#39;M&#39;</span><span class="p">,</span> <span class="s1">&#39;N&#39;</span><span class="p">,</span> <span class="s1">&#39;P&#39;</span><span class="p">,</span> <span class="s1">&#39;Q&#39;</span><span class="p">,</span> <span class="s1">&#39;R&#39;</span><span class="p">,</span>\
-    <span class="s1">&#39;S&#39;</span><span class="p">,</span> <span class="s1">&#39;T&#39;</span><span class="p">,</span> <span class="s1">&#39;V&#39;</span><span class="p">,</span> <span class="s1">&#39;W&#39;</span><span class="p">,</span> <span class="s1">&#39;Y&#39;</span><span class="p">]</span>
-
-    <span class="c1"># set up matrix object 20*20</span>
-    <span class="n">dope_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="n">aa1</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="n">aa1</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">object</span><span class="p">)</span>
-
-    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">dope_file</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+    <span class="n">dope_dict</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">dope_file</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
         <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">file</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">line</span><span class="p">[</span><span class="mi">4</span><span class="p">:</span><span class="mi">6</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;CA&#39;</span> <span class="ow">and</span> <span class="n">line</span><span class="p">[</span><span class="mi">11</span><span class="p">:</span><span class="mi">13</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;CA&#39;</span><span class="p">:</span>
-                <span class="c1"># get the line with C-alpha for both amino acids</span>
-                <span class="n">res_1</span> <span class="o">=</span> <span class="n">protein_letters_3to1</span><span class="p">[</span><span class="n">line</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">title</span><span class="p">()]</span>
-                <span class="n">res_2</span> <span class="o">=</span> <span class="n">protein_letters_3to1</span><span class="p">[</span><span class="n">line</span><span class="p">[</span><span class="mi">7</span><span class="p">:</span><span class="mi">10</span><span class="p">]</span><span class="o">.</span><span class="n">title</span><span class="p">()]</span>
-                <span class="n">energy_res1_res2</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">float</span><span class="p">,</span> <span class="n">line</span><span class="p">[</span><span class="mi">14</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">)))</span>
-                <span class="n">dope_df</span><span class="p">[</span><span class="n">res_1</span><span class="p">][</span><span class="n">res_2</span><span class="p">]</span> <span class="o">=</span> <span class="n">energy_res1_res2</span>
-    <span class="k">return</span> <span class="n">dope_df</span></div>
+            <span class="c1"># get the line with C-alpha for both amino acids</span>
+            <span class="k">if</span> <span class="n">line</span><span class="p">[</span><span class="mi">4</span><span class="p">:</span><span class="mi">6</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;CA&quot;</span> <span class="ow">and</span> <span class="n">line</span><span class="p">[</span><span class="mi">11</span><span class="p">:</span><span class="mi">13</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;CA&quot;</span><span class="p">:</span>
+                <span class="n">res_1</span> <span class="o">=</span> <span class="n">seq1</span><span class="p">(</span><span class="n">line</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">3</span><span class="p">])</span>
+                <span class="n">res_2</span> <span class="o">=</span> <span class="n">seq1</span><span class="p">(</span><span class="n">line</span><span class="p">[</span><span class="mi">7</span><span class="p">:</span><span class="mi">10</span><span class="p">])</span>
+                <span class="n">dope_dict</span><span class="p">[</span><span class="n">res_1</span><span class="o">+</span><span class="n">res_2</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">fromstring</span><span class="p">(</span><span class="n">line</span><span class="p">[</span><span class="mi">14</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s2">&quot; &quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">dope_dict</span></div>
 
 
 <div class="viewcode-block" id="foldrec"><a class="viewcode-back" href="../../parsing.html#src.parsing.foldrec">[docs]</a><span class="k">def</span> <span class="nf">foldrec</span><span class="p">(</span><span class="n">foldrec_file</span><span class="p">,</span> <span class="n">nb_templates</span><span class="p">,</span> <span class="n">metafold_dict</span><span class="p">):</span>
@@ -233,7 +228,8 @@
 <span class="sd">                                        value = pdb file.</span>
 
 <span class="sd">        Returns:</span>
-<span class="sd">            list of Alignment: A list of Alignment objects.</span>
+<span class="sd">            Dictionary of Alignments: A dictionary with key = template name and</span>
+<span class="sd">                                      value = an Alignment object.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="c1"># Regex :</span>
@@ -242,7 +238,7 @@
     <span class="n">query_seq_reg</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s2">&quot;^Query</span><span class="se">\\</span><span class="s2">s*[0-9]+</span><span class="se">\\</span><span class="s2">s*([A-Z-]+)&quot;</span><span class="p">)</span>
     <span class="n">template_seq_reg</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s2">&quot;^Template</span><span class="se">\\</span><span class="s2">s*[0-9]+</span><span class="se">\\</span><span class="s2">s*([A-Z-]+)&quot;</span><span class="p">)</span>
 
-    <span class="n">alignment_list</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">alignment_dict</span> <span class="o">=</span> <span class="p">{}</span>
     <span class="n">count_templates</span> <span class="o">=</span> <span class="mi">0</span>
 
     <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">foldrec_file</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
@@ -272,10 +268,10 @@
                 <span class="n">ali</span> <span class="o">=</span> <span class="n">Alignment</span><span class="p">(</span><span class="n">score</span><span class="p">,</span> <span class="n">query_seq</span><span class="p">,</span> <span class="n">template_name</span><span class="p">,</span> <span class="n">template_seq</span><span class="p">)</span>
                 <span class="n">ali</span><span class="o">.</span><span class="n">template</span><span class="o">.</span><span class="n">get_pdb</span><span class="p">(</span><span class="n">metafold_dict</span><span class="p">)</span>
                 <span class="n">ali</span><span class="o">.</span><span class="n">template</span><span class="o">.</span><span class="n">get_all_ca_coords</span><span class="p">()</span>
-                <span class="n">alignment_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ali</span><span class="p">)</span>
+                <span class="n">alignment_dict</span><span class="p">[</span><span class="n">template_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">ali</span>
                 <span class="n">count_templates</span> <span class="o">=</span> <span class="n">count_templates</span> <span class="o">+</span> <span class="mi">1</span>
             <span class="n">prev_line</span> <span class="o">=</span> <span class="n">line</span>
-    <span class="k">return</span> <span class="n">alignment_list</span></div>
+    <span class="k">return</span> <span class="n">alignment_dict</span></div>
 </pre></div>
 
            </div>
@@ -288,7 +284,7 @@
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2018, Gabriel Cretin, Hélène Kabbech, Tom Gutman, Flora Mikaeloff, Franz Arnold
+        &copy; Copyright 2018, Gabriel Cretin, Hélène Kabbech, Tom Gutman, Flora Mikaeloff, Franz Arnold.
 
     </p>
   </div>
@@ -307,14 +303,21 @@
 
   
 
-    
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
-        <script type="text/javascript" src="../../_static/jquery.js"></script>
-        <script type="text/javascript" src="../../_static/underscore.js"></script>
-        <script type="text/javascript" src="../../_static/doctools.js"></script>
-        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'1.0',
+            LANGUAGE:'None',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 
   
 
