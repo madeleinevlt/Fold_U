@@ -36,35 +36,28 @@ def metafold(metafold_file):
 
 def dope(dope_file):
     """
-        Extracts 10 energy values for the 20*20 residus-CA pairs and stores it
-        in double indexed and labelled pandas DataFrame.
+        Extracts 30 dope energy values for the 20*20 residus-CA pairs and stores it
+        in a dictionary with key = res_1-res_2 and value = an array of the 30 dope scores.
 
         Args:
-            dope_file: The file dope_file.par containing energy values for each
-                    amino acid pair.
+            dope file: The file dope.par containing energy values for each
+                       amino acid pair.
 
         Returns:
-            pandas DataFrame : Amino acids indexed matrix containing lists of energies
+            dope dictionary: a dictionary with key = res_1-res_2
+                             and value = an array of the 30 dope scores.
 
      """
     # set up aa liste for rownames & colnames of the DataFrame
-    aa = {}
-
-    # set up matrix object 20*20
-    dope = np.zeros((400, 30), dtype=object)
-
-    index = 0
-    with open(dope_file, 'r') as file:
+    dope_dict = {}
+    with open(dope_file, "r") as file:
         for line in file:
-            if line[4:6] == 'CA' and line[11:13] == 'CA':
-                # get the line with C-alpha for both amino acids
+            # get the line with C-alpha for both amino acids
+            if line[4:6] == "CA" and line[11:13] == "CA":
                 res_1 = protein_letters_3to1[line[0:3].title()]
                 res_2 = protein_letters_3to1[line[7:10].title()]
-                aa[(res_1, res_2)] = index
-                energy_res1_res2 = np.fromstring(line[14:-1], dtype=float, sep=" ")
-                dope[index] = energy_res1_res2
-                index += 1
-    return dope
+                dope_dict[res_1+res_2] = np.fromstring(line[14:-1], dtype=float, sep=" ")
+    return dope_dict
 
 
 def foldrec(foldrec_file, nb_templates, metafold_dict):

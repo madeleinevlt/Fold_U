@@ -49,9 +49,7 @@ def process(ali):
     # Calculate the distance matrix
     query = ali.query_residues
     template = ali.template.residues
-    matrix, dist_dict = threading.calc_dist_matrix(query, template, DIST_RANGE)
-    # Convert distances into energies based on DOPE energies
-    energy_matrix = threading.convert_dist_to_energy(matrix, dist_dict, DOPE_DF)
+    energy_matrix = threading.calc_dist_convert_energy(query, template, DIST_RANGE, DOPE_DF)
     return np.nansum(energy_matrix), ali.template.name
 
 
@@ -86,7 +84,7 @@ if __name__ == "__main__":
 
 
     ### Main calculations
-    ####################
+    #####################
 
     # Parallelization of the main loop: threading calculations
     POOL = Pool(processes=cpu_count())
