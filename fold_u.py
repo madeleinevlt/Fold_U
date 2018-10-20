@@ -49,10 +49,8 @@ def process(ali):
     # Calculate the distance matrix
     query = ali.query_residues
     template = ali.template.residues
-    energy_matrix = threading.calc_dist_convert_energy(query, template, DIST_RANGE, DOPE_DF)
+    energy_matrix = threading.calc_dist_convert_energy(query, template, DIST_RANGE, DOPE_DICT)
     return np.nansum(energy_matrix), ali.template.name
-
-
 
 
 if __name__ == "__main__":
@@ -80,7 +78,7 @@ if __name__ == "__main__":
     # Parse Foldrec file
     ALIGNMENT_LIST = parse.foldrec(FOLDREC_FILE, NB_TEMPLATES, METAFOLD_DICT)
     # Parse DOPE file
-    DOPE_DF = parse.dope(DOPE)
+    DOPE_DICT = parse.dope(DOPE)
 
 
     ### Main calculations

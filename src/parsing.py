@@ -44,10 +44,10 @@ def dope(dope_file):
                        amino acid pair.
 
         Returns:
-            dope dictionary: a dictionary with key = res_1-res_2
-                             and value = an array of the 30 dope scores.
+            dope dictionary: A dictionary with key = res_1-res_2
+                             and value = an array of the 30 dope energy values.
 
-     """
+    """
     # set up aa liste for rownames & colnames of the DataFrame
     dope_dict = {}
     with open(dope_file, "r") as file:
