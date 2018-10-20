@@ -5,19 +5,22 @@
 """
 
 # Third-party modules
-import numpy as np
-import time
 from functools import wraps
+import time
+import numpy as np
+
 
 
 def fn_timer(function):
+    """It calculates the time during the run of a function"""
     @wraps(function)
     def function_timer(*args, **kwargs):
-        t0 = time.time()
+        """It calculates the time during the run of a function"""
+        t_0 = time.time()
         result = function(*args, **kwargs)
-        t1 = time.time()
-        print("Total time running %s: %s seconds" %
-               (function.__name__, str(t1-t0)))
+        t_1 = time.time()
+        print("Total time running {:s}: {:s} seconds"\
+            .format(function.__name__, str(t_1-t_0)))
         return result
     return function_timer
 

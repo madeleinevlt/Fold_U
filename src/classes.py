@@ -4,9 +4,8 @@
 """
 
 # Third-party modules
-from subprocess import call
 import numpy as np
-from Bio.Data.IUPACData import protein_letters_3to1
+
 
 
 class Alignment:
@@ -72,21 +71,18 @@ class Template:
                 void
         """
         res_num = 0
-        with open("data/pdb/" + self.name + "/" + self.pdb, 'r') as f:
-            for line in f:
+        with open("data/pdb/" + self.name + "/" + self.pdb, 'r') as file:
+            for line in file:
                 line_type = line[0:6].strip()
                 name_at = line[12:16].strip()
-                chain = line[21:22].strip()
                 if line_type == "ATOM" and name_at == "CA":
-                    name_res = str(line[17:20].strip())
-                    num_res = int(line[22:26].strip())
-                    x = float(line[30:38].strip())
-                    y = float(line[38:46].strip())
-                    z = float(line[46:54].strip())
+                    x_coord = float(line[30:38].strip())
+                    y_coord = float(line[38:46].strip())
+                    z_coord = float(line[46:54].strip())
                     # Skip gaps in the template
                     while self.residues[res_num].name == '-':
                         res_num += 1
-                    self.residues[res_num].ca_coords = np.array([x, y, z])
+                    self.residues[res_num].ca_coords = np.array([x_coord, y_coord, z_coord])
                     res_num += 1
 
 

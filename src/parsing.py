@@ -7,7 +7,7 @@
 # Third-party modules
 import re
 import numpy as np
-from Bio.Data.IUPACData import protein_letters_3to1
+from Bio.SeqUtils import seq1
 
 # Local modules
 from src.classes import Residue
@@ -54,8 +54,8 @@ def dope(dope_file):
         for line in file:
             # get the line with C-alpha for both amino acids
             if line[4:6] == "CA" and line[11:13] == "CA":
-                res_1 = protein_letters_3to1[line[0:3].title()]
-                res_2 = protein_letters_3to1[line[7:10].title()]
+                res_1 = seq1(line[0:3])
+                res_2 = seq1(line[7:10])
                 dope_dict[res_1+res_2] = np.fromstring(line[14:-1], dtype=float, sep=" ")
     return dope_dict
 
@@ -76,7 +76,8 @@ def foldrec(foldrec_file, nb_templates, metafold_dict):
                                         value = pdb file.
 
         Returns:
-            list of Alignment: A list of Alignment objects.
+            Dictionary of Alignments: A dictionary with key = template name and
+            value = an Alignment object.
     """
 
     # Regex :
@@ -85,7 +86,7 @@ def foldrec(foldrec_file, nb_templates, metafold_dict):
     query_seq_reg = re.compile("^Query\\s*[0-9]+\\s*([A-Z-]+)")
     template_seq_reg = re.compile("^Template\\s*[0-9]+\\s*([A-Z-]+)")
 
-    alignment_list = []
+    alignment_dict = {}
     count_templates = 0
 
     with open(foldrec_file, "r") as file:
@@ -115,7 +116,7 @@ def foldrec(foldrec_file, nb_templates, metafold_dict):
                 ali = Alignment(score, query_seq, template_name, template_seq)
                 ali.template.get_pdb(metafold_dict)
                 ali.template.get_all_ca_coords()
-                alignment_list.append(ali)
+                alignment_dict[template_name] = ali
                 count_templates = count_templates + 1
             prev_line = line
-    return alignment_list
+    return alignment_dict
