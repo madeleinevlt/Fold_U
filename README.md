@@ -13,21 +13,22 @@ Meet-U is a collaborative pedagogical and research initiative between several Un
 ## Installation
 
 ### Clone the repository
-```shell
+```
 git clone https://github.com/meetU-MasterStudents/2018---2019-Equipe-4.git
 cd 2018---2019-Equipe-4
 ```
 
 ### Requirements
 Install the few required packages / modules:
-```shell
+```
 pip install -r src/requirements.txt
 ```
 
 ## Run the program
+fold_u.py takes in input N profil-profil alignments and their corresponding scores (foldrec file).
 
 ### Run the test
-```shell
+```
 ./fold_u.py data/foldrec/Agglutinin.foldrec
 ```
 ### Get help
@@ -59,7 +60,7 @@ The documentation of the project was generated with Sphinx and Read The Docs the
 You can access it by opening the `docs/build/html/index.html` file
 with your favorite web browser.
 
-```shell
+```
 firefox docs/build/html/index.html
 ```
 
