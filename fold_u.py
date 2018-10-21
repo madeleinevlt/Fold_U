@@ -52,18 +52,17 @@ def check_args():
         'FILE': Use(open, error='FILE should be readable'),
         '--metafold': Use(open, error='METAFOLD should be readable'),
         '--dope': Use(open, error='DOPE should be readable'),
-        '--nb_templates': And(Use(int), lambda n: 1 <= n <= 413, \
+        '--nb_templates': And(Use(int), lambda n: 1 <= n <= 413,\
                                 error='--nb_templates=NUM should be integer 1 <= N <= 413'),
-        '--nb_pdb': And(Use(int), lambda n: 1 < n < 413,\
+        '--nb_pdb': And(Use(int), lambda n: 1 <= n <= 413,\
                                 error='--nb_pdb=NB_PDB should be integer 1 <= N <= 413'),
+        # -The output PATH is created (if not exists) at the end of the program
+        # so we skip the check.
         object: object})
     try:
         schema.validate(ARGUMENTS)
     except SchemaError as err:
         exit(err)
-
-
-
 
 
 def process(ali):
