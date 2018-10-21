@@ -47,7 +47,7 @@ fold_u.py takes in input N profil-profil alignments and their corresponding scor
                                               [default: 10]
         -o PATH, --output PATH                Path to the directory containing
                                               the result files (scores and pdb)
-                                              [default: res/threading]                                            
+                                              [default: res/threading] 
         -m METAFOLD, --metafold METAFOLD      Path to the metafold.list file
                                               [default: data/METAFOLD.list]
         -d DOPE, --dope DOPE                  Path to the dope.par file
