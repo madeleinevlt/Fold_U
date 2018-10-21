@@ -1,10 +1,12 @@
+# Fold U: A Protein Structure Prediction Program
 ![Fold U version](https://img.shields.io/badge/Fold%20U-1.1-blue.svg)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 ![Python version](https://img.shields.io/badge/python-3-brightgreen.svg)
 ![Sphinx version](https://img.shields.io/badge/sphinx%20build-1.7.4-brightgreen.svg)
+This program is the second step (downstream) of a protein structure prediction project. This step consists of threading a query sequence on different given models.
 
-# Fold U: A Protein Structure Prediction Program
-This project is part of the Meet-U competition 2018-2019.
+
+Our project is part of the Meet-U 2018-2019 competition.
 Meet-U is a collaborative pedagogical and research initiative between several Universities of Paris area. The course is intended to Master students (2nd year) in Bioinformatics. For more details refer to [http://www.meet-u.org/](http://www.meet-u.org/)
 
 ## Installation
@@ -21,13 +23,13 @@ Install the few required packages / modules:
 pip install -r src/requirements.txt
 ```
 
-## Run the program
+### Run the program
 
-### Run the test
+## Run the test
 ```shell
 ./fold_u.py data/foldrec/Agglutinin.foldrec
 ```
-### Get help
+## Get help
 ```
 ./fold_u.py -h
 
