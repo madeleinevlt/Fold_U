@@ -3,13 +3,14 @@
 
 """
     Usage:
-        fold_u.py FILE [--nb_templates NUM] [--nb_pdb NUM] [--metafold METAFOLD] [--dope DOPE] [--output OUTPUT]
+        fold_u.py FILE [--nb_templates NUM] [--nb_pdb NB_PDB] [--metafold METAFOLD]\
+                       [--dope DOPE] [--output PATH]
 
     Options:
         -h, --help                            Show this
         -n NUM, --nb_templates NUM            First n templates to retrieve from
                                               The foldrec file [default: 100]
-        -p NUM, --nb_pdb NUM                  Number of pdb to create
+        -p NB_PDB, --nb_pdb NB_PDB            Number of pdb to create
                                               [default: 10]
         -m METAFOLD, --metafold METAFOLD      Path to the metafold.list file
                                               [default: data/METAFOLD.list]
@@ -23,6 +24,7 @@
 # Third-party modules
 from multiprocessing import Pool, cpu_count
 from docopt import docopt
+from schema import Schema, And, Use, SchemaError
 import numpy as np
 
 # Local modules
@@ -34,6 +36,33 @@ import src.writing as write
 
 
 DIST_RANGE = [5, 15]
+
+
+def check_args():
+    """
+        Checks and validates the types of inputs parsed by docopt from command line.
+
+        Args:
+            void
+
+        Returns:
+            void
+    """
+    schema = Schema({
+        'FILE': Use(open, error='FILE should be readable'),
+        '--metafold': Use(open, error='METAFOLD should be readable'),
+        '--dope': Use(open, error='DOPE should be readable'),
+        '--nb_templates': And(Use(int), lambda n: 1 <= n <= 413, \
+                                error='--nb_templates=NUM should be integer 1 <= N <= 413'),
+        '--nb_pdb': And(Use(int), lambda n: 1 < n < 413,\
+                                error='--nb_pdb=NB_PDB should be integer 1 <= N <= 413'),
+        object: object})
+    try:
+        schema.validate(ARGUMENTS)
+    except SchemaError as err:
+        exit(err)
+
+
 
 
 
@@ -63,6 +92,10 @@ if __name__ == "__main__":
     ######################
 
     ARGUMENTS = docopt(__doc__, version='fold-U 1.1')
+
+    # Check the types and ranges of the command line arguments parsed by docopt
+    check_args()
+
     FOLDREC_FILE = ARGUMENTS["FILE"]
     # Process the first n templates only
     NB_TEMPLATES = int(ARGUMENTS["--nb_templates"])
@@ -91,7 +124,7 @@ if __name__ == "__main__":
 
     # Parallelization of the main loop: threading calculations
     POOL = Pool(processes=cpu_count())
-    # Necessary to pass arguments to parallelized function
+    # Necessary to pass ARGUMENTS to parallelized function
     SCORES = POOL.imap(process, ALIGNMENT_DICT.values())
     POOL.close()
     POOL.join()
