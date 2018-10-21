@@ -3,22 +3,22 @@
 
 """
     Usage:
-        fold_u.py FILE [--nb_templates NUM] [--nb_pdb NB_PDB] [--metafold METAFOLD]\
-                       [--dope DOPE] [--output PATH]
+        fold_u.py FILE [--nb_templates NUM] [--nb_pdb NB_PDB] [--output PATH]
+                       [--metafold METAFOLD] [--dope DOPE]
 
     Options:
         -h, --help                            Show this
         -n NUM, --nb_templates NUM            First n templates to retrieve from
-                                              The foldrec file [default: 100]
+                                              the foldrec file [default: 100]
         -p NB_PDB, --nb_pdb NB_PDB            Number of pdb to create
                                               [default: 10]
+        -o PATH, --output PATH                Path to the directory containing
+                                              the result files (scores and pdb)
+                                              [default: res/threading]                                            
         -m METAFOLD, --metafold METAFOLD      Path to the metafold.list file
                                               [default: data/METAFOLD.list]
         -d DOPE, --dope DOPE                  Path to the dope.par file
                                               [default: data/dope.par]
-        -o PATH, --output PATH                Path to the directory containing
-                                              the result files (scores and pdb)
-                                              [default: res/threading]
 """
 
 # Third-party modules
