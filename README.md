@@ -1,5 +1,5 @@
 # Fold U: A Protein Structure Prediction Program
-![Fold-U release](https://img.shields.io/badge/fold--u-v1.1-pink.svg)
+![Fold-U release](https://img.shields.io/badge/fold--u-v1.1-blue.svg)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 ![Python version](https://img.shields.io/badge/python-3-brightgreen.svg)
 ![Sphinx version](https://img.shields.io/badge/sphinx%20build-1.7.4-brightgreen.svg)
