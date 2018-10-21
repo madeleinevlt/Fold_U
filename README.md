@@ -1,5 +1,5 @@
 # Fold U: A Protein Structure Prediction Program
-![Fold-U release](https://img.shields.io/badge/fold--u-v1.1-blue.svg)
+![Fold-U release](https://img.shields.io/badge/fold--u-v1.1-pink.svg)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 ![Python version](https://img.shields.io/badge/python-3-brightgreen.svg)
 ![Sphinx version](https://img.shields.io/badge/sphinx%20build-1.7.4-brightgreen.svg)
@@ -8,7 +8,7 @@
   <img width="250" src="img/fold_u.svg" alt="fold_u_logo"/>
 </p>
 
-This program is the second step (downstream) of a protein structure prediction project. This step consists of threading a query sequence on different given models.
+This program is the second step (downstream) of a protein structure prediction project. This step consists of threading a query sequence on different given templates.
 
 
 Our project is part of the Meet-U 2018-2019 competition.
@@ -18,7 +18,7 @@ Meet-U is a collaborative pedagogical and research initiative between several Un
 
 ### Clone the repository
 ```
-git clone https://github.com/meetU-MasterStudents/2018---2019-Equipe-4.git
+git clone https://github.com/meetU-MasterStudents/Fold_U.git
 cd 2018---2019-Equipe-4
 ```
 
