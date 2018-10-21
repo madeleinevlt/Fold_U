@@ -49,12 +49,12 @@ def write_pdb(res_path, template_name, template_num, alignment_dict):
         Returns:
             void
     """
-    with open(res_path+"/pdb/template_"+str(template_num)+".pdb", "w") as file:
+    with open(res_path+"/pdb/model_"+str(template_num)+".pdb", "w") as file:
         query = alignment_dict[template_name].query_residues
         template = alignment_dict[template_name].template.residues
         # Extra informations on the template used to generate the pdb file
-        file.write("REMARK Threading of query sequence on the Template {:d} ({:s}).\n"\
-            .format(template_num, template_name))
+        file.write("REMARK Threading of query sequence on the Template {:s}.\n"\
+            .format(template_name))
         for res_num, res_q in enumerate(query):
             res_t = template[res_num]
             if (res_q == "-" or res_t == "-"):
