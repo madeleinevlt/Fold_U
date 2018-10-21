@@ -15,54 +15,6 @@ git clone https://github.com/meetU-MasterStudents/2018---2019-Equipe-4.git
 cd 2018---2019-Equipe-4
 ```
 
-1
-
-![Fold U version](https://img.shields.io/badge/Fold%20U-1.1-blue.svg)
-
-2
-
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-
-3
-
-![Python version](https://img.shields.io/badge/python-3-brightgreen.svg)
-
-4
-
-![Sphinx version](https://img.shields.io/badge/sphinx%20build-1.7.4-brightgreen.svg)
-
-5
-
-​
-
-6
-
-# Fold U: A Protein Structure Prediction Program
-
-7
-
-This project is part of the Meet-U competition 2018-2019.
-
-8
-
-Meet-U is a collaborative pedagogical and research initiative between several Universities of Paris area. The course is intended to Master students (2nd year) in Bioinformatics. For more details refer to [http://www.meet-u.org/](http://www.meet-u.org/)
-
-9
-
-​
-
-10
-
-## Installation
-
-11
-
-​
-
-12
-
-### Clone the repository
-
 ### Requirements
 Install the few required packages / modules:
 ```shell
@@ -71,7 +23,7 @@ pip install -r src/requirements.txt
 
 ## Run the program
 
-### Test
+### Run the test
 ```shell
 ./fold_u.py data/foldrec/Agglutinin.foldrec
 ```
