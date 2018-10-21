@@ -62,7 +62,7 @@ if __name__ == "__main__":
     ### Parse command line
     ######################
 
-    ARGUMENTS = docopt(__doc__, version='fold-U 1.0')
+    ARGUMENTS = docopt(__doc__, version='fold-U 1.1')
     FOLDREC_FILE = ARGUMENTS["FILE"]
     # Process the first n templates only
     NB_TEMPLATES = int(ARGUMENTS["--nb_templates"])
