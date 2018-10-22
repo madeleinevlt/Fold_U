@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Welcome to fold-U’s documentation! &mdash; fold-u 1.0 documentation</title>
+  <title>Residue module &mdash; fold-u 1.0 documentation</title>
   
 
   
@@ -28,7 +28,8 @@
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="README" href="README.html" /> 
+    <link rel="next" title="Template module" href="template.html" />
+    <link rel="prev" title="Alignment module" href="alignment.html" /> 
 
   
   <script src="_static/js/modernizr.min.js"></script>
@@ -47,7 +48,7 @@
           
 
           
-            <a href="#" class="icon icon-home"> fold-u
+            <a href="index.html" class="icon icon-home"> fold-u
           
 
           
@@ -81,13 +82,13 @@
               
             
             
-              <ul>
+              <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="README.html">README</a></li>
 <li class="toctree-l1"><a class="reference internal" href="meeting.html">Meeting</a></li>
 <li class="toctree-l1"><a class="reference internal" href="parsing.html">Parsing module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="writing.html">Writing module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="alignment.html">Alignment module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="residue.html">Residue module</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Residue module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="template.html">Template module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="time.html">Time module</a></li>
 </ul>
@@ -104,7 +105,7 @@
       <nav class="wy-nav-top" aria-label="top navigation">
         
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="#">fold-u</a>
+          <a href="index.html">fold-u</a>
         
       </nav>
 
@@ -133,15 +134,15 @@
 
   <ul class="wy-breadcrumbs">
     
-      <li><a href="#">Docs</a> &raquo;</li>
+      <li><a href="index.html">Docs</a> &raquo;</li>
         
-      <li>Welcome to fold-U’s documentation!</li>
+      <li>Residue module</li>
     
     
       <li class="wy-breadcrumbs-aside">
         
             
-            <a href="_sources/index.rst.txt" rel="nofollow"> View page source</a>
+            <a href="_sources/residue.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -154,27 +155,47 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="welcome-to-fold-u-s-documentation">
-<h1>Welcome to fold-U’s documentation!<a class="headerlink" href="#welcome-to-fold-u-s-documentation" title="Permalink to this headline">¶</a></h1>
-<div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="README.html">README</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="README.html#fold-u-a-protein-structure-prediction-program">Fold U: A Protein Structure Prediction Program</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="meeting.html">Meeting</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="meeting.html#meeting-1-lundi-1-10">Meeting 1 : lundi 1/10</a></li>
-<li class="toctree-l2"><a class="reference internal" href="meeting.html#meeting-2-jeudi-11-octobre">Meeting 2 : jeudi 11 octobre</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="parsing.html">Parsing module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="writing.html">Writing module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="alignment.html">Alignment module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="residue.html">Residue module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="template.html">Template module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="time.html">Time module</a></li>
-</ul>
-</div>
+  <div class="section" id="module-src.residue">
+<span id="residue-module"></span><h1>Residue module<a class="headerlink" href="#module-src.residue" title="Permalink to this headline">¶</a></h1>
+<span class="target" id="module-Residue"></span><dl class="class">
+<dt id="src.residue.Residue">
+<em class="property">class </em><code class="descclassname">src.residue.</code><code class="descname">Residue</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/residue.html#Residue"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.residue.Residue" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="class">
+<dt id="src.residue.Residue.Residue">
+<em class="property">class </em><code class="descname">Residue</code><a class="headerlink" href="#src.residue.Residue.Residue" title="Permalink to this definition">¶</a></dt>
+<dd><p>This class groups informations about a residue.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.residue.Residue.name">
+<code class="descname">name</code><a class="headerlink" href="#src.residue.Residue.name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Name of the residue (1 letter code)</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.residue.Residue.ca_coords">
+<code class="descname">ca_coords</code><a class="headerlink" href="#src.residue.Residue.ca_coords" title="Permalink to this definition">¶</a></dt>
+<dd><p>3D coordinates of the residue</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="src.residue.Residue.set_ca_coords">
+<code class="descname">set_ca_coords</code><span class="sig-paren">(</span><em>coords</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/residue.html#Residue.set_ca_coords"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.residue.Residue.set_ca_coords" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the coordinates of the Residue.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>coords</strong> (<em>np array</em>) – x,y,z coordinates.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">void</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
 </div>
 
 
@@ -185,8 +206,10 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="README.html" class="btn btn-neutral float-right" title="README" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="template.html" class="btn btn-neutral float-right" title="Template module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
+      
+        <a href="alignment.html" class="btn btn-neutral" title="Alignment module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

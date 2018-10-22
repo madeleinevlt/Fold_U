@@ -85,9 +85,11 @@
 <li class="toctree-l1"><a class="reference internal" href="README.html">README</a></li>
 <li class="toctree-l1"><a class="reference internal" href="meeting.html">Meeting</a></li>
 <li class="toctree-l1"><a class="reference internal" href="parsing.html">Parsing module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="threading.html">Threading module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="classes.html">Classes module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="writing.html">Parsing writing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="writing.html">Writing module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="alignment.html">Alignment module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="residue.html">Residue module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="template.html">Template module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="time.html">Time module</a></li>
 </ul>
 
             
@@ -156,10 +158,7 @@
 <div class="genindex-jumpbox">
  <a href="#A"><strong>A</strong></a>
  | <a href="#C"><strong>C</strong></a>
- | <a href="#D"><strong>D</strong></a>
  | <a href="#F"><strong>F</strong></a>
- | <a href="#G"><strong>G</strong></a>
- | <a href="#M"><strong>M</strong></a>
  | <a href="#N"><strong>N</strong></a>
  | <a href="#P"><strong>P</strong></a>
  | <a href="#Q"><strong>Q</strong></a>
@@ -172,11 +171,15 @@
 <h2 id="A">A</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="classes.html#src.classes.Alignment">Alignment (class in src.classes)</a>
+      <li><a href="alignment.html#src.alignment.Alignment">Alignment (class in src.alignment)</a>
+
+      <ul>
+        <li><a href="alignment.html#module-Alignment">(module)</a>
 </li>
+      </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="classes.html#src.classes.Alignment.Alignment">Alignment.Alignment (class in src.classes)</a>
+      <li><a href="alignment.html#src.alignment.Alignment.Alignment">Alignment.Alignment (class in src.alignment)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -184,27 +187,11 @@
 <h2 id="C">C</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="classes.html#src.classes.Residue.ca_coords">ca_coords (src.classes.Residue attribute)</a>
-</li>
-      <li><a href="threading.html#src.threading.calc_dist_matrix">calc_dist_matrix() (in module src.threading)</a>
+      <li><a href="residue.html#src.residue.Residue.ca_coords">ca_coords (src.residue.Residue attribute)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="classes.html#module-classes">classes (module)</a>
-</li>
-      <li><a href="threading.html#src.threading.convert_dist_to_energy">convert_dist_to_energy() (in module src.threading)</a>
-</li>
-  </ul></td>
-</tr></table>
-
-<h2 id="D">D</h2>
-<table style="width: 100%" class="indextable genindextable"><tr>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="threading.html#src.threading.display_matrix">display_matrix() (in module src.threading)</a>
-</li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="parsing.html#src.parsing.dope">dope() (in module src.parsing)</a>
+      <li><a href="alignment.html#src.alignment.Alignment.calculate_energy">calculate_energy() (src.alignment.Alignment method)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -212,27 +199,7 @@
 <h2 id="F">F</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="parsing.html#src.parsing.foldrec">foldrec() (in module src.parsing)</a>
-</li>
-  </ul></td>
-</tr></table>
-
-<h2 id="G">G</h2>
-<table style="width: 100%" class="indextable genindextable"><tr>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="classes.html#src.classes.Template.get_all_ca_coords">get_all_ca_coords() (src.classes.Template method)</a>
-</li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="classes.html#src.classes.Template.get_pdb">get_pdb() (src.classes.Template method)</a>
-</li>
-  </ul></td>
-</tr></table>
-
-<h2 id="M">M</h2>
-<table style="width: 100%" class="indextable genindextable"><tr>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="parsing.html#src.parsing.metafold">metafold() (in module src.parsing)</a>
+      <li><a href="time.html#src.time.fn_timer">fn_timer() (in module src.time)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -240,10 +207,10 @@
 <h2 id="N">N</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="classes.html#src.classes.Residue.name">name (src.classes.Residue attribute)</a>
+      <li><a href="residue.html#src.residue.Residue.name">name (src.residue.Residue attribute)</a>
 
       <ul>
-        <li><a href="classes.html#src.classes.Template.name">(src.classes.Template attribute)</a>
+        <li><a href="template.html#src.template.Template.name">(src.template.Template attribute)</a>
 </li>
       </ul></li>
   </ul></td>
@@ -252,11 +219,19 @@
 <h2 id="P">P</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="parsing.html#module-parsing">parsing (module)</a>
+      <li><a href="parsing.html#src.parsing.parse_dope">parse_dope() (in module src.parsing)</a>
+</li>
+      <li><a href="parsing.html#src.parsing.parse_foldrec">parse_foldrec() (in module src.parsing)</a>
+</li>
+      <li><a href="parsing.html#src.parsing.parse_metafold">parse_metafold() (in module src.parsing)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="classes.html#src.classes.Template.pdb">pdb (src.classes.Template attribute)</a>
+      <li><a href="template.html#src.template.Template.parse_pdb">parse_pdb() (src.template.Template method)</a>
+</li>
+      <li><a href="parsing.html#module-parsing">parsing (module)</a>
+</li>
+      <li><a href="template.html#src.template.Template.pdb">pdb (src.template.Template attribute)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -264,7 +239,7 @@
 <h2 id="Q">Q</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="classes.html#src.classes.Alignment.query_residues">query_residues (src.classes.Alignment attribute)</a>
+      <li><a href="alignment.html#src.alignment.Alignment.query_residues">query_residues (src.alignment.Alignment attribute)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -272,13 +247,17 @@
 <h2 id="R">R</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="classes.html#src.classes.Residue">Residue (class in src.classes)</a>
+      <li><a href="residue.html#src.residue.Residue">Residue (class in src.residue)</a>
+
+      <ul>
+        <li><a href="residue.html#module-Residue">(module)</a>
 </li>
+      </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="classes.html#src.classes.Residue.Residue">Residue.Residue (class in src.classes)</a>
+      <li><a href="residue.html#src.residue.Residue.Residue">Residue.Residue (class in src.residue)</a>
 </li>
-      <li><a href="classes.html#src.classes.Template.residues">residues (src.classes.Template attribute)</a>
+      <li><a href="template.html#src.template.Template.residues">residues (src.template.Template attribute)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -286,17 +265,23 @@
 <h2 id="S">S</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="classes.html#src.classes.Alignment.score">score (src.classes.Alignment attribute)</a>
+      <li><a href="alignment.html#src.alignment.Alignment.score">score (src.alignment.Alignment attribute)</a>
 </li>
-      <li><a href="writing.html#src.writing.scores">scores() (in module src.writing)</a>
+      <li><a href="residue.html#src.residue.Residue.set_ca_coords">set_ca_coords() (src.residue.Residue method)</a>
 </li>
-      <li><a href="classes.html#module-src.classes">src.classes (module)</a>
+      <li><a href="template.html#src.template.Template.set_pdb_name">set_pdb_name() (src.template.Template method)</a>
+</li>
+      <li><a href="alignment.html#module-src.alignment">src.alignment (module)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="parsing.html#module-src.parsing">src.parsing (module)</a>
 </li>
-      <li><a href="threading.html#module-src.threading">src.threading (module)</a>
+      <li><a href="residue.html#module-src.residue">src.residue (module)</a>
+</li>
+      <li><a href="template.html#module-src.template">src.template (module)</a>
+</li>
+      <li><a href="time.html#module-src.time">src.time (module)</a>
 </li>
       <li><a href="writing.html#module-src.writing">src.writing (module)</a>
 </li>
@@ -306,15 +291,19 @@
 <h2 id="T">T</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="classes.html#src.classes.Template">Template (class in src.classes)</a>
+      <li><a href="template.html#src.template.Template">Template (class in src.template)</a>
+
+      <ul>
+        <li><a href="template.html#module-Template">(module)</a>
 </li>
-      <li><a href="classes.html#src.classes.Alignment.template">template (src.classes.Alignment attribute)</a>
-</li>
+      </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="classes.html#src.classes.Template.Template">Template.Template (class in src.classes)</a>
+      <li><a href="alignment.html#src.alignment.Alignment.template">template (src.alignment.Alignment attribute)</a>
 </li>
-      <li><a href="threading.html#module-threading">threading (module)</a>
+      <li><a href="template.html#src.template.Template.Template">Template.Template (class in src.template)</a>
+</li>
+      <li><a href="time.html#module-time">time (module)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -322,6 +311,12 @@
 <h2 id="W">W</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="alignment.html#src.alignment.Alignment.write_pdb">write_pdb() (src.alignment.Alignment method)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="writing.html#src.writing.write_scores">write_scores() (in module src.writing)</a>
+</li>
       <li><a href="writing.html#module-writing">writing (module)</a>
 </li>
   </ul></td>
@@ -339,7 +334,7 @@
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2018, Gabriel Cretin, Hélène Kabbech, Tom Gutman, Flora Mikaeloff, Franz Arnold
+        &copy; Copyright 2018, Gabriel Cretin, Hélène Kabbech, Tom Gutman, Flora Mikaeloff, Franz Arnold.
 
     </p>
   </div>
@@ -358,14 +353,21 @@
 
   
 
-    
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-        <script type="text/javascript" src="_static/jquery.js"></script>
-        <script type="text/javascript" src="_static/underscore.js"></script>
-        <script type="text/javascript" src="_static/doctools.js"></script>
-        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'1.0',
+            LANGUAGE:'None',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 
   
 

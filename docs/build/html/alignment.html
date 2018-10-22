@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Parsing module &mdash; fold-u 1.0 documentation</title>
+  <title>Alignment module &mdash; fold-u 1.0 documentation</title>
   
 
   
@@ -28,8 +28,8 @@
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Writing module" href="writing.html" />
-    <link rel="prev" title="Meeting" href="meeting.html" /> 
+    <link rel="next" title="Residue module" href="residue.html" />
+    <link rel="prev" title="Writing module" href="writing.html" /> 
 
   
   <script src="_static/js/modernizr.min.js"></script>
@@ -85,9 +85,9 @@
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="README.html">README</a></li>
 <li class="toctree-l1"><a class="reference internal" href="meeting.html">Meeting</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Parsing module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="parsing.html">Parsing module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="writing.html">Writing module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="alignment.html">Alignment module</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Alignment module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="residue.html">Residue module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="template.html">Template module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="time.html">Time module</a></li>
@@ -136,13 +136,13 @@
     
       <li><a href="index.html">Docs</a> &raquo;</li>
         
-      <li>Parsing module</li>
+      <li>Alignment module</li>
     
     
       <li class="wy-breadcrumbs-aside">
         
             
-            <a href="_sources/parsing.rst.txt" rel="nofollow"> View page source</a>
+            <a href="_sources/alignment.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -155,86 +155,87 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="module-src.parsing">
-<span id="parsing-module"></span><h1>Parsing module<a class="headerlink" href="#module-src.parsing" title="Permalink to this headline">¶</a></h1>
-<span class="target" id="module-parsing"></span><dl class="function">
-<dt id="src.parsing.parse_dope">
-<code class="descclassname">src.parsing.</code><code class="descname">parse_dope</code><span class="sig-paren">(</span><em>dope_file</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/parsing.html#parse_dope"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.parsing.parse_dope" title="Permalink to this definition">¶</a></dt>
-<dd><p>Extracts 30 dope energy values for the 20*20 residus-CA pairs and stores it
-in a dictionary with key = res_1-res_2 and value = an array of the 30 dope scores.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>file</strong> (<em>dope</em>) – The file dope.par containing energy values for each
-amino acid pair.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><dl class="docutils">
-<dt>A dictionary with key = res_1-res_2 and value = an array of</dt>
-<dd>the 30 dope energy values.</dd>
-</dl>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">dict</td>
-</tr>
-</tbody>
-</table>
+  <div class="section" id="module-src.alignment">
+<span id="alignment-module"></span><h1>Alignment module<a class="headerlink" href="#module-src.alignment" title="Permalink to this headline">¶</a></h1>
+<span class="target" id="module-Alignment"></span><dl class="class">
+<dt id="src.alignment.Alignment">
+<em class="property">class </em><code class="descclassname">src.alignment.</code><code class="descname">Alignment</code><span class="sig-paren">(</span><em>score</em>, <em>query_residues</em>, <em>template_name</em>, <em>template_residues</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/alignment.html#Alignment"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.alignment.Alignment" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="class">
+<dt id="src.alignment.Alignment.Alignment">
+<em class="property">class </em><code class="descname">Alignment</code><a class="headerlink" href="#src.alignment.Alignment.Alignment" title="Permalink to this definition">¶</a></dt>
+<dd><p>This class groups informations about an alignment.</p>
 </dd></dl>
 
-<dl class="function">
-<dt id="src.parsing.parse_foldrec">
-<code class="descclassname">src.parsing.</code><code class="descname">parse_foldrec</code><span class="sig-paren">(</span><em>foldrec_file</em>, <em>nb_templates</em>, <em>metafold_dict</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/parsing.html#parse_foldrec"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.parsing.parse_foldrec" title="Permalink to this definition">¶</a></dt>
-<dd><p>Extracts the score, the template name, the query and template sequences for
-the first n alignments from a file containing N profil-profil alignments and
-creates a list of Alignment objects. It also gives the template’s pdb file name
-and gets all the coordinates of the CA atoms in the template’s Residue list.</p>
+<dl class="attribute">
+<dt id="src.alignment.Alignment.score">
+<code class="descname">score</code><a class="headerlink" href="#src.alignment.Alignment.score" title="Permalink to this definition">¶</a></dt>
+<dd><p>Score of the alignment</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.alignment.Alignment.query_residues">
+<code class="descname">query_residues</code><a class="headerlink" href="#src.alignment.Alignment.query_residues" title="Permalink to this definition">¶</a></dt>
+<dd><p>Query’s sequence of residues as list of Residues objects</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.alignment.Alignment.template">
+<code class="descname">template</code><a class="headerlink" href="#src.alignment.Alignment.template" title="Permalink to this definition">¶</a></dt>
+<dd><p>Instance of a Template object as
+<code class="docutils literal notranslate"><span class="pre">Template(template_name,</span> <span class="pre">template_residues)</span></code></p>
+</dd></dl>
+
+<dl class="method">
+<dt id="src.alignment.Alignment.calculate_energy">
+<code class="descname">calculate_energy</code><span class="sig-paren">(</span><em>dist_range</em>, <em>gap_penalty</em>, <em>dope_dict</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/alignment.html#Alignment.calculate_energy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.alignment.Alignment.calculate_energy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the matrix of distances of pair residues of the query sequence,
+using the coordinates of the template sequence: threading of the query
+on the template sequence. The distance calculation is optimized.
+The calculated distance is then convert into a dope energy value.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>foldrec_file</strong> (<em>file</em>) – The file containing N profil-profil alignments and their
-corresponding scores.</li>
-<li><strong>nb_templates</strong> (<em>int</em>) – Number of alignments to retrieve from the file and chosen
-by the user.</li>
-<li><strong>metafold_dict</strong> (<em>dictionary</em>) – A dictionary with key = template name and
-value = pdb file.</li>
+<li><strong>dist_range</strong> (<em>list of int</em>) – Range of distances in angströms. Distances
+within this range only are taken into account</li>
+<li><strong>gap_penalty</strong> (<em>int</em>) – Gap penalty</li>
+<li><strong>dope_dict</strong> (<em>dictionary</em>) – A dictionary with key = res_1-res_2 and
+value = an array of 30 dope energy values.</li>
 </ul>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><dl class="docutils">
-<dt>A dictionary with key = template name and</dt>
-<dd><p class="first last">value = an Alignment object.</p>
+<dt>2D matrix containing energy between pairs of residues</dt>
+<dd><p class="first last">of the query sequence threaded on the template.</p>
 </dd>
 </dl>
 </p>
 </td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">dict of Alignments</p>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">numpy 2D array</p>
 </td>
 </tr>
 </tbody>
 </table>
 </dd></dl>
 
-<dl class="function">
-<dt id="src.parsing.parse_metafold">
-<code class="descclassname">src.parsing.</code><code class="descname">parse_metafold</code><span class="sig-paren">(</span><em>metafold_file</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/parsing.html#parse_metafold"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.parsing.parse_metafold" title="Permalink to this definition">¶</a></dt>
-<dd><p>Extracts the name of the metafold as a key and the associated pdb as
-a value in a dictionary</p>
+<dl class="method">
+<dt id="src.alignment.Alignment.write_pdb">
+<code class="descname">write_pdb</code><span class="sig-paren">(</span><em>pdb_path</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/alignment.html#Alignment.write_pdb"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.alignment.Alignment.write_pdb" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write a pdb file by threading the query sequence on the template CA coordinates.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>metafold_file</strong> – A METAFOLD.list file containing for a given line a
-template name and a pdb file name associated</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>pdb_path</strong> (<em>str</em>) – Path of the pdb file to create.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A dictionary with key = template name and value = pdb file</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">dict</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">void</td>
 </tr>
 </tbody>
 </table>
+</dd></dl>
+
 </dd></dl>
 
 </div>
@@ -247,10 +248,10 @@ template name and a pdb file name associated</td>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="writing.html" class="btn btn-neutral float-right" title="Writing module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="residue.html" class="btn btn-neutral float-right" title="Residue module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="meeting.html" class="btn btn-neutral" title="Meeting" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="writing.html" class="btn btn-neutral" title="Writing module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

@@ -12,6 +12,8 @@ Welcome to fold-U's documentation!
    README
    meeting
    parsing
-   threading
-   classes
    writing
+   alignment
+   residue
+   template
+   time

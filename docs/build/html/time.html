@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Welcome to fold-U’s documentation! &mdash; fold-u 1.0 documentation</title>
+  <title>Time module &mdash; fold-u 1.0 documentation</title>
   
 
   
@@ -28,7 +28,7 @@
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="README" href="README.html" /> 
+    <link rel="prev" title="Template module" href="template.html" /> 
 
   
   <script src="_static/js/modernizr.min.js"></script>
@@ -47,7 +47,7 @@
           
 
           
-            <a href="#" class="icon icon-home"> fold-u
+            <a href="index.html" class="icon icon-home"> fold-u
           
 
           
@@ -81,7 +81,7 @@
               
             
             
-              <ul>
+              <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="README.html">README</a></li>
 <li class="toctree-l1"><a class="reference internal" href="meeting.html">Meeting</a></li>
 <li class="toctree-l1"><a class="reference internal" href="parsing.html">Parsing module</a></li>
@@ -89,7 +89,7 @@
 <li class="toctree-l1"><a class="reference internal" href="alignment.html">Alignment module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="residue.html">Residue module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="template.html">Template module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="time.html">Time module</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Time module</a></li>
 </ul>
 
             
@@ -104,7 +104,7 @@
       <nav class="wy-nav-top" aria-label="top navigation">
         
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="#">fold-u</a>
+          <a href="index.html">fold-u</a>
         
       </nav>
 
@@ -133,15 +133,15 @@
 
   <ul class="wy-breadcrumbs">
     
-      <li><a href="#">Docs</a> &raquo;</li>
+      <li><a href="index.html">Docs</a> &raquo;</li>
         
-      <li>Welcome to fold-U’s documentation!</li>
+      <li>Time module</li>
     
     
       <li class="wy-breadcrumbs-aside">
         
             
-            <a href="_sources/index.rst.txt" rel="nofollow"> View page source</a>
+            <a href="_sources/time.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -154,27 +154,23 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="welcome-to-fold-u-s-documentation">
-<h1>Welcome to fold-U’s documentation!<a class="headerlink" href="#welcome-to-fold-u-s-documentation" title="Permalink to this headline">¶</a></h1>
-<div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="README.html">README</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="README.html#fold-u-a-protein-structure-prediction-program">Fold U: A Protein Structure Prediction Program</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="meeting.html">Meeting</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="meeting.html#meeting-1-lundi-1-10">Meeting 1 : lundi 1/10</a></li>
-<li class="toctree-l2"><a class="reference internal" href="meeting.html#meeting-2-jeudi-11-octobre">Meeting 2 : jeudi 11 octobre</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="parsing.html">Parsing module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="writing.html">Writing module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="alignment.html">Alignment module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="residue.html">Residue module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="template.html">Template module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="time.html">Time module</a></li>
-</ul>
-</div>
+  <div class="section" id="module-src.time">
+<span id="time-module"></span><h1>Time module<a class="headerlink" href="#module-src.time" title="Permalink to this headline">¶</a></h1>
+<span class="target" id="module-time"></span><dl class="function">
+<dt id="src.time.fn_timer">
+<code class="descclassname">src.time.</code><code class="descname">fn_timer</code><span class="sig-paren">(</span><em>function</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/time.html#fn_timer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.time.fn_timer" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function is a wrapper to benchmarck a function
+when trying to optimize it. It returns the total running time of the function</p>
+<blockquote>
+<div><dl class="docutils">
+<dt>Args:</dt>
+<dd>function: The function to benchmarck</dd>
+<dt>Returns:</dt>
+<dd>float: The time the function took to run</dd>
+</dl>
+</div></blockquote>
+</dd></dl>
+
 </div>
 
 
@@ -185,8 +181,8 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="README.html" class="btn btn-neutral float-right" title="README" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
+        <a href="template.html" class="btn btn-neutral" title="Template module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

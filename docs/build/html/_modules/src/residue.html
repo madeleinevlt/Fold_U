@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>src.writing &mdash; fold-u 1.0 documentation</title>
+  <title>src.residue &mdash; fold-u 1.0 documentation</title>
   
 
   
@@ -136,7 +136,7 @@
         
           <li><a href="../index.html">Module code</a> &raquo;</li>
         
-      <li>src.writing</li>
+      <li>src.residue</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -151,42 +151,45 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <h1>Source code for src.writing</h1><div class="highlight"><pre>
+  <h1>Source code for src.residue</h1><div class="highlight"><pre>
 <span></span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    .. module:: writing</span>
-<span class="sd">      :synopsis: This module implements all the functions to create result files.</span>
+<span class="sd">.. module:: Residue</span>
+<span class="sd">   :synopsis: This module implements the Residue class.</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="c1"># Third-party modules</span>
-<span class="kn">import</span> <span class="nn">os</span>
 
-<div class="viewcode-block" id="write_scores"><a class="viewcode-back" href="../../writing.html#src.writing.write_scores">[docs]</a><span class="k">def</span> <span class="nf">write_scores</span><span class="p">(</span><span class="n">res_path</span><span class="p">,</span> <span class="n">score_list</span><span class="p">,</span> <span class="n">nb_pdb</span><span class="p">,</span> <span class="n">alignment_dict</span><span class="p">):</span>
+<div class="viewcode-block" id="Residue"><a class="viewcode-back" href="../../residue.html#src.residue.Residue">[docs]</a><span class="k">class</span> <span class="nc">Residue</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Creates a scores.out file containing for each line a score and the template&#39;s</span>
-<span class="sd">        name associated. Creates the pdb files of the n best templates (best scores).</span>
+<span class="sd">    .. class:: Residue</span>
 
-<span class="sd">        Args:</span>
-<span class="sd">            res_path (str): The path of the directory where to stock the created files.</span>
-<span class="sd">            score_list (list): A list of tupples (score, template&#39;s name)</span>
-<span class="sd">            nb_pdb (int): Number of pdb to create using the n first templates.</span>
-<span class="sd">            alignment_dict (dictionary): A dictionary containing Alignment objects.</span>
+<span class="sd">      This class groups informations about a residue.</span>
 
-<span class="sd">        Returns:</span>
-<span class="sd">            void</span>
+<span class="sd">    Attributes:</span>
+<span class="sd">        name: Name of the residue (1 letter code)</span>
+<span class="sd">        ca_coords: 3D coordinates of the residue</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">res_path</span><span class="o">+</span><span class="s2">&quot;/pdb&quot;</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">res_path</span><span class="o">+</span><span class="s2">&quot;/scores.out&quot;</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
-        <span class="n">template_num</span> <span class="o">=</span> <span class="mi">1</span>
-        <span class="k">for</span> <span class="n">score</span><span class="p">,</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">score_list</span><span class="p">:</span>
-            <span class="c1"># Write a line in the score.out file containing the</span>
-            <span class="c1"># score and the name of the current ranked template</span>
-            <span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{:&lt;8d}{}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">score</span><span class="p">),</span> <span class="n">name</span><span class="p">))</span>
-            <span class="c1"># Only nb_pdb pdb files are created</span>
-            <span class="k">if</span> <span class="n">template_num</span> <span class="o">&lt;=</span> <span class="n">nb_pdb</span><span class="p">:</span>
-                <span class="n">pdb_filename</span> <span class="o">=</span> <span class="n">res_path</span> <span class="o">+</span> <span class="s2">&quot;/pdb/top_&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">template_num</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;.pdb&quot;</span>
-                <span class="n">alignment_dict</span><span class="p">[</span><span class="n">name</span><span class="p">]</span><span class="o">.</span><span class="n">write_pdb</span><span class="p">(</span><span class="n">pdb_filename</span><span class="p">)</span>
-                <span class="n">template_num</span> <span class="o">+=</span> <span class="mi">1</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">The program ended successfully !</span><span class="se">\n</span><span class="s2">The results are stored in &quot;</span> <span class="o">+</span> <span class="n">res_path</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ca_coords</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">ca_coords</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">&quot;&lt;&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="s2">&quot; | &quot;</span> <span class="o">+</span> <span class="s2">&quot;empty coordinates&gt;&quot;</span>
+        <span class="n">coords</span> <span class="o">=</span> <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">coord</span><span class="p">)</span> <span class="k">for</span> <span class="n">coord</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">ca_coords</span><span class="p">]</span>
+        <span class="k">return</span> <span class="s2">&quot;&lt;&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="s2">&quot; | &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">coords</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;&gt;&quot;</span>
+
+<div class="viewcode-block" id="Residue.set_ca_coords"><a class="viewcode-back" href="../../residue.html#src.residue.Residue.set_ca_coords">[docs]</a>    <span class="k">def</span> <span class="nf">set_ca_coords</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">coords</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Sets the coordinates of the Residue.</span>
+
+<span class="sd">            Args:</span>
+<span class="sd">                coords (np array): x,y,z coordinates.</span>
+
+<span class="sd">            Returns:</span>
+<span class="sd">                void</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ca_coords</span> <span class="o">=</span> <span class="n">coords</span></div></div>
 </pre></div>
 
            </div>

@@ -84,23 +84,31 @@
             
               <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">README</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#fold-u">Fold-U</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#authors">Authors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#fold-u-a-protein-structure-prediction-program">Fold U: A Protein Structure Prediction Program</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#installation">Installation</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#requirements">Requirements</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#clone-the-repository">Clone the repository</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#documentation">Documentation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#requirements">Requirements</a></li>
 </ul>
 </li>
+<li class="toctree-l3"><a class="reference internal" href="#run-the-program">Run the program</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#run-the-test">Run the test</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#get-help">Get help</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#documentation">Documentation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#authors">Authors</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#license">License</a></li>
 </ul>
 </li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="meeting.html">Meeting</a></li>
 <li class="toctree-l1"><a class="reference internal" href="parsing.html">Parsing module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="threading.html">Threading module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="classes.html">Classes module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="writing.html">Parsing writing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="writing.html">Writing module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="alignment.html">Alignment module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="residue.html">Residue module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="template.html">Template module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="time.html">Time module</a></li>
 </ul>
 
             
@@ -167,33 +175,70 @@
             
   <div class="section" id="readme">
 <h1>README<a class="headerlink" href="#readme" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="fold-u">
-<h2>Fold-U<a class="headerlink" href="#fold-u" title="Permalink to this headline">¶</a></h2>
-<p>Meet-U 2019</p>
-<div class="section" id="authors">
-<h3>Authors<a class="headerlink" href="#authors" title="Permalink to this headline">¶</a></h3>
-<ul class="simple">
-<li>Gabriel Cretin</li>
-<li>Hélène Kabbech</li>
-<li>Tom Gutman</li>
-<li>Flora Mikaeloff</li>
-<li>Franz-Arnold Ake</li>
-</ul>
-</div>
+<div class="section" id="fold-u-a-protein-structure-prediction-program">
+<h2>Fold U: A Protein Structure Prediction Program<a class="headerlink" href="#fold-u-a-protein-structure-prediction-program" title="Permalink to this headline">¶</a></h2>
+<a class="reference external image-reference" href="https://img.shields.io/badge/fold--u-v1.1-blue.svg"><img alt="Fold-U release" src="https://img.shields.io/badge/fold--u-v1.1-blue.svg" /></a>
+<a class="reference external image-reference" href="https://opensource.org/licenses/MIT"><img alt="License: MIT" src="https://img.shields.io/badge/License-MIT-yellow.svg" /></a>
+<a class="reference external image-reference" href="https://img.shields.io/badge/python-3-brightgreen.svg"><img alt="Python version" src="https://img.shields.io/badge/python-3-brightgreen.svg" /></a>
+<a class="reference external image-reference" href="https://img.shields.io/badge/sphinx%20build-1.7.4-brightgreen.svg"><img alt="Sphinx version" src="https://img.shields.io/badge/sphinx%20build-1.7.4-brightgreen.svg" /></a>
+<p align="center">
+  <img width="250" src="img/fold_u.svg" alt="fold_u_logo"/>
+</p><p>This program is the second step (downstream) of a protein structure prediction project. This step consists of threading a query sequence on different given templates.</p>
+<p>Our project is part of the Meet-U 2018-2019 competition.
+Meet-U is a collaborative pedagogical and research initiative between several Universities of Paris area. The course is intended to Master students (2nd year) in Bioinformatics. For more details refer to <a class="reference external" href="http://www.meet-u.org/">http://www.meet-u.org/</a>.</p>
 <div class="section" id="installation">
 <h3>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h3>
-<div class="section" id="requirements">
-<h4>Requirements<a class="headerlink" href="#requirements" title="Permalink to this headline">¶</a></h4>
-</div>
 <div class="section" id="clone-the-repository">
 <h4>Clone the repository<a class="headerlink" href="#clone-the-repository" title="Permalink to this headline">¶</a></h4>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>git clone https://github.com/meetU-MasterStudents/2018---2019-Equipe-4.git
-<span class="nb">cd</span> <span class="m">2018</span>---2019-Equipe-4
+<div class="highlight-guess notranslate"><div class="highlight"><pre><span></span>git clone https://github.com/meetU-MasterStudents/Fold_U.git
+cd 2018---2019-Equipe-4
 </pre></div>
 </div>
 </div>
+<div class="section" id="requirements">
+<h4>Requirements<a class="headerlink" href="#requirements" title="Permalink to this headline">¶</a></h4>
+<p>Install the few required packages / modules:</p>
+<div class="highlight-guess notranslate"><div class="highlight"><pre><span></span>pip install -r src/requirements.txt
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="run-the-program">
+<h3>Run the program<a class="headerlink" href="#run-the-program" title="Permalink to this headline">¶</a></h3>
+<p>fold_u.py takes in input N profil-profil alignments and their corresponding scores (foldrec file).</p>
+<div class="section" id="run-the-test">
+<h4>Run the test<a class="headerlink" href="#run-the-test" title="Permalink to this headline">¶</a></h4>
+<div class="highlight-guess notranslate"><div class="highlight"><pre><span></span>./fold_u.py data/foldrec/Agglutinin.foldrec
+</pre></div>
+</div>
+</div>
+<div class="section" id="get-help">
+<h4>Get help<a class="headerlink" href="#get-help" title="Permalink to this headline">¶</a></h4>
+<div class="highlight-guess notranslate"><div class="highlight"><pre><span></span>./fold_u.py -h
+
+    Usage:
+        fold_u.py FILE [--nb_templates NUM] [--nb_pdb NB_PDB] [--output PATH]
+                       [--metafold METAFOLD] [--dope DOPE]
+
+    Options:
+        -h, --help                            Show this
+        -n NUM, --nb_templates NUM            First n templates to retrieve from
+                                              the foldrec file [default: 100]
+        -p NB_PDB, --nb_pdb NB_PDB            Number of pdb to create
+                                              [default: 10]
+        -o PATH, --output PATH                Path to the directory containing
+                                              the result files (scores and pdb)
+                                              [default: res/threading]
+        -m METAFOLD, --metafold METAFOLD      Path to the metafold.list file
+                                              [default: data/METAFOLD.list]
+        -d DOPE, --dope DOPE                  Path to the dope.par file
+                                              [default: data/dope.par]
+</pre></div>
+</div>
+</div>
+</div>
 <div class="section" id="documentation">
-<h4>Documentation<a class="headerlink" href="#documentation" title="Permalink to this headline">¶</a></h4>
+<h3>Documentation<a class="headerlink" href="#documentation" title="Permalink to this headline">¶</a></h3>
 <p>The documentation of the project was generated with Sphinx and Read The Docs theme.
 You can access it by opening the <code class="docutils literal notranslate"><span class="pre">docs/build/html/index.html</span></code> file
 with your favorite web browser.</p>
@@ -201,6 +246,19 @@ with your favorite web browser.</p>
 </pre></div>
 </div>
 </div>
+<div class="section" id="authors">
+<h3>Authors<a class="headerlink" href="#authors" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><a class="reference external" href="https://github.com/gabrielctn">Gabriel Cretin</a></li>
+<li><a class="reference external" href="https://github.com/kabhel">Hélène Kabbech</a></li>
+<li><a class="reference external" href="https://github.com/tomgutman">Tom Gutman</a></li>
+<li><a class="reference external" href="https://github.com/FloraMika">Flora Mikaeloff</a></li>
+<li><a class="reference external" href="https://github.com/franzx5">Franz-Arnold Ake</a></li>
+</ul>
+</div>
+<div class="section" id="license">
+<h3>License<a class="headerlink" href="#license" title="Permalink to this headline">¶</a></h3>
+<p>This project is licensed under the MIT License.</p>
 </div>
 </div>
 </div>
@@ -225,7 +283,7 @@ with your favorite web browser.</p>
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2018, Gabriel Cretin, Hélène Kabbech, Tom Gutman, Flora Mikaeloff, Franz Arnold
+        &copy; Copyright 2018, Gabriel Cretin, Hélène Kabbech, Tom Gutman, Flora Mikaeloff, Franz Arnold.
 
     </p>
   </div>
@@ -244,14 +302,21 @@ with your favorite web browser.</p>
 
   
 
-    
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-        <script type="text/javascript" src="_static/jquery.js"></script>
-        <script type="text/javascript" src="_static/underscore.js"></script>
-        <script type="text/javascript" src="_static/doctools.js"></script>
-        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'1.0',
+            LANGUAGE:'None',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 
   
 
