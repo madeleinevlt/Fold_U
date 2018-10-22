@@ -28,15 +28,12 @@ from schema import Schema, And, Use, SchemaError
 import numpy as np
 
 # Local modules
-import src.parsing as parse
-import src.threading as threading
-import src.writing as write
-
-
+import src.parsing as parsing
+import src.writing as writing
 
 
 DIST_RANGE = [5, 15]
-GAP_PENALITY = 1
+GAP_PENALTY = 1
 
 
 def check_args():
@@ -79,7 +76,7 @@ def process(ali):
 
     """
     # Calculate the energy matrix
-    energy_matrix = threading.calc_energy(ali, DIST_RANGE, GAP_PENALITY, DOPE_DICT)
+    energy_matrix = ali.calculate_energy(DIST_RANGE, GAP_PENALTY, DOPE_DICT)
     # for i, res in enumerate(energy_matrix):
     #     for j, res2 in enumerate(energy_matrix):
     #         print("{:^5.1f}".format(energy_matrix[i, j]),end="")
@@ -92,7 +89,6 @@ if __name__ == "__main__":
 
     ### Parse command line
     ######################
-
     ARGUMENTS = docopt(__doc__, version='fold-U 1.1')
 
     # Check the types and ranges of the command line arguments parsed by docopt
@@ -114,10 +110,10 @@ if __name__ == "__main__":
     ####################
 
     # Parse Metafold file
-    METAFOLD_DICT = parse.metafold(METAFOLD)
+    METAFOLD_DICT = parsing.parse_metafold(METAFOLD)
     # Parse Foldrec file
-    ALIGNMENT_DICT = parse.foldrec(FOLDREC_FILE, NB_TEMPLATES, METAFOLD_DICT)
-    DOPE_DICT = parse.dope(DOPE)
+    ALIGNMENT_DICT = parsing.parse_foldrec(FOLDREC_FILE, NB_TEMPLATES, METAFOLD_DICT)
+    DOPE_DICT = parsing.parse_dope(DOPE)
 
 
     ### Main calculations
@@ -132,4 +128,4 @@ if __name__ == "__main__":
 
     ### Results : Score and PDB files
     #################################
-    write.scores_and_pdb(OUTPUT, sorted(SCORES), NB_PDB, ALIGNMENT_DICT)
+    writing.write_scores(OUTPUT, sorted(SCORES), NB_PDB, ALIGNMENT_DICT)
