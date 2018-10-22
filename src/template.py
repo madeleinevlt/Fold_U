@@ -6,6 +6,7 @@
 # Third-party modules
 import numpy as np
 
+
 class Template:
     """
     .. class:: Template
@@ -15,7 +16,7 @@ class Template:
     Attributes:
         name: Name of the template
         residues: Template's sequence of residues as list of Residues objects
-        pdb: PDB code of the template
+        pdb: PDB filename of the template
     """
 
     def __init__(self, name, residues):

@@ -29,7 +29,7 @@ def write_scores(res_path, score_list, nb_pdb, alignment_dict):
             file.write("{:<8d}{}\n".format(int(score), name))
             # Only nb_pdb pdb files are created
             if template_num <= nb_pdb:
-                pdb_filename = res_path+"/pdb/template_"+str(template_num)+".pdb"
+                pdb_filename = res_path + "/pdb/top_" + str(template_num) + ".pdb"
                 alignment_dict[name].write_pdb(pdb_filename)
                 template_num += 1
     print("\nThe program ended successfully !\nThe results are stored in " + res_path)

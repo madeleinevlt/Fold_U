@@ -14,7 +14,6 @@ from src.residue import Residue
 from src.alignment import Alignment
 
 
-
 def parse_metafold(metafold_file):
     """
         Extracts the name of the metafold as a key and the associated pdb as
@@ -44,8 +43,8 @@ def parse_dope(dope_file):
                        amino acid pair.
 
         Returns:
-            dope dictionary: A dictionary with key = res_1-res_2
-                             and value = an array of the 30 dope energy values.
+            dictionary: A dictionary with key = res_1-res_2 and
+                        value = an array of the 30 dope energy values.
 
     """
     # set up aa liste for rownames & colnames of the DataFrame
@@ -77,7 +76,7 @@ def parse_foldrec(foldrec_file, nb_templates, metafold_dict):
 
         Returns:
             Dictionary of Alignments: A dictionary with key = template name and
-            value = an Alignment object.
+                                      value = an Alignment object.
     """
 
     # Regex :

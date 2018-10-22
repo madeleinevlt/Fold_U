@@ -3,6 +3,7 @@
    :synopsis: This module implements the Residue class.
 """
 
+
 class Residue:
     """
     .. class:: Residue
