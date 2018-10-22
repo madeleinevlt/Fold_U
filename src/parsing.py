@@ -10,12 +10,12 @@ import numpy as np
 from Bio.SeqUtils import seq1
 
 # Local modules
-from src.classes import Residue
-from src.classes import Alignment
+from src.residue import Residue
+from src.alignment import Alignment
 
 
 
-def metafold(metafold_file):
+def parse_metafold(metafold_file):
     """
         Extracts the name of the metafold as a key and the associated pdb as
         a value in a dictionary
@@ -34,7 +34,7 @@ def metafold(metafold_file):
     return metafold_dict
 
 
-def dope(dope_file):
+def parse_dope(dope_file):
     """
         Extracts 30 dope energy values for the 20*20 residus-CA pairs and stores it
         in a dictionary with key = res_1-res_2 and value = an array of the 30 dope scores.
@@ -60,7 +60,7 @@ def dope(dope_file):
     return dope_dict
 
 
-def foldrec(foldrec_file, nb_templates, metafold_dict):
+def parse_foldrec(foldrec_file, nb_templates, metafold_dict):
     """
         Extracts the score, the template name, the query and template sequences for
         the first n alignments from a file containing N profil-profil alignments and
@@ -114,8 +114,8 @@ def foldrec(foldrec_file, nb_templates, metafold_dict):
                 template_seq = [Residue(name) for name in list(template_seq_found.group(1))]
                 # Add a new alignment object in the list :
                 ali = Alignment(score, query_seq, template_name, template_seq)
-                ali.template.get_pdb(metafold_dict)
-                ali.template.get_all_ca_coords()
+                ali.template.set_pdb_name(metafold_dict)
+                ali.template.parse_pdb()
                 alignment_dict[template_name] = ali
                 count_templates = count_templates + 1
             prev_line = line
