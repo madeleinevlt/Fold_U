@@ -12,7 +12,16 @@ import numpy as np
 
 
 def fn_timer(function):
-    """It calculates the time during the run of a function"""
+    """This function is a wrapper to benchmarck a function
+    when trying to optimize it. It returns the total running time of the function
+
+        Args:
+            function: The function to benchmarck
+
+        Returns:
+            float: The time the function took to run
+
+    """
     @wraps(function)
     def function_timer(*args, **kwargs):
         """It calculates the time during the run of a function"""
@@ -23,6 +32,8 @@ def fn_timer(function):
             .format(function.__name__, str(t_1-t_0)))
         return result
     return function_timer
+
+
 
 #@fn_timer
 def calc_energy(ali, dist_range, gap_penality, dope):
@@ -74,5 +85,3 @@ def calc_energy(ali, dist_range, gap_penality, dope):
                     interval_index = round(int((dist * 30) / 15))
                     energy[i, j] = dope[row_res.name+col_res.name][interval_index]
     return energy
-
-    
