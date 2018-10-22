@@ -30,8 +30,9 @@ def scores_and_pdb(res_path, score_list, nb_pdb, alignment_dict):
             # score and the name of the current ranked template
             file.write("{:<5d}{}\n".format(int(score), name))
             # Only nb_pdb pdb files are created
-            if template_num <= nb_pdb:
-                write_pdb(res_path, name, template_num, alignment_dict)
+            if template_num <= 1:
+                pdb_filename = res_path+"/pdb/template_"+str(template_num)+".pdb"
+                write_pdb(pdb_filename, alignment_dict[name])
                 template_num = template_num + 1
     print("\nThe program ended successfully !\nThe results are stored in " + res_path)
 
