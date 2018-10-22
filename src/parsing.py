@@ -45,9 +45,7 @@ def parse_dope(dope_file):
         Returns:
             dictionary: A dictionary with key = res_1-res_2 and
                         value = an array of the 30 dope energy values.
-
     """
-    # set up aa liste for rownames & colnames of the DataFrame
     dope_dict = {}
     with open(dope_file, "r") as file:
         for line in file:
@@ -116,6 +114,6 @@ def parse_foldrec(foldrec_file, nb_templates, metafold_dict):
                 ali.template.set_pdb_name(metafold_dict)
                 ali.template.parse_pdb()
                 alignment_dict[template_name] = ali
-                count_templates = count_templates + 1
+                count_templates += 1
             prev_line = line
     return alignment_dict

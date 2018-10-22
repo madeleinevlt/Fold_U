@@ -113,6 +113,7 @@ if __name__ == "__main__":
     METAFOLD_DICT = parsing.parse_metafold(METAFOLD)
     # Parse Foldrec file
     ALIGNMENT_DICT = parsing.parse_foldrec(FOLDREC_FILE, NB_TEMPLATES, METAFOLD_DICT)
+    # Parse the DOPE file
     DOPE_DICT = parsing.parse_dope(DOPE)
 
 

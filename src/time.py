@@ -1,7 +1,7 @@
 """
     .. module:: time
-      :synopsis: This module implements all the functions to make the threading of
-                 the query sequence on the templates.
+      :synopsis: This module implements a function for testing / benchmarking
+                 the functions. More function smay be implemented.
 """
 
 # Third-party modules
