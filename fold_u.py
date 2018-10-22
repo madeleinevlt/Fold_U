@@ -124,7 +124,7 @@ if __name__ == "__main__":
     #####################
 
     # Parallelization of the main loop: threading calculations
-    POOL = Pool(processes=1)
+    POOL = Pool(processes=cpu_count())
     # Necessary to pass ARGUMENTS to parallelized function
     SCORES = POOL.imap(process, ALIGNMENT_DICT.values())
     POOL.close()
