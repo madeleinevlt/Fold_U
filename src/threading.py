@@ -60,17 +60,30 @@ def calc_energy(ali, dist_range, gap_penality, dope):
     template = ali.template.residues
 
     query_size = len(query)
-
+    # This sets a numpy matrix of shape query * query which will contain all
+    # the energies corresponding to distances between all pairs of residues
+    # between the query and itself: the coordinates are the ones from the template.
     energy = np.empty((query_size, query_size), dtype=object)
+    # Filling the matrix afterwards with "NaN" is faster
     energy.fill(np.nan)
 
     for i, row_res in enumerate(query):
-        if row_res.name == "-" or template[i].name == "-":
+        # The gap was already treated
+        if i <= (query_size - 3) and energy[i, (i+2)] == gap_penality:
+            continue
+        # There is a gap in the query or the template
+        elif row_res.name == "-" or template[i].name == "-":
+            # The whole line is set with gap penalty value
             energy[i, (i+2):] = gap_penality
             continue
         for j in range(i+2, query_size-1):
             col_res = query[j]
-            if col_res.name == "-" or template[j].name == "-":
+            # The gap was already treated
+            if energy[i, j] == gap_penality:
+                continue
+            # There is a gap in the query or the template
+            elif col_res.name == "-" or template[j].name == "-":
+                # The whole column is set with gap penalty value
                 energy[:(j-1), j] = gap_penality
                 continue
             else:
