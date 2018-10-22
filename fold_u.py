@@ -36,6 +36,7 @@ import src.writing as write
 
 
 DIST_RANGE = [5, 15]
+GAP_PENALITY = 2
 
 
 def check_args():
@@ -78,9 +79,17 @@ def process(ali):
 
     """
     # Calculate the distance matrix
-    query = ali.query_residues
-    template = ali.template.residues
-    energy_matrix = threading.calc_dist_convert_energy(query, template, DIST_RANGE, DOPE_DICT)
+    print("\n\n  {}\n".format(ali.template.name))
+    # for i in query:
+    #     print(i.name)
+    threading.test(ali, DIST_RANGE, GAP_PENALITY, DOPE_DICT)
+    print("\n\ncoucou\n")
+    energy_matrix = threading.calc_energy(ali, DIST_RANGE, GAP_PENALITY, DOPE_DICT)
+
+    # for i, res in enumerate(energy_matrix):
+    #     for j, res2 in enumerate(energy_matrix):
+    #         print("{:^5.1f}".format(energy_matrix[i, j]),end="")
+    #     print("")
     return np.nansum(energy_matrix), ali.template.name
 
 
@@ -114,7 +123,6 @@ if __name__ == "__main__":
     METAFOLD_DICT = parse.metafold(METAFOLD)
     # Parse Foldrec file
     ALIGNMENT_DICT = parse.foldrec(FOLDREC_FILE, NB_TEMPLATES, METAFOLD_DICT)
-    # Parse DOPE file
     DOPE_DICT = parse.dope(DOPE)
 
 
@@ -122,7 +130,7 @@ if __name__ == "__main__":
     #####################
 
     # Parallelization of the main loop: threading calculations
-    POOL = Pool(processes=cpu_count())
+    POOL = Pool(processes=1)
     # Necessary to pass ARGUMENTS to parallelized function
     SCORES = POOL.imap(process, ALIGNMENT_DICT.values())
     POOL.close()
