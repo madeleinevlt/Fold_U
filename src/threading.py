@@ -49,6 +49,7 @@ def calc_energy(ali, dist_range, gap_penality, dope):
     template = ali.template.residues
 
     query_size = len(query)
+
     energy = np.empty((query_size, query_size), dtype=object)
     energy.fill(np.nan)
 
@@ -56,7 +57,7 @@ def calc_energy(ali, dist_range, gap_penality, dope):
         if row_res.name == "-" or template[i].name == "-":
             energy[i, (i+2):] = gap_penality
             continue
-        for j in range(i+2, query_size):
+        for j in range(i+2, query_size-1):
             col_res = query[j]
             if col_res.name == "-" or template[j].name == "-":
                 energy[:(j-1), j] = gap_penality
@@ -73,29 +74,5 @@ def calc_energy(ali, dist_range, gap_penality, dope):
                     interval_index = round(int((dist * 30) / 15))
                     energy[i, j] = dope[row_res.name+col_res.name][interval_index]
     return energy
-
-def test(ali, dist_range, gap_penality, dope):
-    query = ali.query_residues
-    template = ali.template.residues
-    query_size = len(query)
-    energy = np.empty((query_size, query_size), dtype=object)
-    energy.fill(np.nan)
-    query = ali.query_residues
-    template = ali.template.residues
-    for i, row_res in enumerate(query):
-        print(i, row_res.name, end=" ")
-        if row_res.name == "-" or template[i].name == "-":
-            energy[i, (i+2):] = gap_penality
-            continue
-        for j in range(i+2, query_size):
-            print(j, query[j].name)
-            col_res = query[j]
-            if col_res.name == "-" or template[j].name == "-":
-                energy[:(j-1), j] = gap_penality
-                continue
-            else:
-                print(template[i].ca_coords,template[j].ca_coords)
-                a_min_b = template[i].ca_coords - template[j].ca_coords
-                dist = np.sqrt(np.einsum('i,i->', a_min_b, a_min_b))
 
     

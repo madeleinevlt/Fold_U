@@ -28,7 +28,7 @@ def scores_and_pdb(res_path, score_list, nb_pdb, alignment_dict):
         for score, name in score_list:
             # Write a line in the score.out file containing the
             # score and the name of the current ranked template
-            file.write("{:<5d}{}\n".format(int(score), name))
+            file.write("{:<8d}{}\n".format(int(score), name))
             # Only nb_pdb pdb files are created
             if template_num <= nb_pdb:
                 pdb_filename = res_path+"/pdb/template_"+str(template_num)+".pdb"
@@ -54,6 +54,8 @@ def write_pdb(pdb_filename, ali):
             .format(ali.template.name))
         for res_num, res_q in enumerate(ali.query_residues):
             res_t = ali.template.residues[res_num]
+            if res_num > len(ali.template.residues) or res_num == len(ali.template.residues) - 1:
+                break
             if res_q.name == "-" or res_t.name == "-":
                 continue
             # An "ATOM" line of the created pdb file

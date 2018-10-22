@@ -36,7 +36,7 @@ import src.writing as write
 
 
 DIST_RANGE = [5, 15]
-GAP_PENALITY = 2
+GAP_PENALITY = 1
 
 
 def check_args():
@@ -78,14 +78,8 @@ def process(ali):
                     (template's score, template's name)
 
     """
-    # Calculate the distance matrix
-    print("\n\n  {}\n".format(ali.template.name))
-    # for i in query:
-    #     print(i.name)
-    threading.test(ali, DIST_RANGE, GAP_PENALITY, DOPE_DICT)
-    print("\n\ncoucou\n")
+    # Calculate the energy matrix
     energy_matrix = threading.calc_energy(ali, DIST_RANGE, GAP_PENALITY, DOPE_DICT)
-
     # for i, res in enumerate(energy_matrix):
     #     for j, res2 in enumerate(energy_matrix):
     #         print("{:^5.1f}".format(energy_matrix[i, j]),end="")
