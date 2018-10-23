@@ -83,11 +83,8 @@ class Alignment:
                     energy[:(j-1), j] = gap_penalty
                     continue
                 else:
-                    # THE most efficient method to calculate Euclidian distances.
-                    # Formula: distance = sqrt((xa-xb)**2 + (ya-yb)**2 + (za-zb)**2)
-                    #print(template[i].name, template[j].name)
-                    a_min_b = template[i].ca_coords - template[j].ca_coords
-                    dist = np.sqrt(np.einsum('i,i->', a_min_b, a_min_b))
+                    # Calculate to distance between two residues
+                    dist = template[i].calculate_distance(template[j])
                     # Keep distances only in a defined range because we don't want to
                     # take into account directly bonded residues (dist < ~5 A) and too far residues
                     if dist_range[0] <= dist <= dist_range[1]:

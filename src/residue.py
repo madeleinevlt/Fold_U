@@ -3,6 +3,9 @@
    :synopsis: This module implements the Residue class.
 """
 
+# Third-party modules
+import numpy as np
+
 
 class Residue:
     """
@@ -36,3 +39,18 @@ class Residue:
                 void
         """
         self.ca_coords = coords
+
+    def calculate_distance(self, residue):
+        """
+            Calculate Euclidian distance between two residues with THE most efficient method.
+            Formula: distance = sqrt((xa-xb)**2 + (ya-yb)**2 + (za-zb)**2)
+
+            Args:
+                residue (object): An object of the Residue class.
+
+            Returns:
+                dist (float): The calculated distance.
+        """
+        a_min_b = self.ca_coords - residue.ca_coords
+        dist = np.sqrt(np.einsum('i,i->', a_min_b, a_min_b))
+        return dist
