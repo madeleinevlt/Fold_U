@@ -30,7 +30,6 @@ import numpy as np
 # Local modules
 import src.parsing as parsing
 import src.score as score
-import src.writing as writing
 
 
 DIST_RANGE = [5, 15]
