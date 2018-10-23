@@ -29,7 +29,7 @@ import numpy as np
 
 # Local modules
 import src.parsing as parsing
-import src.score as score
+from src.score import Score
 
 
 DIST_RANGE = [5, 15]
@@ -122,7 +122,7 @@ if __name__ == "__main__":
     # Parallelization of the main loop: threading calculations
     POOL = Pool(processes=cpu_count())
     # Necessary to pass ARGUMENTS to parallelized function
-    THREADING_SCORE = score.Score(POOL.imap(process, ALIGNMENT_DICT.values()))
+    THREADING_SCORE = Score(POOL.imap(process, ALIGNMENT_DICT.values()))
     POOL.close()
     POOL.join()
 

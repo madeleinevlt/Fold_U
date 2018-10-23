@@ -48,8 +48,7 @@ class Template:
                 void
 
         """
-        res_num = 0
-        nb_gap = 0
+        count_res = 0
         with open("data/pdb/" + self.name + "/" + self.pdb, 'r') as file:
             for line in file:
                 line_type = line[0:6].strip()
@@ -58,10 +57,10 @@ class Template:
                     x_coord = float(line[30:38].strip())
                     y_coord = float(line[38:46].strip())
                     z_coord = float(line[46:54].strip())
-                    # Skip gaps in the template
-                    if res_num <= len(self.residues):
-                        while self.residues[res_num].name == "-":
-                            nb_gap += 1
-                            res_num += 1
-                        self.residues[res_num].set_ca_coords(np.array([x_coord, y_coord, z_coord]))
-                        res_num += 1
+                    if count_res <= len(self.residues):
+                        # Skip gaps in the template
+                        while self.residues[count_res].name == "-":
+                            count_res += 1
+                        self.residues[count_res].set_ca_coords(np.array([x_coord, y_coord,\
+                                                                         z_coord]))
+                        count_res += 1

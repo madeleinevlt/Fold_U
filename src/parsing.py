@@ -12,6 +12,8 @@ from Bio.SeqUtils import seq1
 # Local modules
 from src.residue import Residue
 from src.alignment import Alignment
+from src.query import Query
+from src.template import Template
 
 
 def parse_metafold(metafold_file):
@@ -78,7 +80,7 @@ def parse_foldrec(foldrec_file, nb_templates, metafold_dict):
     """
 
     # Regex :
-    no_reg = re.compile("^No\\s*([0-9]+)")
+    num_reg = re.compile("^No\\s*([0-9]+)")
     template_name_reg = re.compile("Alignment :.*vs\\s+([A-Za-z0-9-_]+)")
     score_reg = re.compile("^Score :\\s+([-0-9\\.]+)")
     query_seq_reg = re.compile("^Query\\s*([0-9]+)\\s*([A-Z-]+)\\s*([0-9]+)")
@@ -94,14 +96,14 @@ def parse_foldrec(foldrec_file, nb_templates, metafold_dict):
             if count_templates == nb_templates:
                 break
             # Search a regex for the current line :
-            no_found = re.search(no_reg, line)
+            num_found = re.search(num_reg, line)
             template_name_found = re.search(template_name_reg, line)
             score_found = re.search(score_reg, line)
             query_seq_found = re.search(query_seq_reg, line)
             template_seq_found = re.search(template_seq_reg, line)
-            # A no is found :
-            if no_found:
-                no = int(no_found.group(1))
+            # A num is found :
+            if num_found:
+                num = int(num_found.group(1))
             # A template name is found :
             if template_name_found:
                 template_name = template_name_found.group(1)
@@ -117,7 +119,8 @@ def parse_foldrec(foldrec_file, nb_templates, metafold_dict):
             if template_seq_found and prev_line == '\n':
                 template_seq = [Residue(name) for name in list(template_seq_found.group(1))]
                 # Add a new alignment object in the list :
-                ali = Alignment(no, score, query_seq, query_first, query_last, template_name, template_seq)
+                ali = Alignment(num, score, Query(query_seq, query_first, query_last),\
+                                Template(template_name, template_seq))
                 ali.template.set_pdb_name(metafold_dict)
                 ali.template.parse_pdb()
                 alignment_dict[template_name] = ali

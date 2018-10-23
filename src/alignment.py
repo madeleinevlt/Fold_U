@@ -27,11 +27,11 @@ class Alignment:
                   ``Template(template_name, template_residues)``
     """
 
-    def __init__(self, num, score, query_residues, query_first, query_last, template_name, template_residues):
+    def __init__(self, num, score, query, template):
         self.num = num
         self.score = score
-        self.query = Query(query_residues, query_first, query_last)
-        self.template = Template(template_name, template_residues)
+        self.query = query
+        self.template = template
 
     #@fn_timer
     def calculate_energy(self, dist_range, gap_penalty, dope_dict):
@@ -106,12 +106,11 @@ class Alignment:
             # Extra informations on the template used to generate the pdb file
             file.write("REMARK Threading of query sequence on the {:s} template #{:d}.\n"\
                 .format(self.template.name, self.num))
-            res_num = -1
-            #for res_num, res_t in enumerate(self.template.residues):
+            count_res = -1
             for ind in range(self.query.first, self.query.last+1):
-                res_num += 1
-                res_t = self.template.residues[res_num]
-                res_q = self.query.residues[res_num]
+                count_res += 1
+                res_t = self.template.residues[count_res]
+                res_q = self.query.residues[count_res]
                 if res_q.name == "-" or res_t.name == "-":
                     continue
                 # An "ATOM" line of the created pdb file
