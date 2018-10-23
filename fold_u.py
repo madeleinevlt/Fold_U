@@ -81,7 +81,7 @@ def process(ali):
     #     for j, res2 in enumerate(energy_matrix):
     #         print("{:^5.1f}".format(energy_matrix[i, j]),end="")
     #     print("")
-    return np.nansum(energy_matrix), ali.no, ali.template.name
+    return np.nansum(energy_matrix), ali.num, ali.template.name
 
 
 if __name__ == "__main__":

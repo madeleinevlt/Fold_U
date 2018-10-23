@@ -19,7 +19,7 @@ class Alignment:
       This class groups informations about an alignment.
 
     Attributes:
-        no (int): Number of the alignment
+        num (int): Number of the alignment
         score: Score of the alignment
         query: Instance of a Query object as
                ``Query(query_residues, query_first, query_last)``
@@ -27,8 +27,8 @@ class Alignment:
                   ``Template(template_name, template_residues)``
     """
 
-    def __init__(self, no, score, query_residues, query_first, query_last, template_name, template_residues):
-        self.no = no
+    def __init__(self, num, score, query_residues, query_first, query_last, template_name, template_residues):
+        self.num = num
         self.score = score
         self.query = Query(query_residues, query_first, query_last)
         self.template = Template(template_name, template_residues)
@@ -108,7 +108,7 @@ class Alignment:
         with open(pdb_path, "w") as file:
             # Extra informations on the template used to generate the pdb file
             file.write("REMARK Threading of query sequence on the {:s} template #{:d}.\n"\
-                .format(self.template.name, self.no))
+                .format(self.template.name, self.num))
             res_num = -1
             #for res_num, res_t in enumerate(self.template.residues):
             for ind in range(self.query.first, self.query.last+1):
@@ -121,7 +121,5 @@ class Alignment:
                 file.write("{:6s}{:5d} {:^4s} {:>3s}{:>2s}{:4d}{:>12.3f}{:8.3f}{:8.3f}{:6.2f}{:6.2f}{:>12s}\n"\
                     .format("ATOM", ind, "CA", seq3(res_q.name).upper(), "A", ind,\
                     res_t.ca_coords[0], res_t.ca_coords[1], res_t.ca_coords[2], 1.00, 0, "C"))
-                # if res_num > len(self.template.residues)-1:
-                #     break
             # The two last lines of the created pdb file ("END" and "TER" lines)
             file.write("END\n")
