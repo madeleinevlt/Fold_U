@@ -6,6 +6,9 @@
 # Third-party modules
 import numpy as np
 
+# Local modules
+from src.atom import Atom
+
 
 class Residue:
     """
@@ -20,25 +23,9 @@ class Residue:
 
     def __init__(self, name):
         self.name = name
-        self.ca_coords = None
-
-    def __str__(self):
-        if self.ca_coords is None:
-            return "<" + self.name + " | " + "empty coordinates>"
-        coords = [str(coord) for coord in self.ca_coords]
-        return "<" + self.name + " | " + str(coords) + ">"
-
-    def set_ca_coords(self, coords):
-        """
-            Sets the coordinates of the Residue.
-
-            Args:
-                coords (np array): x,y,z coordinates.
-
-            Returns:
-                void
-        """
-        self.ca_coords = coords
+        self.ca_atom = Atom("CA")
+        self.cb_atom = Atom("CB")
+        self.n_atom = Atom("N")
 
     def calculate_distance(self, residue):
         """
@@ -51,6 +38,6 @@ class Residue:
             Returns:
                 dist (float): The calculated distance.
         """
-        a_min_b = self.ca_coords - residue.ca_coords
+        a_min_b = self.ca_atom.coords - residue.ca_atom.coords
         dist = np.sqrt(np.einsum('i,i->', a_min_b, a_min_b))
         return dist
