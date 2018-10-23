@@ -59,7 +59,7 @@ class Template:
                     y_coord = float(line[38:46].strip())
                     z_coord = float(line[46:54].strip())
                     # Skip gaps in the template
-                    if res_num > len(self.residues) or res_num == len(self.residues) - 1:
+                    if res_num > len(self.residues):
                         break
                     while self.residues[res_num].name == "-":
                         nb_gap += 1
