@@ -19,6 +19,7 @@ class Alignment:
       This class groups informations about an alignment.
 
     Attributes:
+        no (int): Number of the alignment
         score: Score of the alignment
         query: Instance of a Query object as
                ``Query(query_residues, query_first, query_last)``
@@ -26,7 +27,8 @@ class Alignment:
                   ``Template(template_name, template_residues)``
     """
 
-    def __init__(self, score, query_residues, query_first, query_last, template_name, template_residues):
+    def __init__(self, no, score, query_residues, query_first, query_last, template_name, template_residues):
+        self.no = no
         self.score = score
         self.query = Query(query_residues, query_first, query_last)
         self.template = Template(template_name, template_residues)
