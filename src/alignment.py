@@ -113,7 +113,6 @@ class Alignment:
                 res_num += 1
                 res_t = self.template.residues[res_num]
                 res_q = self.query.residues[res_num]
-                print(res_t.name, res_q.name)
                 if res_q.name == "-" or res_t.name == "-":
                     continue
                 # An "ATOM" line of the created pdb file
