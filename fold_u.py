@@ -29,6 +29,7 @@ import numpy as np
 
 # Local modules
 import src.parsing as parsing
+import src.score as score
 import src.writing as writing
 
 
@@ -113,7 +114,6 @@ if __name__ == "__main__":
     METAFOLD_DICT = parsing.parse_metafold(METAFOLD)
     # Parse Foldrec file
     ALIGNMENT_DICT = parsing.parse_foldrec(FOLDREC_FILE, NB_TEMPLATES, METAFOLD_DICT)
-    # Parse the DOPE file
     DOPE_DICT = parsing.parse_dope(DOPE)
 
 
@@ -123,10 +123,10 @@ if __name__ == "__main__":
     # Parallelization of the main loop: threading calculations
     POOL = Pool(processes=cpu_count())
     # Necessary to pass ARGUMENTS to parallelized function
-    SCORES = POOL.imap(process, ALIGNMENT_DICT.values())
+    ALIGNMENT_SCORE = score.Score(POOL.imap(process, ALIGNMENT_DICT.values()))
     POOL.close()
     POOL.join()
 
     ### Results : Score and PDB files
     #################################
-    writing.write_scores(OUTPUT, sorted(SCORES), NB_PDB, ALIGNMENT_DICT)
+    ALIGNMENT_SCORE.write_score(OUTPUT, NB_PDB, ALIGNMENT_DICT)
