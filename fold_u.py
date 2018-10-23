@@ -122,10 +122,10 @@ if __name__ == "__main__":
     # Parallelization of the main loop: threading calculations
     POOL = Pool(processes=cpu_count())
     # Necessary to pass ARGUMENTS to parallelized function
-    ALIGNMENT_SCORE = score.Score(POOL.imap(process, ALIGNMENT_DICT.values()))
+    THREADING_SCORE = score.Score(POOL.imap(process, ALIGNMENT_DICT.values()))
     POOL.close()
     POOL.join()
 
     ### Results : Score and PDB files
     #################################
-    ALIGNMENT_SCORE.write_score(OUTPUT, NB_PDB, ALIGNMENT_DICT)
+    THREADING_SCORE.write_score(OUTPUT, NB_PDB, ALIGNMENT_DICT)
