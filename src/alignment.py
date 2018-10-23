@@ -107,8 +107,8 @@ class Alignment:
         """
         with open(pdb_path, "w") as file:
             # Extra informations on the template used to generate the pdb file
-            file.write("REMARK Threading of query sequence on the {:s} template.\n"\
-                .format(self.template.name))
+            file.write("REMARK Threading of query sequence on the {:s} template #{:d}.\n"\
+                .format(self.template.name, self.no))
             res_num = -1
             #for res_num, res_t in enumerate(self.template.residues):
             for ind in range(self.query.first, self.query.last+1):
