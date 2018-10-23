@@ -78,9 +78,10 @@ def parse_foldrec(foldrec_file, nb_templates, metafold_dict):
     """
 
     # Regex :
+    no_reg = re.compile("^No\\s*([0-9]+)")
     template_name_reg = re.compile("Alignment :.*vs\\s+([A-Za-z0-9-_]+)")
     score_reg = re.compile("^Score :\\s+([-0-9\\.]+)")
-    query_seq_reg = re.compile("^Query\\s*[0-9]+\\s*([A-Z-]+)")
+    query_seq_reg = re.compile("^Query\\s*([0-9]+)\\s*([A-Z-]+)\\s*([0-9]+)")
     template_seq_reg = re.compile("^Template\\s*[0-9]+\\s*([A-Z-]+)")
 
     alignment_dict = {}
@@ -93,10 +94,14 @@ def parse_foldrec(foldrec_file, nb_templates, metafold_dict):
             if count_templates == nb_templates:
                 break
             # Search a regex for the current line :
+            no_found = re.search(no_reg, line)
             template_name_found = re.search(template_name_reg, line)
             score_found = re.search(score_reg, line)
             query_seq_found = re.search(query_seq_reg, line)
             template_seq_found = re.search(template_seq_reg, line)
+            # A no is found :
+            if no_found:
+                no = int(no_found.group(1))
             # A template name is found :
             if template_name_found:
                 template_name = template_name_found.group(1)
@@ -105,12 +110,14 @@ def parse_foldrec(foldrec_file, nb_templates, metafold_dict):
                 score = float(score_found.group(1))
             # A query sequence is found :
             if query_seq_found and prev_line == '\n':
-                query_seq = [Residue(name) for name in list(query_seq_found.group(1))]
+                query_first = int(query_seq_found.group(1))
+                query_seq = [Residue(name) for name in list(query_seq_found.group(2))]
+                query_last = int(query_seq_found.group(3))
             # A template sequence is founds :
             if template_seq_found and prev_line == '\n':
                 template_seq = [Residue(name) for name in list(template_seq_found.group(1))]
                 # Add a new alignment object in the list :
-                ali = Alignment(score, query_seq, template_name, template_seq)
+                ali = Alignment(no, score, query_seq, query_first, query_last, template_name, template_seq)
                 ali.template.set_pdb_name(metafold_dict)
                 ali.template.parse_pdb()
                 alignment_dict[template_name] = ali

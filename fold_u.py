@@ -81,7 +81,7 @@ def process(ali):
     #     for j, res2 in enumerate(energy_matrix):
     #         print("{:^5.1f}".format(energy_matrix[i, j]),end="")
     #     print("")
-    return np.nansum(energy_matrix), ali.template.name
+    return np.nansum(energy_matrix), ali.num, ali.template.name
 
 
 if __name__ == "__main__":
@@ -122,10 +122,10 @@ if __name__ == "__main__":
     # Parallelization of the main loop: threading calculations
     POOL = Pool(processes=cpu_count())
     # Necessary to pass ARGUMENTS to parallelized function
-    ALIGNMENT_SCORE = score.Score(POOL.imap(process, ALIGNMENT_DICT.values()))
+    THREADING_SCORE = score.Score(POOL.imap(process, ALIGNMENT_DICT.values()))
     POOL.close()
     POOL.join()
 
     ### Results : Score and PDB files
     #################################
-    ALIGNMENT_SCORE.write_score(OUTPUT, NB_PDB, ALIGNMENT_DICT)
+    THREADING_SCORE.write_score(OUTPUT, NB_PDB, ALIGNMENT_DICT)

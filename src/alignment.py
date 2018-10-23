@@ -9,6 +9,7 @@ from Bio.SeqUtils import seq3
 
 # Local modules
 from src.template import Template
+from src.query import Query
 
 
 class Alignment:
@@ -18,15 +19,18 @@ class Alignment:
       This class groups informations about an alignment.
 
     Attributes:
+        num (int): Number of the alignment
         score: Score of the alignment
-        query_residues: Query's sequence of residues as list of Residues objects
+        query: Instance of a Query object as
+               ``Query(query_residues, query_first, query_last)``
         template: Instance of a Template object as
                   ``Template(template_name, template_residues)``
     """
 
-    def __init__(self, score, query_residues, template_name, template_residues):
+    def __init__(self, num, score, query_residues, query_first, query_last, template_name, template_residues):
+        self.num = num
         self.score = score
-        self.query_residues = query_residues
+        self.query = Query(query_residues, query_first, query_last)
         self.template = Template(template_name, template_residues)
 
     #@fn_timer
@@ -48,7 +52,7 @@ class Alignment:
                 numpy 2D array: 2D matrix containing energy between pairs of residues
                                 of the query sequence threaded on the template.
         """
-        query = self.query_residues
+        query = self.query.residues
         template = self.template.residues
 
         query_size = len(query)
@@ -103,18 +107,19 @@ class Alignment:
         """
         with open(pdb_path, "w") as file:
             # Extra informations on the template used to generate the pdb file
-            file.write("REMARK Threading of query sequence on the {:s} template.\n"\
-                .format(self.template.name))
-            for res_num, res_q in enumerate(self.query_residues):
+            file.write("REMARK Threading of query sequence on the {:s} template #{:d}.\n"\
+                .format(self.template.name, self.num))
+            res_num = -1
+            #for res_num, res_t in enumerate(self.template.residues):
+            for ind in range(self.query.first, self.query.last+1):
+                res_num += 1
                 res_t = self.template.residues[res_num]
-                if res_num > len(self.template.residues) or\
-                   res_num == len(self.template.residues) - 1:
-                    break
+                res_q = self.query.residues[res_num]
                 if res_q.name == "-" or res_t.name == "-":
                     continue
                 # An "ATOM" line of the created pdb file
                 file.write("{:6s}{:5d} {:^4s} {:>3s}{:>2s}{:4d}{:>12.3f}{:8.3f}{:8.3f}{:6.2f}{:6.2f}{:>12s}\n"\
-                    .format("ATOM", res_num+1, "CA", seq3(res_q.name).upper(), "A", res_num+1,\
+                    .format("ATOM", ind, "CA", seq3(res_q.name).upper(), "A", ind,\
                     res_t.ca_coords[0], res_t.ca_coords[1], res_t.ca_coords[2], 1.00, 0, "C"))
             # The two last lines of the created pdb file ("END" and "TER" lines)
             file.write("END\n")
