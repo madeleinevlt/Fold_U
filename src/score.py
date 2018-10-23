@@ -36,7 +36,7 @@ class Score:
         os.makedirs(res_path+"/pdb", exist_ok=True)
         with open(res_path+"/scores.out", "w") as file:
             template_num = 1
-            file.write("{:<4s} {:<18s}{:>6s}\n".format("#num", "name", "score"))
+            file.write("{:<4s} {:<18s}{:>6s}\n".format("#num", "template name", "score"))
             for score, num, name in sorted(self.iterator):
                 # Write a line in the score.out file containing the
                 # score and the name of the current ranked template
