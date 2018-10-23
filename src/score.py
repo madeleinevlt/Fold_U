@@ -14,12 +14,11 @@ class Score:
       This class groups informations about a residue.
 
     Attributes:
-        name: Name of the residue (1 letter code)
-        ca_coords: 3D coordinates of the residue
+        iterator: An iterator of the generated scores.
     """
 
-    def __init__(self, generator):
-        self.generator = generator
+    def __init__(self, iterator):
+        self.iterator = iterator
 
     def write_score(self, res_path, nb_pdb, alignment_dict):
         """
@@ -28,7 +27,6 @@ class Score:
 
             Args:
                 res_path (str): The path of the directory where to stock the created files.
-                score_list (list): A list of tupples (score, template's name)
                 nb_pdb (int): Number of pdb to create using the n first templates.
                 alignment_dict (dictionary): A dictionary containing Alignment objects.
 
@@ -38,7 +36,7 @@ class Score:
         os.makedirs(res_path+"/pdb", exist_ok=True)
         with open(res_path+"/scores.out", "w") as file:
             template_num = 1
-            for score, name in sorted(self.generator):
+            for score, name in sorted(self.iterator):
                 # Write a line in the score.out file containing the
                 # score and the name of the current ranked template
                 file.write("{:<8d}{}\n".format(int(score), name))
