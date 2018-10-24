@@ -83,14 +83,15 @@ def parse_foldrec(foldrec_file, nb_templates, metafold_dict):
     num_reg = re.compile("^No\\s*([0-9]+)")
     template_name_reg = re.compile("Alignment :.*vs\\s+([A-Za-z0-9-_]+)")
     score_reg = re.compile("^Score :\\s+([-0-9\\.]+)")
-    query_seq_reg = re.compile("^Query\\s*([0-9]+)\\s*([A-Z-]+)\\s*([0-9]+)")
+    query_seq_reg = re.compile("^Query\\s*([0-9]+)\\s*([A-Z0-9-]+)\\s*([0-9]+)")
     template_seq_reg = re.compile("^Template\\s*[0-9]+\\s*([A-Z-]+)")
 
     alignment_dict = {}
     count_templates = 0
 
     with open(foldrec_file, "r") as file:
-        prev_line = file.readline()
+        query_count = 0
+        template_count = 0
         for line in file:
             # The loop is break when the required nb of templates is reached :
             if count_templates == nb_templates:
@@ -111,15 +112,33 @@ def parse_foldrec(foldrec_file, nb_templates, metafold_dict):
             if score_found:
                 score = float(score_found.group(1))
             # A query sequence is found :
-            if query_seq_found and prev_line == '\n':
-                query_first = int(query_seq_found.group(1))
-                query_seq = [Residue(name) for name in list(query_seq_found.group(2))]
-                query_last = int(query_seq_found.group(3))
+            if query_seq_found:
+                if query_count == 0:
+                    query_first = int(query_seq_found.group(1))
+                    query_seq = [Residue(name) for name in list(query_seq_found.group(2))]
+                    query_last = int(query_seq_found.group(3))
+                    query_count += 1
+                elif query_count == 1:
+                    for ind, ss in enumerate(list(query_seq_found.group(2))):
+                        query_seq[ind].ss = ss
+                    query_count += 1
+                elif query_count == 2:
+                    for ind, ss_conf in enumerate(list(query_seq_found.group(2))):
+                        query_seq[ind].ss_conf = ss_conf
+                    query_count = 0
             # A template sequence is founds :
-            if template_seq_found and prev_line == '\n':
-                template_seq = [Residue(name) for name in list(template_seq_found.group(1))]
+            if template_seq_found:
+                if template_count == 0:
+                    template_seq = [Residue(name) for name in list(template_seq_found.group(1))]
+                    template_count += 1
+                elif template_count == 1:
+                    for ind, ss in enumerate(list(template_seq_found.group(1))):
+                        template_seq[ind].ss = ss
+                    template_count = 0
+                
                 # Add a new alignment object in the list :
-                ali = Alignment(num, score, Query(query_seq, query_first, query_last),\
+                ali = Alignment(num, score,
+                                Query(query_seq, query_first, query_last),
                                 Template(template_name, template_seq))
                 ali.template.set_pdb_name(metafold_dict)
                 ali.template.parse_pdb()

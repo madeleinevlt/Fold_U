@@ -26,6 +26,8 @@ class Residue:
         self.ca_atom = Atom("CA")
         self.c_atom = Atom("C")
         self.n_atom = Atom("N")
+        self.ss = None
+        self.ss_confidence = None
 
     def calculate_distance(self, residue):
         """
