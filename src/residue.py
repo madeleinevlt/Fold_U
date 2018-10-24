@@ -24,7 +24,7 @@ class Residue:
     def __init__(self, name):
         self.name = name
         self.ca_atom = Atom("CA")
-        self.cb_atom = Atom("CB")
+        self.c_atom = Atom("C")
         self.n_atom = Atom("N")
 
     def calculate_distance(self, residue):

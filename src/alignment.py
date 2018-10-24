@@ -84,11 +84,13 @@ class Alignment:
                     continue
                 else:
                     # Calculate to distance between two residues
-                    print(template[i].name, template[i].ca_atom.coords, template[j].name, template[j].ca_atom.coords)
+                    #print(template[i].name, template[i].ca_atom.coords, template[j].name, template[j].ca_atom.coords)
                     dist = template[i].calculate_distance(template[j])
                     # Keep distances only in a defined range because we don't want to
                     # take into account directly bonded residues (dist < ~5 A) and too far residues
                     if dist_range[0] <= dist <= dist_range[1]:
+                        # DOPE energy values spread between 0.25 and 15 by 0.5 intervals
+                        # So 30 intervals and max value = 15
                         interval_index = round(int((dist * 30) / 15))
                         energy[i, j] = dope_dict[row_res.name+col_res.name][interval_index]
         return energy
@@ -107,29 +109,29 @@ class Alignment:
             # Extra informations on the template used to generate the pdb file
             file.write("REMARK Threading of query sequence on the {:s} template #{:d}.\n"\
                 .format(self.template.name, self.num))
-            ind = -1
-            count_atom = -1
+            ind = 0
+            count_atom = 0
             for count_res in range(self.query.first, self.query.last+1):
-                ind += 1
                 res_t = self.template.residues[ind]
                 res_q = self.query.residues[ind]
                 if res_q.name == "-" or res_t.name == "-":
+                    ind += 1
                     continue
-                # N "ATOM" line
-                count_atom += 1
+                # # N "ATOM" line
                 file.write("{:6s}{:5d} {:^4s} {:>3s}{:>2s}{:4d}{:>12.3f}{:8.3f}{:8.3f}{:6.2f}{:6.2f}{:>12s}\n"\
                     .format("ATOM", count_atom, "N", seq3(res_q.name).upper(), "A", count_res,\
                     res_t.n_atom.coords[0], res_t.n_atom.coords[1], res_t.n_atom.coords[2], 1.00, 0, "N"))
-                # CA "ATOM" line
                 count_atom += 1
+                # CA "ATOM" line
                 file.write("{:6s}{:5d} {:^4s} {:>3s}{:>2s}{:4d}{:>12.3f}{:8.3f}{:8.3f}{:6.2f}{:6.2f}{:>12s}\n"\
                     .format("ATOM", count_atom, "CA", seq3(res_q.name).upper(), "A", count_res,\
                     res_t.ca_atom.coords[0], res_t.ca_atom.coords[1], res_t.ca_atom.coords[2], 1.00, 0, "C"))
-                # CB "ATOM" line
                 count_atom += 1
+                # C "ATOM" line
                 file.write("{:6s}{:5d} {:^4s} {:>3s}{:>2s}{:4d}{:>12.3f}{:8.3f}{:8.3f}{:6.2f}{:6.2f}{:>12s}\n"\
-                    .format("ATOM", count_atom, "CB", seq3(res_q.name).upper(), "A", count_res,\
-                    res_t.cb_atom.coords[0], res_t.cb_atom.coords[1], res_t.cb_atom.coords[2], 1.00, 0, "C"))
-
+                    .format("ATOM", count_atom, "C", seq3(res_q.name).upper(), "A", count_res,\
+                    res_t.c_atom.coords[0], res_t.c_atom.coords[1], res_t.c_atom.coords[2], 1.00, 0, "C"))
+                count_atom += 1
+                ind += 1
             # The two last lines of the created pdb file ("END" and "TER" lines)
             file.write("END\n")
