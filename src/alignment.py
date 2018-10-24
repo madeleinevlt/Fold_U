@@ -110,7 +110,7 @@ class Alignment:
             file.write("REMARK Threading of query sequence on the {:s} template #{:d}.\n"\
                 .format(self.template.name, self.num))
             ind = 0
-            count_atom = 0
+            count_atom = 1
             for count_res in range(self.query.first, self.query.last+1):
                 res_t = self.template.residues[ind]
                 res_q = self.query.residues[ind]
