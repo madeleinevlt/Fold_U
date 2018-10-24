@@ -76,7 +76,6 @@ def process(ali):
 
     """
     # Calculate the energy matrix
-    print(ali.template.name)
     energy_matrix = ali.calculate_energy(DIST_RANGE, GAP_PENALTY, DOPE_DICT)
     # for i, res in enumerate(energy_matrix):
     #     for j, res2 in enumerate(energy_matrix):
@@ -121,7 +120,7 @@ if __name__ == "__main__":
     #####################
 
     # Parallelization of the main loop: threading calculations
-    POOL = Pool(processes=1)
+    POOL = Pool(processes=cpu_count())
     # Necessary to pass ARGUMENTS to parallelized function
     THREADING_SCORE = Score(POOL.imap(process, ALIGNMENT_DICT.values()))
     POOL.close()
