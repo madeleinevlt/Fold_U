@@ -122,7 +122,7 @@ if __name__ == "__main__":
     # Parallelization of the main loop: threading calculations
     POOL = Pool(processes=cpu_count())
     # Necessary to pass ARGUMENTS to parallelized function
-    THREADING_SCORE = Score(POOL.imap(process, ALIGNMENT_DICT.values()))
+    THREADING_SCORE = Score(POOL.map(process, ALIGNMENT_DICT.values()))
     POOL.close()
     POOL.join()
 
