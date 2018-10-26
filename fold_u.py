@@ -3,21 +3,21 @@
 
 """
     Usage:
-        fold_u.py FILE [--nb_templates NUM] [--nb_pdb NB_PDB] [--output PATH]
-                       [--metafold METAFOLD] [--dope DOPE]
+        fold_u.py FOLDREC_FILE [--nb_templates NUM] [--nb_pdb NUM] [--output PATH]
+                               [--metafold FILE] [--dope FILE]
 
     Options:
         -h, --help                            Show this
         -n NUM, --nb_templates NUM            First n templates to retrieve from
                                               the foldrec file [default: 100]
-        -p NB_PDB, --nb_pdb NB_PDB            Number of pdb to create
+        -p NUM, --nb_pdb NUM                  Number of pdb to create
                                               [default: 10]
         -o PATH, --output PATH                Path to the directory containing
                                               the result files (scores and pdb)
                                               [default: res/threading]
-        -m METAFOLD, --metafold METAFOLD      Path to the metafold.list file
+        -m FILE, --metafold FILE              Path to the metafold.list file
                                               [default: data/METAFOLD.list]
-        -d DOPE, --dope DOPE                  Path to the dope.par file
+        -d FILE, --dope FILE                  Path to the dope.par file
                                               [default: data/dope.par]
 """
 
@@ -48,13 +48,13 @@ def check_args():
             void
     """
     schema = Schema({
-        'FILE': Use(open, error='FILE should be readable'),
-        '--metafold': Use(open, error='METAFOLD should be readable'),
-        '--dope': Use(open, error='DOPE should be readable'),
+        'FOLDREC_FILE': Use(open, error='FOLDREC_FILE should be readable'),
+        '--metafold': Use(open, error='METAFOLD_FILE should be readable'),
+        '--dope': Use(open, error='DOPE_FILE should be readable'),
         '--nb_templates': And(Use(int), lambda n: 1 <= n <= 413,\
                                 error='--nb_templates=NUM should be integer 1 <= N <= 413'),
         '--nb_pdb': And(Use(int), lambda n: 1 <= n <= 413,\
-                                error='--nb_pdb=NB_PDB should be integer 1 <= N <= 413'),
+                                error='--nb_pdb=NUM should be integer 1 <= N <= 413'),
         # -The output PATH is created (if not exists) at the end of the program
         # so we skip the check.
         object: object})
@@ -93,26 +93,26 @@ if __name__ == "__main__":
     # Check the types and ranges of the command line arguments parsed by docopt
     check_args()
 
-    FOLDREC_FILE = ARGUMENTS["FILE"]
+    FOLDREC_FILE = ARGUMENTS["FOLDREC_FILE"]
     # Process the first n templates only
     NB_TEMPLATES = int(ARGUMENTS["--nb_templates"])
     # Create the first n pdb templates
     NB_PDB = int(ARGUMENTS["--nb_pdb"])
     # METAFOLD file
-    METAFOLD = ARGUMENTS["--metafold"]
+    METAFOLD_FILE = ARGUMENTS["--metafold"]
     # DOPE file
-    DOPE = ARGUMENTS["--dope"]
+    DOPE_FILE = ARGUMENTS["--dope"]
     # SCORES file
-    OUTPUT = ARGUMENTS["--output"]
+    OUTPUT_PATH = ARGUMENTS["--output"]
 
     ### Parse data files
     ####################
 
     # Parse Metafold file
-    METAFOLD_DICT = parsing.parse_metafold(METAFOLD)
+    METAFOLD_DICT = parsing.parse_metafold(METAFOLD_FILE)
     # Parse Foldrec file
     ALIGNMENT_DICT = parsing.parse_foldrec(FOLDREC_FILE, NB_TEMPLATES, METAFOLD_DICT)
-    DOPE_DICT = parsing.parse_dope(DOPE)
+    DOPE_DICT = parsing.parse_dope(DOPE_FILE)
 
 
     ### Main calculations
@@ -134,4 +134,5 @@ if __name__ == "__main__":
 
     ### Results : Score and PDB files
     #################################
-    THREADING_SCORE.write_score(OUTPUT, NB_PDB, ALIGNMENT_DICT)
+    THREADING_SCORE.write_score(OUTPUT_PATH, NB_PDB, ALIGNMENT_DICT)
+    print("\nThe program ended successfully !\nThe results are stored in " + OUTPUT_PATH)
