@@ -28,8 +28,8 @@
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Residue module" href="residue.html" />
-    <link rel="prev" title="Writing module" href="writing.html" /> 
+    <link rel="next" title="Query module" href="query.html" />
+    <link rel="prev" title="README" href="README.html" /> 
 
   
   <script src="_static/js/modernizr.min.js"></script>
@@ -84,12 +84,12 @@
             
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="README.html">README</a></li>
-<li class="toctree-l1"><a class="reference internal" href="meeting.html">Meeting</a></li>
-<li class="toctree-l1"><a class="reference internal" href="parsing.html">Parsing module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="writing.html">Writing module</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Alignment module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="residue.html">Residue module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="query.html">Query module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="template.html">Template module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="residue.html">Residue module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="atom.html">Atom module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="parsing.html">Parsing module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="time.html">Time module</a></li>
 </ul>
 
@@ -159,11 +159,25 @@
 <span id="alignment-module"></span><h1>Alignment module<a class="headerlink" href="#module-src.alignment" title="Permalink to this headline">¶</a></h1>
 <span class="target" id="module-Alignment"></span><dl class="class">
 <dt id="src.alignment.Alignment">
-<em class="property">class </em><code class="descclassname">src.alignment.</code><code class="descname">Alignment</code><span class="sig-paren">(</span><em>score</em>, <em>query_residues</em>, <em>template_name</em>, <em>template_residues</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/alignment.html#Alignment"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.alignment.Alignment" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">src.alignment.</code><code class="descname">Alignment</code><span class="sig-paren">(</span><em>num</em>, <em>score</em>, <em>query</em>, <em>template</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/alignment.html#Alignment"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.alignment.Alignment" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="class">
 <dt id="src.alignment.Alignment.Alignment">
 <em class="property">class </em><code class="descname">Alignment</code><a class="headerlink" href="#src.alignment.Alignment.Alignment" title="Permalink to this definition">¶</a></dt>
 <dd><p>This class groups informations about an alignment.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.alignment.Alignment.num">
+<code class="descname">num</code><a class="headerlink" href="#src.alignment.Alignment.num" title="Permalink to this definition">¶</a></dt>
+<dd><p>Number of the alignment</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">int</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="attribute">
@@ -173,9 +187,10 @@
 </dd></dl>
 
 <dl class="attribute">
-<dt id="src.alignment.Alignment.query_residues">
-<code class="descname">query_residues</code><a class="headerlink" href="#src.alignment.Alignment.query_residues" title="Permalink to this definition">¶</a></dt>
-<dd><p>Query’s sequence of residues as list of Residues objects</p>
+<dt id="src.alignment.Alignment.query">
+<code class="descname">query</code><a class="headerlink" href="#src.alignment.Alignment.query" title="Permalink to this definition">¶</a></dt>
+<dd><p>Instance of a Query object as
+<code class="docutils literal notranslate"><span class="pre">Query(query_residues,</span> <span class="pre">query_first,</span> <span class="pre">query_last)</span></code></p>
 </dd></dl>
 
 <dl class="attribute">
@@ -248,10 +263,10 @@ value = an array of 30 dope energy values.</li>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="residue.html" class="btn btn-neutral float-right" title="Residue module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="query.html" class="btn btn-neutral float-right" title="Query module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="writing.html" class="btn btn-neutral" title="Writing module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="README.html" class="btn btn-neutral" title="README" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -260,7 +275,7 @@ value = an array of 30 dope energy values.</li>
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2018, Gabriel Cretin, Hélène Kabbech, Tom Gutman, Flora Mikaeloff, Franz Arnold.
+        &copy; Copyright 2018, Gabriel Cretin, Hélène Kabbech, Tom Gutman, Flora Mikaeloff, Franz Arnold
 
     </p>
   </div>
@@ -279,21 +294,14 @@ value = an array of 30 dope energy values.</li>
 
   
 
-    <script type="text/javascript">
-        var DOCUMENTATION_OPTIONS = {
-            URL_ROOT:'./',
-            VERSION:'1.0',
-            LANGUAGE:'None',
-            COLLAPSE_INDEX:false,
-            FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true,
-            SOURCELINK_SUFFIX: '.txt'
-        };
-    </script>
-      <script type="text/javascript" src="_static/jquery.js"></script>
-      <script type="text/javascript" src="_static/underscore.js"></script>
-      <script type="text/javascript" src="_static/doctools.js"></script>
-      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
 
   
 

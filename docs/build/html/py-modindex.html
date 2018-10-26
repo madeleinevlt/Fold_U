@@ -85,12 +85,12 @@
             
               <ul>
 <li class="toctree-l1"><a class="reference internal" href="README.html">README</a></li>
-<li class="toctree-l1"><a class="reference internal" href="meeting.html">Meeting</a></li>
-<li class="toctree-l1"><a class="reference internal" href="parsing.html">Parsing module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="writing.html">Writing module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="alignment.html">Alignment module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="residue.html">Residue module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="query.html">Query module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="template.html">Template module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="residue.html">Residue module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="atom.html">Atom module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="parsing.html">Parsing module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="time.html">Time module</a></li>
 </ul>
 
@@ -158,10 +158,10 @@
    <div class="modindex-jumpbox">
    <a href="#cap-a"><strong>a</strong></a> | 
    <a href="#cap-p"><strong>p</strong></a> | 
+   <a href="#cap-q"><strong>q</strong></a> | 
    <a href="#cap-r"><strong>r</strong></a> | 
    <a href="#cap-s"><strong>s</strong></a> | 
-   <a href="#cap-t"><strong>t</strong></a> | 
-   <a href="#cap-w"><strong>w</strong></a>
+   <a href="#cap-t"><strong>t</strong></a>
    </div>
 
    <table class="indextable modindextable">
@@ -173,6 +173,11 @@
        <td>
        <a href="alignment.html#module-Alignment"><code class="xref">Alignment</code></a></td><td>
        <em>This module implements the Alignment class.</em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="atom.html#module-Atom"><code class="xref">Atom</code></a></td><td>
+       <em>This module implements the Atom class.</em></td></tr>
      <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
      <tr class="cap" id="cap-p"><td></td><td>
        <strong>p</strong></td><td></td></tr>
@@ -182,6 +187,14 @@
        <a href="parsing.html#module-parsing"><code class="xref">parsing</code></a></td><td>
        <em>This module implements all the functions to parse either input
 or additional necessary files.</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-q"><td></td><td>
+       <strong>q</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="query.html#module-Query"><code class="xref">Query</code></a></td><td>
+       <em>This module implements the Query class.</em></td></tr>
      <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
      <tr class="cap" id="cap-r"><td></td><td>
        <strong>r</strong></td><td></td></tr>
@@ -207,7 +220,17 @@ or additional necessary files.</em></td></tr>
      <tr class="cg-1">
        <td></td>
        <td>&#160;&#160;&#160;
+       <a href="atom.html#module-src.atom"><code class="xref">src.atom</code></a></td><td>
+       <em></em></td></tr>
+     <tr class="cg-1">
+       <td></td>
+       <td>&#160;&#160;&#160;
        <a href="parsing.html#module-src.parsing"><code class="xref">src.parsing</code></a></td><td>
+       <em></em></td></tr>
+     <tr class="cg-1">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="query.html#module-src.query"><code class="xref">src.query</code></a></td><td>
        <em></em></td></tr>
      <tr class="cg-1">
        <td></td>
@@ -224,11 +247,6 @@ or additional necessary files.</em></td></tr>
        <td>&#160;&#160;&#160;
        <a href="time.html#module-src.time"><code class="xref">src.time</code></a></td><td>
        <em></em></td></tr>
-     <tr class="cg-1">
-       <td></td>
-       <td>&#160;&#160;&#160;
-       <a href="writing.html#module-src.writing"><code class="xref">src.writing</code></a></td><td>
-       <em></em></td></tr>
      <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
      <tr class="cap" id="cap-t"><td></td><td>
        <strong>t</strong></td><td></td></tr>
@@ -243,14 +261,6 @@ or additional necessary files.</em></td></tr>
        <a href="time.html#module-time"><code class="xref">time</code></a></td><td>
        <em>This module implements a function for testing / benchmarking
 the functions. More function smay be implemented.</em></td></tr>
-     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
-     <tr class="cap" id="cap-w"><td></td><td>
-       <strong>w</strong></td><td></td></tr>
-     <tr>
-       <td></td>
-       <td>
-       <a href="writing.html#module-writing"><code class="xref">writing</code></a></td><td>
-       <em>This module implements all the functions to create result files.</em></td></tr>
    </table>
 
 
@@ -264,7 +274,7 @@ the functions. More function smay be implemented.</em></td></tr>
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2018, Gabriel Cretin, Hélène Kabbech, Tom Gutman, Flora Mikaeloff, Franz Arnold.
+        &copy; Copyright 2018, Gabriel Cretin, Hélène Kabbech, Tom Gutman, Flora Mikaeloff, Franz Arnold
 
     </p>
   </div>
@@ -283,21 +293,14 @@ the functions. More function smay be implemented.</em></td></tr>
 
   
 
-    <script type="text/javascript">
-        var DOCUMENTATION_OPTIONS = {
-            URL_ROOT:'./',
-            VERSION:'1.0',
-            LANGUAGE:'None',
-            COLLAPSE_INDEX:false,
-            FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true,
-            SOURCELINK_SUFFIX: '.txt'
-        };
-    </script>
-      <script type="text/javascript" src="_static/jquery.js"></script>
-      <script type="text/javascript" src="_static/underscore.js"></script>
-      <script type="text/javascript" src="_static/doctools.js"></script>
-      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
 
   
 

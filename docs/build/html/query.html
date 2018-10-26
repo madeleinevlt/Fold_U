@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Writing module &mdash; fold-u 1.0 documentation</title>
+  <title>Query module &mdash; fold-u 1.0 documentation</title>
   
 
   
@@ -28,8 +28,8 @@
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Alignment module" href="alignment.html" />
-    <link rel="prev" title="Parsing module" href="parsing.html" /> 
+    <link rel="next" title="Template module" href="template.html" />
+    <link rel="prev" title="Alignment module" href="alignment.html" /> 
 
   
   <script src="_static/js/modernizr.min.js"></script>
@@ -84,12 +84,12 @@
             
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="README.html">README</a></li>
-<li class="toctree-l1"><a class="reference internal" href="meeting.html">Meeting</a></li>
-<li class="toctree-l1"><a class="reference internal" href="parsing.html">Parsing module</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Writing module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="alignment.html">Alignment module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="residue.html">Residue module</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Query module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="template.html">Template module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="residue.html">Residue module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="atom.html">Atom module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="parsing.html">Parsing module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="time.html">Time module</a></li>
 </ul>
 
@@ -136,13 +136,13 @@
     
       <li><a href="index.html">Docs</a> &raquo;</li>
         
-      <li>Writing module</li>
+      <li>Query module</li>
     
     
       <li class="wy-breadcrumbs-aside">
         
             
-            <a href="_sources/writing.rst.txt" rel="nofollow"> View page source</a>
+            <a href="_sources/query.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -155,30 +155,51 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="module-src.writing">
-<span id="writing-module"></span><h1>Writing module<a class="headerlink" href="#module-src.writing" title="Permalink to this headline">¶</a></h1>
-<span class="target" id="module-writing"></span><dl class="function">
-<dt id="src.writing.write_scores">
-<code class="descclassname">src.writing.</code><code class="descname">write_scores</code><span class="sig-paren">(</span><em>res_path</em>, <em>score_list</em>, <em>nb_pdb</em>, <em>alignment_dict</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/writing.html#write_scores"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.writing.write_scores" title="Permalink to this definition">¶</a></dt>
-<dd><p>Creates a scores.out file containing for each line a score and the template’s
-name associated. Creates the pdb files of the n best templates (best scores).</p>
+  <div class="section" id="module-src.query">
+<span id="query-module"></span><h1>Query module<a class="headerlink" href="#module-src.query" title="Permalink to this headline">¶</a></h1>
+<span class="target" id="module-Query"></span><dl class="class">
+<dt id="src.query.Query">
+<em class="property">class </em><code class="descclassname">src.query.</code><code class="descname">Query</code><span class="sig-paren">(</span><em>residues</em>, <em>first</em>, <em>last</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/query.html#Query"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.query.Query" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="class">
+<dt id="src.query.Query.Query">
+<em class="property">class </em><code class="descname">Query</code><a class="headerlink" href="#src.query.Query.Query" title="Permalink to this definition">¶</a></dt>
+<dd><p>This class groups informations about a query sequence.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.query.Query.residues">
+<code class="descname">residues</code><a class="headerlink" href="#src.query.Query.residues" title="Permalink to this definition">¶</a></dt>
+<dd><p>Template’s sequence of residues as list of Residues objects</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.query.Query.first">
+<code class="descname">first</code><a class="headerlink" href="#src.query.Query.first" title="Permalink to this definition">¶</a></dt>
+<dd><p>First residue of the query sequence.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>res_path</strong> (<em>str</em>) – The path of the directory where to stock the created files.</li>
-<li><strong>score_list</strong> (<em>list</em>) – A list of tupples (score, template’s name)</li>
-<li><strong>nb_pdb</strong> (<em>int</em>) – Number of pdb to create using the n first templates.</li>
-<li><strong>alignment_dict</strong> (<em>dictionary</em>) – A dictionary containing Alignment objects.</li>
-</ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">void</p>
-</td>
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">int</td>
 </tr>
 </tbody>
 </table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.query.Query.last">
+<code class="descname">last</code><a class="headerlink" href="#src.query.Query.last" title="Permalink to this definition">¶</a></dt>
+<dd><p>Last residue of the query sequence.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">int</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 </dd></dl>
 
 </div>
@@ -191,10 +212,10 @@ name associated. Creates the pdb files of the n best templates (best scores).</p
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="alignment.html" class="btn btn-neutral float-right" title="Alignment module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="template.html" class="btn btn-neutral float-right" title="Template module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="parsing.html" class="btn btn-neutral" title="Parsing module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="alignment.html" class="btn btn-neutral" title="Alignment module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -203,7 +224,7 @@ name associated. Creates the pdb files of the n best templates (best scores).</p
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2018, Gabriel Cretin, Hélène Kabbech, Tom Gutman, Flora Mikaeloff, Franz Arnold.
+        &copy; Copyright 2018, Gabriel Cretin, Hélène Kabbech, Tom Gutman, Flora Mikaeloff, Franz Arnold
 
     </p>
   </div>
@@ -222,21 +243,14 @@ name associated. Creates the pdb files of the n best templates (best scores).</p
 
   
 
-    <script type="text/javascript">
-        var DOCUMENTATION_OPTIONS = {
-            URL_ROOT:'./',
-            VERSION:'1.0',
-            LANGUAGE:'None',
-            COLLAPSE_INDEX:false,
-            FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true,
-            SOURCELINK_SUFFIX: '.txt'
-        };
-    </script>
-      <script type="text/javascript" src="_static/jquery.js"></script>
-      <script type="text/javascript" src="_static/underscore.js"></script>
-      <script type="text/javascript" src="_static/doctools.js"></script>
-      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
 
   
 

@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Template module &mdash; fold-u 1.0 documentation</title>
+  <title>Atom module &mdash; fold-u 1.0 documentation</title>
   
 
   
@@ -28,8 +28,8 @@
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Residue module" href="residue.html" />
-    <link rel="prev" title="Query module" href="query.html" /> 
+    <link rel="next" title="Parsing module" href="parsing.html" />
+    <link rel="prev" title="Residue module" href="residue.html" /> 
 
   
   <script src="_static/js/modernizr.min.js"></script>
@@ -86,9 +86,9 @@
 <li class="toctree-l1"><a class="reference internal" href="README.html">README</a></li>
 <li class="toctree-l1"><a class="reference internal" href="alignment.html">Alignment module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="query.html">Query module</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Template module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="template.html">Template module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="residue.html">Residue module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="atom.html">Atom module</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Atom module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="parsing.html">Parsing module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="time.html">Time module</a></li>
 </ul>
@@ -136,13 +136,13 @@
     
       <li><a href="index.html">Docs</a> &raquo;</li>
         
-      <li>Template module</li>
+      <li>Atom module</li>
     
     
       <li class="wy-breadcrumbs-aside">
         
             
-            <a href="_sources/template.rst.txt" rel="nofollow"> View page source</a>
+            <a href="_sources/atom.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -155,67 +155,40 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="module-src.template">
-<span id="template-module"></span><h1>Template module<a class="headerlink" href="#module-src.template" title="Permalink to this headline">¶</a></h1>
-<span class="target" id="module-Template"></span><dl class="class">
-<dt id="src.template.Template">
-<em class="property">class </em><code class="descclassname">src.template.</code><code class="descname">Template</code><span class="sig-paren">(</span><em>name</em>, <em>residues</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/template.html#Template"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.template.Template" title="Permalink to this definition">¶</a></dt>
+  <div class="section" id="module-src.atom">
+<span id="atom-module"></span><h1>Atom module<a class="headerlink" href="#module-src.atom" title="Permalink to this headline">¶</a></h1>
+<span class="target" id="module-Atom"></span><dl class="class">
+<dt id="src.atom.Atom">
+<em class="property">class </em><code class="descclassname">src.atom.</code><code class="descname">Atom</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/atom.html#Atom"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.atom.Atom" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="class">
-<dt id="src.template.Template.Template">
-<em class="property">class </em><code class="descname">Template</code><a class="headerlink" href="#src.template.Template.Template" title="Permalink to this definition">¶</a></dt>
-<dd><p>This class groups informations about a template sequence/structure.</p>
+<dt id="src.atom.Atom.Atom">
+<em class="property">class </em><code class="descname">Atom</code><a class="headerlink" href="#src.atom.Atom.Atom" title="Permalink to this definition">¶</a></dt>
+<dd><p>This class groups informations about an atom.</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="src.template.Template.name">
-<code class="descname">name</code><a class="headerlink" href="#src.template.Template.name" title="Permalink to this definition">¶</a></dt>
-<dd><p>Name of the template</p>
+<dt id="src.atom.Atom.name">
+<code class="descname">name</code><a class="headerlink" href="#src.atom.Atom.name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Name of the atom</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="src.template.Template.residues">
-<code class="descname">residues</code><a class="headerlink" href="#src.template.Template.residues" title="Permalink to this definition">¶</a></dt>
-<dd><p>Template’s sequence of residues as list of Residues objects</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="src.template.Template.pdb">
-<code class="descname">pdb</code><a class="headerlink" href="#src.template.Template.pdb" title="Permalink to this definition">¶</a></dt>
-<dd><p>PDB filename of the template</p>
+<dt id="src.atom.Atom.coords">
+<code class="descname">coords</code><a class="headerlink" href="#src.atom.Atom.coords" title="Permalink to this definition">¶</a></dt>
+<dd><p>3D coordinates of the atom</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="src.template.Template.parse_pdb">
-<code class="descname">parse_pdb</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/template.html#Template.parse_pdb"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.template.Template.parse_pdb" title="Permalink to this definition">¶</a></dt>
-<dd><p>Parse the pdb file and set the CA coordinates.</p>
+<dt id="src.atom.Atom.set_coords">
+<code class="descname">set_coords</code><span class="sig-paren">(</span><em>coords</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/atom.html#Atom.set_coords"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.atom.Atom.set_coords" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the coordinates of the atom.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>void</strong> – </td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>coords</strong> (<em>np array</em>) – x,y,z coordinates.</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">void</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="src.template.Template.set_pdb_name">
-<code class="descname">set_pdb_name</code><span class="sig-paren">(</span><em>metafold_dict</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/template.html#Template.set_pdb_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.template.Template.set_pdb_name" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get the PDB file name of the current template from the template’s name.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>self</strong> – The current alignment’s template.</li>
-<li><strong>dictionary</strong> – A dictionary with key = template name and value = pdb file</li>
-</ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">void</p>
-</td>
 </tr>
 </tbody>
 </table>
@@ -233,10 +206,10 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="residue.html" class="btn btn-neutral float-right" title="Residue module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="parsing.html" class="btn btn-neutral float-right" title="Parsing module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="query.html" class="btn btn-neutral" title="Query module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="residue.html" class="btn btn-neutral" title="Residue module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

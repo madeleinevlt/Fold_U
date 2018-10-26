@@ -10,10 +10,10 @@ Welcome to fold-U's documentation!
    :maxdepth: 2
 
    README
-   meeting
-   parsing
-   writing
    alignment
-   residue
+   query
    template
+   residue
+   atom
+   parsing
    time

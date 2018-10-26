@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>src.residue &mdash; fold-u 1.0 documentation</title>
+  <title>src.query &mdash; fold-u 1.0 documentation</title>
   
 
   
@@ -136,7 +136,7 @@
         
           <li><a href="../index.html">Module code</a> &raquo;</li>
         
-      <li>src.residue</li>
+      <li>src.query</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -151,52 +151,29 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <h1>Source code for src.residue</h1><div class="highlight"><pre>
+  <h1>Source code for src.query</h1><div class="highlight"><pre>
 <span></span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">.. module:: Residue</span>
-<span class="sd">   :synopsis: This module implements the Residue class.</span>
+<span class="sd">.. module:: Query</span>
+<span class="sd">   :synopsis: This module implements the Query class.</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="c1"># Third-party modules</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
-<span class="c1"># Local modules</span>
-<span class="kn">from</span> <span class="nn">src.atom</span> <span class="k">import</span> <span class="n">Atom</span>
-
-
-<div class="viewcode-block" id="Residue"><a class="viewcode-back" href="../../residue.html#src.residue.Residue">[docs]</a><span class="k">class</span> <span class="nc">Residue</span><span class="p">:</span>
+<div class="viewcode-block" id="Query"><a class="viewcode-back" href="../../query.html#src.query.Query">[docs]</a><span class="k">class</span> <span class="nc">Query</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    .. class:: Residue</span>
+<span class="sd">    .. class:: Query</span>
 
-<span class="sd">      This class groups informations about a residue.</span>
+<span class="sd">      This class groups informations about a query sequence.</span>
 
 <span class="sd">    Attributes:</span>
-<span class="sd">        name: Name of the residue (1 letter code)</span>
-<span class="sd">        ca_coords: 3D coordinates of the residue</span>
+<span class="sd">        residues: Template&#39;s sequence of residues as list of Residues objects</span>
+<span class="sd">        first (int): First residue of the query sequence.</span>
+<span class="sd">        last (int): Last residue of the query sequence.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">ca_atom</span> <span class="o">=</span> <span class="n">Atom</span><span class="p">(</span><span class="s2">&quot;CA&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">c_atom</span> <span class="o">=</span> <span class="n">Atom</span><span class="p">(</span><span class="s2">&quot;C&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">n_atom</span> <span class="o">=</span> <span class="n">Atom</span><span class="p">(</span><span class="s2">&quot;N&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">ss</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">ss_confidence</span> <span class="o">=</span> <span class="kc">None</span>
-
-<div class="viewcode-block" id="Residue.calculate_distance"><a class="viewcode-back" href="../../residue.html#src.residue.Residue.calculate_distance">[docs]</a>    <span class="k">def</span> <span class="nf">calculate_distance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">residue</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">            Calculate Euclidian distance between two residues with THE most efficient method.</span>
-<span class="sd">            Formula: distance = sqrt((xa-xb)**2 + (ya-yb)**2 + (za-zb)**2)</span>
-
-<span class="sd">            Args:</span>
-<span class="sd">                residue (object): An object of the Residue class.</span>
-
-<span class="sd">            Returns:</span>
-<span class="sd">                dist (float): The calculated distance.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">a_min_b</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ca_atom</span><span class="o">.</span><span class="n">coords</span> <span class="o">-</span> <span class="n">residue</span><span class="o">.</span><span class="n">ca_atom</span><span class="o">.</span><span class="n">coords</span>
-        <span class="n">dist</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span><span class="s1">&#39;i,i-&gt;&#39;</span><span class="p">,</span> <span class="n">a_min_b</span><span class="p">,</span> <span class="n">a_min_b</span><span class="p">))</span>
-        <span class="k">return</span> <span class="n">dist</span></div></div>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">residues</span><span class="p">,</span> <span class="n">first</span><span class="p">,</span> <span class="n">last</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">residues</span> <span class="o">=</span> <span class="n">residues</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">first</span> <span class="o">=</span> <span class="n">first</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">last</span> <span class="o">=</span> <span class="n">last</span></div>
 </pre></div>
 
            </div>
