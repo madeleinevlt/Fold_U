@@ -135,7 +135,6 @@ def parse_foldrec(foldrec_file, nb_templates, metafold_dict):
                     for ind, ss in enumerate(list(template_seq_found.group(1))):
                         template_seq[ind].ss = ss
                     template_reg_count = 0
-                
                     # Add a new alignment object in the list :
                     ali = Alignment(num, score,
                                     Query(query_seq, query_first, query_last),

@@ -40,35 +40,32 @@ fold_u.py takes in input N profil-profil alignments and their corresponding scor
 ./fold_u.py -h
 
     Usage:
-        fold_u.py FILE [--nb_templates NUM] [--nb_pdb NB_PDB] [--output PATH]
-                       [--metafold METAFOLD] [--dope DOPE]
+        fold_u.py FOLDREC_FILE [--nb_templates NUM] [--nb_pdb NUM] [--output PATH]
+                               [--metafold FILE] [--dope FILE]
 
     Options:
         -h, --help                            Show this
         -n NUM, --nb_templates NUM            First n templates to retrieve from
                                               the foldrec file [default: 100]
-        -p NB_PDB, --nb_pdb NB_PDB            Number of pdb to create
+        -p NUM, --nb_pdb NUM                  Number of pdb to create
                                               [default: 10]
         -o PATH, --output PATH                Path to the directory containing
                                               the result files (scores and pdb)
-                                              [default: res/threading] 
-        -m METAFOLD, --metafold METAFOLD      Path to the metafold.list file
+                                              [default: res/threading]
+        -m FILE, --metafold FILE              Path to the metafold.list file
                                               [default: data/METAFOLD.list]
-        -d DOPE, --dope DOPE                  Path to the dope.par file
+        -d FILE, --dope FILE                  Path to the dope.par file
                                               [default: data/dope.par]
 ```
 
 ## Documentation
 
-The documentation of the project was generated with Sphinx and Read The Docs theme.
-You can access it by opening the `docs/build/html/index.html` file
-with your favorite web browser.
-
-```
-firefox docs/build/html/index.html
-```
+The documentation of our program, generated with Sphinx and Read The Docs theme, is accessible at the following address:
+[https://meetu-masterstudents.github.io/Fold_U/build/html/index.html](https://meetu-masterstudents.github.io/Fold_U/build/html/index.html)
 
 ## Authors
+
+We are master students in bioinformatics at Paris Diderot University.
 - [Gabriel Cretin](https://github.com/gabrielctn)
 - [Hélène Kabbech](https://github.com/kabhel)
 - [Tom Gutman](https://github.com/tomgutman)

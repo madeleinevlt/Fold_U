@@ -63,13 +63,16 @@ class Template:
                         while self.residues[count_res].name == "-":
                             count_res += 1
                         if line_type == "ATOM" and name_at == "N":
-                            self.residues[count_res].ca_atom.set_coords(np.array([x_coord, y_coord, z_coord]))
+                            self.residues[count_res].ca_atom\
+                            .set_coords(np.array([x_coord, y_coord, z_coord]))
                             nb_atoms += 1
                         elif line_type == "ATOM" and name_at == "CA":
-                            self.residues[count_res].c_atom.set_coords(np.array([x_coord, y_coord, z_coord]))
+                            self.residues[count_res].c_atom\
+                            .set_coords(np.array([x_coord, y_coord, z_coord]))
                             nb_atoms += 1
                         elif line_type == "ATOM" and name_at == "C":
-                            self.residues[count_res].n_atom.set_coords(np.array([x_coord, y_coord, z_coord]))
+                            self.residues[count_res].n_atom\
+                            .set_coords(np.array([x_coord, y_coord, z_coord]))
                             nb_atoms += 1
                         if nb_atoms == 3:
                             count_res += 1
