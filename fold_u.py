@@ -77,10 +77,8 @@ def process(ali):
     """
     # Calculate the energy matrix
     energy_matrix = ali.calculate_energy(DIST_RANGE, GAP_PENALTY, DOPE_DICT)
-    # for i, res in enumerate(energy_matrix):
-    #     for j, res2 in enumerate(energy_matrix):
-    #         print("{:^5.1f}".format(energy_matrix[i, j]),end="")
-    #     print("")
+    # Return the sum of energy matrix with numpy's "Nan" interpreted as zeros with
+    # alignment's informations
     return np.nansum(energy_matrix), ali.num, ali.template.name
 
 
@@ -121,8 +119,9 @@ if __name__ == "__main__":
 
     # Parallelization of the main loop: threading calculations
     POOL = Pool(processes=cpu_count())
-    # Necessary to pass ARGUMENTS to parallelized function
-    THREADING_SCORE = Score(POOL.map(process, ALIGNMENT_DICT.values()))
+    # imap_unordered can smooth things out by yielding faster-calculated values
+    # ahead of slower-calculated values.
+    THREADING_SCORE = Score(POOL.imap_unordered(process, ALIGNMENT_DICT.values()))
     POOL.close()
     POOL.join()
 
