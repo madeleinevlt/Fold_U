@@ -61,7 +61,7 @@ fold_u.py takes in input N profil-profil alignments and their corresponding scor
 ## Documentation
 
 The documentation of our program, generated with Sphinx and Read The Docs theme, is accessible at the following address:
-[https://meetu-masterstudents.github.io/Fold_U/build/html/index.html](https://meetu-masterstudents.github.io/Fold_U/build/html/index.html)
+[https://meetu-masterstudents.github.io/Fold_U/](https://meetu-masterstudents.github.io/Fold_U/)
 
 ## Authors
 
