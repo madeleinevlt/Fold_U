@@ -19,7 +19,7 @@ Meet-U is a collaborative pedagogical and research initiative between several Un
 ### Clone the repository
 ```
 git clone https://github.com/meetU-MasterStudents/Fold_U.git
-cd 2018---2019-Equipe-4
+cd Fold_U
 ```
 
 ### Requirements
