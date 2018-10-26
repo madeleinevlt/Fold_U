@@ -7,10 +7,6 @@
 import numpy as np
 from Bio.SeqUtils import seq3
 
-# Local modules
-from src.template import Template
-from src.query import Query
-
 
 class Alignment:
     """
@@ -84,7 +80,6 @@ class Alignment:
                     continue
                 else:
                     # Calculate to distance between two residues
-                    #print(template[i].name, template[i].ca_atom.coords, template[j].name, template[j].ca_atom.coords)
                     dist = template[i].calculate_distance(template[j])
                     # Keep distances only in a defined range because we don't want to
                     # take into account directly bonded residues (dist < ~5 A) and too far residues
