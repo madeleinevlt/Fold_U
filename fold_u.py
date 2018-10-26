@@ -23,9 +23,10 @@
 
 # Third-party modules
 from multiprocessing import Pool, cpu_count
+import numpy as np
+from tqdm import tqdm
 from docopt import docopt
 from schema import Schema, And, Use, SchemaError
-import numpy as np
 
 # Local modules
 import src.parsing as parsing
@@ -119,11 +120,17 @@ if __name__ == "__main__":
 
     # Parallelization of the main loop: threading calculations
     POOL = Pool(processes=cpu_count())
+    # tqdm module enables an ETA progress bar of alignments
     # imap_unordered can smooth things out by yielding faster-calculated values
     # ahead of slower-calculated values.
-    THREADING_SCORE = Score(POOL.imap_unordered(process, ALIGNMENT_DICT.values()))
+    print("\nProcessing threading on templates ...\n\n")
+    RESULTS = [res_ali for res_ali in tqdm(POOL.imap_unordered(process,\
+                ALIGNMENT_DICT.values()), total=len(ALIGNMENT_DICT.values()))]
     POOL.close()
     POOL.join()
+
+    # Calculate the threading score of all alignments
+    THREADING_SCORE = Score(RESULTS)
 
     ### Results : Score and PDB files
     #################################
