@@ -58,6 +58,33 @@ def parse_dope(dope_file):
                 dope_dict[res_1+res_2] = np.fromstring(line[14:-1], dtype=float, sep=" ")
     return dope_dict
 
+def parse_blosum(blosum_file):
+    """
+        Extracts the substitution score for the 20*20 residus-CA pairs from the BLOSSUM62 matrix
+        and stores it in a dictionary with key = res_1-res_2 and value = an integer value of
+        the substitution score.
+
+        Args:
+            blossum file: The file containing substitution scores of the BLOSSUM62 for each amino
+                          acid pair. A positive score is given to the more likely substitutions
+                          while a negative score is given to the less likely substitutions.
+
+        Returns:
+            dict: A dictionary with key = res_1-res_2 and value = an integer value
+                  of the substitution score.
+    """
+    blosum_dict = {}
+    with open(blosum_file, "r") as file:
+        header = file.readline()[0:-1].split("  ")
+        lines = file.readlines()
+        j = 0
+        for l in lines:
+            elements = l[0:-1].split(" ")
+            for i in range(len(elements)):
+                blosum_dict[header[i]+header[j]] = int(elements[i])
+            j += 1
+    return blosum_dict
+
 
 def parse_foldrec(foldrec_file, nb_templates, metafold_dict):
     """
@@ -124,7 +151,9 @@ def parse_foldrec(foldrec_file, nb_templates, metafold_dict):
                     query_reg_count += 1
                 elif query_reg_count == 2:
                     for ind, ss_conf in enumerate(list(query_seq_found.group(2))):
-                        query_seq[ind].ss_conf = ss_conf
+                        if ss_conf != "-":
+                            ss_conf = int(ss_conf)
+                        query_seq[ind].ss_confidence = ss_conf
                     query_reg_count = 0
             # A template sequence is founds :
             if template_seq_found:
