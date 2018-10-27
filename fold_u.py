@@ -116,8 +116,10 @@ if __name__ == "__main__":
     METAFOLD_DICT = parsing.parse_metafold(METAFOLD_FILE)
     # Parse Foldrec file
     ALIGNMENT_DICT = parsing.parse_foldrec(FOLDREC_FILE, NB_TEMPLATES, METAFOLD_DICT)
+    # Parse DOPE file
     DOPE_DICT = parsing.parse_dope(DOPE_FILE)
-    parsing.parse_blosum(BLOSUM_FILE)
+    # Parse BLOSSUM file
+    BLOSSUM_DICT = parsing.parse_blosum(BLOSUM_FILE)
 
 
     ### TEST SCORES ###
