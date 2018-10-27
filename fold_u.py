@@ -4,7 +4,7 @@
 """
     Usage:
         fold_u.py FOLDREC_FILE [--nb_templates NUM] [--nb_pdb NUM] [--output PATH]
-                               [--metafold FILE] [--dope FILE]
+                               [--metafold FILE] [--dope FILE] [--blosum FILE]
 
     Options:
         -h, --help                            Show this
@@ -19,6 +19,8 @@
                                               [default: data/METAFOLD.list]
         -d FILE, --dope FILE                  Path to the dope.par file
                                               [default: data/dope.par]
+        -b FILE, --blosum FILE                  Path to the dope.par file
+                                              [default: data/BLOSUM62.txt]                                            
 """
 
 # Third-party modules
@@ -31,7 +33,7 @@ from schema import Schema, And, Use, SchemaError
 # Local modules
 import src.parsing as parsing
 from src.score import Score
-
+from src.scoring import *
 
 DIST_RANGE = [5, 15]
 GAP_PENALTY = 1
@@ -102,6 +104,8 @@ if __name__ == "__main__":
     METAFOLD_FILE = ARGUMENTS["--metafold"]
     # DOPE file
     DOPE_FILE = ARGUMENTS["--dope"]
+    # DOPE file
+    BLOSUM_FILE = ARGUMENTS["--blosum"]
     # SCORES file
     OUTPUT_PATH = ARGUMENTS["--output"]
 
@@ -113,6 +117,13 @@ if __name__ == "__main__":
     # Parse Foldrec file
     ALIGNMENT_DICT = parsing.parse_foldrec(FOLDREC_FILE, NB_TEMPLATES, METAFOLD_DICT)
     DOPE_DICT = parsing.parse_dope(DOPE_FILE)
+    parsing.parse_blosum(BLOSUM_FILE)
+
+
+    ### TEST SCORES ###
+    for ali in ALIGNMENT_DICT.values():
+        ss_score(ali)
+    ###################
 
 
     ### Main calculations
