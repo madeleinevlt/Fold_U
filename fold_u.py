@@ -20,7 +20,7 @@
         -d FILE, --dope FILE                  Path to the dope.par file
                                               [default: data/dope.par]
         -b FILE, --blosum FILE                  Path to the dope.par file
-                                              [default: data/BLOSUM62.txt]                                            
+                                              [default: data/BLOSUM62.txt]
 """
 
 # Third-party modules
@@ -125,6 +125,8 @@ if __name__ == "__main__":
     ### TEST SCORES ###
     for ali in ALIGNMENT_DICT.values():
         ss_score(ali)
+        blossum_score(ali, BLOSSUM_DICT)
+        break
     ###################
 
 

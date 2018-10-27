@@ -13,5 +13,18 @@ def ss_score(ali):
                 # print(res_q.ss, res_t.ss)
                 score += 1
     score = round((score/L),2) # Revoir la normalisation
-    # print(ali.num, score) 
+    # print(ali.num, score)
     return score
+
+
+def blossum_score(ali, BLOSSUM_DICT):
+    query = ali.query.residues
+    template = ali.template.residues
+    score_ali = 0
+    size = len(query)
+    for i in range(size):
+        if query[i].name == "-" or template[i].name == "-":
+            continue
+        else:
+            score_ali += BLOSSUM_DICT[query[i].name+template[i].name]
+    return(score_ali)
