@@ -4,7 +4,7 @@
 """
     Usage:
         fold_u.py FOLDREC_FILE [--nb_templates NUM] [--nb_pdb NUM] [--output PATH]
-                               [--metafold FILE] [--dope FILE] [--blosum FILE]
+                               [--metafold FILE] [--dope FILE]
 
     Options:
         -h, --help                            Show this
@@ -19,13 +19,10 @@
                                               [default: data/METAFOLD.list]
         -d FILE, --dope FILE                  Path to the dope.par file
                                               [default: data/dope.par]
-        -b FILE, --blosum FILE                  Path to the dope.par file
-                                              [default: data/BLOSUM62.txt]
 """
 
 # Third-party modules
 from multiprocessing import Pool, cpu_count
-import numpy as np
 from tqdm import tqdm
 from docopt import docopt
 from schema import Schema, And, Use, SchemaError
@@ -78,11 +75,11 @@ def process(ali):
                     (template's score, template's name)
 
     """
-    # Calculate the energy matrix
-    energy_matrix = ali.calculate_energy(DIST_RANGE, GAP_PENALTY, DOPE_DICT)
-    # Return the sum of energy matrix with numpy's "Nan" interpreted as zeros with
-    # alignment's informations
-    return np.nansum(energy_matrix), ali.num, ali.template.name
+    # Calculate the threading score of all alignments
+    threading_score = ali.calculate_threading_score(DIST_RANGE, GAP_PENALTY, DOPE_DICT)
+    physics_based_score = ali.calculate_physics_score()
+    
+    return threading_score + physics_based_score, ali.num, ali.template.name
 
 
 if __name__ == "__main__":
@@ -104,8 +101,6 @@ if __name__ == "__main__":
     METAFOLD_FILE = ARGUMENTS["--metafold"]
     # DOPE file
     DOPE_FILE = ARGUMENTS["--dope"]
-    # DOPE file
-    BLOSUM_FILE = ARGUMENTS["--blosum"]
     # SCORES file
     OUTPUT_PATH = ARGUMENTS["--output"]
 
@@ -118,15 +113,11 @@ if __name__ == "__main__":
     ALIGNMENT_DICT = parsing.parse_foldrec(FOLDREC_FILE, NB_TEMPLATES, METAFOLD_DICT)
     # Parse DOPE file
     DOPE_DICT = parsing.parse_dope(DOPE_FILE)
-    # Parse BLOSSUM file
-    BLOSSUM_DICT = parsing.parse_blosum(BLOSUM_FILE)
-
 
     ### TEST SCORES ###
-    for ali in ALIGNMENT_DICT.values():
-        ss_score(ali)
-        blossum_score(ali, BLOSSUM_DICT)
-        break
+    # for ali in ALIGNMENT_DICT.values():
+    #     print(ali.template.name)
+    #     ss_score(ali)
     ###################
 
 
@@ -139,15 +130,12 @@ if __name__ == "__main__":
     # imap_unordered can smooth things out by yielding faster-calculated values
     # ahead of slower-calculated values.
     print("\nProcessing threading on templates ...\n\n")
-    RESULTS = [res_ali for res_ali in tqdm(POOL.imap_unordered(process,\
-                ALIGNMENT_DICT.values()), total=len(ALIGNMENT_DICT.values()))]
+    RESULTS = Score([res_ali for res_ali in tqdm(POOL.imap_unordered(process,\
+                ALIGNMENT_DICT.values()), total=len(ALIGNMENT_DICT.values()))])
     POOL.close()
     POOL.join()
 
-    # Calculate the threading score of all alignments
-    THREADING_SCORE = Score(RESULTS)
-
     ### Results : Score and PDB files
     #################################
-    THREADING_SCORE.write_score(OUTPUT_PATH, NB_PDB, ALIGNMENT_DICT)
+    RESULTS.write_score(OUTPUT_PATH, NB_PDB, ALIGNMENT_DICT)
     print("\nThe program ended successfully !\nThe results are stored in " + OUTPUT_PATH)

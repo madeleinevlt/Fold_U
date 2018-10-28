@@ -5,6 +5,7 @@
 
 # Third-party modules
 import numpy as np
+from Bio.SubsMat import MatrixInfo
 from Bio.SeqUtils import seq3
 
 
@@ -30,12 +31,14 @@ class Alignment:
         self.template = template
 
     #@fn_timer
-    def calculate_energy(self, dist_range, gap_penalty, dope_dict):
+    def calculate_threading_score(self, dist_range, gap_penalty, dope_dict):
         """
-            Calculate the matrix of distances of pair residues of the query sequence,
-            using the coordinates of the template sequence: threading of the query
-            on the template sequence. The distance calculation is optimized.
-            The calculated distance is then convert into a dope energy value.
+            Calculate the threading score of the query on the template sequence.
+            1) For each pair residues of the query sequence the distance between them is
+            calculated using the coordinates of the template sequence.The distance calculation
+            is optimized.
+            2) The calculated distance is then convert into a dope energy value.
+            3) All elements of the energy matrix generated are finally sum.
 
             Args:
                 dist_range (list of int): Range of distances in angströms. Distances
@@ -45,8 +48,7 @@ class Alignment:
                                         value = an array of 30 dope energy values.
 
             Returns:
-                numpy 2D array: 2D matrix containing energy between pairs of residues
-                                of the query sequence threaded on the template.
+                float: The threading score calculated. Sum of the energy matrix.
         """
         query = self.query.residues
         template = self.template.residues
@@ -88,7 +90,36 @@ class Alignment:
                         # So 30 intervals and max value = 15
                         interval_index = round(int((dist * 30) / 15))
                         energy[i, j] = dope_dict[row_res.name+col_res.name][interval_index]
-        return energy
+        # Return the sum of energy matrix with numpy's "Nan" interpreted as zeros
+        return np.nansum(energy)
+
+    def calculate_physics_score(self):
+        """
+            Calculate a physics-based score using the BLOSSUM62 matrix. This matrix contains
+            substitution scores for each amino acid pair. A positive score is given to the more
+            likely substitutions while a negative score is given to the less likely substitutions.
+
+            Args:
+                void
+
+            Returns:
+                int: The physics-based score calculated.
+        """
+        # dictionary containing substitution scores of the BLOSSUM62 matrix
+        blosum62 = MatrixInfo.blosum62
+        score = 0
+        for ind, res_q in enumerate(self.query.residues):
+            res_t = self.template.residues[ind]
+            if res_q.name == "-" or res_t.name == "-":
+                continue
+            # The BLOSSUM62 matrix is symetric, thus we need to test
+            # if (res_1, res_2) key is in the dictionary.
+            if (res_q.name, res_t.name) in blosum62:
+                score += blosum62[(res_q.name, res_t.name)]
+            # If not, the corresponding key is (res_2, res_1)
+            else:
+                score += blosum62[(res_t.name, res_q.name)]
+        return -score
 
     def write_pdb(self, pdb_path):
         """
