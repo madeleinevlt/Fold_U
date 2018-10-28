@@ -24,6 +24,10 @@ class Template:
         self.residues = residues
         self.pdb = None
 
+
+    def display(self):
+        return "".join(str(res.name) for res in self.residues)
+
     def set_pdb_name(self, metafold_dict):
         """
             Get the PDB file name of the current template from the template's name.

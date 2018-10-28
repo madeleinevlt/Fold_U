@@ -73,6 +73,8 @@ def process(ali):
             tupple: Sum of the different scores and alignment's informations (num and name)
 
     """
+    ali.write_alignment_for_modeller()
+    ali.generate_model_with_modeller()
     # Calculate the threading score of all alignments
     threading_score = ali.calculate_threading_score(DIST_RANGE, GAP_PENALTY, DOPE_DICT)
     physics_based_score = ali.calculate_physics_score()

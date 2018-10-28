@@ -7,6 +7,9 @@
 import numpy as np
 from Bio.SubsMat import MatrixInfo
 from Bio.SeqUtils import seq3
+from modeller import *              # Load standard Modeller classes
+from modeller.automodel import *    # Load the automodel class
+import os
 
 
 class Alignment:
@@ -93,6 +96,7 @@ class Alignment:
         # Return the sum of energy matrix with numpy's "Nan" interpreted as zeros
         return np.nansum(energy)
 
+
     def calculate_physics_score(self):
         """
             Calculate a physics-based score using the BLOSSUM62 matrix. This matrix contains
@@ -120,6 +124,7 @@ class Alignment:
             else:
                 score += blosum62[(res_t.name, res_q.name)]
         return -score
+
 
     def write_pdb(self, pdb_path):
         """
@@ -161,3 +166,63 @@ class Alignment:
                 ind += 1
             # The two last lines of the created pdb file ("END" and "TER" lines)
             file.write("END\n")
+
+
+    def write_alignment_for_modeller(self):
+        """
+            Modeller requires a specifically formatted alignment file ".ali",
+            following the PIR type format.
+            This function writes this .ali file for the current alignment between
+            the query and the template.
+
+            Example of an alignment.ali file for Modeller:
+            >P1;5fd1
+            structureX:5fd1:1    :A:106  :A:ferredoxin:Azotobacter vinelandii: 1.90: 0.19
+            AFVVTDNCIKCKYTDCVEVCPVDCFYEGPNFLVIHPDECIDCALCEPECPAQAIFSEDEVPEDMQEFIQLNAELA
+            EVWPNITEKKDPLPDAEDWDGVKGKLQHLER*
+
+            >P1;1fdx
+            sequence:1fdx:1    : :54   : :ferredoxin:Peptococcus aerogenes: 2.00:-1.00
+            AYVINDSC--IACGACKPECPVNIIQGS--IYAIDADSCIDCGSCASVCPVGAPNPED-----------------
+            -------------------------------*
+        """
+        with open("alignment.ali", "w") as ali_out:
+            template_len = len([res for res in self.template.residues if res.name != '-'])
+            ali_out.write(">P1;" + self.template.pdb.split(".")[0])
+            ali_out.write("\nstructure:" + self.template.pdb.split(".")[0] + ":1:@:" + str(template_len) + ":@::::\n")
+            ali_out.write(self.template.display() + "*")
+            ali_out.write("\n\n>P1;query")
+            ali_out.write("\nsequence:query:" + str(self.query.first) + ":@:" + str(self.query.last) + ":@::::\n")
+            ali_out.write(self.query.display() + "*")
+
+
+    def generate_model_with_modeller(self):
+        """
+        This function constructs a single comparative model for the query sequence
+        from the known template structure, using alignment.ali, a PIR format
+        alignment of query and template. The final model is written into the PDB
+        file
+        """
+        # request no verbose output (still gives few that will be silenced afterwards)
+        log.none()
+        # create a new MODELLER environment to build this model in
+        env = environ()
+
+        # directories for input atom files
+        env.io.atom_files_directory = ['data/pdb/' + self.template.name]
+
+        model = automodel(env,
+                          # alignment filename
+                          alnfile  = 'alignment.ali',
+                          # codes of the templates
+                          knowns   = self.template.pdb.split(".")[0],
+                          # code of the target
+                          sequence = 'query')
+        # index of the first and last model (determines how many models to calculate)
+        model.starting_model = 1
+        model.ending_model = 1
+
+        # We want no log info at all from modeller
+        with contextlib.redirect_stdout(None):
+            # do the actual comparative modeling
+            model.make()

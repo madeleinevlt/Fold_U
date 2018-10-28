@@ -29,6 +29,12 @@ class Residue:
         self.ss = None
         self.ss_confidence = None
 
+    def __str__(self):
+        return str(self.name)
+
+    def __repr__(self):
+        return str(self.name)
+
     def calculate_distance(self, residue):
         """
             Calculate Euclidian distance between two residues with THE most efficient method.

@@ -20,3 +20,7 @@ class Query:
         self.residues = residues
         self.first = first
         self.last = last
+
+
+    def display(self):
+        return "".join(str(res.name) for res in self.residues)
