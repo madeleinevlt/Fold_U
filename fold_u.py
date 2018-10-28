@@ -30,7 +30,6 @@ from schema import Schema, And, Use, SchemaError
 # Local modules
 import src.parsing as parsing
 from src.score import Score
-from src.scoring import *
 
 DIST_RANGE = [5, 15]
 GAP_PENALTY = 1
@@ -65,20 +64,18 @@ def check_args():
 
 def process(ali):
     """
-        Does the threading and gives the score for a given Alignment object.
+        Generates the threading and the physics-based scores for a given Alignment object.
 
         Args:
             ali (alignment object): An object of the class Alignment
 
         Returns:
-            tupple: threading's result for the given alignment as a tuple
-                    (template's score, template's name)
+            tupple: Sum of the different scores and alignment's informations (num and name)
 
     """
     # Calculate the threading score of all alignments
     threading_score = ali.calculate_threading_score(DIST_RANGE, GAP_PENALTY, DOPE_DICT)
     physics_based_score = ali.calculate_physics_score()
-    
     return threading_score + physics_based_score, ali.num, ali.template.name
 
 
@@ -104,6 +101,7 @@ if __name__ == "__main__":
     # SCORES file
     OUTPUT_PATH = ARGUMENTS["--output"]
 
+
     ### Parse data files
     ####################
 
@@ -113,12 +111,6 @@ if __name__ == "__main__":
     ALIGNMENT_DICT = parsing.parse_foldrec(FOLDREC_FILE, NB_TEMPLATES, METAFOLD_DICT)
     # Parse DOPE file
     DOPE_DICT = parsing.parse_dope(DOPE_FILE)
-
-    ### TEST SCORES ###
-    # for ali in ALIGNMENT_DICT.values():
-    #     print(ali.template.name)
-    #     ss_score(ali)
-    ###################
 
 
     ### Main calculations
