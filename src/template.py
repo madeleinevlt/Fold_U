@@ -23,6 +23,7 @@ class Template:
         self.name = name
         self.residues = residues
         self.pdb = None
+        self.first = None
 
 
     def display(self):
@@ -54,11 +55,17 @@ class Template:
         """
         count_res = 0
         nb_atoms = 0
+        flag = True
         with open("data/pdb/" + self.name + "/" + self.pdb, 'r') as file:
             for line in file:
                 line_type = line[0:6].strip()
                 name_at = line[12:16].strip()
                 if line_type == "ATOM" and (name_at == "N" or name_at == "CA" or name_at == "C"):
+                    # In some PDBs the residues ids do not start at 1
+                    # so we remember the first id number
+                    if flag:
+                        self.first = int(line[22:26].strip())
+                        flag = False
                     x_coord = float(line[30:38].strip())
                     y_coord = float(line[38:46].strip())
                     z_coord = float(line[46:54].strip())
