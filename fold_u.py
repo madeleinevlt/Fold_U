@@ -14,7 +14,7 @@
                                               [default: 10]
         -o PATH, --output PATH                Path to the directory containing
                                               the result files (scores and pdb)
-                                              [default: res/threading]
+                                              [default: res/]
         -m FILE, --metafold FILE              Path to the metafold.list file
                                               [default: data/METAFOLD.list]
         -d FILE, --dope FILE                  Path to the dope.par file
@@ -73,8 +73,8 @@ def process(ali):
             tupple: Sum of the different scores and alignment's informations (num and name)
 
     """
-    ali.write_alignment_for_modeller()
-    ali.generate_model_with_modeller()
+    ali.write_alignment_for_modeller(OUTPUT_PATH)
+    ali.generate_model_with_modeller(OUTPUT_PATH)
     # Calculate the threading score of all alignments
     threading_score = ali.calculate_threading_score(DIST_RANGE, GAP_PENALTY, DOPE_DICT)
     physics_based_score = ali.calculate_physics_score()
@@ -119,7 +119,7 @@ if __name__ == "__main__":
     #####################
 
     # Parallelization of the main loop: threading calculations
-    POOL = Pool(processes=cpu_count())
+    POOL = Pool(processes=1)
     # tqdm module enables an ETA progress bar of alignments
     # imap_unordered can smooth things out by yielding faster-calculated values
     # ahead of slower-calculated values.

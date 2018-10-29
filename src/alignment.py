@@ -9,6 +9,7 @@ from Bio.SubsMat import MatrixInfo
 from Bio.SeqUtils import seq3
 from modeller import *              # Load standard Modeller classes
 from modeller.automodel import *    # Load the automodel class
+import contextlib
 import os
 
 
@@ -168,7 +169,7 @@ class Alignment:
             file.write("END\n")
 
 
-    def write_alignment_for_modeller(self):
+    def write_alignment_for_modeller(self, res_path):
         """
             Modeller requires a specifically formatted alignment file ".ali",
             following the PIR type format.
@@ -186,34 +187,46 @@ class Alignment:
             AYVINDSC--IACGACKPECPVNIIQGS--IYAIDADSCIDCGSCASVCPVGAPNPED-----------------
             -------------------------------*
         """
-        with open("alignment.ali", "w") as ali_out:
+        print(self.template.first)
+        ali_out_dir = res_path + "modeller/alignments/"
+        if not os.path.exists(ali_out_dir):
+            os.makedirs(ali_out_dir)
+        with open(ali_out_dir+self.template.name+"_alignment.ali", "w") as ali_out:
             template_len = len([res for res in self.template.residues if res.name != '-'])
             ali_out.write(">P1;" + self.template.pdb.split(".")[0])
-            ali_out.write("\nstructure:" + self.template.pdb.split(".")[0] + ":1:@:" + str(template_len) + ":@::::\n")
+            ali_out.write("\nstructure:" + self.template.pdb.split(".")[0] + \
+                            ":" + str(self.template.first) +":@:" + str(template_len) + ":@::::\n")
             ali_out.write(self.template.display() + "*")
             ali_out.write("\n\n>P1;query")
-            ali_out.write("\nsequence:query:" + str(self.query.first) + ":@:" + str(self.query.last) + ":@::::\n")
+            ali_out.write("\nsequence:query:" + str(self.query.first) + ":@:" + \
+                            str(self.query.last) + ":@::::\n")
             ali_out.write(self.query.display() + "*")
 
 
-    def generate_model_with_modeller(self):
+    def generate_model_with_modeller(self, res_path):
         """
         This function constructs a single comparative model for the query sequence
         from the known template structure, using alignment.ali, a PIR format
         alignment of query and template. The final model is written into the PDB
         file
         """
+        root_dir = os.getcwd()
+        modeller_out_dir = res_path + "modeller/"
+        ali_dir = "alignments/"
+        # MODELLER generates the result files in his current directory, so we must
+        # go to the results directory and come back to root dir afterwards.
+        os.chdir(modeller_out_dir)
         # request no verbose output (still gives few that will be silenced afterwards)
         log.none()
         # create a new MODELLER environment to build this model in
         env = environ()
 
         # directories for input atom files
-        env.io.atom_files_directory = ['data/pdb/' + self.template.name]
+        env.io.atom_files_directory = [root_dir + '/data/pdb/' + self.template.name]
 
         model = automodel(env,
                           # alignment filename
-                          alnfile  = 'alignment.ali',
+                          alnfile  = ali_dir + self.template.name+'_alignment.ali',
                           # codes of the templates
                           knowns   = self.template.pdb.split(".")[0],
                           # code of the target
@@ -226,3 +239,5 @@ class Alignment:
         with contextlib.redirect_stdout(None):
             # do the actual comparative modeling
             model.make()
+        # Go back to root directory
+        os.chdir(root_dir)
