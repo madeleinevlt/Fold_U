@@ -28,8 +28,15 @@ Install the few required packages / modules:
 pip install -r src/requirements.txt
 ```
 
+MODELLER is also required, and can be installed easily with Conda:
+```
+conda install -c salilab modeller
+```
+You need to register to get a license key: https://salilab.org/modeller/registration.html
+And follow instructions during installation to insert license key in the program.
+
 ## Run the program
-fold_u.py takes in input N profil-profil alignments and their corresponding scores (foldrec file).
+`fold_u.py` takes in input N profil-profil alignments and their corresponding scores (foldrec file).
 
 ### Run the test
 ```
@@ -70,7 +77,7 @@ We are master students in bioinformatics at Paris Diderot University.
 - [Hélène Kabbech](https://github.com/kabhel)
 - [Tom Gutman](https://github.com/tomgutman)
 - [Flora Mikaeloff](https://github.com/FloraMika)
-- [Franz-Arnold Ake](https://github.com/franzx5) 
+- [Franz-Arnold Ake](https://github.com/franzx5)
 
 ## License
 
