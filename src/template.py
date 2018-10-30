@@ -5,6 +5,7 @@
 
 # Third-party modules
 import numpy as np
+import re
 
 
 class Template:
