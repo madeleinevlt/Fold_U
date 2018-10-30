@@ -23,6 +23,7 @@ class Template:
         self.name = name
         self.residues = residues
         self.pdb = None
+        self.benchmark = None
 
     def set_pdb_name(self, metafold_dict):
         """
@@ -77,3 +78,25 @@ class Template:
                         if nb_atoms == 3:
                             count_res += 1
                             nb_atoms = 0
+
+    def set_benchmark(foldrec):
+        """  
+            Parse the benchmark.list file to extract the template and the structure corresponding to the selected foldrec.
+
+            Args:
+                the name of the foldrec (noramly found in FOLDREC_FILE)
+
+            Returns:
+                void
+        """
+        
+        re_foldrec = re.compile("^.*\\/(\\w*)")
+        hit_foldrec = re.search(re_foldrec, FOLDREC_FILE)
+        with open("data/Benchmark.list","r") as bench:
+            for line in bench:
+                if hit_foldrec.group(1) in line:
+                    template_benchmark = line[0:-1].split(": ")[1].split(", ")
+                    for i in template_benchmark:
+                        template = i.split(" ")[0]
+                        structure = i.split(" ")[1]
+                        ALIGNMENT_DICT[template].template.benchmark = structure
