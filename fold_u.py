@@ -4,7 +4,7 @@
 """
     Usage:
         fold_u.py FOLDREC_FILE [--nb_templates NUM] [--nb_pdb NUM] [--output PATH]
-                               [--metafold FILE] [--dope FILE]
+                               [--metafold FILE] [--dope FILE] [--benchmark FILE]
 
     Options:
         -h, --help                            Show this
@@ -16,9 +16,11 @@
                                               the result files (scores and pdb)
                                               [default: res/threading]
         -m FILE, --metafold FILE              Path to the metafold.list file
-                                              [default: data/METAFOLD.list]
+                                              [default: data/metafold.list]
         -d FILE, --dope FILE                  Path to the dope.par file
                                               [default: data/dope.par]
+        -b FILE, --benchmark FILE             Path to the benchmark.list file
+                                              [default: data/benchmark.list]
 """
 
 # Third-party modules
@@ -32,7 +34,7 @@ import src.parsing as parsing
 from src.score import Score
 
 DIST_RANGE = [5, 15]
-GAP_PENALTY = 1
+GAP_PENALTY = 0
 
 
 def check_args():
@@ -49,6 +51,7 @@ def check_args():
         'FOLDREC_FILE': Use(open, error='FOLDREC_FILE should be readable'),
         '--metafold': Use(open, error='METAFOLD_FILE should be readable'),
         '--dope': Use(open, error='DOPE_FILE should be readable'),
+        '--benchmark': Use(open, error='BENCHMARK_FILE should be readable'),
         '--nb_templates': And(Use(int), lambda n: 1 <= n <= 413,\
                                 error='--nb_templates=NUM should be integer 1 <= N <= 413'),
         '--nb_pdb': And(Use(int), lambda n: 1 <= n <= 413,\
@@ -70,13 +73,14 @@ def process(ali):
             ali (alignment object): An object of the class Alignment
 
         Returns:
-            tupple: Sum of the different scores and alignment's informations (num and name)
+            tupple: (Number of the Alignment, Template's name, Template's benchmark,
+                    Sum of the different scores)
 
     """
     # Calculate the threading score of all alignments
     threading_score = ali.calculate_threading_score(DIST_RANGE, GAP_PENALTY, DOPE_DICT)
     physics_based_score = ali.calculate_physics_score()
-    return threading_score + physics_based_score, ali.num, ali.template.name
+    return ali.num, ali.template.name, ali.template.benchmark, threading_score+physics_based_score
 
 
 if __name__ == "__main__":
@@ -98,7 +102,9 @@ if __name__ == "__main__":
     METAFOLD_FILE = ARGUMENTS["--metafold"]
     # DOPE file
     DOPE_FILE = ARGUMENTS["--dope"]
-    # SCORES file
+    # BENCHMARK file
+    BENCHMARK_FILE = ARGUMENTS["--benchmark"]
+    # OUTPUT file
     OUTPUT_PATH = ARGUMENTS["--output"]
 
 
@@ -109,6 +115,8 @@ if __name__ == "__main__":
     METAFOLD_DICT = parsing.parse_metafold(METAFOLD_FILE)
     # Parse Foldrec file
     ALIGNMENT_DICT = parsing.parse_foldrec(FOLDREC_FILE, NB_TEMPLATES, METAFOLD_DICT)
+    # Set the benchmark of the query
+    parsing.set_benchmark(BENCHMARK_FILE, FOLDREC_FILE, ALIGNMENT_DICT)
     # Parse DOPE file
     DOPE_DICT = parsing.parse_dope(DOPE_FILE)
 
