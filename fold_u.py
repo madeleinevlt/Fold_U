@@ -73,14 +73,15 @@ def process(ali):
             ali (alignment object): An object of the class Alignment
 
         Returns:
-            tupple: (Sum of the different scores, Number of the Alignment, Template's name,
-                    Template's benchmark)
+            tupple: (Sum of the different scores, Number of the Alignment,
+                    Template's name, Template's benchmark)
 
     """
     # Calculate the threading score of all alignments
     threading_score = ali.calculate_threading_score(DIST_RANGE, GAP_PENALTY, DOPE_DICT)
     physics_based_score = ali.calculate_physics_score()
-    return threading_score, ali.num, ali.template.name, ali.template.benchmark
+    total_energy_score = threading_score + physics_based_score
+    return total_energy_score, ali.num, ali.template.name, ali.template.benchmark
 
 
 if __name__ == "__main__":
@@ -116,7 +117,7 @@ if __name__ == "__main__":
     # Parse Foldrec file
     ALIGNMENT_DICT = parsing.parse_foldrec(FOLDREC_FILE, NB_TEMPLATES, METAFOLD_DICT)
     # Set the benchmark of the query
-    parsing.set_benchmark(BENCHMARK_FILE, FOLDREC_FILE, ALIGNMENT_DICT)
+    parsing.parse_benchmark(BENCHMARK_FILE, FOLDREC_FILE, ALIGNMENT_DICT)
     # Parse DOPE file
     DOPE_DICT = parsing.parse_dope(DOPE_FILE)
 
