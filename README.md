@@ -41,7 +41,7 @@ fold_u.py takes in input N profil-profil alignments and their corresponding scor
 
     Usage:
         fold_u.py FOLDREC_FILE [--nb_templates NUM] [--nb_pdb NUM] [--output PATH]
-                               [--metafold FILE] [--dope FILE]
+                               [--metafold FILE] [--dope FILE] [--benchmark FILE]
 
     Options:
         -h, --help                            Show this
@@ -53,9 +53,11 @@ fold_u.py takes in input N profil-profil alignments and their corresponding scor
                                               the result files (scores and pdb)
                                               [default: res/threading]
         -m FILE, --metafold FILE              Path to the metafold.list file
-                                              [default: data/METAFOLD.list]
+                                              [default: data/metafold.list]
         -d FILE, --dope FILE                  Path to the dope.par file
                                               [default: data/dope.par]
+        -b FILE, --benchmark FILE             Path to the benchmark.list file
+                                              [default: data/benchmark.list]
 ```
 
 ## Documentation

@@ -23,6 +23,7 @@ class Template:
         self.name = name
         self.residues = residues
         self.pdb = None
+        self.benchmark = ""
 
     def set_pdb_name(self, metafold_dict):
         """
@@ -77,3 +78,20 @@ class Template:
                         if nb_atoms == 3:
                             count_res += 1
                             nb_atoms = 0
+
+
+    def set_benchmark(self, fold_type):
+        """
+            Sets the benchmark attribute of the template.
+            The benchmark attribute represents the fold family type of the
+            template: "Family", "Superfamily" or "Fold", that is to say how similar
+            the template is from the query. This is necessary to be
+            able to benchmark the new scoring functions.
+
+            Args:
+                fold_type (str): "Family", "Superfamily" or "Fold"
+
+            Returns:
+                void
+        """
+        self.benchmark = fold_type

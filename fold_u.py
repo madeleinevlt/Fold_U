@@ -4,7 +4,7 @@
 """
     Usage:
         fold_u.py FOLDREC_FILE [--nb_templates NUM] [--nb_pdb NUM] [--output PATH]
-                               [--metafold FILE] [--dope FILE]
+                               [--metafold FILE] [--dope FILE] [--benchmark FILE]
 
     Options:
         -h, --help                            Show this
@@ -16,14 +16,15 @@
                                               the result files (scores and pdb)
                                               [default: res/threading]
         -m FILE, --metafold FILE              Path to the metafold.list file
-                                              [default: data/METAFOLD.list]
+                                              [default: data/metafold.list]
         -d FILE, --dope FILE                  Path to the dope.par file
                                               [default: data/dope.par]
+        -b FILE, --benchmark FILE             Path to the benchmark.list file
+                                              [default: data/benchmark.list]
 """
 
 # Third-party modules
 from multiprocessing import Pool, cpu_count
-import numpy as np
 from tqdm import tqdm
 from docopt import docopt
 from schema import Schema, And, Use, SchemaError
@@ -32,9 +33,8 @@ from schema import Schema, And, Use, SchemaError
 import src.parsing as parsing
 from src.score import Score
 
-
 DIST_RANGE = [5, 15]
-GAP_PENALTY = 1
+GAP_PENALTY = 0
 
 
 def check_args():
@@ -51,6 +51,7 @@ def check_args():
         'FOLDREC_FILE': Use(open, error='FOLDREC_FILE should be readable'),
         '--metafold': Use(open, error='METAFOLD_FILE should be readable'),
         '--dope': Use(open, error='DOPE_FILE should be readable'),
+        '--benchmark': Use(open, error='BENCHMARK_FILE should be readable'),
         '--nb_templates': And(Use(int), lambda n: 1 <= n <= 413,\
                                 error='--nb_templates=NUM should be integer 1 <= N <= 413'),
         '--nb_pdb': And(Use(int), lambda n: 1 <= n <= 413,\
@@ -66,21 +67,21 @@ def check_args():
 
 def process(ali):
     """
-        Does the threading and gives the score for a given Alignment object.
+        Generates the threading and the physics-based scores for a given Alignment object.
 
         Args:
             ali (alignment object): An object of the class Alignment
 
         Returns:
-            tupple: threading's result for the given alignment as a tuple
-                    (template's score, template's name)
+            tupple: (Sum of the different scores, Number of the Alignment,
+                    Template's name, Template's benchmark)
 
     """
-    # Calculate the energy matrix
-    energy_matrix = ali.calculate_energy(DIST_RANGE, GAP_PENALTY, DOPE_DICT)
-    # Return the sum of energy matrix with numpy's "Nan" interpreted as zeros with
-    # alignment's informations
-    return np.nansum(energy_matrix), ali.num, ali.template.name
+    # Calculate the threading score of all alignments
+    threading_score = ali.calculate_threading_score(DIST_RANGE, GAP_PENALTY, DOPE_DICT)
+    physics_based_score = ali.calculate_physics_score()
+    total_energy_score = threading_score + physics_based_score
+    return total_energy_score, ali.num, ali.template.name, ali.template.benchmark
 
 
 if __name__ == "__main__":
@@ -102,8 +103,11 @@ if __name__ == "__main__":
     METAFOLD_FILE = ARGUMENTS["--metafold"]
     # DOPE file
     DOPE_FILE = ARGUMENTS["--dope"]
-    # SCORES file
+    # BENCHMARK file
+    BENCHMARK_FILE = ARGUMENTS["--benchmark"]
+    # OUTPUT file
     OUTPUT_PATH = ARGUMENTS["--output"]
+
 
     ### Parse data files
     ####################
@@ -112,6 +116,9 @@ if __name__ == "__main__":
     METAFOLD_DICT = parsing.parse_metafold(METAFOLD_FILE)
     # Parse Foldrec file
     ALIGNMENT_DICT = parsing.parse_foldrec(FOLDREC_FILE, NB_TEMPLATES, METAFOLD_DICT)
+    # Set the benchmark of the query
+    parsing.parse_benchmark(BENCHMARK_FILE, FOLDREC_FILE, ALIGNMENT_DICT)
+    # Parse DOPE file
     DOPE_DICT = parsing.parse_dope(DOPE_FILE)
 
 
@@ -124,15 +131,12 @@ if __name__ == "__main__":
     # imap_unordered can smooth things out by yielding faster-calculated values
     # ahead of slower-calculated values.
     print("\nProcessing threading on templates ...\n\n")
-    RESULTS = [res_ali for res_ali in tqdm(POOL.imap_unordered(process,\
-                ALIGNMENT_DICT.values()), total=len(ALIGNMENT_DICT.values()))]
+    RESULTS = Score([res_ali for res_ali in tqdm(POOL.imap_unordered(process,\
+                ALIGNMENT_DICT.values()), total=len(ALIGNMENT_DICT.values()))])
     POOL.close()
     POOL.join()
 
-    # Calculate the threading score of all alignments
-    THREADING_SCORE = Score(RESULTS)
-
     ### Results : Score and PDB files
     #################################
-    THREADING_SCORE.write_score(OUTPUT_PATH, NB_PDB, ALIGNMENT_DICT)
+    RESULTS.write_score(OUTPUT_PATH, NB_PDB, ALIGNMENT_DICT)
     print("\nThe program ended successfully !\nThe results are stored in " + OUTPUT_PATH)
