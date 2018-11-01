@@ -73,14 +73,14 @@ def process(ali):
             ali (alignment object): An object of the class Alignment
 
         Returns:
-            tupple: (Number of the Alignment, Template's name, Template's benchmark,
-                    Sum of the different scores)
+            tupple: (Sum of the different scores, Number of the Alignment, Template's name,
+                    Template's benchmark)
 
     """
     # Calculate the threading score of all alignments
     threading_score = ali.calculate_threading_score(DIST_RANGE, GAP_PENALTY, DOPE_DICT)
     physics_based_score = ali.calculate_physics_score()
-    return ali.num, ali.template.name, ali.template.benchmark, threading_score+physics_based_score
+    return threading_score, ali.num, ali.template.name, ali.template.benchmark
 
 
 if __name__ == "__main__":

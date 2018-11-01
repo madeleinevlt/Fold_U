@@ -38,7 +38,7 @@ class Score:
             template_num = 1
             file.write("{:<4s} {:<18s}{:<12s}{:>6s}\n"\
                 .format("#num", "template name", "benchmark", "score"))
-            for num, name, benchmark, score in sorted(self.iterator):
+            for score, num, name, benchmark in sorted(self.iterator):
                 # Write a line in the score.out file containing the
                 # score and the name of the current ranked template
                 file.write("{:<5d}{:<18s}{:<12s}{:>6d}\n"\
