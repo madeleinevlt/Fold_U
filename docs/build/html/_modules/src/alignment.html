@@ -1,0 +1,343 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>src.alignment &mdash; fold-u 1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> fold-u
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../README.html">README</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../alignment.html">Alignment module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../query.html">Query module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../template.html">Template module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../residue.html">Residue module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../atom.html">Atom module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../parsing.html">Parsing module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../time.html">Time module</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">fold-u</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>src.alignment</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for src.alignment</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">.. module:: Alignment</span>
+<span class="sd">   :synopsis: This module implements the Alignment class.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="c1"># Third-party modules</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">Bio.SeqUtils</span> <span class="k">import</span> <span class="n">seq3</span>
+
+<span class="c1"># Local modules</span>
+<span class="kn">from</span> <span class="nn">src.template</span> <span class="k">import</span> <span class="n">Template</span>
+<span class="kn">from</span> <span class="nn">src.query</span> <span class="k">import</span> <span class="n">Query</span>
+
+
+<div class="viewcode-block" id="Alignment"><a class="viewcode-back" href="../../alignment.html#src.alignment.Alignment">[docs]</a><span class="k">class</span> <span class="nc">Alignment</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    .. class:: Alignment</span>
+
+<span class="sd">      This class groups informations about an alignment.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        num (int): Number of the alignment</span>
+<span class="sd">        score: Score of the alignment</span>
+<span class="sd">        query: Instance of a Query object as</span>
+<span class="sd">               ``Query(query_residues, query_first, query_last)``</span>
+<span class="sd">        template: Instance of a Template object as</span>
+<span class="sd">                  ``Template(template_name, template_residues)``</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num</span><span class="p">,</span> <span class="n">score</span><span class="p">,</span> <span class="n">query</span><span class="p">,</span> <span class="n">template</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">num</span> <span class="o">=</span> <span class="n">num</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">score</span> <span class="o">=</span> <span class="n">score</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">query</span> <span class="o">=</span> <span class="n">query</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">template</span> <span class="o">=</span> <span class="n">template</span>
+
+    <span class="c1">#@fn_timer</span>
+<div class="viewcode-block" id="Alignment.calculate_energy"><a class="viewcode-back" href="../../alignment.html#src.alignment.Alignment.calculate_energy">[docs]</a>    <span class="k">def</span> <span class="nf">calculate_energy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dist_range</span><span class="p">,</span> <span class="n">gap_penalty</span><span class="p">,</span> <span class="n">dope_dict</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Calculate the matrix of distances of pair residues of the query sequence,</span>
+<span class="sd">            using the coordinates of the template sequence: threading of the query</span>
+<span class="sd">            on the template sequence. The distance calculation is optimized.</span>
+<span class="sd">            The calculated distance is then convert into a dope energy value.</span>
+
+<span class="sd">            Args:</span>
+<span class="sd">                dist_range (list of int): Range of distances in angströms. Distances</span>
+<span class="sd">                                          within this range only are taken into account</span>
+<span class="sd">                gap_penalty (int): Gap penalty</span>
+<span class="sd">                dope_dict (dictionary): A dictionary with key = res_1-res_2 and</span>
+<span class="sd">                                        value = an array of 30 dope energy values.</span>
+
+<span class="sd">            Returns:</span>
+<span class="sd">                numpy 2D array: 2D matrix containing energy between pairs of residues</span>
+<span class="sd">                                of the query sequence threaded on the template.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">query</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">residues</span>
+        <span class="n">template</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">template</span><span class="o">.</span><span class="n">residues</span>
+
+        <span class="n">query_size</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">query</span><span class="p">)</span>
+        <span class="c1"># This sets a numpy matrix of shape query * query which will contain all</span>
+        <span class="c1"># the energies corresponding to distances between all pairs of residues</span>
+        <span class="c1"># between the query and itself: the coordinates are the ones from the template.</span>
+        <span class="n">energy</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="n">query_size</span><span class="p">,</span> <span class="n">query_size</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">object</span><span class="p">)</span>
+        <span class="c1"># Filling the matrix afterwards with &quot;NaN&quot; is faster</span>
+        <span class="n">energy</span><span class="o">.</span><span class="n">fill</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">row_res</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">query</span><span class="p">):</span>
+            <span class="c1"># The gap was already treated</span>
+            <span class="k">if</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="p">(</span><span class="n">query_size</span> <span class="o">-</span> <span class="mi">3</span><span class="p">)</span> <span class="ow">and</span> <span class="n">energy</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">2</span><span class="p">)]</span> <span class="o">==</span> <span class="n">gap_penalty</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="c1"># There is a gap in the query or the template</span>
+            <span class="k">elif</span> <span class="n">row_res</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;-&quot;</span> <span class="ow">or</span> <span class="n">template</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;-&quot;</span><span class="p">:</span>
+                <span class="c1"># The whole line is set with gap penalty value</span>
+                <span class="n">energy</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">2</span><span class="p">):]</span> <span class="o">=</span> <span class="n">gap_penalty</span>
+                <span class="k">continue</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">2</span><span class="p">,</span> <span class="n">query_size</span><span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+                <span class="n">col_res</span> <span class="o">=</span> <span class="n">query</span><span class="p">[</span><span class="n">j</span><span class="p">]</span>
+                <span class="c1"># The gap was already treated</span>
+                <span class="k">if</span> <span class="n">energy</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">==</span> <span class="n">gap_penalty</span><span class="p">:</span>
+                    <span class="k">continue</span>
+                <span class="c1"># There is a gap in the query or the template</span>
+                <span class="k">elif</span> <span class="n">col_res</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;-&quot;</span> <span class="ow">or</span> <span class="n">template</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;-&quot;</span><span class="p">:</span>
+                    <span class="c1"># The whole column is set with gap penalty value</span>
+                    <span class="n">energy</span><span class="p">[:(</span><span class="n">j</span><span class="o">-</span><span class="mi">1</span><span class="p">),</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">gap_penalty</span>
+                    <span class="k">continue</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="c1"># Calculate to distance between two residues</span>
+                    <span class="c1">#print(template[i].name, template[i].ca_atom.coords, template[j].name, template[j].ca_atom.coords)</span>
+                    <span class="n">dist</span> <span class="o">=</span> <span class="n">template</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">calculate_distance</span><span class="p">(</span><span class="n">template</span><span class="p">[</span><span class="n">j</span><span class="p">])</span>
+                    <span class="c1"># Keep distances only in a defined range because we don&#39;t want to</span>
+                    <span class="c1"># take into account directly bonded residues (dist &lt; ~5 A) and too far residues</span>
+                    <span class="k">if</span> <span class="n">dist_range</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">dist</span> <span class="o">&lt;=</span> <span class="n">dist_range</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
+                        <span class="c1"># DOPE energy values spread between 0.25 and 15 by 0.5 intervals</span>
+                        <span class="c1"># So 30 intervals and max value = 15</span>
+                        <span class="n">interval_index</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="nb">int</span><span class="p">((</span><span class="n">dist</span> <span class="o">*</span> <span class="mi">30</span><span class="p">)</span> <span class="o">/</span> <span class="mi">15</span><span class="p">))</span>
+                        <span class="n">energy</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">dope_dict</span><span class="p">[</span><span class="n">row_res</span><span class="o">.</span><span class="n">name</span><span class="o">+</span><span class="n">col_res</span><span class="o">.</span><span class="n">name</span><span class="p">][</span><span class="n">interval_index</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">energy</span></div>
+
+<div class="viewcode-block" id="Alignment.write_pdb"><a class="viewcode-back" href="../../alignment.html#src.alignment.Alignment.write_pdb">[docs]</a>    <span class="k">def</span> <span class="nf">write_pdb</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pdb_path</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Write a pdb file by threading the query sequence on the template CA coordinates.</span>
+
+<span class="sd">            Args:</span>
+<span class="sd">                pdb_path (str): Path of the pdb file to create.</span>
+
+<span class="sd">            Returns:</span>
+<span class="sd">                void</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">pdb_path</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+            <span class="c1"># Extra informations on the template used to generate the pdb file</span>
+            <span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;REMARK Threading of query sequence on the </span><span class="si">{:s}</span><span class="s2"> template #</span><span class="si">{:d}</span><span class="s2">.</span><span class="se">\n</span><span class="s2">&quot;</span>\
+                <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">template</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">num</span><span class="p">))</span>
+            <span class="n">ind</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="n">count_atom</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="k">for</span> <span class="n">count_res</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">first</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">last</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
+                <span class="n">res_t</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">template</span><span class="o">.</span><span class="n">residues</span><span class="p">[</span><span class="n">ind</span><span class="p">]</span>
+                <span class="n">res_q</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">residues</span><span class="p">[</span><span class="n">ind</span><span class="p">]</span>
+                <span class="k">if</span> <span class="n">res_q</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;-&quot;</span> <span class="ow">or</span> <span class="n">res_t</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;-&quot;</span><span class="p">:</span>
+                    <span class="n">ind</span> <span class="o">+=</span> <span class="mi">1</span>
+                    <span class="k">continue</span>
+                <span class="c1"># # N &quot;ATOM&quot; line</span>
+                <span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{:6s}{:5d}</span><span class="s2"> </span><span class="si">{:^4s}</span><span class="s2"> </span><span class="si">{:&gt;3s}{:&gt;2s}{:4d}{:&gt;12.3f}{:8.3f}{:8.3f}{:6.2f}{:6.2f}{:&gt;12s}</span><span class="se">\n</span><span class="s2">&quot;</span>\
+                    <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s2">&quot;ATOM&quot;</span><span class="p">,</span> <span class="n">count_atom</span><span class="p">,</span> <span class="s2">&quot;N&quot;</span><span class="p">,</span> <span class="n">seq3</span><span class="p">(</span><span class="n">res_q</span><span class="o">.</span><span class="n">name</span><span class="p">)</span><span class="o">.</span><span class="n">upper</span><span class="p">(),</span> <span class="s2">&quot;A&quot;</span><span class="p">,</span> <span class="n">count_res</span><span class="p">,</span>\
+                    <span class="n">res_t</span><span class="o">.</span><span class="n">n_atom</span><span class="o">.</span><span class="n">coords</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">res_t</span><span class="o">.</span><span class="n">n_atom</span><span class="o">.</span><span class="n">coords</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">res_t</span><span class="o">.</span><span class="n">n_atom</span><span class="o">.</span><span class="n">coords</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="mf">1.00</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;N&quot;</span><span class="p">))</span>
+                <span class="n">count_atom</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="c1"># CA &quot;ATOM&quot; line</span>
+                <span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{:6s}{:5d}</span><span class="s2"> </span><span class="si">{:^4s}</span><span class="s2"> </span><span class="si">{:&gt;3s}{:&gt;2s}{:4d}{:&gt;12.3f}{:8.3f}{:8.3f}{:6.2f}{:6.2f}{:&gt;12s}</span><span class="se">\n</span><span class="s2">&quot;</span>\
+                    <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s2">&quot;ATOM&quot;</span><span class="p">,</span> <span class="n">count_atom</span><span class="p">,</span> <span class="s2">&quot;CA&quot;</span><span class="p">,</span> <span class="n">seq3</span><span class="p">(</span><span class="n">res_q</span><span class="o">.</span><span class="n">name</span><span class="p">)</span><span class="o">.</span><span class="n">upper</span><span class="p">(),</span> <span class="s2">&quot;A&quot;</span><span class="p">,</span> <span class="n">count_res</span><span class="p">,</span>\
+                    <span class="n">res_t</span><span class="o">.</span><span class="n">ca_atom</span><span class="o">.</span><span class="n">coords</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">res_t</span><span class="o">.</span><span class="n">ca_atom</span><span class="o">.</span><span class="n">coords</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">res_t</span><span class="o">.</span><span class="n">ca_atom</span><span class="o">.</span><span class="n">coords</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="mf">1.00</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;C&quot;</span><span class="p">))</span>
+                <span class="n">count_atom</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="c1"># C &quot;ATOM&quot; line</span>
+                <span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{:6s}{:5d}</span><span class="s2"> </span><span class="si">{:^4s}</span><span class="s2"> </span><span class="si">{:&gt;3s}{:&gt;2s}{:4d}{:&gt;12.3f}{:8.3f}{:8.3f}{:6.2f}{:6.2f}{:&gt;12s}</span><span class="se">\n</span><span class="s2">&quot;</span>\
+                    <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s2">&quot;ATOM&quot;</span><span class="p">,</span> <span class="n">count_atom</span><span class="p">,</span> <span class="s2">&quot;C&quot;</span><span class="p">,</span> <span class="n">seq3</span><span class="p">(</span><span class="n">res_q</span><span class="o">.</span><span class="n">name</span><span class="p">)</span><span class="o">.</span><span class="n">upper</span><span class="p">(),</span> <span class="s2">&quot;A&quot;</span><span class="p">,</span> <span class="n">count_res</span><span class="p">,</span>\
+                    <span class="n">res_t</span><span class="o">.</span><span class="n">c_atom</span><span class="o">.</span><span class="n">coords</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">res_t</span><span class="o">.</span><span class="n">c_atom</span><span class="o">.</span><span class="n">coords</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">res_t</span><span class="o">.</span><span class="n">c_atom</span><span class="o">.</span><span class="n">coords</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="mf">1.00</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;C&quot;</span><span class="p">))</span>
+                <span class="n">count_atom</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="n">ind</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="c1"># The two last lines of the created pdb file (&quot;END&quot; and &quot;TER&quot; lines)</span>
+            <span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;END</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Gabriel Cretin, Hélène Kabbech, Tom Gutman, Flora Mikaeloff, Franz Arnold
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+
+  
+
+  <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
