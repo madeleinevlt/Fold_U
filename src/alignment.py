@@ -9,6 +9,25 @@ from Bio.SubsMat import MatrixInfo
 from Bio.SeqUtils import seq3
 
 
+def process(dist_range, gap_penality, dope_dict, ali):
+    """
+        Generates the threading and the physics-based scores for a given Alignment object.
+
+        Args:
+            void
+
+        Returns:
+            tupple: (Sum of the different scores, Number of the Alignment,
+                    Template's name, Template's benchmark)
+
+    """
+    # Calculate the threading score of all alignments
+    threading_score = ali.calculate_threading_score(dist_range, gap_penality, dope_dict)
+    physics_based_score = ali.calculate_physics_score()
+    total_energy_score = threading_score
+    return total_energy_score, ali.num, ali.template.name, ali.template.benchmark
+
+
 class Alignment:
     """
     .. class:: Alignment

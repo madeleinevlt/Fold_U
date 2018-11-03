@@ -25,17 +25,18 @@
 
 # Third-party modules
 from multiprocessing import Pool, cpu_count
+from functools import partial
 from tqdm import tqdm
 from docopt import docopt
 from schema import Schema, And, Use, SchemaError
 
 # Local modules
 import src.parsing as parsing
+from src.alignment import process
 from src.score import Score
 
 DIST_RANGE = [5, 15]
 GAP_PENALTY = 0
-
 
 def check_args():
     """
@@ -63,25 +64,6 @@ def check_args():
         schema.validate(ARGUMENTS)
     except SchemaError as err:
         exit(err)
-
-
-def process(ali):
-    """
-        Generates the threading and the physics-based scores for a given Alignment object.
-
-        Args:
-            ali (alignment object): An object of the class Alignment
-
-        Returns:
-            tupple: (Sum of the different scores, Number of the Alignment,
-                    Template's name, Template's benchmark)
-
-    """
-    # Calculate the threading score of all alignments
-    threading_score = ali.calculate_threading_score(DIST_RANGE, GAP_PENALTY, DOPE_DICT)
-    physics_based_score = ali.calculate_physics_score()
-    total_energy_score = threading_score + physics_based_score
-    return total_energy_score, ali.num, ali.template.name, ali.template.benchmark
 
 
 if __name__ == "__main__":
@@ -127,11 +109,12 @@ if __name__ == "__main__":
 
     # Parallelization of the main loop: threading calculations
     POOL = Pool(processes=cpu_count())
+    func = partial(process, DIST_RANGE, GAP_PENALTY, DOPE_DICT)
     # tqdm module enables an ETA progress bar of alignments
     # imap_unordered can smooth things out by yielding faster-calculated values
     # ahead of slower-calculated values.
     print("\nProcessing threading on templates ...\n\n")
-    RESULTS = Score([res_ali for res_ali in tqdm(POOL.imap_unordered(process,\
+    RESULTS = Score([res_ali for res_ali in tqdm(POOL.imap_unordered(func,\
                 ALIGNMENT_DICT.values()), total=len(ALIGNMENT_DICT.values()))])
     POOL.close()
     POOL.join()
