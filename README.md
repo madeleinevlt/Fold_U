@@ -5,14 +5,14 @@
 ![Sphinx version](https://img.shields.io/badge/sphinx%20build-1.7.4-brightgreen.svg)
 
 <p align="center">
-  <img width="500" src="img/logo_foldu.svg" alt="logo_foldu"/>
+  <img width="400" src="img/logo_foldu.svg" alt="logo_foldu"/>
 </p>
 
 This program is the second step (downstream) of a protein structure prediction project. This step consists of threading a query sequence on different given templates.
 
 
 Our project is part of the Meet-U 2018-2019 competition.
-Meet-U is a collaborative pedagogical and research initiative between several Universities of Paris area. The course is intended to Master students (2nd year) in Bioinformatics. For more details refer to [http://www.meet-u.org/](http://www.meet-u.org/).
+Meet-U is a collaborative pedagogical and research initiative between several Universities of Paris area. The course is intended to Master students (2nd year) in Bioinformatics. For more details, please refer to [http://www.meet-u.org/](http://www.meet-u.org/).
 
 ## Installation
 
@@ -62,7 +62,7 @@ fold_u.py takes in input N profil-profil alignments and their corresponding scor
 
 ## Documentation
 
-The documentation of our program, generated with Sphinx and Read The Docs theme, is accessible at the following address:
+The documentation of our program is generated with Sphinx and Read The Docs theme and is accessible at the following address:
 [https://meetu-masterstudents.github.io/Fold_U/](https://meetu-masterstudents.github.io/Fold_U/)
 
 ## Authors
