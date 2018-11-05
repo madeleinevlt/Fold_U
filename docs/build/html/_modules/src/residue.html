@@ -192,7 +192,7 @@
 <span class="sd">                residue (object): An object of the Residue class.</span>
 
 <span class="sd">            Returns:</span>
-<span class="sd">                dist (float): The calculated distance.</span>
+<span class="sd">                float: The calculated distance.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">a_min_b</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ca_atom</span><span class="o">.</span><span class="n">coords</span> <span class="o">-</span> <span class="n">residue</span><span class="o">.</span><span class="n">ca_atom</span><span class="o">.</span><span class="n">coords</span>
         <span class="n">dist</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span><span class="s1">&#39;i,i-&gt;&#39;</span><span class="p">,</span> <span class="n">a_min_b</span><span class="p">,</span> <span class="n">a_min_b</span><span class="p">))</span>

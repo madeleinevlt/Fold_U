@@ -7,25 +7,11 @@
 import numpy as np
 from Bio.SubsMat import MatrixInfo
 from Bio.SeqUtils import seq3
-
-
-def process(dist_range, gap_penality, dope_dict, ali):
-    """
-        Generates the threading and the physics-based scores for a given Alignment object.
-
-        Args:
-            void
-
-        Returns:
-            tupple: (Sum of the different scores, Number of the Alignment,
-                    Template's name, Template's benchmark)
-
-    """
-    # Calculate the threading score of all alignments
-    threading_score = ali.calculate_threading_score(dist_range, gap_penality, dope_dict)
-    physics_based_score = ali.calculate_physics_score()
-    total_energy_score = threading_score
-    return total_energy_score, ali.num, ali.template.name, ali.template.benchmark
+import modeller as m
+import modeller.automodel as am
+from modeller.automodel import assess
+import contextlib
+import os
 
 
 class Alignment:
@@ -36,10 +22,10 @@ class Alignment:
 
     Attributes:
         num (int): Number of the alignment
-        score (float): Score of the alignment
-        query (Query object): Instance of a Query object as
+        score: Score of the alignment
+        query: Instance of a Query object as
                ``Query(query_residues, query_first, query_last)``
-        template (Template object): Instance of a Template object as
+        template: Instance of a Template object as
                   ``Template(template_name, template_residues)``
     """
 
@@ -49,16 +35,14 @@ class Alignment:
         self.query = query
         self.template = template
 
-    #@fn_timer
     def calculate_threading_score(self, dist_range, gap_penalty, dope_dict):
         """
             Calculate the threading score of the query on the template sequence.
-
-            1. For each pair residues of the query sequence the distance between them is
-               calculated using the coordinates of the template sequence.The distance calculation
-               is optimized.
-            2. The calculated distance is then convert into a dope energy value.
-            3. All elements of the energy matrix generated are finally sum.
+            1) For each pair residues of the query sequence the distance between them is
+            calculated using the coordinates of the template sequence.The distance calculation
+            is optimized.
+            2) The calculated distance is then convert into a dope energy value.
+            3) All elements of the energy matrix generated are finally sum.
 
             Args:
                 dist_range (list of int): Range of distances in angströms. Distances
@@ -119,6 +103,9 @@ class Alignment:
             substitution scores for each amino acid pair. A positive score is given to the more
             likely substitutions while a negative score is given to the less likely substitutions.
 
+            Args:
+                void
+
             Returns:
                 int: The physics-based score calculated.
         """
@@ -144,11 +131,14 @@ class Alignment:
 
             Args:
                 pdb_path (str): Path of the pdb file to create.
+
+            Returns:
+                void
         """
         with open(pdb_path, "w") as file:
             # Extra informations on the template used to generate the pdb file
-            file.write("REMARK Threading of query sequence on the {:s} template #{:d}.\n"\
-                .format(self.template.name, self.num))
+            file.write("REMARK Threading of query sequence on the {:s} template #{:d}.\n"
+                       .format(self.template.name, self.num))
             ind = 0
             count_atom = 1
             for count_res in range(self.query.first, self.query.last+1):
@@ -158,19 +148,19 @@ class Alignment:
                     ind += 1
                     continue
                 # # N "ATOM" line
-                file.write("{:6s}{:5d} {:^4s} {:>3s}{:>2s}{:4d}{:>12.3f}{:8.3f}{:8.3f}{:6.2f}{:6.2f}{:>12s}\n"\
-                    .format("ATOM", count_atom, "N", seq3(res_q.name).upper(), "A", count_res,\
-                    res_t.n_atom.coords[0], res_t.n_atom.coords[1], res_t.n_atom.coords[2], 1.00, 0, "N"))
+                file.write("{:6s}{:5d} {:^4s} {:>3s}{:>2s}{:4d}{:>12.3f}{:8.3f}{:8.3f}{:6.2f}{:6.2f}{:>12s}\n"
+                           .format("ATOM", count_atom, "N", seq3(res_q.name).upper(), "A", count_res,
+                                   res_t.n_atom.coords[0], res_t.n_atom.coords[1], res_t.n_atom.coords[2], 1.00, 0, "N"))
                 count_atom += 1
                 # CA "ATOM" line
-                file.write("{:6s}{:5d} {:^4s} {:>3s}{:>2s}{:4d}{:>12.3f}{:8.3f}{:8.3f}{:6.2f}{:6.2f}{:>12s}\n"\
-                    .format("ATOM", count_atom, "CA", seq3(res_q.name).upper(), "A", count_res,\
-                    res_t.ca_atom.coords[0], res_t.ca_atom.coords[1], res_t.ca_atom.coords[2], 1.00, 0, "C"))
+                file.write("{:6s}{:5d} {:^4s} {:>3s}{:>2s}{:4d}{:>12.3f}{:8.3f}{:8.3f}{:6.2f}{:6.2f}{:>12s}\n"
+                           .format("ATOM", count_atom, "CA", seq3(res_q.name).upper(), "A", count_res,
+                                   res_t.ca_atom.coords[0], res_t.ca_atom.coords[1], res_t.ca_atom.coords[2], 1.00, 0, "C"))
                 count_atom += 1
                 # C "ATOM" line
-                file.write("{:6s}{:5d} {:^4s} {:>3s}{:>2s}{:4d}{:>12.3f}{:8.3f}{:8.3f}{:6.2f}{:6.2f}{:>12s}\n"\
-                    .format("ATOM", count_atom, "C", seq3(res_q.name).upper(), "A", count_res,\
-                    res_t.c_atom.coords[0], res_t.c_atom.coords[1], res_t.c_atom.coords[2], 1.00, 0, "C"))
+                file.write("{:6s}{:5d} {:^4s} {:>3s}{:>2s}{:4d}{:>12.3f}{:8.3f}{:8.3f}{:6.2f}{:6.2f}{:>12s}\n"
+                           .format("ATOM", count_atom, "C", seq3(res_q.name).upper(), "A", count_res,
+                                   res_t.c_atom.coords[0], res_t.c_atom.coords[1], res_t.c_atom.coords[2], 1.00, 0, "C"))
                 count_atom += 1
                 ind += 1
             # The two last lines of the created pdb file ("END" and "TER" lines)
@@ -183,20 +173,16 @@ class Alignment:
             This function writes this .ali file for the current alignment between
             the query and the template.
 
-            Example of an alignment.ali file for Modeller::
+            Example of an alignment.ali file for Modeller:
+            >P1;5fd1
+            structureX:5fd1:1:A:106:A:ferredoxin:Azotobacter vinelandii:1.90: 0.19
+            AFVVTDNCIKCKYTDCVEVCPVDCFYEGPNFLVIHPDECIDCALCEPECPAQAIFSEDEVPEDMQEFIQLNAELA
+            EVWPNITEKKDPLPDAEDWDGVKGKLQHLER*
 
-                >P1;5fd1
-                structureX:5fd1:1:A:106:A:ferredoxin:Azotobacter vinelandii:1.90: 0.19
-                AFVVTDNCIKCKYTDCVEVCPVDCFYEGPNFLVIHPDECIDCALCEPECPAQAIFSEDEVPEDMQEFIQLNAELA
-                EVWPNITEKKDPLPDAEDWDGVKGKLQHLER*
-
-                >P1;1fdx
-                sequence:1fdx:1::54::ferredoxin:Peptococcus aerogenes:2.00:-1.00
-                AYVINDSC--IACGACKPECPVNIIQGS--IYAIDADSCIDCGSCASVCPVGAPNPED-----------------
-                -------------------------------*
-
-            Args:
-                res_path (str): Path to the results folder.
+            >P1;1fdx
+            sequence:1fdx:1::54::ferredoxin:Peptococcus aerogenes:2.00:-1.00
+            AYVINDSC--IACGACKPECPVNIIQGS--IYAIDADSCIDCGSCASVCPVGAPNPED-----------------
+            -------------------------------*
         """
         ali_out_dir = res_path + "modeller/alignments/"
         if not os.path.exists(ali_out_dir):
@@ -225,7 +211,7 @@ class Alignment:
               correlate with more native-like models).
 
             Args:
-                res_path (str): Path to the results folder.
+                res_path (str): Path to the results folder
 
             Returns:
                 float: The DOPE score of the model generated by MODELLER.
@@ -274,8 +260,3 @@ class Alignment:
         # Go back to root directory
         os.chdir(root_dir)
         return modeller_dope_score
-
-    # def new_template_alignment(self):
-    #     """
-    #
-    #     """
