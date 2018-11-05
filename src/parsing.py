@@ -45,13 +45,8 @@ def parse_dope(dope_file):
                        amino acid pair.
 
         Returns:
-<<<<<<< Updated upstream
-            dictionary: A dictionary with key = res_1-res_2 and value = an array of
-                    the 30 dope energy values.
-=======
             dict: A dictionary with key = res_1-res_2 and value = an array of
             the 30 dope energy values.
->>>>>>> Stashed changes
     """
     dope_dict = {}
     with open(dope_file, "r") as file:
@@ -80,13 +75,8 @@ def parse_foldrec(foldrec_file, nb_templates, metafold_dict):
                                         and value = pdb file.
 
         Returns:
-<<<<<<< Updated upstream
-            dictionary: A dictionary with key = template name and
-                                      value = an Alignment object.
-=======
             dict of Alignments: A dictionary with key = template name and
             value = an Alignment object.
->>>>>>> Stashed changes
     """
 
     # Regex :
@@ -171,9 +161,6 @@ def parse_benchmark(benchmark_file, foldrec_file, alignment_dict):
             foldrec_file (str): The path to the foldrec file.
             alignment_dict (dictionary): A dictionary with key = template name
                                          and value = an Alignment object.
-
-        Returns:
-            void
     """
     # The name of the query is retrieved from the foldrec file pathway
     query_reg = re.compile("^.*\\/(\\w*)")

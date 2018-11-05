@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Template &mdash; fold-u 1.0 documentation</title>
+  <title>Template &mdash; Fold U 1.2 documentation</title>
   
 
   
@@ -48,7 +48,7 @@
           
 
           
-            <a href="index.html" class="icon icon-home"> fold-u
+            <a href="index.html" class="icon icon-home"> Fold U
           
 
           
@@ -58,7 +58,7 @@
             
             
               <div class="version">
-                1.0
+                1.2
               </div>
             
           
@@ -103,7 +103,7 @@
       <nav class="wy-nav-top" aria-label="top navigation">
         
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="index.html">fold-u</a>
+          <a href="index.html">Fold U</a>
         
       </nav>
 
@@ -209,15 +209,18 @@
 <dl class="method">
 <dt id="src.template.Template.add_gaps_in_template_sequence">
 <code class="descname">add_gaps_in_template_sequence</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/template.html#Template.add_gaps_in_template_sequence"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.template.Template.add_gaps_in_template_sequence" title="Permalink to this definition">¶</a></dt>
-<dd><p>This function replaces the missing residues of the template’s
-sequence</p>
+<dd><p>Sets the benchmark attribute of the template.
+The benchmark attribute represents the fold family type of the
+template: “Family”, “Superfamily” or “Fold”, that is to say how similar
+the template is from the query. This is necessary to be
+able to benchmark the new scoring functions.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Path to the new (gapless) PDB file of the template.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>fold_type</strong> (<em>str</em>) – “Family”, “Superfamily” or “Fold”</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">str</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">void</td>
 </tr>
 </tbody>
 </table>
@@ -249,7 +252,7 @@ and write it to an alignment file.</p>
 <dl class="method">
 <dt id="src.template.Template.set_pdb_name">
 <code class="descname">set_pdb_name</code><span class="sig-paren">(</span><em>metafold_dict</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/template.html#Template.set_pdb_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.template.Template.set_pdb_name" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get the PDB name of the current template from the template’s name.</p>
+<dd><p>Get the PDB file name of the current template from the template’s name.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -260,50 +263,6 @@ and write it to an alignment file.</p>
 </table>
 </dd></dl>
 
-</dd></dl>
-
-<dl class="function">
-<dt id="src.template.build_new_pdb_with_modeller">
-<code class="descclassname">src.template.</code><code class="descname">build_new_pdb_with_modeller</code><span class="sig-paren">(</span><em>self</em>, <em>res_path</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/template.html#build_new_pdb_with_modeller"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.template.build_new_pdb_with_modeller" title="Permalink to this definition">¶</a></dt>
-<dd><p>This function launches MODELLER to rebuild the PDB structures
-containing missing residues. Some structures have unresolved parts
-which are consequently not integrated in the PDB file because no
-coordinates could be determined for the faulty residues.
-We can use MODELLER to “fill in” these missing residues by treating
-the original structure (without the missing residues) as a template,
-and building a comparative model using the full sequence.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Path to the new (gapless) PDB file of the template.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">str</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
-<dt id="src.template.write_new_alignment">
-<code class="descclassname">src.template.</code><code class="descname">write_new_alignment</code><span class="sig-paren">(</span><em>self</em>, <em>res_path</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/template.html#write_new_alignment"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.template.write_new_alignment" title="Permalink to this definition">¶</a></dt>
-<dd><p>This function launches MODELLER to rebuild the PDB structures
-containing missing residues. Some structures have unresolved parts
-which are consequently not integrated in the PDB file because no
-coordinates could be determined for the faulty residues.
-We can use MODELLER to “fill in” these missing residues by treating
-the original structure (without the missing residues) as a template,
-and building a comparative model using the full sequence.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Path to the new (gapless) PDB file of the template.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">str</td>
-</tr>
-</tbody>
-</table>
 </dd></dl>
 
 </div>

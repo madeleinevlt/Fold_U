@@ -5,63 +5,63 @@
 <!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
 <head>
   <meta charset="utf-8">
-
+  
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>src.alignment &mdash; Fold U 1.2 documentation</title>
+  
 
-  <title>src.alignment &mdash; fold-u 1.0 documentation</title>
+  
+  
+  
+  
 
+  
 
+  
+  
+    
 
-
-
-
-
-
-
-
-
-
-
-
+  
 
   <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="../../genindex.html" />
-    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
 
-
+  
   <script src="../../_static/js/modernizr.min.js"></script>
 
 </head>
 
 <body class="wy-body-for-nav">
 
-
+   
   <div class="wy-grid-for-nav">
 
-
+    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search">
+          
 
+          
+            <a href="../../index.html" class="icon icon-home"> Fold U
+          
 
-
-            <a href="../../index.html" class="icon icon-home"> fold-u
-
-
-
+          
           </a>
 
-
-
-
+          
+            
+            
               <div class="version">
-                1.0
+                1.2
               </div>
+            
+          
 
-
-
-
+          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -70,16 +70,16 @@
   </form>
 </div>
 
-
+          
         </div>
 
         <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-
-
-
-
-
-
+          
+            
+            
+              
+            
+            
               <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../parsing.html">Parsing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../alignment.html">Alignment</a></li>
@@ -89,28 +89,28 @@
 <li class="toctree-l1"><a class="reference internal" href="../../atom.html">Atom</a></li>
 </ul>
 
-
-
+            
+          
         </div>
       </div>
     </nav>
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
 
-
+      
       <nav class="wy-nav-top" aria-label="top navigation">
-
+        
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../../index.html">fold-u</a>
-
+          <a href="../../index.html">Fold U</a>
+        
       </nav>
 
 
       <div class="wy-nav-content">
-
+        
         <div class="rst-content">
-
-
+        
+          
 
 
 
@@ -129,26 +129,26 @@
 <div role="navigation" aria-label="breadcrumbs navigation">
 
   <ul class="wy-breadcrumbs">
-
+    
       <li><a href="../../index.html">Docs</a> &raquo;</li>
-
+        
           <li><a href="../index.html">Module code</a> &raquo;</li>
-
+        
       <li>src.alignment</li>
-
-
+    
+    
       <li class="wy-breadcrumbs-aside">
-
+        
       </li>
-
+    
   </ul>
 
-
+  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-
+            
   <h1>Source code for src.alignment</h1><div class="highlight"><pre>
 <span></span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">.. module:: Alignment</span>
@@ -157,12 +157,27 @@
 
 <span class="c1"># Third-party modules</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">Bio.SubsMat</span> <span class="k">import</span> <span class="n">MatrixInfo</span>
 <span class="kn">from</span> <span class="nn">Bio.SeqUtils</span> <span class="k">import</span> <span class="n">seq3</span>
-<span class="kn">import</span> <span class="nn">modeller</span> <span class="k">as</span> <span class="nn">m</span>
-<span class="kn">import</span> <span class="nn">modeller.automodel</span> <span class="k">as</span> <span class="nn">am</span>
-<span class="kn">from</span> <span class="nn">modeller.automodel</span> <span class="k">import</span> <span class="n">assess</span>
-<span class="kn">import</span> <span class="nn">contextlib</span>
-<span class="kn">import</span> <span class="nn">os</span>
+
+
+<div class="viewcode-block" id="process"><a class="viewcode-back" href="../../alignment.html#src.alignment.process">[docs]</a><span class="k">def</span> <span class="nf">process</span><span class="p">(</span><span class="n">dist_range</span><span class="p">,</span> <span class="n">gap_penality</span><span class="p">,</span> <span class="n">dope_dict</span><span class="p">,</span> <span class="n">ali</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Generates the threading and the physics-based scores for a given Alignment object.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            void</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            tupple: (Sum of the different scores, Number of the Alignment,</span>
+<span class="sd">                    Template&#39;s name, Template&#39;s benchmark)</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Calculate the threading score of all alignments</span>
+    <span class="n">threading_score</span> <span class="o">=</span> <span class="n">ali</span><span class="o">.</span><span class="n">calculate_threading_score</span><span class="p">(</span><span class="n">dist_range</span><span class="p">,</span> <span class="n">gap_penality</span><span class="p">,</span> <span class="n">dope_dict</span><span class="p">)</span>
+    <span class="n">physics_based_score</span> <span class="o">=</span> <span class="n">ali</span><span class="o">.</span><span class="n">calculate_physics_score</span><span class="p">()</span>
+    <span class="n">total_energy_score</span> <span class="o">=</span> <span class="n">threading_score</span>
+    <span class="k">return</span> <span class="n">total_energy_score</span><span class="p">,</span> <span class="n">ali</span><span class="o">.</span><span class="n">num</span><span class="p">,</span> <span class="n">ali</span><span class="o">.</span><span class="n">template</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">ali</span><span class="o">.</span><span class="n">template</span><span class="o">.</span><span class="n">benchmark</span></div>
 
 
 <div class="viewcode-block" id="Alignment"><a class="viewcode-back" href="../../alignment.html#src.alignment.Alignment">[docs]</a><span class="k">class</span> <span class="nc">Alignment</span><span class="p">:</span>
@@ -186,6 +201,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">query</span> <span class="o">=</span> <span class="n">query</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">template</span> <span class="o">=</span> <span class="n">template</span>
 
+    <span class="c1">#@fn_timer</span>
 <div class="viewcode-block" id="Alignment.calculate_threading_score"><a class="viewcode-back" href="../../alignment.html#src.alignment.Alignment.calculate_threading_score">[docs]</a>    <span class="k">def</span> <span class="nf">calculate_threading_score</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dist_range</span><span class="p">,</span> <span class="n">gap_penalty</span><span class="p">,</span> <span class="n">dope_dict</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">            Calculate the threading score of the query on the template sequence.</span>
@@ -204,8 +220,7 @@
 <span class="sd">                                        value = an array of 30 dope energy values.</span>
 
 <span class="sd">            Returns:</span>
-<span class="sd">                numpy 2D array: 2D matrix containing energy between pairs of residues</span>
-<span class="sd">                                of the query sequence threaded on the template.</span>
+<span class="sd">                float: The threading score calculated. Sum of the energy matrix.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">query</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">residues</span>
         <span class="n">template</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">template</span><span class="o">.</span><span class="n">residues</span>
@@ -239,7 +254,6 @@
                     <span class="k">continue</span>
                 <span class="k">else</span><span class="p">:</span>
                     <span class="c1"># Calculate to distance between two residues</span>
-                    <span class="c1">#print(template[i].name, template[i].ca_atom.coords, template[j].name, template[j].ca_atom.coords)</span>
                     <span class="n">dist</span> <span class="o">=</span> <span class="n">template</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">calculate_distance</span><span class="p">(</span><span class="n">template</span><span class="p">[</span><span class="n">j</span><span class="p">])</span>
                     <span class="c1"># Keep distances only in a defined range because we don&#39;t want to</span>
                     <span class="c1"># take into account directly bonded residues (dist &lt; ~5 A) and too far residues</span>
@@ -285,8 +299,8 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">pdb_path</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
             <span class="c1"># Extra informations on the template used to generate the pdb file</span>
-            <span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;REMARK Threading of query sequence on the </span><span class="si">{:s}</span><span class="s2"> template #</span><span class="si">{:d}</span><span class="s2">.</span><span class="se">\n</span><span class="s2">&quot;</span>
-                       <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">template</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">num</span><span class="p">))</span>
+            <span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;REMARK Threading of query sequence on the </span><span class="si">{:s}</span><span class="s2"> template #</span><span class="si">{:d}</span><span class="s2">.</span><span class="se">\n</span><span class="s2">&quot;</span>\
+                <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">template</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">num</span><span class="p">))</span>
             <span class="n">ind</span> <span class="o">=</span> <span class="mi">0</span>
             <span class="n">count_atom</span> <span class="o">=</span> <span class="mi">1</span>
             <span class="k">for</span> <span class="n">count_res</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">first</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">last</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
@@ -296,19 +310,19 @@
                     <span class="n">ind</span> <span class="o">+=</span> <span class="mi">1</span>
                     <span class="k">continue</span>
                 <span class="c1"># # N &quot;ATOM&quot; line</span>
-                <span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{:6s}{:5d}</span><span class="s2"> </span><span class="si">{:^4s}</span><span class="s2"> </span><span class="si">{:&gt;3s}{:&gt;2s}{:4d}{:&gt;12.3f}{:8.3f}{:8.3f}{:6.2f}{:6.2f}{:&gt;12s}</span><span class="se">\n</span><span class="s2">&quot;</span>
-                           <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s2">&quot;ATOM&quot;</span><span class="p">,</span> <span class="n">count_atom</span><span class="p">,</span> <span class="s2">&quot;N&quot;</span><span class="p">,</span> <span class="n">seq3</span><span class="p">(</span><span class="n">res_q</span><span class="o">.</span><span class="n">name</span><span class="p">)</span><span class="o">.</span><span class="n">upper</span><span class="p">(),</span> <span class="s2">&quot;A&quot;</span><span class="p">,</span> <span class="n">count_res</span><span class="p">,</span>
-                                   <span class="n">res_t</span><span class="o">.</span><span class="n">n_atom</span><span class="o">.</span><span class="n">coords</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">res_t</span><span class="o">.</span><span class="n">n_atom</span><span class="o">.</span><span class="n">coords</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">res_t</span><span class="o">.</span><span class="n">n_atom</span><span class="o">.</span><span class="n">coords</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="mf">1.00</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;N&quot;</span><span class="p">))</span>
+                <span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{:6s}{:5d}</span><span class="s2"> </span><span class="si">{:^4s}</span><span class="s2"> </span><span class="si">{:&gt;3s}{:&gt;2s}{:4d}{:&gt;12.3f}{:8.3f}{:8.3f}{:6.2f}{:6.2f}{:&gt;12s}</span><span class="se">\n</span><span class="s2">&quot;</span>\
+                    <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s2">&quot;ATOM&quot;</span><span class="p">,</span> <span class="n">count_atom</span><span class="p">,</span> <span class="s2">&quot;N&quot;</span><span class="p">,</span> <span class="n">seq3</span><span class="p">(</span><span class="n">res_q</span><span class="o">.</span><span class="n">name</span><span class="p">)</span><span class="o">.</span><span class="n">upper</span><span class="p">(),</span> <span class="s2">&quot;A&quot;</span><span class="p">,</span> <span class="n">count_res</span><span class="p">,</span>\
+                    <span class="n">res_t</span><span class="o">.</span><span class="n">n_atom</span><span class="o">.</span><span class="n">coords</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">res_t</span><span class="o">.</span><span class="n">n_atom</span><span class="o">.</span><span class="n">coords</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">res_t</span><span class="o">.</span><span class="n">n_atom</span><span class="o">.</span><span class="n">coords</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="mf">1.00</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;N&quot;</span><span class="p">))</span>
                 <span class="n">count_atom</span> <span class="o">+=</span> <span class="mi">1</span>
                 <span class="c1"># CA &quot;ATOM&quot; line</span>
-                <span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{:6s}{:5d}</span><span class="s2"> </span><span class="si">{:^4s}</span><span class="s2"> </span><span class="si">{:&gt;3s}{:&gt;2s}{:4d}{:&gt;12.3f}{:8.3f}{:8.3f}{:6.2f}{:6.2f}{:&gt;12s}</span><span class="se">\n</span><span class="s2">&quot;</span>
-                           <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s2">&quot;ATOM&quot;</span><span class="p">,</span> <span class="n">count_atom</span><span class="p">,</span> <span class="s2">&quot;CA&quot;</span><span class="p">,</span> <span class="n">seq3</span><span class="p">(</span><span class="n">res_q</span><span class="o">.</span><span class="n">name</span><span class="p">)</span><span class="o">.</span><span class="n">upper</span><span class="p">(),</span> <span class="s2">&quot;A&quot;</span><span class="p">,</span> <span class="n">count_res</span><span class="p">,</span>
-                                   <span class="n">res_t</span><span class="o">.</span><span class="n">ca_atom</span><span class="o">.</span><span class="n">coords</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">res_t</span><span class="o">.</span><span class="n">ca_atom</span><span class="o">.</span><span class="n">coords</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">res_t</span><span class="o">.</span><span class="n">ca_atom</span><span class="o">.</span><span class="n">coords</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="mf">1.00</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;C&quot;</span><span class="p">))</span>
+                <span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{:6s}{:5d}</span><span class="s2"> </span><span class="si">{:^4s}</span><span class="s2"> </span><span class="si">{:&gt;3s}{:&gt;2s}{:4d}{:&gt;12.3f}{:8.3f}{:8.3f}{:6.2f}{:6.2f}{:&gt;12s}</span><span class="se">\n</span><span class="s2">&quot;</span>\
+                    <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s2">&quot;ATOM&quot;</span><span class="p">,</span> <span class="n">count_atom</span><span class="p">,</span> <span class="s2">&quot;CA&quot;</span><span class="p">,</span> <span class="n">seq3</span><span class="p">(</span><span class="n">res_q</span><span class="o">.</span><span class="n">name</span><span class="p">)</span><span class="o">.</span><span class="n">upper</span><span class="p">(),</span> <span class="s2">&quot;A&quot;</span><span class="p">,</span> <span class="n">count_res</span><span class="p">,</span>\
+                    <span class="n">res_t</span><span class="o">.</span><span class="n">ca_atom</span><span class="o">.</span><span class="n">coords</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">res_t</span><span class="o">.</span><span class="n">ca_atom</span><span class="o">.</span><span class="n">coords</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">res_t</span><span class="o">.</span><span class="n">ca_atom</span><span class="o">.</span><span class="n">coords</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="mf">1.00</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;C&quot;</span><span class="p">))</span>
                 <span class="n">count_atom</span> <span class="o">+=</span> <span class="mi">1</span>
                 <span class="c1"># C &quot;ATOM&quot; line</span>
-                <span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{:6s}{:5d}</span><span class="s2"> </span><span class="si">{:^4s}</span><span class="s2"> </span><span class="si">{:&gt;3s}{:&gt;2s}{:4d}{:&gt;12.3f}{:8.3f}{:8.3f}{:6.2f}{:6.2f}{:&gt;12s}</span><span class="se">\n</span><span class="s2">&quot;</span>
-                           <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s2">&quot;ATOM&quot;</span><span class="p">,</span> <span class="n">count_atom</span><span class="p">,</span> <span class="s2">&quot;C&quot;</span><span class="p">,</span> <span class="n">seq3</span><span class="p">(</span><span class="n">res_q</span><span class="o">.</span><span class="n">name</span><span class="p">)</span><span class="o">.</span><span class="n">upper</span><span class="p">(),</span> <span class="s2">&quot;A&quot;</span><span class="p">,</span> <span class="n">count_res</span><span class="p">,</span>
-                                   <span class="n">res_t</span><span class="o">.</span><span class="n">c_atom</span><span class="o">.</span><span class="n">coords</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">res_t</span><span class="o">.</span><span class="n">c_atom</span><span class="o">.</span><span class="n">coords</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">res_t</span><span class="o">.</span><span class="n">c_atom</span><span class="o">.</span><span class="n">coords</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="mf">1.00</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;C&quot;</span><span class="p">))</span>
+                <span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{:6s}{:5d}</span><span class="s2"> </span><span class="si">{:^4s}</span><span class="s2"> </span><span class="si">{:&gt;3s}{:&gt;2s}{:4d}{:&gt;12.3f}{:8.3f}{:8.3f}{:6.2f}{:6.2f}{:&gt;12s}</span><span class="se">\n</span><span class="s2">&quot;</span>\
+                    <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s2">&quot;ATOM&quot;</span><span class="p">,</span> <span class="n">count_atom</span><span class="p">,</span> <span class="s2">&quot;C&quot;</span><span class="p">,</span> <span class="n">seq3</span><span class="p">(</span><span class="n">res_q</span><span class="o">.</span><span class="n">name</span><span class="p">)</span><span class="o">.</span><span class="n">upper</span><span class="p">(),</span> <span class="s2">&quot;A&quot;</span><span class="p">,</span> <span class="n">count_res</span><span class="p">,</span>\
+                    <span class="n">res_t</span><span class="o">.</span><span class="n">c_atom</span><span class="o">.</span><span class="n">coords</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">res_t</span><span class="o">.</span><span class="n">c_atom</span><span class="o">.</span><span class="n">coords</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">res_t</span><span class="o">.</span><span class="n">c_atom</span><span class="o">.</span><span class="n">coords</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="mf">1.00</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;C&quot;</span><span class="p">))</span>
                 <span class="n">count_atom</span> <span class="o">+=</span> <span class="mi">1</span>
                 <span class="n">ind</span> <span class="o">+=</span> <span class="mi">1</span>
             <span class="c1"># The two last lines of the created pdb file (&quot;END&quot; and &quot;TER&quot; lines)</span>
@@ -420,10 +434,10 @@
 </pre></div>
 
            </div>
-
+           
           </div>
           <footer>
-
+  
 
   <hr/>
 
@@ -433,7 +447,7 @@
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -443,21 +457,21 @@
     </section>
 
   </div>
+  
 
 
+  
 
-
-
-
-
+    
+    
       <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
         <script type="text/javascript" src="../../_static/jquery.js"></script>
         <script type="text/javascript" src="../../_static/underscore.js"></script>
         <script type="text/javascript" src="../../_static/doctools.js"></script>
         <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
 
-
-
+  
 
   <script type="text/javascript" src="../../_static/js/theme.js"></script>
 
@@ -465,7 +479,7 @@
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
+  </script> 
 
 </body>
 </html>

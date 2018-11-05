@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Fold U: A Protein Structure Prediction Program &mdash; fold-u 1.0 documentation</title>
+  <title>Fold U: A Protein Structure Prediction Program &mdash; Fold U 1.2 documentation</title>
   
 
   
@@ -47,7 +47,7 @@
           
 
           
-            <a href="#" class="icon icon-home"> fold-u
+            <a href="#" class="icon icon-home"> Fold U
           
 
           
@@ -57,7 +57,7 @@
             
             
               <div class="version">
-                1.0
+                1.2
               </div>
             
           
@@ -102,7 +102,7 @@
       <nav class="wy-nav-top" aria-label="top navigation">
         
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="#">fold-u</a>
+          <a href="#">Fold U</a>
         
       </nav>
 
@@ -159,10 +159,10 @@
 <a class="reference external image-reference" href="https://img.shields.io/badge/python-3-brightgreen.svg"><img alt="Python version" src="https://img.shields.io/badge/python-3-brightgreen.svg" /></a>
 <a class="reference external image-reference" href="https://img.shields.io/badge/sphinx%20build-1.7.4-brightgreen.svg"><img alt="Sphinx version" src="https://img.shields.io/badge/sphinx%20build-1.7.4-brightgreen.svg" /></a>
 <p align="center">
-  <img width="250" src="img/fold_u.svg" alt="fold_u_logo"/>
+  <img width="400" src="img/logo_foldu.svg" alt="logo_foldu"/>
 </p><p>This program is the second step (downstream) of a protein structure prediction project. This step consists of threading a query sequence on different given templates.</p>
 <p>Our project is part of the Meet-U 2018-2019 competition.
-Meet-U is a collaborative pedagogical and research initiative between several Universities of Paris area. The course is intended to Master students (2nd year) in Bioinformatics. For more details refer to <a class="reference external" href="http://www.meet-u.org/">http://www.meet-u.org/</a>.</p>
+Meet-U is a collaborative pedagogical and research initiative between several Universities of Paris area. The course is intended to Master students (2nd year) in Bioinformatics. For more details, please refer to <a class="reference external" href="http://www.meet-u.org/">http://www.meet-u.org/</a>.</p>
 <div class="section" id="installation">
 <h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="clone-the-repository">
@@ -178,16 +178,11 @@ cd Fold_U
 <div class="highlight-guess notranslate"><div class="highlight"><pre><span></span>pip install -r src/requirements.txt
 </pre></div>
 </div>
-<p>MODELLER is also required, and can be installed easily with Conda:</p>
-<div class="highlight-guess notranslate"><div class="highlight"><pre><span></span>conda install -c salilab modeller
-</pre></div>
-</div>
-<p>You need to register to get a license key <a class="reference external" href="https://salilab.org/modeller/registration.html">here</a>, and follow instructions during installation to insert license key in the program.</p>
 </div>
 </div>
 <div class="section" id="run-the-program">
 <h2>Run the program<a class="headerlink" href="#run-the-program" title="Permalink to this headline">¶</a></h2>
-<p><code class="docutils literal notranslate"><span class="pre">fold_u.py</span></code> takes in input N profil-profil alignments and their corresponding scores (foldrec file).</p>
+<p>fold_u.py takes in input N profil-profil alignments and their corresponding scores (foldrec file).</p>
 <div class="section" id="run-the-test">
 <h3>Run the test<a class="headerlink" href="#run-the-test" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-guess notranslate"><div class="highlight"><pre><span></span>./fold_u.py data/foldrec/Agglutinin.foldrec
@@ -200,7 +195,7 @@ cd Fold_U
 
     Usage:
         fold_u.py FOLDREC_FILE [--nb_templates NUM] [--nb_pdb NUM] [--output PATH]
-                               [--metafold FILE] [--dope FILE]
+                               [--metafold FILE] [--dope FILE] [--benchmark FILE]
 
     Options:
         -h, --help                            Show this
@@ -212,16 +207,18 @@ cd Fold_U
                                               the result files (scores and pdb)
                                               [default: res/threading]
         -m FILE, --metafold FILE              Path to the metafold.list file
-                                              [default: data/METAFOLD.list]
+                                              [default: data/metafold.list]
         -d FILE, --dope FILE                  Path to the dope.par file
                                               [default: data/dope.par]
+        -b FILE, --benchmark FILE             Path to the benchmark.list file
+                                              [default: data/benchmark.list]
 </pre></div>
 </div>
 </div>
 </div>
 <div class="section" id="documentation">
 <h2>Documentation<a class="headerlink" href="#documentation" title="Permalink to this headline">¶</a></h2>
-<p>The documentation of our program, generated with Sphinx and Read The Docs theme, is accessible at the following address:
+<p>The documentation of our program is generated with Sphinx and Read The Docs theme and is accessible at the following address:
 <a class="reference external" href="https://meetu-masterstudents.github.io/Fold_U/">https://meetu-masterstudents.github.io/Fold_U/</a></p>
 </div>
 <div class="section" id="authors">

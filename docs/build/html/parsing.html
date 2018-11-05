@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Parsing &mdash; fold-u 1.0 documentation</title>
+  <title>Parsing &mdash; Fold U 1.2 documentation</title>
   
 
   
@@ -48,7 +48,7 @@
           
 
           
-            <a href="index.html" class="icon icon-home"> fold-u
+            <a href="index.html" class="icon icon-home"> Fold U
           
 
           
@@ -58,7 +58,7 @@
             
             
               <div class="version">
-                1.0
+                1.2
               </div>
             
           
@@ -103,7 +103,7 @@
       <nav class="wy-nav-top" aria-label="top navigation">
         
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="index.html">fold-u</a>
+          <a href="index.html">Fold U</a>
         
       </nav>
 
@@ -156,6 +156,30 @@
   <div class="section" id="module-src.parsing">
 <span id="parsing"></span><h1>Parsing<a class="headerlink" href="#module-src.parsing" title="Permalink to this headline">¶</a></h1>
 <span class="target" id="module-parsing"></span><dl class="function">
+<dt id="src.parsing.parse_benchmark">
+<code class="descclassname">src.parsing.</code><code class="descname">parse_benchmark</code><span class="sig-paren">(</span><em>benchmark_file</em>, <em>foldrec_file</em>, <em>alignment_dict</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/parsing.html#parse_benchmark"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.parsing.parse_benchmark" title="Permalink to this definition">¶</a></dt>
+<dd><p>Extract the line of the benchmark file containing the benchmarks of
+the studied query. Each benchmark template have an assigned structure
+corresponding to the degree of similarity with the query
+(“Family”, “Superfamily” or “Fold”). For a given benchmark template
+object, the structure is stored in the benchmark item.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>benchmark_file</strong> (<em>str</em>) – The path to the benchmark file.</li>
+<li><strong>foldrec_file</strong> (<em>str</em>) – The path to the foldrec file.</li>
+<li><strong>alignment_dict</strong> (<em>dictionary</em>) – A dictionary with key = template name
+and value = an Alignment object.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
 <dt id="src.parsing.parse_dope">
 <code class="descclassname">src.parsing.</code><code class="descname">parse_dope</code><span class="sig-paren">(</span><em>dope_file</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/parsing.html#parse_dope"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.parsing.parse_dope" title="Permalink to this definition">¶</a></dt>
 <dd><p>Extracts 30 dope energy values for the 20*20 residus-CA pairs and stores it
@@ -164,7 +188,7 @@ in a dictionary with key = res_1-res_2 and value = an array of the 30 dope score
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>file</strong> (<em>dope</em>) – The file dope.par containing energy values for each
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>dope_file</strong> (<em>str</em>) – The file dope.par containing energy values for each
 amino acid pair.</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A dictionary with key = res_1-res_2 and value = an array of
@@ -188,7 +212,7 @@ and gets all the coordinates of the CA atoms in the template’s Residue list.</
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>foldrec_file</strong> (<em>file</em>) – The file containing N profil-profil alignments and their
+<li><strong>foldrec_file</strong> (<em>str</em>) – The file containing N profil-profil alignments and their
 corresponding scores.</li>
 <li><strong>nb_templates</strong> (<em>int</em>) – Number of alignments to retrieve from the file and chosen
 by the user.</li>
@@ -217,12 +241,12 @@ a value in a dictionary</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>metafold_file</strong> – A METAFOLD.list file containing for a given line a
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>metafold_file</strong> (<em>str</em>) – A METAFOLD.list file containing for a given line a
 template name and a pdb file name associated</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A dictionary with key = template name and value = pdb file</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">dict</td>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">dictionary</td>
 </tr>
 </tbody>
 </table>

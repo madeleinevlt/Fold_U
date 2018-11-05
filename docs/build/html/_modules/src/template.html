@@ -5,63 +5,63 @@
 <!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
 <head>
   <meta charset="utf-8">
-
+  
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>src.template &mdash; Fold U 1.2 documentation</title>
+  
 
-  <title>src.template &mdash; fold-u 1.0 documentation</title>
+  
+  
+  
+  
 
+  
 
+  
+  
+    
 
-
-
-
-
-
-
-
-
-
-
-
+  
 
   <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="../../genindex.html" />
-    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
 
-
+  
   <script src="../../_static/js/modernizr.min.js"></script>
 
 </head>
 
 <body class="wy-body-for-nav">
 
-
+   
   <div class="wy-grid-for-nav">
 
-
+    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search">
+          
 
+          
+            <a href="../../index.html" class="icon icon-home"> Fold U
+          
 
-
-            <a href="../../index.html" class="icon icon-home"> fold-u
-
-
-
+          
           </a>
 
-
-
-
+          
+            
+            
               <div class="version">
-                1.0
+                1.2
               </div>
+            
+          
 
-
-
-
+          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -70,16 +70,16 @@
   </form>
 </div>
 
-
+          
         </div>
 
         <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-
-
-
-
-
-
+          
+            
+            
+              
+            
+            
               <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../parsing.html">Parsing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../alignment.html">Alignment</a></li>
@@ -89,28 +89,28 @@
 <li class="toctree-l1"><a class="reference internal" href="../../atom.html">Atom</a></li>
 </ul>
 
-
-
+            
+          
         </div>
       </div>
     </nav>
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
 
-
+      
       <nav class="wy-nav-top" aria-label="top navigation">
-
+        
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../../index.html">fold-u</a>
-
+          <a href="../../index.html">Fold U</a>
+        
       </nav>
 
 
       <div class="wy-nav-content">
-
+        
         <div class="rst-content">
-
-
+        
+          
 
 
 
@@ -129,26 +129,26 @@
 <div role="navigation" aria-label="breadcrumbs navigation">
 
   <ul class="wy-breadcrumbs">
-
+    
       <li><a href="../../index.html">Docs</a> &raquo;</li>
-
+        
           <li><a href="../index.html">Module code</a> &raquo;</li>
-
+        
       <li>src.template</li>
-
-
+    
+    
       <li class="wy-breadcrumbs-aside">
-
+        
       </li>
-
+    
   </ul>
 
-
+  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-
+            
   <h1>Source code for src.template</h1><div class="highlight"><pre>
 <span></span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">.. module:: Template</span>
@@ -157,10 +157,6 @@
 
 <span class="c1"># Third-party modules</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">import</span> <span class="nn">wget</span>
-<span class="kn">from</span> <span class="nn">Bio</span> <span class="k">import</span> <span class="n">SeqIO</span>
-<span class="kn">from</span> <span class="nn">modeller</span> <span class="k">import</span> <span class="o">*</span>
 
 
 <div class="viewcode-block" id="Template"><a class="viewcode-back" href="../../template.html#src.template.Template">[docs]</a><span class="k">class</span> <span class="nc">Template</span><span class="p">:</span>
@@ -176,22 +172,19 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">residues</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>            <span class="c1"># ex: Agglutinin</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">residues</span> <span class="o">=</span> <span class="n">residues</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">pdb</span> <span class="o">=</span> <span class="kc">None</span>             <span class="c1"># ex: 1jlxa1</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">first</span> <span class="o">=</span> <span class="kc">None</span>
-
-    <span class="k">def</span> <span class="nf">display</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">res</span><span class="o">.</span><span class="n">name</span><span class="p">)</span> <span class="k">for</span> <span class="n">res</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">residues</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pdb</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">benchmark</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
 
 <div class="viewcode-block" id="Template.set_pdb_name"><a class="viewcode-back" href="../../template.html#src.template.Template.set_pdb_name">[docs]</a>    <span class="k">def</span> <span class="nf">set_pdb_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">metafold_dict</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">            Get the PDB name of the current template from the template&#39;s name.</span>
+<span class="sd">            Get the PDB file name of the current template from the template&#39;s name.</span>
 
 <span class="sd">            Args:</span>
 <span class="sd">                metafold_dict: A dictionary with key = template name and value = pdb file</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">pdb</span> <span class="o">=</span> <span class="n">metafold_dict</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pdb</span> <span class="o">=</span> <span class="n">metafold_dict</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">]</span></div>
 
 <div class="viewcode-block" id="Template.parse_pdb"><a class="viewcode-back" href="../../template.html#src.template.Template.parse_pdb">[docs]</a>    <span class="k">def</span> <span class="nf">parse_pdb</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -199,17 +192,11 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">count_res</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="n">nb_atoms</span> <span class="o">=</span> <span class="mi">0</span>
-        <span class="n">flag</span> <span class="o">=</span> <span class="kc">True</span>
-        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;data/pdb/&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="s2">&quot;/&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">pdb</span> <span class="o">+</span> <span class="s2">&quot;.atm&quot;</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;data/pdb/&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="s2">&quot;/&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">pdb</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
             <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">file</span><span class="p">:</span>
                 <span class="n">line_type</span> <span class="o">=</span> <span class="n">line</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">6</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
                 <span class="n">name_at</span> <span class="o">=</span> <span class="n">line</span><span class="p">[</span><span class="mi">12</span><span class="p">:</span><span class="mi">16</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
                 <span class="k">if</span> <span class="n">line_type</span> <span class="o">==</span> <span class="s2">&quot;ATOM&quot;</span> <span class="ow">and</span> <span class="p">(</span><span class="n">name_at</span> <span class="o">==</span> <span class="s2">&quot;N&quot;</span> <span class="ow">or</span> <span class="n">name_at</span> <span class="o">==</span> <span class="s2">&quot;CA&quot;</span> <span class="ow">or</span> <span class="n">name_at</span> <span class="o">==</span> <span class="s2">&quot;C&quot;</span><span class="p">):</span>
-                    <span class="c1"># In some PDBs the residues ids do not start at 1</span>
-                    <span class="c1"># so we remember the first id number</span>
-                    <span class="k">if</span> <span class="n">flag</span><span class="p">:</span>
-                        <span class="bp">self</span><span class="o">.</span><span class="n">first</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">line</span><span class="p">[</span><span class="mi">22</span><span class="p">:</span><span class="mi">26</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span>
-                        <span class="n">flag</span> <span class="o">=</span> <span class="kc">False</span>
                     <span class="n">x_coord</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">line</span><span class="p">[</span><span class="mi">30</span><span class="p">:</span><span class="mi">38</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span>
                     <span class="n">y_coord</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">line</span><span class="p">[</span><span class="mi">38</span><span class="p">:</span><span class="mi">46</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span>
                     <span class="n">z_coord</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">line</span><span class="p">[</span><span class="mi">46</span><span class="p">:</span><span class="mi">54</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span>
@@ -219,15 +206,15 @@
                             <span class="n">count_res</span> <span class="o">+=</span> <span class="mi">1</span>
                         <span class="k">if</span> <span class="n">line_type</span> <span class="o">==</span> <span class="s2">&quot;ATOM&quot;</span> <span class="ow">and</span> <span class="n">name_at</span> <span class="o">==</span> <span class="s2">&quot;N&quot;</span><span class="p">:</span>
                             <span class="bp">self</span><span class="o">.</span><span class="n">residues</span><span class="p">[</span><span class="n">count_res</span><span class="p">]</span><span class="o">.</span><span class="n">ca_atom</span>\
-                                <span class="o">.</span><span class="n">set_coords</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">x_coord</span><span class="p">,</span> <span class="n">y_coord</span><span class="p">,</span> <span class="n">z_coord</span><span class="p">]))</span>
+                            <span class="o">.</span><span class="n">set_coords</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">x_coord</span><span class="p">,</span> <span class="n">y_coord</span><span class="p">,</span> <span class="n">z_coord</span><span class="p">]))</span>
                             <span class="n">nb_atoms</span> <span class="o">+=</span> <span class="mi">1</span>
                         <span class="k">elif</span> <span class="n">line_type</span> <span class="o">==</span> <span class="s2">&quot;ATOM&quot;</span> <span class="ow">and</span> <span class="n">name_at</span> <span class="o">==</span> <span class="s2">&quot;CA&quot;</span><span class="p">:</span>
                             <span class="bp">self</span><span class="o">.</span><span class="n">residues</span><span class="p">[</span><span class="n">count_res</span><span class="p">]</span><span class="o">.</span><span class="n">c_atom</span>\
-                                <span class="o">.</span><span class="n">set_coords</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">x_coord</span><span class="p">,</span> <span class="n">y_coord</span><span class="p">,</span> <span class="n">z_coord</span><span class="p">]))</span>
+                            <span class="o">.</span><span class="n">set_coords</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">x_coord</span><span class="p">,</span> <span class="n">y_coord</span><span class="p">,</span> <span class="n">z_coord</span><span class="p">]))</span>
                             <span class="n">nb_atoms</span> <span class="o">+=</span> <span class="mi">1</span>
                         <span class="k">elif</span> <span class="n">line_type</span> <span class="o">==</span> <span class="s2">&quot;ATOM&quot;</span> <span class="ow">and</span> <span class="n">name_at</span> <span class="o">==</span> <span class="s2">&quot;C&quot;</span><span class="p">:</span>
                             <span class="bp">self</span><span class="o">.</span><span class="n">residues</span><span class="p">[</span><span class="n">count_res</span><span class="p">]</span><span class="o">.</span><span class="n">n_atom</span>\
-                                <span class="o">.</span><span class="n">set_coords</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">x_coord</span><span class="p">,</span> <span class="n">y_coord</span><span class="p">,</span> <span class="n">z_coord</span><span class="p">]))</span>
+                            <span class="o">.</span><span class="n">set_coords</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">x_coord</span><span class="p">,</span> <span class="n">y_coord</span><span class="p">,</span> <span class="n">z_coord</span><span class="p">]))</span>
                             <span class="n">nb_atoms</span> <span class="o">+=</span> <span class="mi">1</span>
                         <span class="k">if</span> <span class="n">nb_atoms</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
                             <span class="n">count_res</span> <span class="o">+=</span> <span class="mi">1</span>
@@ -253,74 +240,26 @@
 
 <div class="viewcode-block" id="Template.add_gaps_in_template_sequence"><a class="viewcode-back" href="../../template.html#src.template.Template.add_gaps_in_template_sequence">[docs]</a>    <span class="k">def</span> <span class="nf">add_gaps_in_template_sequence</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">            This function replaces the missing residues of the template&#39;s</span>
-<span class="sd">            sequence</span>
+<span class="sd">            Sets the benchmark attribute of the template.</span>
+<span class="sd">            The benchmark attribute represents the fold family type of the</span>
+<span class="sd">            template: &quot;Family&quot;, &quot;Superfamily&quot; or &quot;Fold&quot;, that is to say how similar</span>
+<span class="sd">            the template is from the query. This is necessary to be</span>
+<span class="sd">            able to benchmark the new scoring functions.</span>
+
+<span class="sd">            Args:</span>
+<span class="sd">                fold_type (str): &quot;Family&quot;, &quot;Superfamily&quot; or &quot;Fold&quot;</span>
 
 <span class="sd">            Returns:</span>
-<span class="sd">                str: Path to the new (gapless) PDB file of the template.</span>
+<span class="sd">                void</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="c1"># Fetch FASTA file from RCSB PDB database</span>
-        <span class="n">fasta_file</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_fasta_file</span><span class="p">()</span>
-        <span class="c1"># Parse the file to get sequence</span>
-        <span class="n">sequence</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">SeqIO</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">fasta_file</span><span class="p">,</span> <span class="s2">&quot;fasta&quot;</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">seq</span>
-        <span class="c1"># Add gaps &quot;-&quot; to the initial sequence inplace of the missing residues</span>
-        <span class="n">new_seq</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
-        <span class="n">self_ind</span> <span class="o">=</span> <span class="mi">0</span>
-        <span class="k">for</span> <span class="n">ind</span><span class="p">,</span> <span class="n">res</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">sequence</span><span class="p">):</span>
-            <span class="k">if</span> <span class="n">self_ind</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">residues</span><span class="p">)</span> <span class="ow">and</span> <span class="n">res</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">residues</span><span class="p">[</span><span class="n">self_ind</span><span class="p">]</span><span class="o">.</span><span class="n">name</span><span class="p">:</span>
-                <span class="n">new_seq</span> <span class="o">+=</span> <span class="n">res</span>
-                <span class="n">self_ind</span> <span class="o">+=</span> <span class="mi">1</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">new_seq</span> <span class="o">+=</span> <span class="s2">&quot;-&quot;</span>
-        <span class="k">return</span> <span class="n">new_seq</span></div></div>
-
-
-<div class="viewcode-block" id="write_new_alignment"><a class="viewcode-back" href="../../template.html#src.template.write_new_alignment">[docs]</a><span class="k">def</span> <span class="nf">write_new_alignment</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">res_path</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        This function launches MODELLER to rebuild the PDB structures</span>
-<span class="sd">        containing missing residues. Some structures have unresolved parts</span>
-<span class="sd">        which are consequently not integrated in the PDB file because no</span>
-<span class="sd">        coordinates could be determined for the faulty residues.</span>
-<span class="sd">        We can use MODELLER to &quot;fill in&quot; these missing residues by treating</span>
-<span class="sd">        the original structure (without the missing residues) as a template,</span>
-<span class="sd">        and building a comparative model using the full sequence.</span>
-
-<span class="sd">        Returns:</span>
-<span class="sd">            str: Path to the new (gapless) PDB file of the template.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">new_template_seq</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">add_gaps_in_template_sequence</span><span class="p">()</span>
-    <span class="n">ali_out_dir</span> <span class="o">=</span> <span class="n">res_path</span> <span class="o">+</span> <span class="s2">&quot;modeller/alignments/&quot;</span>
-    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">ali_out_dir</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">template</span><span class="o">.</span><span class="n">name</span><span class="o">+</span><span class="s2">&quot;.ali&quot;</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">ali_out</span><span class="p">:</span>
-        <span class="n">template_len</span> <span class="o">=</span> <span class="nb">len</span><span class="p">([</span><span class="n">res</span> <span class="k">for</span> <span class="n">res</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">template</span><span class="o">.</span><span class="n">residues</span> <span class="k">if</span> <span class="n">res</span><span class="o">.</span><span class="n">name</span> <span class="o">!=</span> <span class="s1">&#39;-&#39;</span><span class="p">])</span>
-        <span class="n">ali_out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;&gt;P1;&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">template</span><span class="o">.</span><span class="n">pdb</span><span class="p">)</span>
-        <span class="n">ali_out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">structure:&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">template</span><span class="o">.</span><span class="n">pdb</span>
-                      <span class="o">+</span> <span class="s2">&quot;:&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">template</span><span class="o">.</span><span class="n">first</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;:@:&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">template_len</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;:@::::</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
-        <span class="n">ali_out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">template</span><span class="o">.</span><span class="n">display</span><span class="p">()</span> <span class="o">+</span> <span class="s2">&quot;*&quot;</span><span class="p">)</span>
-        <span class="n">ali_out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">&gt;P1;&quot;</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">template</span><span class="o">.</span><span class="n">pdb</span><span class="o">+</span><span class="s2">&quot;_fill&quot;</span><span class="p">)</span>
-        <span class="n">ali_out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">sequence:::::::::</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
-        <span class="n">ali_out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">new_template_seq</span> <span class="o">+</span> <span class="s2">&quot;*&quot;</span><span class="p">)</span></div>
-
-
-<div class="viewcode-block" id="build_new_pdb_with_modeller"><a class="viewcode-back" href="../../template.html#src.template.build_new_pdb_with_modeller">[docs]</a><span class="k">def</span> <span class="nf">build_new_pdb_with_modeller</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">res_path</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        This function launches MODELLER to rebuild the PDB structures</span>
-<span class="sd">        containing missing residues. Some structures have unresolved parts</span>
-<span class="sd">        which are consequently not integrated in the PDB file because no</span>
-<span class="sd">        coordinates could be determined for the faulty residues.</span>
-<span class="sd">        We can use MODELLER to &quot;fill in&quot; these missing residues by treating</span>
-<span class="sd">        the original structure (without the missing residues) as a template,</span>
-<span class="sd">        and building a comparative model using the full sequence.</span>
-
-<span class="sd">        Returns:</span>
-<span class="sd">            str: Path to the new (gapless) PDB file of the template.</span>
-<span class="sd">    &quot;&quot;&quot;</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">benchmark</span> <span class="o">=</span> <span class="n">fold_type</span></div></div>
 </pre></div>
 
            </div>
-
+           
           </div>
           <footer>
-
+  
 
   <hr/>
 
@@ -330,7 +269,7 @@
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -340,21 +279,21 @@
     </section>
 
   </div>
+  
 
 
+  
 
-
-
-
-
+    
+    
       <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
         <script type="text/javascript" src="../../_static/jquery.js"></script>
         <script type="text/javascript" src="../../_static/underscore.js"></script>
         <script type="text/javascript" src="../../_static/doctools.js"></script>
         <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
 
-
-
+  
 
   <script type="text/javascript" src="../../_static/js/theme.js"></script>
 
@@ -362,7 +301,7 @@
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
+  </script> 
 
 </body>
 </html>
