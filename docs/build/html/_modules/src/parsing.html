@@ -81,14 +81,12 @@
             
             
               <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../README.html">README</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../alignment.html">Alignment module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../query.html">Query module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../template.html">Template module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../residue.html">Residue module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../atom.html">Atom module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../parsing.html">Parsing module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../time.html">Time module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../parsing.html">Parsing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../alignment.html">Alignment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../query.html">Query</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../template.html">Template</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../residue.html">Residue</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../atom.html">Atom</a></li>
 </ul>
 
             
@@ -200,7 +198,7 @@
 
 <span class="sd">        Returns:</span>
 <span class="sd">            dict: A dictionary with key = res_1-res_2 and value = an array of</span>
-<span class="sd">                    the 30 dope energy values.</span>
+<span class="sd">            the 30 dope energy values.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">dope_dict</span> <span class="o">=</span> <span class="p">{}</span>
     <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">dope_file</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
@@ -225,12 +223,12 @@
 <span class="sd">                                 corresponding scores.</span>
 <span class="sd">            nb_templates (int): Number of alignments to retrieve from the file and chosen</span>
 <span class="sd">                                by the user.</span>
-<span class="sd">            metafold_dict (dictionary): A dictionary with key = template name and</span>
-<span class="sd">                                        value = pdb file.</span>
+<span class="sd">            metafold_dict (dictionary): A dictionary with key = template name</span>
+<span class="sd">                                        and value = pdb file.</span>
 
 <span class="sd">        Returns:</span>
 <span class="sd">            dict of Alignments: A dictionary with key = template name and</span>
-<span class="sd">                                      value = an Alignment object.</span>
+<span class="sd">            value = an Alignment object.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="c1"># Regex :</span>

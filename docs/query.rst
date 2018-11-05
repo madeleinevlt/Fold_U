@@ -1,5 +1,5 @@
-Query module
-************
+Query
+*****
 
 .. automodule:: src.query
    :members:

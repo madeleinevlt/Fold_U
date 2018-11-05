@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Atom module &mdash; fold-u 1.0 documentation</title>
+  <title>Atom &mdash; fold-u 1.0 documentation</title>
   
 
   
@@ -28,8 +28,7 @@
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Parsing module" href="parsing.html" />
-    <link rel="prev" title="Residue module" href="residue.html" /> 
+    <link rel="prev" title="Residue" href="residue.html" /> 
 
   
   <script src="_static/js/modernizr.min.js"></script>
@@ -83,14 +82,12 @@
             
             
               <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="README.html">README</a></li>
-<li class="toctree-l1"><a class="reference internal" href="alignment.html">Alignment module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="query.html">Query module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="template.html">Template module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="residue.html">Residue module</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Atom module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="parsing.html">Parsing module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="time.html">Time module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="parsing.html">Parsing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="alignment.html">Alignment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="query.html">Query</a></li>
+<li class="toctree-l1"><a class="reference internal" href="template.html">Template</a></li>
+<li class="toctree-l1"><a class="reference internal" href="residue.html">Residue</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Atom</a></li>
 </ul>
 
             
@@ -136,7 +133,7 @@
     
       <li><a href="index.html">Docs</a> &raquo;</li>
         
-      <li>Atom module</li>
+      <li>Atom</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -156,7 +153,7 @@
            <div itemprop="articleBody">
             
   <div class="section" id="module-src.atom">
-<span id="atom-module"></span><h1>Atom module<a class="headerlink" href="#module-src.atom" title="Permalink to this headline">¶</a></h1>
+<span id="atom"></span><h1>Atom<a class="headerlink" href="#module-src.atom" title="Permalink to this headline">¶</a></h1>
 <span class="target" id="module-Atom"></span><dl class="class">
 <dt id="src.atom.Atom">
 <em class="property">class </em><code class="descclassname">src.atom.</code><code class="descname">Atom</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/atom.html#Atom"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.atom.Atom" title="Permalink to this definition">¶</a></dt>
@@ -170,12 +167,28 @@
 <dt id="src.atom.Atom.name">
 <code class="descname">name</code><a class="headerlink" href="#src.atom.Atom.name" title="Permalink to this definition">¶</a></dt>
 <dd><p>Name of the atom</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">str</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="src.atom.Atom.coords">
 <code class="descname">coords</code><a class="headerlink" href="#src.atom.Atom.coords" title="Permalink to this definition">¶</a></dt>
 <dd><p>3D coordinates of the atom</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">Numpy array</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
@@ -186,9 +199,7 @@
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>coords</strong> (<em>np array</em>) – x,y,z coordinates.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">void</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>coords</strong> (<em>Numpy array</em>) – x,y,z coordinates.</td>
 </tr>
 </tbody>
 </table>
@@ -206,10 +217,8 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="parsing.html" class="btn btn-neutral float-right" title="Parsing module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
-      
-        <a href="residue.html" class="btn btn-neutral" title="Residue module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="residue.html" class="btn btn-neutral" title="Residue" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

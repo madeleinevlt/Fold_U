@@ -14,9 +14,9 @@ class Template:
       This class groups informations about a template sequence/structure.
 
     Attributes:
-        name: Name of the template
-        residues: Template's sequence of residues as list of Residues objects
-        pdb: PDB filename of the template
+        name (str): Name of the template
+        residues (list of Residue object): Template's sequence of residues as list of Residues objects
+        pdb (str): PDB filename of the template
     """
 
     def __init__(self, name, residues):
@@ -30,17 +30,22 @@ class Template:
             Get the PDB file name of the current template from the template's name.
 
             Args:
+<<<<<<< Updated upstream
                 self: The current alignment's template.
                 dictionary: A dictionary with key = template name and value = pdb file
 
             Returns:
                 void
+=======
+                metafold_dict: A dictionary with key = template name and value = pdb file
+>>>>>>> Stashed changes
         """
         self.pdb = metafold_dict[self.name]
 
     def parse_pdb(self):
         """
             Parse the pdb file and set the CA coordinates.
+<<<<<<< Updated upstream
 
             Args:
                 void
@@ -48,6 +53,8 @@ class Template:
             Returns:
                 void
 
+=======
+>>>>>>> Stashed changes
         """
         count_res = 0
         nb_atoms = 0
@@ -79,8 +86,30 @@ class Template:
                             count_res += 1
                             nb_atoms = 0
 
+<<<<<<< Updated upstream
 
     def set_benchmark(self, fold_type):
+=======
+    def get_fasta_file(self):
+        """
+        Retrieve the full FASTA amino acid sequence (gapless) of the template,
+        and write it to an alignment file.
+
+        Returns:
+            str: Path to the FASTA file containing the sequence of the template.
+        """
+        url = "https://www.rcsb.org/pdb/download/downloadFastaFiles.do?structureIdList=" + self.pdb + "&compressionType=uncompressed"
+        file_name = None
+        try:
+            file_name = wget.download(url, bar=None)
+        except Exception as e:
+            print("Errors encountered while downloading FASTA file of "
+                  + self.pdb + ".atm template.")
+            print("Initial error: " + str(e))
+        return file_name
+
+    def add_gaps_in_template_sequence(self):
+>>>>>>> Stashed changes
         """
             Sets the benchmark attribute of the template.
             The benchmark attribute represents the fold family type of the

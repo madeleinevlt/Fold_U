@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Parsing module &mdash; fold-u 1.0 documentation</title>
+  <title>Parsing &mdash; fold-u 1.0 documentation</title>
   
 
   
@@ -28,8 +28,8 @@
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Time module" href="time.html" />
-    <link rel="prev" title="Atom module" href="atom.html" /> 
+    <link rel="next" title="Alignment" href="alignment.html" />
+    <link rel="prev" title="Fold U: A Protein Structure Prediction Program" href="index.html" /> 
 
   
   <script src="_static/js/modernizr.min.js"></script>
@@ -83,14 +83,12 @@
             
             
               <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="README.html">README</a></li>
-<li class="toctree-l1"><a class="reference internal" href="alignment.html">Alignment module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="query.html">Query module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="template.html">Template module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="residue.html">Residue module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="atom.html">Atom module</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Parsing module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="time.html">Time module</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Parsing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="alignment.html">Alignment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="query.html">Query</a></li>
+<li class="toctree-l1"><a class="reference internal" href="template.html">Template</a></li>
+<li class="toctree-l1"><a class="reference internal" href="residue.html">Residue</a></li>
+<li class="toctree-l1"><a class="reference internal" href="atom.html">Atom</a></li>
 </ul>
 
             
@@ -136,7 +134,7 @@
     
       <li><a href="index.html">Docs</a> &raquo;</li>
         
-      <li>Parsing module</li>
+      <li>Parsing</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -156,7 +154,7 @@
            <div itemprop="articleBody">
             
   <div class="section" id="module-src.parsing">
-<span id="parsing-module"></span><h1>Parsing module<a class="headerlink" href="#module-src.parsing" title="Permalink to this headline">¶</a></h1>
+<span id="parsing"></span><h1>Parsing<a class="headerlink" href="#module-src.parsing" title="Permalink to this headline">¶</a></h1>
 <span class="target" id="module-parsing"></span><dl class="function">
 <dt id="src.parsing.parse_dope">
 <code class="descclassname">src.parsing.</code><code class="descname">parse_dope</code><span class="sig-paren">(</span><em>dope_file</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/parsing.html#parse_dope"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.parsing.parse_dope" title="Permalink to this definition">¶</a></dt>
@@ -169,11 +167,8 @@ in a dictionary with key = res_1-res_2 and value = an array of the 30 dope score
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>file</strong> (<em>dope</em>) – The file dope.par containing energy values for each
 amino acid pair.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><dl class="docutils">
-<dt>A dictionary with key = res_1-res_2 and value = an array of</dt>
-<dd>the 30 dope energy values.</dd>
-</dl>
-</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A dictionary with key = res_1-res_2 and value = an array of
+the 30 dope energy values.</td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">dict</td>
 </tr>
@@ -197,17 +192,13 @@ and gets all the coordinates of the CA atoms in the template’s Residue list.</
 corresponding scores.</li>
 <li><strong>nb_templates</strong> (<em>int</em>) – Number of alignments to retrieve from the file and chosen
 by the user.</li>
-<li><strong>metafold_dict</strong> (<em>dictionary</em>) – A dictionary with key = template name and
-value = pdb file.</li>
+<li><strong>metafold_dict</strong> (<em>dictionary</em>) – A dictionary with key = template name
+and value = pdb file.</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><dl class="docutils">
-<dt>A dictionary with key = template name and</dt>
-<dd><p class="first last">value = an Alignment object.</p>
-</dd>
-</dl>
-</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">A dictionary with key = template name and
+value = an Alignment object.</p>
 </td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">dict of Alignments</p>
@@ -247,10 +238,10 @@ template name and a pdb file name associated</td>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="time.html" class="btn btn-neutral float-right" title="Time module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="alignment.html" class="btn btn-neutral float-right" title="Alignment" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="atom.html" class="btn btn-neutral" title="Atom module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="index.html" class="btn btn-neutral" title="Fold U: A Protein Structure Prediction Program" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

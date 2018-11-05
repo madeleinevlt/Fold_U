@@ -1,5 +1,5 @@
-Atom module
-***********
+Atom
+****
 
 .. automodule:: src.atom
    :members:

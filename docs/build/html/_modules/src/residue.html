@@ -81,14 +81,12 @@
             
             
               <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../README.html">README</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../alignment.html">Alignment module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../query.html">Query module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../template.html">Template module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../residue.html">Residue module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../atom.html">Atom module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../parsing.html">Parsing module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../time.html">Time module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../parsing.html">Parsing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../alignment.html">Alignment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../query.html">Query</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../template.html">Template</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../residue.html">Residue</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../atom.html">Atom</a></li>
 </ul>
 
             
@@ -171,8 +169,8 @@
 <span class="sd">      This class groups informations about a residue.</span>
 
 <span class="sd">    Attributes:</span>
-<span class="sd">        name: Name of the residue (1 letter code)</span>
-<span class="sd">        ca_coords: 3D coordinates of the residue</span>
+<span class="sd">        name (str): Name of the residue (1 letter code)</span>
+<span class="sd">        ca_coords (Numpy array): 3D coordinates of the residue</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
@@ -186,7 +184,8 @@
 <div class="viewcode-block" id="Residue.calculate_distance"><a class="viewcode-back" href="../../residue.html#src.residue.Residue.calculate_distance">[docs]</a>    <span class="k">def</span> <span class="nf">calculate_distance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">residue</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">            Calculate Euclidian distance between two residues with THE most efficient method.</span>
-<span class="sd">            Formula: distance = sqrt((xa-xb)**2 + (ya-yb)**2 + (za-zb)**2)</span>
+
+<span class="sd">            :math: `distance = \\sqrt{(x_a-x_b)^2+(y_a-y_b)^2+(z_a-z_b)^2}`</span>
 
 <span class="sd">            Args:</span>
 <span class="sd">                residue (object): An object of the Residue class.</span>

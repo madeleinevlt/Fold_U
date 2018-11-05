@@ -45,8 +45,13 @@ def parse_dope(dope_file):
                        amino acid pair.
 
         Returns:
+<<<<<<< Updated upstream
             dictionary: A dictionary with key = res_1-res_2 and value = an array of
                     the 30 dope energy values.
+=======
+            dict: A dictionary with key = res_1-res_2 and value = an array of
+            the 30 dope energy values.
+>>>>>>> Stashed changes
     """
     dope_dict = {}
     with open(dope_file, "r") as file:
@@ -71,12 +76,17 @@ def parse_foldrec(foldrec_file, nb_templates, metafold_dict):
                                  corresponding scores.
             nb_templates (int): Number of alignments to retrieve from the file and chosen
                                 by the user.
-            metafold_dict (dictionary): A dictionary with key = template name and
-                                        value = pdb file.
+            metafold_dict (dictionary): A dictionary with key = template name
+                                        and value = pdb file.
 
         Returns:
+<<<<<<< Updated upstream
             dictionary: A dictionary with key = template name and
                                       value = an Alignment object.
+=======
+            dict of Alignments: A dictionary with key = template name and
+            value = an Alignment object.
+>>>>>>> Stashed changes
     """
 
     # Regex :

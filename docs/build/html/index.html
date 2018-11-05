@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Welcome to fold-U’s documentation! &mdash; fold-u 1.0 documentation</title>
+  <title>Fold U: A Protein Structure Prediction Program &mdash; fold-u 1.0 documentation</title>
   
 
   
@@ -28,7 +28,7 @@
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="README" href="README.html" /> 
+    <link rel="next" title="Parsing" href="parsing.html" /> 
 
   
   <script src="_static/js/modernizr.min.js"></script>
@@ -82,14 +82,12 @@
             
             
               <ul>
-<li class="toctree-l1"><a class="reference internal" href="README.html">README</a></li>
-<li class="toctree-l1"><a class="reference internal" href="alignment.html">Alignment module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="query.html">Query module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="template.html">Template module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="residue.html">Residue module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="atom.html">Atom module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="parsing.html">Parsing module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="time.html">Time module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="parsing.html">Parsing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="alignment.html">Alignment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="query.html">Query</a></li>
+<li class="toctree-l1"><a class="reference internal" href="template.html">Template</a></li>
+<li class="toctree-l1"><a class="reference internal" href="residue.html">Residue</a></li>
+<li class="toctree-l1"><a class="reference internal" href="atom.html">Atom</a></li>
 </ul>
 
             
@@ -135,7 +133,7 @@
     
       <li><a href="#">Docs</a> &raquo;</li>
         
-      <li>Welcome to fold-U’s documentation!</li>
+      <li>Fold U: A Protein Structure Prediction Program</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -154,22 +152,102 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="welcome-to-fold-u-s-documentation">
-<h1>Welcome to fold-U’s documentation!<a class="headerlink" href="#welcome-to-fold-u-s-documentation" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="fold-u-a-protein-structure-prediction-program">
+<h1>Fold U: A Protein Structure Prediction Program<a class="headerlink" href="#fold-u-a-protein-structure-prediction-program" title="Permalink to this headline">¶</a></h1>
+<a class="reference external image-reference" href="https://img.shields.io/badge/fold--u-v1.1-blue.svg"><img alt="Fold-U release" src="https://img.shields.io/badge/fold--u-v1.1-blue.svg" /></a>
+<a class="reference external image-reference" href="https://opensource.org/licenses/MIT"><img alt="License: MIT" src="https://img.shields.io/badge/License-MIT-yellow.svg" /></a>
+<a class="reference external image-reference" href="https://img.shields.io/badge/python-3-brightgreen.svg"><img alt="Python version" src="https://img.shields.io/badge/python-3-brightgreen.svg" /></a>
+<a class="reference external image-reference" href="https://img.shields.io/badge/sphinx%20build-1.7.4-brightgreen.svg"><img alt="Sphinx version" src="https://img.shields.io/badge/sphinx%20build-1.7.4-brightgreen.svg" /></a>
+<p align="center">
+  <img width="250" src="img/fold_u.svg" alt="fold_u_logo"/>
+</p><p>This program is the second step (downstream) of a protein structure prediction project. This step consists of threading a query sequence on different given templates.</p>
+<p>Our project is part of the Meet-U 2018-2019 competition.
+Meet-U is a collaborative pedagogical and research initiative between several Universities of Paris area. The course is intended to Master students (2nd year) in Bioinformatics. For more details refer to <a class="reference external" href="http://www.meet-u.org/">http://www.meet-u.org/</a>.</p>
+<div class="section" id="installation">
+<h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="clone-the-repository">
+<h3>Clone the repository<a class="headerlink" href="#clone-the-repository" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-guess notranslate"><div class="highlight"><pre><span></span>git clone https://github.com/meetU-MasterStudents/Fold_U.git
+cd Fold_U
+</pre></div>
+</div>
+</div>
+<div class="section" id="requirements">
+<h3>Requirements<a class="headerlink" href="#requirements" title="Permalink to this headline">¶</a></h3>
+<p>Install the few required packages / modules:</p>
+<div class="highlight-guess notranslate"><div class="highlight"><pre><span></span>pip install -r src/requirements.txt
+</pre></div>
+</div>
+<p>MODELLER is also required, and can be installed easily with Conda:</p>
+<div class="highlight-guess notranslate"><div class="highlight"><pre><span></span>conda install -c salilab modeller
+</pre></div>
+</div>
+<p>You need to register to get a license key <a class="reference external" href="https://salilab.org/modeller/registration.html">here</a>, and follow instructions during installation to insert license key in the program.</p>
+</div>
+</div>
+<div class="section" id="run-the-program">
+<h2>Run the program<a class="headerlink" href="#run-the-program" title="Permalink to this headline">¶</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">fold_u.py</span></code> takes in input N profil-profil alignments and their corresponding scores (foldrec file).</p>
+<div class="section" id="run-the-test">
+<h3>Run the test<a class="headerlink" href="#run-the-test" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-guess notranslate"><div class="highlight"><pre><span></span>./fold_u.py data/foldrec/Agglutinin.foldrec
+</pre></div>
+</div>
+</div>
+<div class="section" id="get-help">
+<h3>Get help<a class="headerlink" href="#get-help" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-guess notranslate"><div class="highlight"><pre><span></span>./fold_u.py -h
+
+    Usage:
+        fold_u.py FOLDREC_FILE [--nb_templates NUM] [--nb_pdb NUM] [--output PATH]
+                               [--metafold FILE] [--dope FILE]
+
+    Options:
+        -h, --help                            Show this
+        -n NUM, --nb_templates NUM            First n templates to retrieve from
+                                              the foldrec file [default: 100]
+        -p NUM, --nb_pdb NUM                  Number of pdb to create
+                                              [default: 10]
+        -o PATH, --output PATH                Path to the directory containing
+                                              the result files (scores and pdb)
+                                              [default: res/threading]
+        -m FILE, --metafold FILE              Path to the metafold.list file
+                                              [default: data/METAFOLD.list]
+        -d FILE, --dope FILE                  Path to the dope.par file
+                                              [default: data/dope.par]
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="documentation">
+<h2>Documentation<a class="headerlink" href="#documentation" title="Permalink to this headline">¶</a></h2>
+<p>The documentation of our program, generated with Sphinx and Read The Docs theme, is accessible at the following address:
+<a class="reference external" href="https://meetu-masterstudents.github.io/Fold_U/">https://meetu-masterstudents.github.io/Fold_U/</a></p>
+</div>
+<div class="section" id="authors">
+<h2>Authors<a class="headerlink" href="#authors" title="Permalink to this headline">¶</a></h2>
+<p>We are master students in bioinformatics at Paris Diderot University.</p>
+<ul class="simple">
+<li><a class="reference external" href="https://github.com/gabrielctn">Gabriel Cretin</a></li>
+<li><a class="reference external" href="https://github.com/kabhel">Hélène Kabbech</a></li>
+<li><a class="reference external" href="https://github.com/tomgutman">Tom Gutman</a></li>
+<li><a class="reference external" href="https://github.com/FloraMika">Flora Mikaeloff</a></li>
+<li><a class="reference external" href="https://github.com/franzx5">Franz-Arnold Ake</a></li>
+</ul>
+</div>
+<div class="section" id="license">
+<h2>License<a class="headerlink" href="#license" title="Permalink to this headline">¶</a></h2>
+<p>This project is licensed under the MIT License.</p>
 <div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="README.html">README</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="README.html#fold-u-a-protein-structure-prediction-program">Fold U: A Protein Structure Prediction Program</a></li>
+<li class="toctree-l1"><a class="reference internal" href="parsing.html">Parsing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="alignment.html">Alignment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="query.html">Query</a></li>
+<li class="toctree-l1"><a class="reference internal" href="template.html">Template</a></li>
+<li class="toctree-l1"><a class="reference internal" href="residue.html">Residue</a></li>
+<li class="toctree-l1"><a class="reference internal" href="atom.html">Atom</a></li>
 </ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="alignment.html">Alignment module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="query.html">Query module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="template.html">Template module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="residue.html">Residue module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="atom.html">Atom module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="parsing.html">Parsing module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="time.html">Time module</a></li>
-</ul>
+</div>
 </div>
 </div>
 
@@ -181,7 +259,7 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="README.html" class="btn btn-neutral float-right" title="README" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="parsing.html" class="btn btn-neutral float-right" title="Parsing" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
     </div>

@@ -17,8 +17,8 @@ class Residue:
       This class groups informations about a residue.
 
     Attributes:
-        name: Name of the residue (1 letter code)
-        ca_coords: 3D coordinates of the residue
+        name (str): Name of the residue (1 letter code)
+        ca_coords (Numpy array): 3D coordinates of the residue
     """
 
     def __init__(self, name):
@@ -32,7 +32,8 @@ class Residue:
     def calculate_distance(self, residue):
         """
             Calculate Euclidian distance between two residues with THE most efficient method.
-            Formula: distance = sqrt((xa-xb)**2 + (ya-yb)**2 + (za-zb)**2)
+
+            :math: `distance = \\sqrt{(x_a-x_b)^2+(y_a-y_b)^2+(z_a-z_b)^2}`
 
             Args:
                 residue (object): An object of the Residue class.

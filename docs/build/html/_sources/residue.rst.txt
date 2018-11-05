@@ -1,5 +1,5 @@
-Residue module
-**************
+Residue
+*******
 
 .. automodule:: src.residue
    :members:

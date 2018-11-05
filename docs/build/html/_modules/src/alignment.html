@@ -81,14 +81,12 @@
             
             
               <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../README.html">README</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../alignment.html">Alignment module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../query.html">Query module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../template.html">Template module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../residue.html">Residue module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../atom.html">Atom module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../parsing.html">Parsing module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../time.html">Time module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../parsing.html">Parsing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../alignment.html">Alignment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../query.html">Query</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../template.html">Template</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../residue.html">Residue</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../atom.html">Atom</a></li>
 </ul>
 
             
@@ -160,10 +158,18 @@
 <span class="c1"># Third-party modules</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">Bio.SeqUtils</span> <span class="k">import</span> <span class="n">seq3</span>
+<<<<<<< Updated upstream
 
 <span class="c1"># Local modules</span>
 <span class="kn">from</span> <span class="nn">src.template</span> <span class="k">import</span> <span class="n">Template</span>
 <span class="kn">from</span> <span class="nn">src.query</span> <span class="k">import</span> <span class="n">Query</span>
+=======
+<span class="kn">import</span> <span class="nn">modeller</span> <span class="k">as</span> <span class="nn">m</span>
+<span class="kn">import</span> <span class="nn">modeller.automodel</span> <span class="k">as</span> <span class="nn">am</span>
+<span class="kn">from</span> <span class="nn">modeller.automodel</span> <span class="k">import</span> <span class="n">assess</span>
+<span class="kn">import</span> <span class="nn">contextlib</span>
+<span class="kn">import</span> <span class="nn">os</span>
+>>>>>>> Stashed changes
 
 
 <div class="viewcode-block" id="Alignment"><a class="viewcode-back" href="../../alignment.html#src.alignment.Alignment">[docs]</a><span class="k">class</span> <span class="nc">Alignment</span><span class="p">:</span>
@@ -174,10 +180,10 @@
 
 <span class="sd">    Attributes:</span>
 <span class="sd">        num (int): Number of the alignment</span>
-<span class="sd">        score: Score of the alignment</span>
-<span class="sd">        query: Instance of a Query object as</span>
+<span class="sd">        score (float): Score of the alignment</span>
+<span class="sd">        query (Query object): Instance of a Query object as</span>
 <span class="sd">               ``Query(query_residues, query_first, query_last)``</span>
-<span class="sd">        template: Instance of a Template object as</span>
+<span class="sd">        template (Template object): Instance of a Template object as</span>
 <span class="sd">                  ``Template(template_name, template_residues)``</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
@@ -187,6 +193,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">query</span> <span class="o">=</span> <span class="n">query</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">template</span> <span class="o">=</span> <span class="n">template</span>
 
+<<<<<<< Updated upstream
     <span class="c1">#@fn_timer</span>
 <div class="viewcode-block" id="Alignment.calculate_energy"><a class="viewcode-back" href="../../alignment.html#src.alignment.Alignment.calculate_energy">[docs]</a>    <span class="k">def</span> <span class="nf">calculate_energy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dist_range</span><span class="p">,</span> <span class="n">gap_penalty</span><span class="p">,</span> <span class="n">dope_dict</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -194,6 +201,17 @@
 <span class="sd">            using the coordinates of the template sequence: threading of the query</span>
 <span class="sd">            on the template sequence. The distance calculation is optimized.</span>
 <span class="sd">            The calculated distance is then convert into a dope energy value.</span>
+=======
+<div class="viewcode-block" id="Alignment.calculate_threading_score"><a class="viewcode-back" href="../../alignment.html#src.alignment.Alignment.calculate_threading_score">[docs]</a>    <span class="k">def</span> <span class="nf">calculate_threading_score</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dist_range</span><span class="p">,</span> <span class="n">gap_penalty</span><span class="p">,</span> <span class="n">dope_dict</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Calculate the threading score of the query on the template sequence.</span>
+
+<span class="sd">            1. For each pair residues of the query sequence the distance between them is</span>
+<span class="sd">               calculated using the coordinates of the template sequence.The distance calculation</span>
+<span class="sd">               is optimized.</span>
+<span class="sd">            2. The calculated distance is then convert into a dope energy value.</span>
+<span class="sd">            3. All elements of the energy matrix generated are finally sum.</span>
+>>>>>>> Stashed changes
 
 <span class="sd">            Args:</span>
 <span class="sd">                dist_range (list of int): Range of distances in angströms. Distances</span>
@@ -247,7 +265,37 @@
                         <span class="c1"># So 30 intervals and max value = 15</span>
                         <span class="n">interval_index</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="nb">int</span><span class="p">((</span><span class="n">dist</span> <span class="o">*</span> <span class="mi">30</span><span class="p">)</span> <span class="o">/</span> <span class="mi">15</span><span class="p">))</span>
                         <span class="n">energy</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">dope_dict</span><span class="p">[</span><span class="n">row_res</span><span class="o">.</span><span class="n">name</span><span class="o">+</span><span class="n">col_res</span><span class="o">.</span><span class="n">name</span><span class="p">][</span><span class="n">interval_index</span><span class="p">]</span>
+<<<<<<< Updated upstream
         <span class="k">return</span> <span class="n">energy</span></div>
+=======
+        <span class="c1"># Return the sum of energy matrix with numpy&#39;s &quot;Nan&quot; interpreted as zeros</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">nansum</span><span class="p">(</span><span class="n">energy</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Alignment.calculate_physics_score"><a class="viewcode-back" href="../../alignment.html#src.alignment.Alignment.calculate_physics_score">[docs]</a>    <span class="k">def</span> <span class="nf">calculate_physics_score</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Calculate a physics-based score using the BLOSSUM62 matrix. This matrix contains</span>
+<span class="sd">            substitution scores for each amino acid pair. A positive score is given to the more</span>
+<span class="sd">            likely substitutions while a negative score is given to the less likely substitutions.</span>
+
+<span class="sd">            Returns:</span>
+<span class="sd">                int: The physics-based score calculated.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># dictionary containing substitution scores of the BLOSSUM62 matrix</span>
+        <span class="n">blosum62</span> <span class="o">=</span> <span class="n">MatrixInfo</span><span class="o">.</span><span class="n">blosum62</span>
+        <span class="n">score</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">ind</span><span class="p">,</span> <span class="n">res_q</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">residues</span><span class="p">):</span>
+            <span class="n">res_t</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">template</span><span class="o">.</span><span class="n">residues</span><span class="p">[</span><span class="n">ind</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">res_q</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;-&quot;</span> <span class="ow">or</span> <span class="n">res_t</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;-&quot;</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="c1"># The BLOSSUM62 matrix is symetric, thus we need to test</span>
+            <span class="c1"># if (res_1, res_2) key is in the dictionary.</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">res_q</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">res_t</span><span class="o">.</span><span class="n">name</span><span class="p">)</span> <span class="ow">in</span> <span class="n">blosum62</span><span class="p">:</span>
+                <span class="n">score</span> <span class="o">+=</span> <span class="n">blosum62</span><span class="p">[(</span><span class="n">res_q</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">res_t</span><span class="o">.</span><span class="n">name</span><span class="p">)]</span>
+            <span class="c1"># If not, the corresponding key is (res_2, res_1)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">score</span> <span class="o">+=</span> <span class="n">blosum62</span><span class="p">[(</span><span class="n">res_t</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">res_q</span><span class="o">.</span><span class="n">name</span><span class="p">)]</span>
+        <span class="k">return</span> <span class="o">-</span><span class="n">score</span></div>
+>>>>>>> Stashed changes
 
 <div class="viewcode-block" id="Alignment.write_pdb"><a class="viewcode-back" href="../../alignment.html#src.alignment.Alignment.write_pdb">[docs]</a>    <span class="k">def</span> <span class="nf">write_pdb</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pdb_path</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -255,14 +303,11 @@
 
 <span class="sd">            Args:</span>
 <span class="sd">                pdb_path (str): Path of the pdb file to create.</span>
-
-<span class="sd">            Returns:</span>
-<span class="sd">                void</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">pdb_path</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
             <span class="c1"># Extra informations on the template used to generate the pdb file</span>
-            <span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;REMARK Threading of query sequence on the </span><span class="si">{:s}</span><span class="s2"> template #</span><span class="si">{:d}</span><span class="s2">.</span><span class="se">\n</span><span class="s2">&quot;</span>\
-                <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">template</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">num</span><span class="p">))</span>
+            <span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;REMARK Threading of query sequence on the </span><span class="si">{:s}</span><span class="s2"> template #</span><span class="si">{:d}</span><span class="s2">.</span><span class="se">\n</span><span class="s2">&quot;</span>
+                       <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">template</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">num</span><span class="p">))</span>
             <span class="n">ind</span> <span class="o">=</span> <span class="mi">0</span>
             <span class="n">count_atom</span> <span class="o">=</span> <span class="mi">1</span>
             <span class="k">for</span> <span class="n">count_res</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">first</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">last</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
@@ -272,23 +317,131 @@
                     <span class="n">ind</span> <span class="o">+=</span> <span class="mi">1</span>
                     <span class="k">continue</span>
                 <span class="c1"># # N &quot;ATOM&quot; line</span>
-                <span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{:6s}{:5d}</span><span class="s2"> </span><span class="si">{:^4s}</span><span class="s2"> </span><span class="si">{:&gt;3s}{:&gt;2s}{:4d}{:&gt;12.3f}{:8.3f}{:8.3f}{:6.2f}{:6.2f}{:&gt;12s}</span><span class="se">\n</span><span class="s2">&quot;</span>\
-                    <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s2">&quot;ATOM&quot;</span><span class="p">,</span> <span class="n">count_atom</span><span class="p">,</span> <span class="s2">&quot;N&quot;</span><span class="p">,</span> <span class="n">seq3</span><span class="p">(</span><span class="n">res_q</span><span class="o">.</span><span class="n">name</span><span class="p">)</span><span class="o">.</span><span class="n">upper</span><span class="p">(),</span> <span class="s2">&quot;A&quot;</span><span class="p">,</span> <span class="n">count_res</span><span class="p">,</span>\
-                    <span class="n">res_t</span><span class="o">.</span><span class="n">n_atom</span><span class="o">.</span><span class="n">coords</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">res_t</span><span class="o">.</span><span class="n">n_atom</span><span class="o">.</span><span class="n">coords</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">res_t</span><span class="o">.</span><span class="n">n_atom</span><span class="o">.</span><span class="n">coords</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="mf">1.00</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;N&quot;</span><span class="p">))</span>
+                <span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{:6s}{:5d}</span><span class="s2"> </span><span class="si">{:^4s}</span><span class="s2"> </span><span class="si">{:&gt;3s}{:&gt;2s}{:4d}{:&gt;12.3f}{:8.3f}{:8.3f}{:6.2f}{:6.2f}{:&gt;12s}</span><span class="se">\n</span><span class="s2">&quot;</span>
+                           <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s2">&quot;ATOM&quot;</span><span class="p">,</span> <span class="n">count_atom</span><span class="p">,</span> <span class="s2">&quot;N&quot;</span><span class="p">,</span> <span class="n">seq3</span><span class="p">(</span><span class="n">res_q</span><span class="o">.</span><span class="n">name</span><span class="p">)</span><span class="o">.</span><span class="n">upper</span><span class="p">(),</span> <span class="s2">&quot;A&quot;</span><span class="p">,</span> <span class="n">count_res</span><span class="p">,</span>
+                                   <span class="n">res_t</span><span class="o">.</span><span class="n">n_atom</span><span class="o">.</span><span class="n">coords</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">res_t</span><span class="o">.</span><span class="n">n_atom</span><span class="o">.</span><span class="n">coords</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">res_t</span><span class="o">.</span><span class="n">n_atom</span><span class="o">.</span><span class="n">coords</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="mf">1.00</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;N&quot;</span><span class="p">))</span>
                 <span class="n">count_atom</span> <span class="o">+=</span> <span class="mi">1</span>
                 <span class="c1"># CA &quot;ATOM&quot; line</span>
-                <span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{:6s}{:5d}</span><span class="s2"> </span><span class="si">{:^4s}</span><span class="s2"> </span><span class="si">{:&gt;3s}{:&gt;2s}{:4d}{:&gt;12.3f}{:8.3f}{:8.3f}{:6.2f}{:6.2f}{:&gt;12s}</span><span class="se">\n</span><span class="s2">&quot;</span>\
-                    <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s2">&quot;ATOM&quot;</span><span class="p">,</span> <span class="n">count_atom</span><span class="p">,</span> <span class="s2">&quot;CA&quot;</span><span class="p">,</span> <span class="n">seq3</span><span class="p">(</span><span class="n">res_q</span><span class="o">.</span><span class="n">name</span><span class="p">)</span><span class="o">.</span><span class="n">upper</span><span class="p">(),</span> <span class="s2">&quot;A&quot;</span><span class="p">,</span> <span class="n">count_res</span><span class="p">,</span>\
-                    <span class="n">res_t</span><span class="o">.</span><span class="n">ca_atom</span><span class="o">.</span><span class="n">coords</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">res_t</span><span class="o">.</span><span class="n">ca_atom</span><span class="o">.</span><span class="n">coords</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">res_t</span><span class="o">.</span><span class="n">ca_atom</span><span class="o">.</span><span class="n">coords</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="mf">1.00</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;C&quot;</span><span class="p">))</span>
+                <span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{:6s}{:5d}</span><span class="s2"> </span><span class="si">{:^4s}</span><span class="s2"> </span><span class="si">{:&gt;3s}{:&gt;2s}{:4d}{:&gt;12.3f}{:8.3f}{:8.3f}{:6.2f}{:6.2f}{:&gt;12s}</span><span class="se">\n</span><span class="s2">&quot;</span>
+                           <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s2">&quot;ATOM&quot;</span><span class="p">,</span> <span class="n">count_atom</span><span class="p">,</span> <span class="s2">&quot;CA&quot;</span><span class="p">,</span> <span class="n">seq3</span><span class="p">(</span><span class="n">res_q</span><span class="o">.</span><span class="n">name</span><span class="p">)</span><span class="o">.</span><span class="n">upper</span><span class="p">(),</span> <span class="s2">&quot;A&quot;</span><span class="p">,</span> <span class="n">count_res</span><span class="p">,</span>
+                                   <span class="n">res_t</span><span class="o">.</span><span class="n">ca_atom</span><span class="o">.</span><span class="n">coords</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">res_t</span><span class="o">.</span><span class="n">ca_atom</span><span class="o">.</span><span class="n">coords</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">res_t</span><span class="o">.</span><span class="n">ca_atom</span><span class="o">.</span><span class="n">coords</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="mf">1.00</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;C&quot;</span><span class="p">))</span>
                 <span class="n">count_atom</span> <span class="o">+=</span> <span class="mi">1</span>
                 <span class="c1"># C &quot;ATOM&quot; line</span>
-                <span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{:6s}{:5d}</span><span class="s2"> </span><span class="si">{:^4s}</span><span class="s2"> </span><span class="si">{:&gt;3s}{:&gt;2s}{:4d}{:&gt;12.3f}{:8.3f}{:8.3f}{:6.2f}{:6.2f}{:&gt;12s}</span><span class="se">\n</span><span class="s2">&quot;</span>\
-                    <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s2">&quot;ATOM&quot;</span><span class="p">,</span> <span class="n">count_atom</span><span class="p">,</span> <span class="s2">&quot;C&quot;</span><span class="p">,</span> <span class="n">seq3</span><span class="p">(</span><span class="n">res_q</span><span class="o">.</span><span class="n">name</span><span class="p">)</span><span class="o">.</span><span class="n">upper</span><span class="p">(),</span> <span class="s2">&quot;A&quot;</span><span class="p">,</span> <span class="n">count_res</span><span class="p">,</span>\
-                    <span class="n">res_t</span><span class="o">.</span><span class="n">c_atom</span><span class="o">.</span><span class="n">coords</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">res_t</span><span class="o">.</span><span class="n">c_atom</span><span class="o">.</span><span class="n">coords</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">res_t</span><span class="o">.</span><span class="n">c_atom</span><span class="o">.</span><span class="n">coords</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="mf">1.00</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;C&quot;</span><span class="p">))</span>
+                <span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{:6s}{:5d}</span><span class="s2"> </span><span class="si">{:^4s}</span><span class="s2"> </span><span class="si">{:&gt;3s}{:&gt;2s}{:4d}{:&gt;12.3f}{:8.3f}{:8.3f}{:6.2f}{:6.2f}{:&gt;12s}</span><span class="se">\n</span><span class="s2">&quot;</span>
+                           <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s2">&quot;ATOM&quot;</span><span class="p">,</span> <span class="n">count_atom</span><span class="p">,</span> <span class="s2">&quot;C&quot;</span><span class="p">,</span> <span class="n">seq3</span><span class="p">(</span><span class="n">res_q</span><span class="o">.</span><span class="n">name</span><span class="p">)</span><span class="o">.</span><span class="n">upper</span><span class="p">(),</span> <span class="s2">&quot;A&quot;</span><span class="p">,</span> <span class="n">count_res</span><span class="p">,</span>
+                                   <span class="n">res_t</span><span class="o">.</span><span class="n">c_atom</span><span class="o">.</span><span class="n">coords</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">res_t</span><span class="o">.</span><span class="n">c_atom</span><span class="o">.</span><span class="n">coords</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">res_t</span><span class="o">.</span><span class="n">c_atom</span><span class="o">.</span><span class="n">coords</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="mf">1.00</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;C&quot;</span><span class="p">))</span>
                 <span class="n">count_atom</span> <span class="o">+=</span> <span class="mi">1</span>
                 <span class="n">ind</span> <span class="o">+=</span> <span class="mi">1</span>
             <span class="c1"># The two last lines of the created pdb file (&quot;END&quot; and &quot;TER&quot; lines)</span>
+<<<<<<< Updated upstream
             <span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;END</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span></div></div>
+=======
+            <span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;END</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Alignment.write_alignment_for_modeller"><a class="viewcode-back" href="../../alignment.html#src.alignment.Alignment.write_alignment_for_modeller">[docs]</a>    <span class="k">def</span> <span class="nf">write_alignment_for_modeller</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">res_path</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Modeller requires a specifically formatted alignment file &quot;.ali&quot;,</span>
+<span class="sd">            following the PIR type format.</span>
+<span class="sd">            This function writes this .ali file for the current alignment between</span>
+<span class="sd">            the query and the template.</span>
+
+<span class="sd">            Example of an alignment.ali file for Modeller::</span>
+
+<span class="sd">                &gt;P1;5fd1</span>
+<span class="sd">                structureX:5fd1:1:A:106:A:ferredoxin:Azotobacter vinelandii:1.90: 0.19</span>
+<span class="sd">                AFVVTDNCIKCKYTDCVEVCPVDCFYEGPNFLVIHPDECIDCALCEPECPAQAIFSEDEVPEDMQEFIQLNAELA</span>
+<span class="sd">                EVWPNITEKKDPLPDAEDWDGVKGKLQHLER*</span>
+
+<span class="sd">                &gt;P1;1fdx</span>
+<span class="sd">                sequence:1fdx:1::54::ferredoxin:Peptococcus aerogenes:2.00:-1.00</span>
+<span class="sd">                AYVINDSC--IACGACKPECPVNIIQGS--IYAIDADSCIDCGSCASVCPVGAPNPED-----------------</span>
+<span class="sd">                -------------------------------*</span>
+
+<span class="sd">            Args:</span>
+<span class="sd">                res_path (str): Path to the results folder.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">ali_out_dir</span> <span class="o">=</span> <span class="n">res_path</span> <span class="o">+</span> <span class="s2">&quot;modeller/alignments/&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">ali_out_dir</span><span class="p">):</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">ali_out_dir</span><span class="p">)</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">ali_out_dir</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">template</span><span class="o">.</span><span class="n">name</span><span class="o">+</span><span class="s2">&quot;.ali&quot;</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">ali_out</span><span class="p">:</span>
+            <span class="n">template_len</span> <span class="o">=</span> <span class="nb">len</span><span class="p">([</span><span class="n">res</span> <span class="k">for</span> <span class="n">res</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">template</span><span class="o">.</span><span class="n">residues</span> <span class="k">if</span> <span class="n">res</span><span class="o">.</span><span class="n">name</span> <span class="o">!=</span> <span class="s1">&#39;-&#39;</span><span class="p">])</span>
+            <span class="n">ali_out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;&gt;P1;&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">template</span><span class="o">.</span><span class="n">pdb</span><span class="p">)</span>
+            <span class="n">ali_out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">structure:&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">template</span><span class="o">.</span><span class="n">pdb</span>
+                          <span class="o">+</span> <span class="s2">&quot;:&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">template</span><span class="o">.</span><span class="n">first</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;:@:&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">template_len</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;:@::::</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">ali_out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">template</span><span class="o">.</span><span class="n">display</span><span class="p">()</span> <span class="o">+</span> <span class="s2">&quot;*&quot;</span><span class="p">)</span>
+            <span class="n">ali_out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">&gt;P1;query&quot;</span><span class="p">)</span>
+            <span class="n">ali_out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">sequence:query:&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">first</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;:@:&quot;</span>
+                          <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">last</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;:@::::</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">ali_out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">display</span><span class="p">()</span> <span class="o">+</span> <span class="s2">&quot;*&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Alignment.calculate_modeller_score"><a class="viewcode-back" href="../../alignment.html#src.alignment.Alignment.calculate_modeller_score">[docs]</a>    <span class="k">def</span> <span class="nf">calculate_modeller_score</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">res_path</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            * This function constructs a single comparative model for the query</span>
+<span class="sd">              sequence from the known template structure, using alignment.ali,</span>
+<span class="sd">              a PIR format alignment of query and template. The final model is</span>
+<span class="sd">              written into the PDB file.</span>
+<span class="sd">            * This function also returns the DOPE assessed score of the model</span>
+<span class="sd">              generated by MODELLER.</span>
+<span class="sd">              DOPE is the most reliable score at separating native-like models</span>
+<span class="sd">              from decoys (lower, i.e, more negative, DOPE scores tend to</span>
+<span class="sd">              correlate with more native-like models).</span>
+
+<span class="sd">            Args:</span>
+<span class="sd">                res_path (str): Path to the results folder.</span>
+
+<span class="sd">            Returns:</span>
+<span class="sd">                float: The DOPE score of the model generated by MODELLER.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">root_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">()</span>
+        <span class="n">modeller_out_dir</span> <span class="o">=</span> <span class="n">res_path</span> <span class="o">+</span> <span class="s2">&quot;modeller/&quot;</span>
+        <span class="n">ali_dir</span> <span class="o">=</span> <span class="s2">&quot;alignments/&quot;</span>
+        <span class="c1"># MODELLER generates the result files in his current directory, so we must</span>
+        <span class="c1"># go to the results directory and come back to root dir afterwards.</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">chdir</span><span class="p">(</span><span class="n">modeller_out_dir</span><span class="p">)</span>
+        <span class="c1"># request no verbose output (still gives few that will be silenced afterwards)</span>
+        <span class="n">m</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">none</span><span class="p">()</span>
+        <span class="c1"># create a new MODELLER environment to build this model in</span>
+        <span class="n">m</span><span class="o">.</span><span class="n">env</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">environ</span><span class="p">()</span>
+
+        <span class="c1"># directories for input atom files</span>
+        <span class="n">m</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">atom_files_directory</span> <span class="o">=</span> <span class="p">[</span><span class="n">root_dir</span> <span class="o">+</span> <span class="s1">&#39;/data/pdb/&#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">template</span><span class="o">.</span><span class="n">name</span><span class="p">]</span>
+
+        <span class="n">a_model</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">automodel</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">env</span><span class="p">,</span>
+                               <span class="c1"># alignment filename</span>
+                               <span class="n">alnfile</span><span class="o">=</span><span class="n">ali_dir</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">template</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="s1">&#39;.ali&#39;</span><span class="p">,</span>
+                               <span class="c1"># codes of the templates</span>
+                               <span class="n">knowns</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">template</span><span class="o">.</span><span class="n">pdb</span><span class="p">,</span>
+                               <span class="c1"># code of the target</span>
+                               <span class="n">sequence</span><span class="o">=</span><span class="s1">&#39;query&#39;</span><span class="p">,</span>
+                               <span class="c1"># DOPEHR is very similar to DOPEHR but is obtained</span>
+                               <span class="c1"># at Higher Resolution (using a bin size of 0.125Å</span>
+                               <span class="c1"># rather than 0.5Å).</span>
+                               <span class="n">assess_methods</span><span class="o">=</span><span class="n">assess</span><span class="o">.</span><span class="n">DOPEHR</span><span class="p">)</span>
+        <span class="c1"># index of the first and last model (determines how many models to calculate)</span>
+        <span class="n">a_model</span><span class="o">.</span><span class="n">starting_model</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="n">a_model</span><span class="o">.</span><span class="n">ending_model</span> <span class="o">=</span> <span class="mi">1</span>
+
+        <span class="n">modeller_dope_score</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="c1"># This mutes all verbose logging from Modeller in the terminal</span>
+        <span class="c1"># with contextlib.redirect_stdout(None):</span>
+        <span class="c1"># do the actual comparative modeling</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">a_model</span><span class="o">.</span><span class="n">make</span><span class="p">()</span>
+            <span class="c1"># Process the outputs of the only model generated</span>
+            <span class="n">new_model_pdb</span> <span class="o">=</span> <span class="n">a_model</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;name&quot;</span><span class="p">]</span>
+            <span class="n">modeller_dope_score</span> <span class="o">=</span> <span class="n">a_model</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;DOPE-HR score&quot;</span><span class="p">]</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">new_model_pdb</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">template</span><span class="o">.</span><span class="n">pdb</span> <span class="o">+</span> <span class="s2">&quot;.pdb&quot;</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">m</span><span class="o">.</span><span class="n">ModellerError</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">template</span><span class="o">.</span><span class="n">add_missing_residues_in_pdb</span><span class="p">()</span>
+        <span class="c1"># Go back to root directory</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">chdir</span><span class="p">(</span><span class="n">root_dir</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">modeller_dope_score</span></div></div>
+
+    <span class="c1"># def new_template_alignment(self):</span>
+    <span class="c1">#     &quot;&quot;&quot;</span>
+    <span class="c1">#</span>
+    <span class="c1">#     &quot;&quot;&quot;</span>
+>>>>>>> Stashed changes
 </pre></div>
 
            </div>
