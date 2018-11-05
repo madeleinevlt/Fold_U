@@ -175,8 +175,6 @@ class Alignment:
                 ind += 1
             # The two last lines of the created pdb file ("END" and "TER" lines)
             file.write("END\n")
-<<<<<<< Updated upstream
-=======
 
     def write_alignment_for_modeller(self, res_path):
         """
@@ -281,4 +279,3 @@ class Alignment:
     #     """
     #
     #     """
->>>>>>> Stashed changes
