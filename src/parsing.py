@@ -142,7 +142,7 @@ def parse_foldrec(foldrec_file, nb_templates, metafold_dict):
                                     Query(query_seq, query_first, query_last),
                                     Template(template_name, template_seq))
                     ali.template.set_pdb_name(metafold_dict)
-                    ali.template.parse_pdb()
+                    ali.template.parse_pdb("data/pdb/")
                     alignment_dict[template_name] = ali
                     count_templates += 1
     return alignment_dict
