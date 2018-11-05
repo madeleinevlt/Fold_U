@@ -74,7 +74,8 @@ def process(ali):
 
     """
     ali.write_alignment_for_modeller(OUTPUT_PATH)
-    ali.generate_model_with_modeller(OUTPUT_PATH)
+    modeller_score = ali.calculate_modeller_score(OUTPUT_PATH)
+    # print(modeller_score)
     # Calculate the threading score of all alignments
     threading_score = ali.calculate_threading_score(DIST_RANGE, GAP_PENALTY, DOPE_DICT)
     physics_based_score = ali.calculate_physics_score()
