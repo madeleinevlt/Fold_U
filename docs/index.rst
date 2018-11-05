@@ -4,6 +4,7 @@
    :maxdepth: 2
 
    parsing
+   score
    alignment
    query
    template

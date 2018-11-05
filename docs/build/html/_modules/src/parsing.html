@@ -82,6 +82,7 @@
             
               <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../parsing.html">Parsing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../score.html">Score</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../alignment.html">Alignment</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../query.html">Query</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../template.html">Template</a></li>
@@ -178,7 +179,7 @@
 <span class="sd">                           template name and a pdb file name associated</span>
 
 <span class="sd">        Returns:</span>
-<span class="sd">            dictionary: A dictionary with key = template name and value = pdb file</span>
+<span class="sd">            dict: A dictionary with key = template name and value = pdb file</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">metafold_dict</span> <span class="o">=</span> <span class="p">{}</span>  <span class="c1"># Initalization of the dictionary</span>
     <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">metafold_file</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
@@ -227,7 +228,7 @@
 <span class="sd">                                        and value = pdb file.</span>
 
 <span class="sd">        Returns:</span>
-<span class="sd">            dict of Alignments: A dictionary with key = template name and</span>
+<span class="sd">            dict: A dictionary with key = template name and</span>
 <span class="sd">            value = an Alignment object.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 

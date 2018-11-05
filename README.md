@@ -5,7 +5,7 @@
 ![Sphinx version](https://img.shields.io/badge/sphinx%20build-1.7.4-brightgreen.svg)
 
 <p align="center">
-  <img width="400" src="img/logo_foldu.svg" alt="logo_foldu"/>
+  <img width="400" src="../../../img/logo_foldu.svg" alt="logo_foldu"/>
 </p>
 
 This program is the second step (downstream) of a protein structure prediction project. This step consists of threading a query sequence on different given templates.
@@ -72,7 +72,7 @@ We are master students in bioinformatics at Paris Diderot University.
 - [Hélène Kabbech](https://github.com/kabhel)
 - [Tom Gutman](https://github.com/tomgutman)
 - [Flora Mikaeloff](https://github.com/FloraMika)
-- [Franz-Arnold Ake](https://github.com/franzx5) 
+- [Franz-Arnold Ake](https://github.com/franzx5)
 
 ## License
 

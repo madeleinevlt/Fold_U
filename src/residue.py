@@ -39,7 +39,7 @@ class Residue:
                 residue (object): An object of the Residue class.
 
             Returns:
-                dist (float): The calculated distance.
+                float: The calculated distance.
         """
         a_min_b = self.ca_atom.coords - residue.ca_atom.coords
         dist = np.sqrt(np.einsum('i,i->', a_min_b, a_min_b))

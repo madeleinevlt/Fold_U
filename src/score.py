@@ -9,7 +9,7 @@ import os
 
 class Score:
     """
-    .. class:: Residue
+    .. class:: Score
 
       This class groups informations about a residue.
 

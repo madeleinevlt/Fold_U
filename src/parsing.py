@@ -26,7 +26,7 @@ def parse_metafold(metafold_file):
                            template name and a pdb file name associated
 
         Returns:
-            dictionary: A dictionary with key = template name and value = pdb file
+            dict: A dictionary with key = template name and value = pdb file
     """
     metafold_dict = {}  # Initalization of the dictionary
     with open(metafold_file, "r") as file:
@@ -75,7 +75,7 @@ def parse_foldrec(foldrec_file, nb_templates, metafold_dict):
                                         and value = pdb file.
 
         Returns:
-            dict of Alignments: A dictionary with key = template name and
+            dict: A dictionary with key = template name and
             value = an Alignment object.
     """
 
