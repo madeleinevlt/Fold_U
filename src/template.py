@@ -105,7 +105,16 @@ class Template:
         Returns:
             str: Path to the FASTA file containing the sequence of the template.
         """
-        url = "https://www.rcsb.org/pdb/download/downloadFastaFiles.do?structureIdList=" + self.pdb + "&compressionType=uncompressed"
+        if len(self.pdb) == 6:
+            chain = self.pdb[-2].upper()
+            name = self.pdb[:-2].upper()
+        elif len(self.pdb) == 5:
+            chain = self.pdb[-1].upper()
+            name = self.pdb[:-1].upper()
+        else:
+            chain = "A"
+            name = self.pdb.upper()
+        url = "https://www.rcsb.org/pdb/download/downloadFile.do?fileFormat=fastachain&compression=NO&structureId=" + name + "&chainId=" + chain
         file_name = None
         try:
             file_name = wget.download(url, bar=None)
