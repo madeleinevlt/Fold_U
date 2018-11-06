@@ -22,8 +22,7 @@ class Atom:
     def __str__(self):
         if self.coords is None:
             return "<" + self.name + " | " + "empty coordinates>"
-        coords = [str(coord) for coord in self.coords]
-        return "<" + self.name + " | " + str(coords) + ">"
+        return "<" + self.name + " | " + str(self.coords) + ">"
 
     def set_coords(self, coords):
         """
