@@ -76,6 +76,8 @@ class Template:
                     z_coord = float(line[46:54].strip())
                     if count_res <= len(self.residues):
                         # Skip gaps in the template
+                        if count_res == len(self.residues):
+                            break
                         while self.residues[count_res].name == "-":
                             count_res += 1
                         if line_type == "ATOM" and name_at == "N":
