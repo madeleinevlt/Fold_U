@@ -29,18 +29,18 @@ pip install -r src/requirements.txt
 ```
 
 ## Run the program
-fold_u.py takes in input N profil-profil alignments and their corresponding scores (foldrec file).
+fold_u takes in input N profil-profil alignments and their corresponding scores (foldrec file).
 
 ### Run the test
 ```
-./fold_u.py data/foldrec/Agglutinin.foldrec
+./fold_u data/foldrec/Agglutinin.foldrec
 ```
 ### Get help
 ```
-./fold_u.py -h
+./fold_u -h
 
     Usage:
-        fold_u.py FOLDREC_FILE [--nb_templates NUM] [--nb_pdb NUM] [--output PATH]
+        ./fold_u FOLDREC_FILE [--nb_templates NUM] [--nb_pdb NUM] [--output PATH]
                                [--metafold FILE] [--dope FILE] [--benchmark FILE]
 
     Options:
