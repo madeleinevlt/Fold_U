@@ -41,12 +41,6 @@ GAP_PENALTY = 0
 def check_args():
     """
         Checks and validates the types of inputs parsed by docopt from command line.
-
-        Args:
-            void
-
-        Returns:
-            void
     """
     schema = Schema({
         'FOLDREC_FILE': Use(open, error='FOLDREC_FILE should be readable'),
