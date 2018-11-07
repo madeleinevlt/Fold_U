@@ -27,6 +27,10 @@ def calculate_co_evolution_score(file_aln,output_mat):
 
 calculate_co_evolution_score('1atza.aln','1atza.mat')
 
-get_top_pairs('1atza.mat', 10, 8)
+top_10_dis8 = top_couplings.get_top_pairs('1atza.mat', 10, 8)
+print(top_10_dis8)
+
+
+
 
 
