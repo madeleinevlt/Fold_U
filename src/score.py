@@ -36,13 +36,13 @@ class Score:
         os.makedirs(res_path+"/pdb", exist_ok=True)
         with open(res_path+"/scores.out", "w") as file:
             template_num = 1
-            file.write("{:<4s} {:<18s}{:<12s}{:>6s}\n"\
-                .format("#num", "template name", "benchmark", "score"))
-            for score, num, name, benchmark in sorted(self.iterator):
+            file.write("{:<18s} {:<11s} {:<9s} {:<9s} {:<9s}\n"\
+                .format("template_name", "benchmark", "alignment", "threading", "blossum"))
+            for num, ali_score, thr_score, blossum_score, name, benchmark in sorted(self.iterator):
                 # Write a line in the score.out file containing the
                 # score and the name of the current ranked template
-                file.write("{:<5d}{:<18s}{:<12s}{:>6d}\n"\
-                    .format(num, name, benchmark, int(score)))
+                file.write("{:<18s} {:<11s} {:<9d} {:<9d} {:<9d}\n"\
+                    .format(name, benchmark, int(ali_score), int(thr_score), int(blossum_score)))
                 # Only nb_pdb pdb files are created
                 if template_num <= nb_pdb:
                     pdb_filename = res_path + "/pdb/top_" + str(template_num) + ".pdb"

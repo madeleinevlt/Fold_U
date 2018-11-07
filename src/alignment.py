@@ -11,7 +11,7 @@ from Bio.SeqUtils import seq3
 
 def process(dist_range, gap_penality, dope_dict, ali):
     """
-        Generates the threading and the physics-based scores for a given Alignment object.
+        Generates the threading and the blossum scores for a given Alignment object.
 
         Args:
             void
@@ -23,9 +23,8 @@ def process(dist_range, gap_penality, dope_dict, ali):
     """
     # Calculate the threading score of all alignments
     threading_score = ali.calculate_threading_score(dist_range, gap_penality, dope_dict)
-    physics_based_score = ali.calculate_physics_score()
-    total_energy_score = threading_score
-    return total_energy_score, ali.num, ali.template.name, ali.template.benchmark
+    blossum_score = ali.calculate_blossum_score()
+    return ali.num, ali.score, threading_score, blossum_score, ali.template.name, ali.template.benchmark
 
 
 class Alignment:
@@ -110,11 +109,11 @@ class Alignment:
                         interval_index = round(int((dist * 30) / 15))
                         energy[i, j] = dope_dict[row_res.name+col_res.name][interval_index]
         # Return the sum of energy matrix with numpy's "Nan" interpreted as zeros
-        return np.nansum(energy)
+        return -np.nansum(energy)
 
-    def calculate_physics_score(self):
+    def calculate_blossum_score(self):
         """
-            Calculate a physics-based score using the BLOSSUM62 matrix. This matrix contains
+            Calculate a blossum score using the BLOSSUM62 matrix. This matrix contains
             substitution scores for each amino acid pair. A positive score is given to the more
             likely substitutions while a negative score is given to the less likely substitutions.
 
@@ -122,7 +121,7 @@ class Alignment:
                 void
 
             Returns:
-                int: The physics-based score calculated.
+                int: The blossum score calculated.
         """
         # dictionary containing substitution scores of the BLOSSUM62 matrix
         blosum62 = MatrixInfo.blosum62
@@ -138,7 +137,7 @@ class Alignment:
             # If not, the corresponding key is (res_2, res_1)
             else:
                 score += blosum62[(res_t.name, res_q.name)]
-        return -score
+        return score
 
     def write_pdb(self, pdb_path):
         """

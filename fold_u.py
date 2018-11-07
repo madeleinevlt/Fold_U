@@ -9,7 +9,7 @@
     Options:
         -h, --help                            Show this
         -n NUM, --nb_templates NUM            First n templates to retrieve from
-                                              the foldrec file [default: 100]
+                                              the foldrec file [default: 413]
         -p NUM, --nb_pdb NUM                  Number of pdb to create
                                               [default: 10]
         -o PATH, --output PATH                Path to the directory containing
