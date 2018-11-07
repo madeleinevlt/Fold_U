@@ -43,7 +43,7 @@ fold_u.py takes in input N profil-profil alignments and their corresponding scor
 ./fold_u.py -h
 
     Usage:
-        fold_u.py FOLDREC_FILE [--nb_templates NUM] [--nb_pdb NUM] [--output PATH]
+        ./fold_u.py FOLDREC_FILE [--nb_templates NUM] [--nb_pdb NUM] [--output PATH]
                                [--metafold FILE] [--dope FILE] [--benchmark FILE]
 
     Options:
