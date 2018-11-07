@@ -239,7 +239,7 @@
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Initial error: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
         <span class="k">return</span> <span class="n">file_name</span></div>
 
-<div class="viewcode-block" id="Template.add_gaps_in_template_sequence"><a class="viewcode-back" href="../../template.html#src.template.Template.add_gaps_in_template_sequence">[docs]</a>    <span class="k">def</span> <span class="nf">add_gaps_in_template_sequence</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Template.set_benchmark"><a class="viewcode-back" href="../../template.html#src.template.Template.set_benchmark">[docs]</a>    <span class="k">def</span> <span class="nf">set_benchmark</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fold_type</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">            Sets the benchmark attribute of the template.</span>
 <span class="sd">            The benchmark attribute represents the fold family type of the</span>
@@ -249,9 +249,6 @@
 
 <span class="sd">            Args:</span>
 <span class="sd">                fold_type (str): &quot;Family&quot;, &quot;Superfamily&quot; or &quot;Fold&quot;</span>
-
-<span class="sd">            Returns:</span>
-<span class="sd">                void</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">benchmark</span> <span class="o">=</span> <span class="n">fold_type</span></div></div>
 </pre></div>

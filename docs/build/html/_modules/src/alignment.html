@@ -167,6 +167,26 @@
 <span class="kn">import</span> <span class="nn">os</span>
 
 
+<div class="viewcode-block" id="process"><a class="viewcode-back" href="../../alignment.html#src.alignment.process">[docs]</a><span class="k">def</span> <span class="nf">process</span><span class="p">(</span><span class="n">dist_range</span><span class="p">,</span> <span class="n">gap_penality</span><span class="p">,</span> <span class="n">dope_dict</span><span class="p">,</span> <span class="n">ali</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Generates the threading and the physics-based scores for a given Alignment object.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            void</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            tupple: (Sum of the different scores, Number of the Alignment,</span>
+<span class="sd">                    Template&#39;s name, Template&#39;s benchmark)</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Calculate the threading score of all alignments</span>
+    <span class="n">threading_score</span> <span class="o">=</span> <span class="n">ali</span><span class="o">.</span><span class="n">calculate_threading_score</span><span class="p">(</span><span class="n">dist_range</span><span class="p">,</span> <span class="n">gap_penality</span><span class="p">,</span> <span class="n">dope_dict</span><span class="p">)</span>
+    <span class="n">physics_based_score</span> <span class="o">=</span> <span class="n">ali</span><span class="o">.</span><span class="n">calculate_physics_score</span><span class="p">()</span>
+    <span class="n">total_energy_score</span> <span class="o">=</span> <span class="n">threading_score</span>
+    <span class="k">return</span> <span class="n">total_energy_score</span><span class="p">,</span> <span class="n">ali</span><span class="o">.</span><span class="n">num</span><span class="p">,</span> <span class="n">ali</span><span class="o">.</span><span class="n">template</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">ali</span><span class="o">.</span><span class="n">template</span><span class="o">.</span><span class="n">benchmark</span></div>
+
+
+
 <div class="viewcode-block" id="Alignment"><a class="viewcode-back" href="../../alignment.html#src.alignment.Alignment">[docs]</a><span class="k">class</span> <span class="nc">Alignment</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    .. class:: Alignment</span>
