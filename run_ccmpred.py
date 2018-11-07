@@ -20,7 +20,7 @@ def calculate_co_evolution_score(file_aln,output_mat):
         Returns:
         	matrix containing all scores associated with each pair of amino acids in the sequence
     """
-    ccmpred_cline = CCMpredCommandline(cmd ='/home/mikov/Documents/Meet-U/2018---2019-Equipe-4/ccmpred/ccmpred', alnfile= file_aln, matfile= output_mat)
+    ccmpred_cline = CCMpredCommandline(cmd ='/home/mikov/Documents/Meet-U/2018---2019-Equipe-4/bin/ccmpred', alnfile= file_aln, matfile= output_mat)
     return ccmpred_cline()
 	
 
