@@ -96,8 +96,5 @@ class Template:
 
             Args:
                 fold_type (str): "Family", "Superfamily" or "Fold"
-
-            Returns:
-                void
         """
         self.benchmark = fold_type
