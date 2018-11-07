@@ -11,7 +11,7 @@
 This program is the second step (downstream) of a protein structure prediction project. This step consists of threading a query sequence on different given templates.
 
 
-Our project is part of the Meet-U 2018-2019 competition.
+Our  project is part of the Meet-U 2018-2019 competition.
 Meet-U is a collaborative pedagogical and research initiative between several Universities of Paris area. The course is intended to Master students (2nd year) in Bioinformatics. For more details refer to [http://www.meet-u.org/](http://www.meet-u.org/).
 
 ## Installation
