@@ -86,7 +86,7 @@ class Template:
             print("Initial error: " + str(e))
         return file_name
 
-    def add_gaps_in_template_sequence(self):
+    def set_benchmark(self, fold_type):
         """
             Sets the benchmark attribute of the template.
             The benchmark attribute represents the fold family type of the
