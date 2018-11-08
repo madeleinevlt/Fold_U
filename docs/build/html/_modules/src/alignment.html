@@ -81,13 +81,13 @@
             
             
               <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../parsing.html">Parsing</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../score.html">Score</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../alignment.html">Alignment</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../query.html">Query</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../template.html">Template</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../query.html">Query</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../residue.html">Residue</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../atom.html">Atom</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../score.html">Score</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../parsing.html">Parsing</a></li>
 </ul>
 
             
@@ -170,9 +170,6 @@
 <div class="viewcode-block" id="process"><a class="viewcode-back" href="../../alignment.html#src.alignment.process">[docs]</a><span class="k">def</span> <span class="nf">process</span><span class="p">(</span><span class="n">dist_range</span><span class="p">,</span> <span class="n">gap_penality</span><span class="p">,</span> <span class="n">dope_dict</span><span class="p">,</span> <span class="n">ali</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Generates the threading and the physics-based scores for a given Alignment object.</span>
-
-<span class="sd">        Args:</span>
-<span class="sd">            void</span>
 
 <span class="sd">        Returns:</span>
 <span class="sd">            tupple: (Sum of the different scores, Number of the Alignment,</span>
@@ -276,9 +273,6 @@
 <span class="sd">            substitution scores for each amino acid pair. A positive score is given to the more</span>
 <span class="sd">            likely substitutions while a negative score is given to the less likely substitutions.</span>
 
-<span class="sd">            Args:</span>
-<span class="sd">                void</span>
-
 <span class="sd">            Returns:</span>
 <span class="sd">                int: The physics-based score calculated.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -304,9 +298,6 @@
 
 <span class="sd">            Args:</span>
 <span class="sd">                pdb_path (str): Path of the pdb file to create.</span>
-
-<span class="sd">            Returns:</span>
-<span class="sd">                void</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">pdb_path</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
             <span class="c1"># Extra informations on the template used to generate the pdb file</span>

@@ -28,8 +28,8 @@
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Query" href="query.html" />
-    <link rel="prev" title="Score" href="score.html" /> 
+    <link rel="next" title="Template" href="template.html" />
+    <link rel="prev" title="Fold U: A Protein Structure Prediction Program" href="index.html" /> 
 
   
   <script src="_static/js/modernizr.min.js"></script>
@@ -83,13 +83,13 @@
             
             
               <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="parsing.html">Parsing</a></li>
-<li class="toctree-l1"><a class="reference internal" href="score.html">Score</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Alignment</a></li>
-<li class="toctree-l1"><a class="reference internal" href="query.html">Query</a></li>
 <li class="toctree-l1"><a class="reference internal" href="template.html">Template</a></li>
+<li class="toctree-l1"><a class="reference internal" href="query.html">Query</a></li>
 <li class="toctree-l1"><a class="reference internal" href="residue.html">Residue</a></li>
 <li class="toctree-l1"><a class="reference internal" href="atom.html">Atom</a></li>
+<li class="toctree-l1"><a class="reference internal" href="score.html">Score</a></li>
+<li class="toctree-l1"><a class="reference internal" href="parsing.html">Parsing</a></li>
 </ul>
 
             
@@ -237,11 +237,9 @@ likely substitutions while a negative score is given to the less likely substitu
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>void</strong> – </td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The physics-based score calculated.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The physics-based score calculated.</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">int</td>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">int</td>
 </tr>
 </tbody>
 </table>
@@ -307,8 +305,6 @@ AYVINDSC–IACGACKPECPVNIIQGS–IYAIDADSCIDCGSCASVCPVGAPNPED—————–
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>pdb_path</strong> (<em>str</em>) – Path of the pdb file to create.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">void</td>
-</tr>
 </tbody>
 </table>
 </dd></dl>
@@ -323,15 +319,13 @@ AYVINDSC–IACGACKPECPVNIIQGS–IYAIDADSCIDCGSCASVCPVGAPNPED—————–
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>void</strong> – </td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><dl class="docutils">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><dl class="docutils">
 <dt>(Sum of the different scores, Number of the Alignment,</dt>
 <dd>Template’s name, Template’s benchmark)</dd>
 </dl>
 </td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">tupple</td>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">tupple</td>
 </tr>
 </tbody>
 </table>
@@ -347,10 +341,10 @@ AYVINDSC–IACGACKPECPVNIIQGS–IYAIDADSCIDCGSCASVCPVGAPNPED—————–
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="query.html" class="btn btn-neutral float-right" title="Query" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="template.html" class="btn btn-neutral float-right" title="Template" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="score.html" class="btn btn-neutral" title="Score" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="index.html" class="btn btn-neutral" title="Fold U: A Protein Structure Prediction Program" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

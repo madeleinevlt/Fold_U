@@ -3,10 +3,10 @@
 .. toctree::
    :maxdepth: 2
 
-   parsing
-   score
    alignment
-   query
    template
+   query
    residue
    atom
+   score
+   parsing

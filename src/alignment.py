@@ -18,9 +18,6 @@ def process(dist_range, gap_penality, dope_dict, ali):
     """
         Generates the threading and the physics-based scores for a given Alignment object.
 
-        Args:
-            void
-
         Returns:
             tupple: (Sum of the different scores, Number of the Alignment,
                     Template's name, Template's benchmark)
@@ -123,9 +120,6 @@ class Alignment:
             substitution scores for each amino acid pair. A positive score is given to the more
             likely substitutions while a negative score is given to the less likely substitutions.
 
-            Args:
-                void
-
             Returns:
                 int: The physics-based score calculated.
         """
@@ -151,9 +145,6 @@ class Alignment:
 
             Args:
                 pdb_path (str): Path of the pdb file to create.
-
-            Returns:
-                void
         """
         with open(pdb_path, "w") as file:
             # Extra informations on the template used to generate the pdb file

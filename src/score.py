@@ -1,6 +1,6 @@
 """
-    .. module:: writing
-      :synopsis: This module implements all the functions to create result files.
+    .. module:: Score
+      :synopsis: This module implements the Score class.
 """
 
 # Third-party modules
@@ -11,7 +11,7 @@ class Score:
     """
     .. class:: Score
 
-      This class groups informations about a residue.
+      This class groups informations about a score.
 
     Attributes:
         iterator (iterator): An iterator of the generated scores.

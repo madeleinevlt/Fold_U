@@ -28,7 +28,7 @@
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Parsing" href="parsing.html" /> 
+    <link rel="next" title="Alignment" href="alignment.html" /> 
 
   
   <script src="_static/js/modernizr.min.js"></script>
@@ -82,13 +82,13 @@
             
             
               <ul>
-<li class="toctree-l1"><a class="reference internal" href="parsing.html">Parsing</a></li>
-<li class="toctree-l1"><a class="reference internal" href="score.html">Score</a></li>
 <li class="toctree-l1"><a class="reference internal" href="alignment.html">Alignment</a></li>
-<li class="toctree-l1"><a class="reference internal" href="query.html">Query</a></li>
 <li class="toctree-l1"><a class="reference internal" href="template.html">Template</a></li>
+<li class="toctree-l1"><a class="reference internal" href="query.html">Query</a></li>
 <li class="toctree-l1"><a class="reference internal" href="residue.html">Residue</a></li>
 <li class="toctree-l1"><a class="reference internal" href="atom.html">Atom</a></li>
+<li class="toctree-l1"><a class="reference internal" href="score.html">Score</a></li>
+<li class="toctree-l1"><a class="reference internal" href="parsing.html">Parsing</a></li>
 </ul>
 
             
@@ -161,7 +161,7 @@
 <div class="section" id="fold-u-a-protein-structure-prediction-program">
 <h1>Fold U: A Protein Structure Prediction Program<a class="headerlink" href="#fold-u-a-protein-structure-prediction-program" title="Permalink to this headline">¶</a></h1>
 <p align="center">
-  <img width="400" src="img/logo_foldu.svg" alt="logo_foldu"/>
+  <img width="400" src="img/logo_foldu.png" alt="logo_foldu"/>
 </p><p>This program is the second step (downstream) of a protein structure prediction project. This step consists of threading a query sequence on different given templates.</p>
 <p>Our project is part of the Meet-U 2018-2019 competition.
 Meet-U is a collaborative pedagogical and research initiative between several Universities of Paris area. The course is intended to Master students (2nd year) in Bioinformatics. For more details, please refer to <a class="reference external" href="http://www.meet-u.org/">http://www.meet-u.org/</a>.</p>
@@ -184,7 +184,7 @@ cd Fold_U
 </div>
 <div class="section" id="run-the-program">
 <h2>Run the program<a class="headerlink" href="#run-the-program" title="Permalink to this headline">¶</a></h2>
-<p>fold_u.py takes in input N profil-profil alignments and their corresponding scores (foldrec file).</p>
+<p>fold_u takes in input N profil-profil alignments and their corresponding scores (foldrec file).</p>
 <div class="section" id="run-the-test">
 <h3>Run the test<a class="headerlink" href="#run-the-test" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-guess notranslate"><div class="highlight"><pre><span></span>./fold_u.py data/foldrec/Agglutinin.foldrec
@@ -193,10 +193,10 @@ cd Fold_U
 </div>
 <div class="section" id="get-help">
 <h3>Get help<a class="headerlink" href="#get-help" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-guess notranslate"><div class="highlight"><pre><span></span>./fold_u.py -h
+<div class="highlight-guess notranslate"><div class="highlight"><pre><span></span>./fold_u -h
 
     Usage:
-        ./fold_u.py FOLDREC_FILE [--nb_templates NUM] [--nb_pdb NUM] [--output PATH]
+        ./fold_u FOLDREC_FILE [--nb_templates NUM] [--nb_pdb NUM] [--output PATH]
                                [--metafold FILE] [--dope FILE] [--benchmark FILE]
 
     Options:
@@ -234,18 +234,22 @@ cd Fold_U
 <li><a class="reference external" href="https://github.com/franzx5">Franz-Arnold Ake</a></li>
 </ul>
 </div>
+<div class="section" id="acknowledgment">
+<h2>Acknowledgment<a class="headerlink" href="#acknowledgment" title="Permalink to this headline">¶</a></h2>
+<p>Thanks to <a class="reference external" href="https://www.linkedin.com/in/maitewho/">Maïté Cretin</a> for the nice logo.</p>
+</div>
 <div class="section" id="license">
 <h2>License<a class="headerlink" href="#license" title="Permalink to this headline">¶</a></h2>
 <p>This project is licensed under the MIT License.</p>
 <div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="parsing.html">Parsing</a></li>
-<li class="toctree-l1"><a class="reference internal" href="score.html">Score</a></li>
 <li class="toctree-l1"><a class="reference internal" href="alignment.html">Alignment</a></li>
-<li class="toctree-l1"><a class="reference internal" href="query.html">Query</a></li>
 <li class="toctree-l1"><a class="reference internal" href="template.html">Template</a></li>
+<li class="toctree-l1"><a class="reference internal" href="query.html">Query</a></li>
 <li class="toctree-l1"><a class="reference internal" href="residue.html">Residue</a></li>
 <li class="toctree-l1"><a class="reference internal" href="atom.html">Atom</a></li>
+<li class="toctree-l1"><a class="reference internal" href="score.html">Score</a></li>
+<li class="toctree-l1"><a class="reference internal" href="parsing.html">Parsing</a></li>
 </ul>
 </div>
 </div>
@@ -259,7 +263,7 @@ cd Fold_U
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="parsing.html" class="btn btn-neutral float-right" title="Parsing" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="alignment.html" class="btn btn-neutral float-right" title="Alignment" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
     </div>
