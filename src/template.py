@@ -15,7 +15,8 @@ class Template:
 
     Attributes:
         name (str): Name of the template
-        residues (list of Residue object): Template's sequence of residues as list of Residues objects
+        residues (list of Residue object): Template's sequence of residues as list of Residues
+                                           objects
         pdb (str): PDB filename of the template
     """
 

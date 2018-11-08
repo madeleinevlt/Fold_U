@@ -26,10 +26,10 @@
 # Third-party modules
 from multiprocessing import Pool, cpu_count
 from functools import partial
+from datetime import datetime
 from tqdm import tqdm
 from docopt import docopt
 from schema import Schema, And, Use, SchemaError
-from datetime import datetime
 
 # Local modules
 import src.parsing as parsing
@@ -63,7 +63,7 @@ def check_args():
 
 if __name__ == "__main__":
 
-    startTime = datetime.now()
+    START_TIME = datetime.now()
 
     ### Parse command line
     ######################
@@ -117,4 +117,4 @@ if __name__ == "__main__":
     #################################
     RESULTS.write_score(OUTPUT_PATH, NB_PDB, ALIGNMENT_DICT)
     print("\nThe program ended successfully !\nThe results are stored in " + OUTPUT_PATH)
-    print("\nTotal runtime: {} seconds".format(str(datetime.now() - startTime)))
+    print("\nTotal runtime: {} seconds".format(str(datetime.now() - START_TIME)))

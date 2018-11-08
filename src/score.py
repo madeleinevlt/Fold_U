@@ -35,7 +35,7 @@ class Score:
             template_num = 1
             file.write("{:<18s} {:<11s} {:<9s} {:<9s} {:<9s}\n"\
                 .format("template_name", "benchmark", "alignment", "threading", "blossum"))
-            for num, ali_score, thr_score, blossum_score, name, benchmark in sorted(self.iterator):
+            for _, ali_score, thr_score, blossum_score, name, benchmark in sorted(self.iterator):
                 # Write a line in the score.out file containing the
                 # score and the name of the current ranked template
                 file.write("{:<18s} {:<11s} {:<9d} {:<9d} {:<9d}\n"\

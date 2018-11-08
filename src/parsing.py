@@ -77,7 +77,6 @@ def parse_foldrec(foldrec_file, nb_templates, metafold_dict):
         Returns:
             dict: A dictionary with key = template name and value = an Alignment object.
     """
-
     # Regex :
     num_reg = re.compile("^No\\s*([0-9]+)")
     template_name_reg = re.compile("Alignment :.*vs\\s+([A-Za-z0-9-_]+)")
@@ -118,8 +117,8 @@ def parse_foldrec(foldrec_file, nb_templates, metafold_dict):
                     query_last = int(query_seq_found.group(3))
                     query_reg_count += 1
                 elif query_reg_count == 1:
-                    for ind, ss in enumerate(list(query_seq_found.group(2))):
-                        query_seq[ind].ss = ss
+                    for ind, sec_struct in enumerate(list(query_seq_found.group(2))):
+                        query_seq[ind].secondary_struct = sec_struct
                     query_reg_count += 1
                 elif query_reg_count == 2:
                     for ind, ss_conf in enumerate(list(query_seq_found.group(2))):
@@ -133,8 +132,8 @@ def parse_foldrec(foldrec_file, nb_templates, metafold_dict):
                     template_seq = [Residue(name) for name in list(template_seq_found.group(1))]
                     template_reg_count += 1
                 elif template_reg_count == 1:
-                    for ind, ss in enumerate(list(template_seq_found.group(1))):
-                        template_seq[ind].ss = ss
+                    for ind, sec_struct in enumerate(list(template_seq_found.group(1))):
+                        template_seq[ind].secondary_struct = sec_struct
                     template_reg_count = 0
                     # Add a new alignment object in the list :
                     ali = Alignment(num, score,

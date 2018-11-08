@@ -79,14 +79,14 @@ class Alignment:
 
         for i, row_res in enumerate(query):
             # The gap was already treated
-            if i <= (query_size - 3) and energy[i, (i+2)] == gap_penalty:
+            if i <= (query_size - 3) and energy[i, (i + 2)] == gap_penalty:
                 continue
             # There is a gap in the query or the template
             elif row_res.name == "-" or template[i].name == "-":
                 # The whole line is set with gap penalty value
-                energy[i, (i+2):] = gap_penalty
+                energy[i, (i + 2):] = gap_penalty
                 continue
-            for j in range(i+2, query_size-1):
+            for j in range(i + 2, query_size - 1):
                 col_res = query[j]
                 # The gap was already treated
                 if energy[i, j] == gap_penalty:
@@ -94,7 +94,7 @@ class Alignment:
                 # There is a gap in the query or the template
                 elif col_res.name == "-" or template[j].name == "-":
                     # The whole column is set with gap penalty value
-                    energy[:(j-1), j] = gap_penalty
+                    energy[:(j - 1), j] = gap_penalty
                     continue
                 else:
                     # Calculate to distance between two residues
@@ -105,7 +105,7 @@ class Alignment:
                         # DOPE energy values spread between 0.25 and 15 by 0.5 intervals
                         # So 30 intervals and max value = 15
                         interval_index = round(int((dist * 30) / 15))
-                        energy[i, j] = dope_dict[row_res.name+col_res.name][interval_index]
+                        energy[i, j] = dope_dict[row_res.name + col_res.name][interval_index]
         # Return the sum of energy matrix with numpy's "Nan" interpreted as zeros
         return -np.nansum(energy)
 

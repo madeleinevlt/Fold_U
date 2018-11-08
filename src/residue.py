@@ -26,7 +26,7 @@ class Residue:
         self.ca_atom = Atom("CA")
         self.c_atom = Atom("C")
         self.n_atom = Atom("N")
-        self.ss = None
+        self.secondary_struct = None
         self.ss_confidence = None
 
     def calculate_distance(self, residue):
@@ -42,5 +42,7 @@ class Residue:
                 float: The calculated distance.
         """
         a_min_b = self.ca_atom.coords - residue.ca_atom.coords
+        # The Numpy's "einsum" function is the most efficient way to calculate a distance
+        #  accordingly to this benchmarking: https://stackoverflow.com/a/47775357/6401758
         dist = np.sqrt(np.einsum('i,i->', a_min_b, a_min_b))
         return dist
