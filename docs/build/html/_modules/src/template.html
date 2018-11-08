@@ -168,7 +168,8 @@
 
 <span class="sd">    Attributes:</span>
 <span class="sd">        name (str): Name of the template</span>
-<span class="sd">        residues (list of Residue object): Template&#39;s sequence of residues as list of Residues objects</span>
+<span class="sd">        residues (list of Residue object): Template&#39;s sequence of residues as list of Residues</span>
+<span class="sd">                                           objects</span>
 <span class="sd">        pdb (str): PDB filename of the template</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
@@ -220,24 +221,6 @@
                         <span class="k">if</span> <span class="n">nb_atoms</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
                             <span class="n">count_res</span> <span class="o">+=</span> <span class="mi">1</span>
                             <span class="n">nb_atoms</span> <span class="o">=</span> <span class="mi">0</span></div>
-
-<div class="viewcode-block" id="Template.get_fasta_file"><a class="viewcode-back" href="../../template.html#src.template.Template.get_fasta_file">[docs]</a>    <span class="k">def</span> <span class="nf">get_fasta_file</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Retrieve the full FASTA amino acid sequence (gapless) of the template,</span>
-<span class="sd">        and write it to an alignment file.</span>
-
-<span class="sd">        Returns:</span>
-<span class="sd">            str: Path to the FASTA file containing the sequence of the template.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">url</span> <span class="o">=</span> <span class="s2">&quot;https://www.rcsb.org/pdb/download/downloadFastaFiles.do?structureIdList=&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">pdb</span> <span class="o">+</span> <span class="s2">&quot;&amp;compressionType=uncompressed&quot;</span>
-        <span class="n">file_name</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="k">try</span><span class="p">:</span>
-            <span class="n">file_name</span> <span class="o">=</span> <span class="n">wget</span><span class="o">.</span><span class="n">download</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">bar</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
-        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Errors encountered while downloading FASTA file of &quot;</span>
-                  <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">pdb</span> <span class="o">+</span> <span class="s2">&quot;.atm template.&quot;</span><span class="p">)</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Initial error: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
-        <span class="k">return</span> <span class="n">file_name</span></div>
 
 <div class="viewcode-block" id="Template.set_benchmark"><a class="viewcode-back" href="../../template.html#src.template.Template.set_benchmark">[docs]</a>    <span class="k">def</span> <span class="nf">set_benchmark</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fold_type</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>

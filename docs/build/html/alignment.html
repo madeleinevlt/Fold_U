@@ -224,16 +224,16 @@
 </dd></dl>
 
 <dl class="method">
-<dt id="src.alignment.Alignment.calculate_blossum_score">
-<code class="descname">calculate_blossum_score</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/alignment.html#Alignment.calculate_blossum_score"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.alignment.Alignment.calculate_blossum_score" title="Permalink to this definition">¶</a></dt>
-<dd><p>Calculate a blossum score using the BLOSSUM62 matrix. This matrix contains
+<dt id="src.alignment.Alignment.calculate_blosum_score">
+<code class="descname">calculate_blosum_score</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/alignment.html#Alignment.calculate_blosum_score"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.alignment.Alignment.calculate_blosum_score" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate a blosum score using the blosum62 matrix. This matrix contains
 substitution scores for each amino acid pair. A positive score is given to the more
 likely substitutions while a negative score is given to the less likely substitutions.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The blossum score calculated.</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The blosum score calculated.</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">int</td>
 </tr>
@@ -292,7 +292,7 @@ value = an array of 30 dope energy values.</li>
 <dl class="function">
 <dt id="src.alignment.process">
 <code class="descclassname">src.alignment.</code><code class="descname">process</code><span class="sig-paren">(</span><em>dist_range</em>, <em>gap_penality</em>, <em>dope_dict</em>, <em>ali</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/alignment.html#process"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.alignment.process" title="Permalink to this definition">¶</a></dt>
-<dd><p>Generates the threading and the blossum scores for a given Alignment object.</p>
+<dd><p>Generates the threading and the blosum scores for a given Alignment object.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />

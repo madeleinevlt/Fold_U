@@ -164,7 +164,7 @@
 
 <div class="viewcode-block" id="process"><a class="viewcode-back" href="../../alignment.html#src.alignment.process">[docs]</a><span class="k">def</span> <span class="nf">process</span><span class="p">(</span><span class="n">dist_range</span><span class="p">,</span> <span class="n">gap_penality</span><span class="p">,</span> <span class="n">dope_dict</span><span class="p">,</span> <span class="n">ali</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Generates the threading and the blossum scores for a given Alignment object.</span>
+<span class="sd">        Generates the threading and the blosum scores for a given Alignment object.</span>
 
 <span class="sd">        Returns:</span>
 <span class="sd">            tuple: (Sum of the different scores, Number of the Alignment,</span>
@@ -173,8 +173,8 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># Calculate the threading score of all alignments</span>
     <span class="n">threading_score</span> <span class="o">=</span> <span class="n">ali</span><span class="o">.</span><span class="n">calculate_threading_score</span><span class="p">(</span><span class="n">dist_range</span><span class="p">,</span> <span class="n">gap_penality</span><span class="p">,</span> <span class="n">dope_dict</span><span class="p">)</span>
-    <span class="n">blossum_score</span> <span class="o">=</span> <span class="n">ali</span><span class="o">.</span><span class="n">calculate_blossum_score</span><span class="p">()</span>
-    <span class="k">return</span> <span class="n">ali</span><span class="o">.</span><span class="n">num</span><span class="p">,</span> <span class="n">ali</span><span class="o">.</span><span class="n">score</span><span class="p">,</span> <span class="n">threading_score</span><span class="p">,</span> <span class="n">blossum_score</span><span class="p">,</span>\
+    <span class="n">blosum_score</span> <span class="o">=</span> <span class="n">ali</span><span class="o">.</span><span class="n">calculate_blosum_score</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">ali</span><span class="o">.</span><span class="n">num</span><span class="p">,</span> <span class="n">ali</span><span class="o">.</span><span class="n">score</span><span class="p">,</span> <span class="n">threading_score</span><span class="p">,</span> <span class="n">blosum_score</span><span class="p">,</span>\
            <span class="n">ali</span><span class="o">.</span><span class="n">template</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">ali</span><span class="o">.</span><span class="n">template</span><span class="o">.</span><span class="n">benchmark</span></div>
 
 
@@ -232,14 +232,14 @@
 
         <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">row_res</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">query</span><span class="p">):</span>
             <span class="c1"># The gap was already treated</span>
-            <span class="k">if</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="p">(</span><span class="n">query_size</span> <span class="o">-</span> <span class="mi">3</span><span class="p">)</span> <span class="ow">and</span> <span class="n">energy</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">2</span><span class="p">)]</span> <span class="o">==</span> <span class="n">gap_penalty</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="p">(</span><span class="n">query_size</span> <span class="o">-</span> <span class="mi">3</span><span class="p">)</span> <span class="ow">and</span> <span class="n">energy</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">2</span><span class="p">)]</span> <span class="o">==</span> <span class="n">gap_penalty</span><span class="p">:</span>
                 <span class="k">continue</span>
             <span class="c1"># There is a gap in the query or the template</span>
             <span class="k">elif</span> <span class="n">row_res</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;-&quot;</span> <span class="ow">or</span> <span class="n">template</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;-&quot;</span><span class="p">:</span>
                 <span class="c1"># The whole line is set with gap penalty value</span>
-                <span class="n">energy</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">2</span><span class="p">):]</span> <span class="o">=</span> <span class="n">gap_penalty</span>
+                <span class="n">energy</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">2</span><span class="p">):]</span> <span class="o">=</span> <span class="n">gap_penalty</span>
                 <span class="k">continue</span>
-            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">2</span><span class="p">,</span> <span class="n">query_size</span><span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">2</span><span class="p">,</span> <span class="n">query_size</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>
                 <span class="n">col_res</span> <span class="o">=</span> <span class="n">query</span><span class="p">[</span><span class="n">j</span><span class="p">]</span>
                 <span class="c1"># The gap was already treated</span>
                 <span class="k">if</span> <span class="n">energy</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">==</span> <span class="n">gap_penalty</span><span class="p">:</span>
@@ -247,7 +247,7 @@
                 <span class="c1"># There is a gap in the query or the template</span>
                 <span class="k">elif</span> <span class="n">col_res</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;-&quot;</span> <span class="ow">or</span> <span class="n">template</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;-&quot;</span><span class="p">:</span>
                     <span class="c1"># The whole column is set with gap penalty value</span>
-                    <span class="n">energy</span><span class="p">[:(</span><span class="n">j</span><span class="o">-</span><span class="mi">1</span><span class="p">),</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">gap_penalty</span>
+                    <span class="n">energy</span><span class="p">[:(</span><span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">),</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">gap_penalty</span>
                     <span class="k">continue</span>
                 <span class="k">else</span><span class="p">:</span>
                     <span class="c1"># Calculate to distance between two residues</span>
@@ -258,27 +258,27 @@
                         <span class="c1"># DOPE energy values spread between 0.25 and 15 by 0.5 intervals</span>
                         <span class="c1"># So 30 intervals and max value = 15</span>
                         <span class="n">interval_index</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="nb">int</span><span class="p">((</span><span class="n">dist</span> <span class="o">*</span> <span class="mi">30</span><span class="p">)</span> <span class="o">/</span> <span class="mi">15</span><span class="p">))</span>
-                        <span class="n">energy</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">dope_dict</span><span class="p">[</span><span class="n">row_res</span><span class="o">.</span><span class="n">name</span><span class="o">+</span><span class="n">col_res</span><span class="o">.</span><span class="n">name</span><span class="p">][</span><span class="n">interval_index</span><span class="p">]</span>
+                        <span class="n">energy</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">dope_dict</span><span class="p">[</span><span class="n">row_res</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="n">col_res</span><span class="o">.</span><span class="n">name</span><span class="p">][</span><span class="n">interval_index</span><span class="p">]</span>
         <span class="c1"># Return the sum of energy matrix with numpy&#39;s &quot;Nan&quot; interpreted as zeros</span>
         <span class="k">return</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">nansum</span><span class="p">(</span><span class="n">energy</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Alignment.calculate_blossum_score"><a class="viewcode-back" href="../../alignment.html#src.alignment.Alignment.calculate_blossum_score">[docs]</a>    <span class="k">def</span> <span class="nf">calculate_blossum_score</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Alignment.calculate_blosum_score"><a class="viewcode-back" href="../../alignment.html#src.alignment.Alignment.calculate_blosum_score">[docs]</a>    <span class="k">def</span> <span class="nf">calculate_blosum_score</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">            Calculate a blossum score using the BLOSSUM62 matrix. This matrix contains</span>
+<span class="sd">            Calculate a blosum score using the blosum62 matrix. This matrix contains</span>
 <span class="sd">            substitution scores for each amino acid pair. A positive score is given to the more</span>
 <span class="sd">            likely substitutions while a negative score is given to the less likely substitutions.</span>
 
 <span class="sd">            Returns:</span>
-<span class="sd">                int: The blossum score calculated.</span>
+<span class="sd">                int: The blosum score calculated.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="c1"># dictionary containing substitution scores of the BLOSSUM62 matrix</span>
+        <span class="c1"># dictionary containing substitution scores of the blosum62 matrix</span>
         <span class="n">blosum62</span> <span class="o">=</span> <span class="n">MatrixInfo</span><span class="o">.</span><span class="n">blosum62</span>
         <span class="n">score</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="k">for</span> <span class="n">ind</span><span class="p">,</span> <span class="n">res_q</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">residues</span><span class="p">):</span>
             <span class="n">res_t</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">template</span><span class="o">.</span><span class="n">residues</span><span class="p">[</span><span class="n">ind</span><span class="p">]</span>
             <span class="k">if</span> <span class="n">res_q</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;-&quot;</span> <span class="ow">or</span> <span class="n">res_t</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;-&quot;</span><span class="p">:</span>
                 <span class="k">continue</span>
-            <span class="c1"># The BLOSSUM62 matrix is symetric, thus we need to test</span>
+            <span class="c1"># The blosum62 matrix is symetric, thus we need to test</span>
             <span class="c1"># if (res_1, res_2) key is in the dictionary.</span>
             <span class="k">if</span> <span class="p">(</span><span class="n">res_q</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">res_t</span><span class="o">.</span><span class="n">name</span><span class="p">)</span> <span class="ow">in</span> <span class="n">blosum62</span><span class="p">:</span>
                 <span class="n">score</span> <span class="o">+=</span> <span class="n">blosum62</span><span class="p">[(</span><span class="n">res_q</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">res_t</span><span class="o">.</span><span class="n">name</span><span class="p">)]</span>

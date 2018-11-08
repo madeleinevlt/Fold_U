@@ -177,18 +177,29 @@ cd Fold_U
 <div class="section" id="requirements">
 <h3>Requirements<a class="headerlink" href="#requirements" title="Permalink to this headline">¶</a></h3>
 <p>Install the few required packages / modules:</p>
-<div class="highlight-guess notranslate"><div class="highlight"><pre><span></span>pip install -r src/requirements.txt
+<div class="highlight-guess notranslate"><div class="highlight"><pre><span></span>pip install -r requirements.txt
 </pre></div>
 </div>
 </div>
 </div>
 <div class="section" id="run-the-program">
 <h2>Run the program<a class="headerlink" href="#run-the-program" title="Permalink to this headline">¶</a></h2>
-<p>fold_u takes in input N profil-profil alignments and their corresponding scores (foldrec file).</p>
-<div class="section" id="run-the-test">
-<h3>Run the test<a class="headerlink" href="#run-the-test" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-guess notranslate"><div class="highlight"><pre><span></span>./fold_u data/foldrec/DEP.foldrec -o res/DEP
+<p>fold_u takes in input <strong>N profil-profil alignments and their corresponding score</strong> (foldrec file).</p>
+<div class="section" id="run-the-toy-example">
+<h3>Run the toy example<a class="headerlink" href="#run-the-toy-example" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="generation-of-the-result-files">
+<h4>Generation of the result files<a class="headerlink" href="#generation-of-the-result-files" title="Permalink to this headline">¶</a></h4>
+<p>The <code class="docutils literal notranslate"><span class="pre">scores.out</span></code> and the <strong>top 10 pdb structures</strong> of the His_biosynth query sequence are stored in <code class="docutils literal notranslate"><span class="pre">results/His_biosynth</span></code> folder.</p>
+<div class="highlight-guess notranslate"><div class="highlight"><pre><span></span>./fold_u data/foldrec/His_biosynth.foldrec -o results/His_biosynth
 </pre></div>
+</div>
+</div>
+<div class="section" id="normalization-and-plot">
+<h4>Normalization and plot<a class="headerlink" href="#normalization-and-plot" title="Permalink to this headline">¶</a></h4>
+<p>The different scores are normalized using <strong>min-max scaling method</strong> (values between 0 and 1) and the <code class="docutils literal notranslate"><span class="pre">benchmark_rank.png</span></code> generated plot represents the cumulative sum of benchmarks encountered along the ranking (from rank 1 to rank 412).</p>
+<div class="highlight-guess notranslate"><div class="highlight"><pre><span></span>./script/plot_scores.R results/His_biosynth
+</pre></div>
+</div>
 </div>
 </div>
 <div class="section" id="get-help">
@@ -197,23 +208,29 @@ cd Fold_U
 
     Usage:
         ./fold_u FOLDREC_FILE [--nb_templates NUM] [--nb_pdb NUM] [--output PATH]
-                               [--metafold FILE] [--dope FILE] [--benchmark FILE]
+                              [--metafold FILE] [--dope FILE] [--benchmark FILE] [--cpu NUM]
+
+    Arguments:
+        FOLDREC_FILE                          N profile * profile alignment and
+                                              their corresponding score
 
     Options:
         -h, --help                            Show this
         -n NUM, --nb_templates NUM            First n templates to retrieve from
-                                              the foldrec file [default: 100]
+                                              the foldrec file [default: 413]
         -p NUM, --nb_pdb NUM                  Number of pdb to create
                                               [default: 10]
         -o PATH, --output PATH                Path to the directory containing
                                               the result files (scores and pdb)
-                                              [default: res/threading]
+                                              [default: ./results]
         -m FILE, --metafold FILE              Path to the metafold.list file
                                               [default: data/metafold.list]
         -d FILE, --dope FILE                  Path to the dope.par file
                                               [default: data/dope.par]
         -b FILE, --benchmark FILE             Path to the benchmark.list file
                                               [default: data/benchmark.list]
+        -c NUM, --cpu NUM                     Number of cpus to use for parallelisation
+                                              [default: 2]
 </pre></div>
 </div>
 </div>
