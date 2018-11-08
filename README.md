@@ -32,7 +32,7 @@ pip install -r src/requirements.txt
 ```
 
 ## Run the program
-fold_u.py takes in input N profil-profil alignments and their corresponding scores (foldrec file).
+fold_u takes in input N profil-profil alignments and their corresponding scores (foldrec file).
 
 ### Run the test
 ```
@@ -40,10 +40,10 @@ fold_u.py takes in input N profil-profil alignments and their corresponding scor
 ```
 ### Get help
 ```
-./fold_u.py -h
+./fold_u -h
 
     Usage:
-        ./fold_u.py FOLDREC_FILE [--nb_templates NUM] [--nb_pdb NUM] [--output PATH]
+        ./fold_u FOLDREC_FILE [--nb_templates NUM] [--nb_pdb NUM] [--output PATH]
                                [--metafold FILE] [--dope FILE] [--benchmark FILE]
 
     Options:
@@ -76,6 +76,10 @@ We are master students in bioinformatics at Paris Diderot University.
 - [Tom Gutman](https://github.com/tomgutman)
 - [Flora Mikaeloff](https://github.com/FloraMika)
 - [Franz-Arnold Ake](https://github.com/franzx5)
+
+## Acknowledgment
+
+Thanks to [Maïté Cretin](https://www.linkedin.com/in/maitewho/) for the nice logo.
 
 ## License
 
