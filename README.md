@@ -36,7 +36,7 @@ fold_u takes in input N profil-profil alignments and their corresponding scores 
 
 ### Run the test
 ```
-./fold_u.py data/foldrec/Agglutinin.foldrec
+./fold_u data/foldrec/Agglutinin.foldrec
 ```
 ### Get help
 ```
