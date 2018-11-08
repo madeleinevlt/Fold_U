@@ -1,9 +1,9 @@
 ![Fold-U release](https://img.shields.io/badge/fold--u-v1.2-blue.svg)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 ![Python version](https://img.shields.io/badge/python-3-brightgreen.svg)
-![Sphinx version](https://img.shields.io/badge/sphinx%20build-1.7.4-brightgreen.svg)  
+![Sphinx doc](https://img.shields.io/badge/doc-sphinx-brightgreen.svg)  
 
-<br>  
+<br>
 
 # Fold U: A Protein Structure Prediction Program
 
@@ -36,7 +36,7 @@ fold_u takes in input N profil-profil alignments and their corresponding scores 
 
 ### Run the test
 ```
-./fold_u data/foldrec/Agglutinin.foldrec
+./fold_u data/foldrec/DEP.foldrec -o res/DEP
 ```
 ### Get help
 ```

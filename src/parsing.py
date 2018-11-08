@@ -68,15 +68,14 @@ def parse_foldrec(foldrec_file, nb_templates, metafold_dict):
 
         Args:
             foldrec_file (str): The file containing N profil-profil alignments and their
-                                 corresponding scores.
+                                corresponding scores.
             nb_templates (int): Number of alignments to retrieve from the file and chosen
                                 by the user.
             metafold_dict (dictionary): A dictionary with key = template name
                                         and value = pdb file.
 
         Returns:
-            dict: A dictionary with key = template name and
-            value = an Alignment object.
+            dict: A dictionary with key = template name and value = an Alignment object.
     """
 
     # Regex :
