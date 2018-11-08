@@ -28,33 +28,43 @@ cd Fold_U
 ### Requirements
 Install the few required packages / modules:
 ```
-pip install -r src/requirements.txt
+pip install -r requirements.txt
 ```
 
 ## Run the program
-fold_u takes in input N profil-profil alignments and their corresponding scores (foldrec file).
+fold_u takes in input **N profil-profil alignments and their corresponding score** (foldrec file).
 
-### Run the test
+### Run the toy example
+
+#### Generation of the result files
+The `scores.out` and the **top 10 pdb structures** of the DEP query sequence are stored in `results/DEP` folder.
 ```
-./fold_u data/foldrec/DEP.foldrec -o res/DEP
+./fold_u data/foldrec/DEP.foldrec -o results/DEP
 ```
+
+#### Normalization and plot
+The different scores are normalized using **min-max scaling method** (values between 0 and 1) and the `benchmark_rank.png` generated plot represents the cumulative sum of benchmarks encountered along the ranking (from rank 1 to rank 412).
+```
+./script/plot_scores.R results/DEP
+```
+
 ### Get help
 ```
 ./fold_u -h
 
     Usage:
         ./fold_u FOLDREC_FILE [--nb_templates NUM] [--nb_pdb NUM] [--output PATH]
-                               [--metafold FILE] [--dope FILE] [--benchmark FILE]
+                              [--metafold FILE] [--dope FILE] [--benchmark FILE]
 
     Options:
         -h, --help                            Show this
         -n NUM, --nb_templates NUM            First n templates to retrieve from
-                                              the foldrec file [default: 100]
+                                              the foldrec file [default: 413]
         -p NUM, --nb_pdb NUM                  Number of pdb to create
                                               [default: 10]
         -o PATH, --output PATH                Path to the directory containing
                                               the result files (scores and pdb)
-                                              [default: res/threading]
+                                              [default: ./results]
         -m FILE, --metafold FILE              Path to the metafold.list file
                                               [default: data/metafold.list]
         -d FILE, --dope FILE                  Path to the dope.par file
