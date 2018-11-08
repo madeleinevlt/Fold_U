@@ -59,6 +59,41 @@ def parse_dope(dope_file):
     return dope_dict
 
 
+def parse_benchmark(benchmark_file, foldrec_file, alignment_dict):
+    """
+        Extract the line of the benchmark file containing the benchmarks of
+        the studied query. Each benchmark template have an assigned structure
+        corresponding to the degree of similarity with the query
+        ("Family", "Superfamily" or "Fold"). For a given benchmark template
+        object, the structure is stored in the benchmark item.
+
+        Args:
+            benchmark_file (str): The path to the benchmark file.
+            foldrec_file (str): The path to the foldrec file.
+            alignment_dict (dictionary): A dictionary with key = template name
+                                         and value = an Alignment object.
+    """
+    # The name of the query is retrieved from the foldrec file pathway
+    query_reg = re.compile("^.*\\/(\\w*)")
+    query_name = re.search(query_reg, foldrec_file)
+    with open(benchmark_file, "r") as file:
+        for line in file:
+            # Only the line containing the query name is extracted
+            if query_name.group(1) in line:
+                # List containing for each benchmark the template name and
+                # the associated fold_type
+                template_fold_type = line[0:-1].split(": ")[1].split(", ")
+                for i in template_fold_type:
+                    # The fold_type of the benchmark template is stored in
+                    # the benchmark item
+                    template = i.split(" ")[0]
+                    fold_type = i.split(" ")[1]
+                    if template in alignment_dict:
+                        alignment_dict[template].template.set_benchmark(fold_type)
+                # No need to continue because all benchmarks are stored
+                break
+
+
 def parse_foldrec(foldrec_file, nb_templates, metafold_dict):
     """
         Extracts the score, the template name, the query and template sequences for
@@ -144,38 +179,3 @@ def parse_foldrec(foldrec_file, nb_templates, metafold_dict):
                     alignment_dict[template_name] = ali
                     count_templates += 1
     return alignment_dict
-
-
-def parse_benchmark(benchmark_file, foldrec_file, alignment_dict):
-    """
-        Extract the line of the benchmark file containing the benchmarks of
-        the studied query. Each benchmark template have an assigned structure
-        corresponding to the degree of similarity with the query
-        ("Family", "Superfamily" or "Fold"). For a given benchmark template
-        object, the structure is stored in the benchmark item.
-
-        Args:
-            benchmark_file (str): The path to the benchmark file.
-            foldrec_file (str): The path to the foldrec file.
-            alignment_dict (dictionary): A dictionary with key = template name
-                                         and value = an Alignment object.
-    """
-    # The name of the query is retrieved from the foldrec file pathway
-    query_reg = re.compile("^.*\\/(\\w*)")
-    query_name = re.search(query_reg, foldrec_file)
-    with open(benchmark_file, "r") as file:
-        for line in file:
-            # Only the line containing the query name is extracted
-            if query_name.group(1) in line:
-                # List containing for each benchmark the template name and
-                # the associated fold_type
-                template_fold_type = line[0:-1].split(": ")[1].split(", ")
-                for i in template_fold_type:
-                    # The fold_type of the benchmark template is stored in
-                    # the benchmark item
-                    template = i.split(" ")[0]
-                    fold_type = i.split(" ")[1]
-                    if template in alignment_dict:
-                        alignment_dict[template].template.set_benchmark(fold_type)
-                # No need to continue because all benchmarks are stored
-                break
