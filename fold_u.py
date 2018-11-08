@@ -107,17 +107,15 @@ if __name__ == "__main__":
     ### Main calculations
     #####################
 
-    # Parallelization of the main loop: threading calculations
-    POOL = Pool(processes=cpu_count())
-    func = partial(process, DIST_RANGE, GAP_PENALTY, DOPE_DICT)
-    # tqdm module enables an ETA progress bar of alignments
-    # imap_unordered can smooth things out by yielding faster-calculated values
-    # ahead of slower-calculated values.
-    print("\nProcessing threading on templates ...\n\n")
-    RESULTS = Score([res_ali for res_ali in tqdm(POOL.imap_unordered(func,\
-                ALIGNMENT_DICT.values()), total=len(ALIGNMENT_DICT.values()))])
-    POOL.close()
-    POOL.join()
+    # Parallelization of the main loop
+    with Pool(processes=cpu_count()) as pool:
+        func = partial(process, DIST_RANGE, GAP_PENALTY, DOPE_DICT)
+        # tqdm module enables an ETA progress bar for each alignment processed
+        # imap_unordered can smooth things out by yielding faster-calculated values
+        # ahead of slower-calculated values.
+        print("\nProcessing threading on templates ...\n\n")
+        RESULTS = Score([res_ali for res_ali in tqdm(pool.imap_unordered(func,\
+                    ALIGNMENT_DICT.values()), total=len(ALIGNMENT_DICT.values()))])
 
     ### Results : Score and PDB files
     #################################
