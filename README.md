@@ -37,15 +37,15 @@ fold_u takes in input **N profil-profil alignments and their corresponding score
 ### Run the toy example
 
 #### Generation of the result files
-The `scores.out` and the **top 10 pdb structures** of the DEP query sequence are stored in `results/DEP` folder.
+The `scores.out` and the **top 10 pdb structures** of the His_biosynth query sequence are stored in `results/His_biosynth` folder.
 ```
-./fold_u data/foldrec/DEP.foldrec -o results/DEP
+./fold_u data/foldrec/His_biosynth.foldrec -o results/His_biosynth
 ```
 
 #### Normalization and plot
 The different scores are normalized using **min-max scaling method** (values between 0 and 1) and the `benchmark_rank.png` generated plot represents the cumulative sum of benchmarks encountered along the ranking (from rank 1 to rank 412).
 ```
-./script/plot_scores.R results/DEP
+./script/plot_scores.R results/His_biosynth
 ```
 
 ### Get help
