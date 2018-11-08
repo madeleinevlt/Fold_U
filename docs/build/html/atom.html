@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Writing module &mdash; fold-u 1.0 documentation</title>
+  <title>Atom &mdash; Fold U 1.2 documentation</title>
   
 
   
@@ -28,7 +28,8 @@
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="prev" title="Classes module" href="classes.html" /> 
+    <link rel="next" title="Score" href="score.html" />
+    <link rel="prev" title="Residue" href="residue.html" /> 
 
   
   <script src="_static/js/modernizr.min.js"></script>
@@ -47,7 +48,7 @@
           
 
           
-            <a href="index.html" class="icon icon-home"> fold-u
+            <a href="index.html" class="icon icon-home"> Fold U
           
 
           
@@ -57,7 +58,7 @@
             
             
               <div class="version">
-                1.0
+                1.2
               </div>
             
           
@@ -82,12 +83,13 @@
             
             
               <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="README.html">README</a></li>
-<li class="toctree-l1"><a class="reference internal" href="meeting.html">Meeting</a></li>
-<li class="toctree-l1"><a class="reference internal" href="parsing.html">Parsing module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="threading.html">Threading module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="classes.html">Classes module</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Writing module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="alignment.html">Alignment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="template.html">Template</a></li>
+<li class="toctree-l1"><a class="reference internal" href="query.html">Query</a></li>
+<li class="toctree-l1"><a class="reference internal" href="residue.html">Residue</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Atom</a></li>
+<li class="toctree-l1"><a class="reference internal" href="score.html">Score</a></li>
+<li class="toctree-l1"><a class="reference internal" href="parsing.html">Parsing</a></li>
 </ul>
 
             
@@ -102,7 +104,7 @@
       <nav class="wy-nav-top" aria-label="top navigation">
         
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="index.html">fold-u</a>
+          <a href="index.html">Fold U</a>
         
       </nav>
 
@@ -133,13 +135,13 @@
     
       <li><a href="index.html">Docs</a> &raquo;</li>
         
-      <li>Writing module</li>
+      <li>Atom</li>
     
     
       <li class="wy-breadcrumbs-aside">
         
             
-            <a href="_sources/writing.rst.txt" rel="nofollow"> View page source</a>
+            <a href="_sources/atom.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -152,53 +154,59 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="module-src.writing">
-<span id="writing-module"></span><h1>Writing module<a class="headerlink" href="#module-src.writing" title="Permalink to this headline">¶</a></h1>
-<span class="target" id="module-writing"></span><dl class="function">
-<dt id="src.writing.scores_and_pdb">
-<code class="descclassname">src.writing.</code><code class="descname">scores_and_pdb</code><span class="sig-paren">(</span><em>res_path</em>, <em>score_list</em>, <em>nb_pdb</em>, <em>alignment_dict</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/writing.html#scores_and_pdb"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.writing.scores_and_pdb" title="Permalink to this definition">¶</a></dt>
-<dd><p>Creates a scores.out file containing for each line a score and the template’s
-name associated. Creates the pdb files of the n best templates (best scores).</p>
+  <div class="section" id="module-src.atom">
+<span id="atom"></span><h1>Atom<a class="headerlink" href="#module-src.atom" title="Permalink to this headline">¶</a></h1>
+<span class="target" id="module-Atom"></span><dl class="class">
+<dt id="src.atom.Atom">
+<em class="property">class </em><code class="descclassname">src.atom.</code><code class="descname">Atom</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/atom.html#Atom"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.atom.Atom" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="class">
+<dt id="src.atom.Atom.Atom">
+<em class="property">class </em><code class="descname">Atom</code><a class="headerlink" href="#src.atom.Atom.Atom" title="Permalink to this definition">¶</a></dt>
+<dd><p>This class groups informations about an atom.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.atom.Atom.name">
+<code class="descname">name</code><a class="headerlink" href="#src.atom.Atom.name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Name of the atom</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>res_path</strong> (<em>str</em>) – The path of the directory where to stock the created files.</li>
-<li><strong>score_list</strong> (<em>list</em>) – A list of tupples (score, template’s name)</li>
-<li><strong>nb_pdb</strong> (<em>int</em>) – Number of pdb to create using the n first templates.</li>
-<li><strong>alignment_dict</strong> (<em>dictionary</em>) – A dictionary containing Alignment objects.</li>
-</ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">void</p>
-</td>
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">str</td>
 </tr>
 </tbody>
 </table>
 </dd></dl>
 
-<dl class="function">
-<dt id="src.writing.write_pdb">
-<code class="descclassname">src.writing.</code><code class="descname">write_pdb</code><span class="sig-paren">(</span><em>res_path</em>, <em>template_name</em>, <em>template_num</em>, <em>alignment_dict</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/writing.html#write_pdb"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.writing.write_pdb" title="Permalink to this definition">¶</a></dt>
-<dd><p>Write a pdb file by threading the query sequence on the template CA coordinates.</p>
+<dl class="attribute">
+<dt id="src.atom.Atom.coords">
+<code class="descname">coords</code><a class="headerlink" href="#src.atom.Atom.coords" title="Permalink to this definition">¶</a></dt>
+<dd><p>3D coordinates of the atom</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>res_path</strong> (<em>str</em>) – The path of the directory where to stock the created files.</li>
-<li><strong>template_name</strong> (<em>str</em>) – Name of the template used.</li>
-<li><strong>template_num</strong> (<em>int</em>) – Rank of the template used.</li>
-<li><strong>alignment_dict</strong> (<em>dictionary</em>) – A dictionary containing Alignment objects.</li>
-</ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">void</p>
-</td>
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">Numpy array</td>
 </tr>
 </tbody>
 </table>
+</dd></dl>
+
+<dl class="method">
+<dt id="src.atom.Atom.set_coords">
+<code class="descname">set_coords</code><span class="sig-paren">(</span><em>coords</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/atom.html#Atom.set_coords"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.atom.Atom.set_coords" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the coordinates of the atom.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>coords</strong> (<em>Numpy array</em>) – x,y,z coordinates.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 </dd></dl>
 
 </div>
@@ -211,8 +219,10 @@ name associated. Creates the pdb files of the n best templates (best scores).</p
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
+        <a href="score.html" class="btn btn-neutral float-right" title="Score" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
-        <a href="classes.html" class="btn btn-neutral" title="Classes module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+        <a href="residue.html" class="btn btn-neutral" title="Residue" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

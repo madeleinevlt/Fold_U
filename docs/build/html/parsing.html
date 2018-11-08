@@ -5,65 +5,64 @@
 <!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
-  <title>Parsing module &mdash; fold-u 1.0 documentation</title>
-  
 
-  
-  
-  
-  
+  <title>Parsing &mdash; Fold U 1.2 documentation</title>
 
-  
 
-  
-  
-    
 
-  
+
+
+
+
+
+
+
+
+
+
+
 
   <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Threading module" href="threading.html" />
-    <link rel="prev" title="Meeting" href="meeting.html" /> 
+    <link rel="prev" title="Score" href="score.html" />
 
-  
+
   <script src="_static/js/modernizr.min.js"></script>
 
 </head>
 
 <body class="wy-body-for-nav">
 
-   
+
   <div class="wy-grid-for-nav">
 
-    
+
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search">
-          
 
-          
-            <a href="index.html" class="icon icon-home"> fold-u
-          
 
-          
+
+            <a href="index.html" class="icon icon-home"> Fold U
+
+
+
           </a>
 
-          
-            
-            
-              <div class="version">
-                1.0
-              </div>
-            
-          
 
-          
+
+
+              <div class="version">
+                1.2
+              </div>
+
+
+
+
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -72,47 +71,48 @@
   </form>
 </div>
 
-          
+
         </div>
 
         <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-              
-            
-            
+
+
+
+
+
+
               <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="README.html">README</a></li>
-<li class="toctree-l1"><a class="reference internal" href="meeting.html">Meeting</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Parsing module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="threading.html">Threading module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="classes.html">Classes module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="writing.html">Writing module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="alignment.html">Alignment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="template.html">Template</a></li>
+<li class="toctree-l1"><a class="reference internal" href="query.html">Query</a></li>
+<li class="toctree-l1"><a class="reference internal" href="residue.html">Residue</a></li>
+<li class="toctree-l1"><a class="reference internal" href="atom.html">Atom</a></li>
+<li class="toctree-l1"><a class="reference internal" href="score.html">Score</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Parsing</a></li>
 </ul>
 
-            
-          
+
+
         </div>
       </div>
     </nav>
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
 
-      
+
       <nav class="wy-nav-top" aria-label="top navigation">
-        
+
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="index.html">fold-u</a>
-        
+          <a href="index.html">Fold U</a>
+
       </nav>
 
 
       <div class="wy-nav-content">
-        
+
         <div class="rst-content">
-        
-          
+
+
 
 
 
@@ -131,57 +131,78 @@
 <div role="navigation" aria-label="breadcrumbs navigation">
 
   <ul class="wy-breadcrumbs">
-    
+
       <li><a href="index.html">Docs</a> &raquo;</li>
-        
-      <li>Parsing module</li>
-    
-    
+
+      <li>Parsing</li>
+
+
       <li class="wy-breadcrumbs-aside">
-        
-            
+
+
             <a href="_sources/parsing.rst.txt" rel="nofollow"> View page source</a>
-          
-        
+
+
       </li>
-    
+
   </ul>
 
-  
+
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-            
+
   <div class="section" id="module-src.parsing">
-<span id="parsing-module"></span><h1>Parsing module<a class="headerlink" href="#module-src.parsing" title="Permalink to this headline">¶</a></h1>
+<span id="parsing"></span><h1>Parsing<a class="headerlink" href="#module-src.parsing" title="Permalink to this headline">¶</a></h1>
 <span class="target" id="module-parsing"></span><dl class="function">
-<dt id="src.parsing.dope">
-<code class="descclassname">src.parsing.</code><code class="descname">dope</code><span class="sig-paren">(</span><em>dope_file</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/parsing.html#dope"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.parsing.dope" title="Permalink to this definition">¶</a></dt>
-<dd><p>Extracts 30 dope energy values for the 20*20 residus-CA pairs and stores it
-in a dictionary with key = res_1-res_2 and value = an array of the 30 dope scores.</p>
+<dt id="src.parsing.parse_benchmark">
+<code class="descclassname">src.parsing.</code><code class="descname">parse_benchmark</code><span class="sig-paren">(</span><em>benchmark_file</em>, <em>foldrec_file</em>, <em>alignment_dict</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/parsing.html#parse_benchmark"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.parsing.parse_benchmark" title="Permalink to this definition">¶</a></dt>
+<dd><p>Extract the line of the benchmark file containing the benchmarks of
+the studied query. Each benchmark template have an assigned structure
+corresponding to the degree of similarity with the query
+(“Family”, “Superfamily” or “Fold”). For a given benchmark template
+object, the structure is stored in the benchmark item.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>file</strong> (<em>dope</em>) – The file dope.par containing energy values for each
-amino acid pair.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><dl class="docutils">
-<dt>A dictionary with key = res_1-res_2</dt>
-<dd>and value = an array of the 30 dope energy values.</dd>
-</dl>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>benchmark_file</strong> (<em>str</em>) – The path to the benchmark file.</li>
+<li><strong>foldrec_file</strong> (<em>str</em>) – The path to the foldrec file.</li>
+<li><strong>alignment_dict</strong> (<em>dictionary</em>) – A dictionary with key = template name
+and value = an Alignment object.</li>
+</ul>
 </td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">dope dictionary</td>
 </tr>
 </tbody>
 </table>
 </dd></dl>
 
 <dl class="function">
-<dt id="src.parsing.foldrec">
-<code class="descclassname">src.parsing.</code><code class="descname">foldrec</code><span class="sig-paren">(</span><em>foldrec_file</em>, <em>nb_templates</em>, <em>metafold_dict</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/parsing.html#foldrec"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.parsing.foldrec" title="Permalink to this definition">¶</a></dt>
+<dt id="src.parsing.parse_dope">
+<code class="descclassname">src.parsing.</code><code class="descname">parse_dope</code><span class="sig-paren">(</span><em>dope_file</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/parsing.html#parse_dope"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.parsing.parse_dope" title="Permalink to this definition">¶</a></dt>
+<dd><p>Extracts 30 dope energy values for the 20*20 residus-CA pairs and stores it
+in a dictionary with key = res_1-res_2 and value = an array of the 30 dope scores.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>dope_file</strong> (<em>str</em>) – The file dope.par containing energy values for each
+amino acid pair.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A dictionary with key = res_1-res_2 and value = an array of
+the 30 dope energy values.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">dict</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="src.parsing.parse_foldrec">
+<code class="descclassname">src.parsing.</code><code class="descname">parse_foldrec</code><span class="sig-paren">(</span><em>foldrec_file</em>, <em>nb_templates</em>, <em>metafold_dict</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/parsing.html#parse_foldrec"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.parsing.parse_foldrec" title="Permalink to this definition">¶</a></dt>
 <dd><p>Extracts the score, the template name, the query and template sequences for
 the first n alignments from a file containing N profil-profil alignments and
 creates a list of Alignment objects. It also gives the template’s pdb file name
@@ -191,24 +212,19 @@ and gets all the coordinates of the CA atoms in the template’s Residue list.</
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>foldrec_file</strong> (<em>file</em>) – The file containing N profil-profil alignments and their
+<li><strong>foldrec_file</strong> (<em>str</em>) – The file containing N profil-profil alignments and their
 corresponding scores.</li>
 <li><strong>nb_templates</strong> (<em>int</em>) – Number of alignments to retrieve from the file and chosen
 by the user.</li>
-<li><strong>metafold_dict</strong> (<em>dictionary</em>) – A dictionary with key = template name and
-value = pdb file.</li>
+<li><strong>metafold_dict</strong> (<em>dictionary</em>) – A dictionary with key = template name
+and value = pdb file.</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><dl class="docutils">
-<dt>A dictionary with key = template name and</dt>
-<dd><p class="first last">value = an Alignment object.</p>
-</dd>
-</dl>
-</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">A dictionary with key = template name and value = an Alignment object.</p>
 </td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">Dictionary of Alignments</p>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">dict</p>
 </td>
 </tr>
 </tbody>
@@ -216,20 +232,20 @@ value = pdb file.</li>
 </dd></dl>
 
 <dl class="function">
-<dt id="src.parsing.metafold">
-<code class="descclassname">src.parsing.</code><code class="descname">metafold</code><span class="sig-paren">(</span><em>metafold_file</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/parsing.html#metafold"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.parsing.metafold" title="Permalink to this definition">¶</a></dt>
+<dt id="src.parsing.parse_metafold">
+<code class="descclassname">src.parsing.</code><code class="descname">parse_metafold</code><span class="sig-paren">(</span><em>metafold_file</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/parsing.html#parse_metafold"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.parsing.parse_metafold" title="Permalink to this definition">¶</a></dt>
 <dd><p>Extracts the name of the metafold as a key and the associated pdb as
 a value in a dictionary</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>metafold_file</strong> – A METAFOLD.list file containing for a given line a
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>metafold_file</strong> (<em>str</em>) – A METAFOLD.list file containing for a given line a
 template name and a pdb file name associated</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A dictionary with key = template name and value = pdb file</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">dictionary</td>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">dict</td>
 </tr>
 </tbody>
 </table>
@@ -239,19 +255,17 @@ template name and a pdb file name associated</td>
 
 
            </div>
-           
+
           </div>
           <footer>
-  
+
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-      
-        <a href="threading.html" class="btn btn-neutral float-right" title="Threading module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
-      
-      
-        <a href="meeting.html" class="btn btn-neutral" title="Meeting" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
-      
+
+
+        <a href="score.html" class="btn btn-neutral" title="Score" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+
     </div>
-  
+
 
   <hr/>
 
@@ -261,7 +275,7 @@ template name and a pdb file name associated</td>
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
 
 </footer>
 
@@ -271,21 +285,21 @@ template name and a pdb file name associated</td>
     </section>
 
   </div>
-  
 
 
-  
 
-    
-    
+
+
+
+
       <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
         <script type="text/javascript" src="_static/jquery.js"></script>
         <script type="text/javascript" src="_static/underscore.js"></script>
         <script type="text/javascript" src="_static/doctools.js"></script>
         <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    
 
-  
+
+
 
   <script type="text/javascript" src="_static/js/theme.js"></script>
 
@@ -293,7 +307,7 @@ template name and a pdb file name associated</td>
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script> 
+  </script>
 
 </body>
 </html>

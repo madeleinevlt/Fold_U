@@ -1,4 +1,0 @@
-Meeting
-*******
-
-.. mdinclude:: ../meeting.md
