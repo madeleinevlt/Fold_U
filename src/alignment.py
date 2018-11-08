@@ -11,7 +11,7 @@ from Bio.SeqUtils import seq3
 
 def process(dist_range, gap_penality, dope_dict, ali):
     """
-        Generates the threading and the blossum scores for a given Alignment object.
+        Generates the threading and the blosum scores for a given Alignment object.
 
         Returns:
             tuple: (Sum of the different scores, Number of the Alignment,
@@ -20,8 +20,8 @@ def process(dist_range, gap_penality, dope_dict, ali):
     """
     # Calculate the threading score of all alignments
     threading_score = ali.calculate_threading_score(dist_range, gap_penality, dope_dict)
-    blossum_score = ali.calculate_blossum_score()
-    return ali.num, ali.score, threading_score, blossum_score,\
+    blosum_score = ali.calculate_blosum_score()
+    return ali.num, ali.score, threading_score, blosum_score,\
            ali.template.name, ali.template.benchmark
 
 
@@ -109,23 +109,23 @@ class Alignment:
         # Return the sum of energy matrix with numpy's "Nan" interpreted as zeros
         return -np.nansum(energy)
 
-    def calculate_blossum_score(self):
+    def calculate_blosum_score(self):
         """
-            Calculate a blossum score using the BLOSSUM62 matrix. This matrix contains
+            Calculate a blosum score using the blosum62 matrix. This matrix contains
             substitution scores for each amino acid pair. A positive score is given to the more
             likely substitutions while a negative score is given to the less likely substitutions.
 
             Returns:
-                int: The blossum score calculated.
+                int: The blosum score calculated.
         """
-        # dictionary containing substitution scores of the BLOSSUM62 matrix
+        # dictionary containing substitution scores of the blosum62 matrix
         blosum62 = MatrixInfo.blosum62
         score = 0
         for ind, res_q in enumerate(self.query.residues):
             res_t = self.template.residues[ind]
             if res_q.name == "-" or res_t.name == "-":
                 continue
-            # The BLOSSUM62 matrix is symetric, thus we need to test
+            # The blosum62 matrix is symetric, thus we need to test
             # if (res_1, res_2) key is in the dictionary.
             if (res_q.name, res_t.name) in blosum62:
                 score += blosum62[(res_q.name, res_t.name)]
