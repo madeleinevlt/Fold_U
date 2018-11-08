@@ -25,7 +25,6 @@ def process(dist_range, gap_penality, dope_dict, ali):
            ali.template.name, ali.template.benchmark
 
 
-
 class Alignment:
     """
     .. class:: Alignment
@@ -69,7 +68,7 @@ class Alignment:
         query = self.query.residues
         template = self.template.residues
 
-        query_size = len(query)
+        query_size = self.query.get_size()
         # This sets a numpy matrix of shape query * query which will contain all
         # the energies corresponding to distances between all pairs of residues
         # between the query and itself: the coordinates are the ones from the template.
