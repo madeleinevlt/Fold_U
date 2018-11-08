@@ -23,7 +23,7 @@ class Template:
         self.name = name
         self.residues = residues
         self.pdb = None
-        self.benchmark = ""
+        self.benchmark = "."
 
     def set_pdb_name(self, metafold_dict):
         """
