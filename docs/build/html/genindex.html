@@ -9,7 +9,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Index &mdash; fold-u 1.0 documentation</title>
+  <title>Index &mdash; Fold U 1.2 documentation</title>
   
 
   
@@ -47,7 +47,7 @@
           
 
           
-            <a href="index.html" class="icon icon-home"> fold-u
+            <a href="index.html" class="icon icon-home"> Fold U
           
 
           
@@ -57,7 +57,7 @@
             
             
               <div class="version">
-                1.0
+                1.2
               </div>
             
           
@@ -82,14 +82,13 @@
             
             
               <ul>
-<li class="toctree-l1"><a class="reference internal" href="README.html">README</a></li>
-<li class="toctree-l1"><a class="reference internal" href="alignment.html">Alignment module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="query.html">Query module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="template.html">Template module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="residue.html">Residue module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="atom.html">Atom module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="parsing.html">Parsing module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="time.html">Time module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="alignment.html">Alignment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="template.html">Template</a></li>
+<li class="toctree-l1"><a class="reference internal" href="query.html">Query</a></li>
+<li class="toctree-l1"><a class="reference internal" href="residue.html">Residue</a></li>
+<li class="toctree-l1"><a class="reference internal" href="atom.html">Atom</a></li>
+<li class="toctree-l1"><a class="reference internal" href="score.html">Score</a></li>
+<li class="toctree-l1"><a class="reference internal" href="parsing.html">Parsing</a></li>
 </ul>
 
             
@@ -104,7 +103,7 @@
       <nav class="wy-nav-top" aria-label="top navigation">
         
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="index.html">fold-u</a>
+          <a href="index.html">Fold U</a>
         
       </nav>
 
@@ -159,6 +158,8 @@
  <a href="#A"><strong>A</strong></a>
  | <a href="#C"><strong>C</strong></a>
  | <a href="#F"><strong>F</strong></a>
+ | <a href="#G"><strong>G</strong></a>
+ | <a href="#I"><strong>I</strong></a>
  | <a href="#L"><strong>L</strong></a>
  | <a href="#N"><strong>N</strong></a>
  | <a href="#P"><strong>P</strong></a>
@@ -200,9 +201,13 @@
 </li>
       <li><a href="residue.html#src.residue.Residue.calculate_distance">calculate_distance() (src.residue.Residue method)</a>
 </li>
+      <li><a href="alignment.html#src.alignment.Alignment.calculate_modeller_score">calculate_modeller_score() (src.alignment.Alignment method)</a>
+</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="alignment.html#src.alignment.Alignment.calculate_energy">calculate_energy() (src.alignment.Alignment method)</a>
+      <li><a href="alignment.html#src.alignment.Alignment.calculate_physics_score">calculate_physics_score() (src.alignment.Alignment method)</a>
+</li>
+      <li><a href="alignment.html#src.alignment.Alignment.calculate_threading_score">calculate_threading_score() (src.alignment.Alignment method)</a>
 </li>
       <li><a href="atom.html#src.atom.Atom.coords">coords (src.atom.Atom attribute)</a>
 </li>
@@ -215,8 +220,20 @@
       <li><a href="query.html#src.query.Query.first">first (src.query.Query attribute)</a>
 </li>
   </ul></td>
+</tr></table>
+
+<h2 id="G">G</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="time.html#src.time.fn_timer">fn_timer() (in module src.time)</a>
+      <li><a href="template.html#src.template.Template.get_fasta_file">get_fasta_file() (src.template.Template method)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="I">I</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="score.html#src.score.Score.iterator">iterator (src.score.Score attribute)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -250,6 +267,8 @@
 <h2 id="P">P</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="parsing.html#src.parsing.parse_benchmark">parse_benchmark() (in module src.parsing)</a>
+</li>
       <li><a href="parsing.html#src.parsing.parse_dope">parse_dope() (in module src.parsing)</a>
 </li>
       <li><a href="parsing.html#src.parsing.parse_foldrec">parse_foldrec() (in module src.parsing)</a>
@@ -263,6 +282,8 @@
       <li><a href="parsing.html#module-parsing">parsing (module)</a>
 </li>
       <li><a href="template.html#src.template.Template.pdb">pdb (src.template.Template attribute)</a>
+</li>
+      <li><a href="alignment.html#src.alignment.process">process() (in module src.alignment)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -310,27 +331,37 @@
 <h2 id="S">S</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="score.html#src.score.Score">Score (class in src.score)</a>
+
+      <ul>
+        <li><a href="score.html#module-Score">(module)</a>
+</li>
+      </ul></li>
       <li><a href="alignment.html#src.alignment.Alignment.score">score (src.alignment.Alignment attribute)</a>
+</li>
+      <li><a href="score.html#src.score.Score.Score">Score.Score (class in src.score)</a>
+</li>
+      <li><a href="template.html#src.template.Template.set_benchmark">set_benchmark() (src.template.Template method)</a>
 </li>
       <li><a href="atom.html#src.atom.Atom.set_coords">set_coords() (src.atom.Atom method)</a>
 </li>
       <li><a href="template.html#src.template.Template.set_pdb_name">set_pdb_name() (src.template.Template method)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="alignment.html#module-src.alignment">src.alignment (module)</a>
 </li>
       <li><a href="atom.html#module-src.atom">src.atom (module)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="parsing.html#module-src.parsing">src.parsing (module)</a>
 </li>
       <li><a href="query.html#module-src.query">src.query (module)</a>
 </li>
       <li><a href="residue.html#module-src.residue">src.residue (module)</a>
 </li>
-      <li><a href="template.html#module-src.template">src.template (module)</a>
+      <li><a href="score.html#module-src.score">src.score (module)</a>
 </li>
-      <li><a href="time.html#module-src.time">src.time (module)</a>
+      <li><a href="template.html#module-src.template">src.template (module)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -350,15 +381,19 @@
 </li>
       <li><a href="template.html#src.template.Template.Template">Template.Template (class in src.template)</a>
 </li>
-      <li><a href="time.html#module-time">time (module)</a>
-</li>
   </ul></td>
 </tr></table>
 
 <h2 id="W">W</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="alignment.html#src.alignment.Alignment.write_alignment_for_modeller">write_alignment_for_modeller() (src.alignment.Alignment method)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="alignment.html#src.alignment.Alignment.write_pdb">write_pdb() (src.alignment.Alignment method)</a>
+</li>
+      <li><a href="score.html#src.score.Score.write_score">write_score() (src.score.Score method)</a>
 </li>
   </ul></td>
 </tr></table>

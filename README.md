@@ -1,11 +1,14 @@
-# Fold U: A Protein Structure Prediction Program
-![Fold-U release](https://img.shields.io/badge/fold--u-v1.1-blue.svg)
+![Fold-U release](https://img.shields.io/badge/fold--u-v1.2-blue.svg)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 ![Python version](https://img.shields.io/badge/python-3-brightgreen.svg)
-![Sphinx version](https://img.shields.io/badge/sphinx%20build-1.7.4-brightgreen.svg)
+![Sphinx version](https://img.shields.io/badge/sphinx%20build-1.7.4-brightgreen.svg)  
+
+<br>  
+
+# Fold U: A Protein Structure Prediction Program
 
 <p align="center">
-  <img width="400" src="img/logo_foldu.svg" alt="logo_foldu"/>
+  <img width="400" src="img/logo_foldu.png" alt="logo_foldu"/>
 </p>
 
 This program is the second step (downstream) of a protein structure prediction project. This step consists of threading a query sequence on different given templates.
@@ -72,7 +75,11 @@ We are master students in bioinformatics at Paris Diderot University.
 - [Hélène Kabbech](https://github.com/kabhel)
 - [Tom Gutman](https://github.com/tomgutman)
 - [Flora Mikaeloff](https://github.com/FloraMika)
-- [Franz-Arnold Ake](https://github.com/franzx5) 
+- [Franz-Arnold Ake](https://github.com/franzx5)
+
+## Acknowledgment
+
+Thanks to [Maïté Cretin](https://www.linkedin.com/in/maitewho/) for the nice logo.
 
 ## License
 

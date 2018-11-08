@@ -26,7 +26,7 @@ def parse_metafold(metafold_file):
                            template name and a pdb file name associated
 
         Returns:
-            dictionary: A dictionary with key = template name and value = pdb file
+            dict: A dictionary with key = template name and value = pdb file
     """
     metafold_dict = {}  # Initalization of the dictionary
     with open(metafold_file, "r") as file:
@@ -45,8 +45,8 @@ def parse_dope(dope_file):
                        amino acid pair.
 
         Returns:
-            dictionary: A dictionary with key = res_1-res_2 and value = an array of
-                    the 30 dope energy values.
+            dict: A dictionary with key = res_1-res_2 and value = an array of
+            the 30 dope energy values.
     """
     dope_dict = {}
     with open(dope_file, "r") as file:
@@ -71,12 +71,12 @@ def parse_foldrec(foldrec_file, nb_templates, metafold_dict):
                                  corresponding scores.
             nb_templates (int): Number of alignments to retrieve from the file and chosen
                                 by the user.
-            metafold_dict (dictionary): A dictionary with key = template name and
-                                        value = pdb file.
+            metafold_dict (dictionary): A dictionary with key = template name
+                                        and value = pdb file.
 
         Returns:
-            dictionary: A dictionary with key = template name and
-                                      value = an Alignment object.
+            dict: A dictionary with key = template name and
+            value = an Alignment object.
     """
 
     # Regex :
@@ -161,9 +161,6 @@ def parse_benchmark(benchmark_file, foldrec_file, alignment_dict):
             foldrec_file (str): The path to the foldrec file.
             alignment_dict (dictionary): A dictionary with key = template name
                                          and value = an Alignment object.
-
-        Returns:
-            void
     """
     # The name of the query is retrieved from the foldrec file pathway
     query_reg = re.compile("^.*\\/(\\w*)")

@@ -41,12 +41,6 @@ GAP_PENALTY = 0
 def check_args():
     """
         Checks and validates the types of inputs parsed by docopt from command line.
-
-        Args:
-            void
-
-        Returns:
-            void
     """
     schema = Schema({
         'FOLDREC_FILE': Use(open, error='FOLDREC_FILE should be readable'),
@@ -71,7 +65,7 @@ if __name__ == "__main__":
 
     ### Parse command line
     ######################
-    ARGUMENTS = docopt(__doc__, version='fold-U 1.2')
+    ARGUMENTS = docopt(__doc__, version='fold_u 1.2')
 
     # Check the types and ranges of the command line arguments parsed by docopt
     check_args()

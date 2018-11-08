@@ -1,5 +1,5 @@
-Alignment module
-****************
+Alignment
+*********
 
 .. automodule:: src.alignment
    :members:

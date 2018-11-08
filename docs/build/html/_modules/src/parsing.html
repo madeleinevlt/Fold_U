@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>src.parsing &mdash; fold-u 1.0 documentation</title>
+  <title>src.parsing &mdash; Fold U 1.2 documentation</title>
   
 
   
@@ -46,7 +46,7 @@
           
 
           
-            <a href="../../index.html" class="icon icon-home"> fold-u
+            <a href="../../index.html" class="icon icon-home"> Fold U
           
 
           
@@ -56,7 +56,7 @@
             
             
               <div class="version">
-                1.0
+                1.2
               </div>
             
           
@@ -81,14 +81,13 @@
             
             
               <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../README.html">README</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../alignment.html">Alignment module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../query.html">Query module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../template.html">Template module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../residue.html">Residue module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../atom.html">Atom module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../parsing.html">Parsing module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../time.html">Time module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../alignment.html">Alignment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../template.html">Template</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../query.html">Query</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../residue.html">Residue</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../atom.html">Atom</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../score.html">Score</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../parsing.html">Parsing</a></li>
 </ul>
 
             
@@ -103,7 +102,7 @@
       <nav class="wy-nav-top" aria-label="top navigation">
         
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../../index.html">fold-u</a>
+          <a href="../../index.html">Fold U</a>
         
       </nav>
 
@@ -176,7 +175,7 @@
 <span class="sd">        a value in a dictionary</span>
 
 <span class="sd">        Args:</span>
-<span class="sd">            metafold_file: A METAFOLD.list file containing for a given line a</span>
+<span class="sd">            metafold_file (str): A METAFOLD.list file containing for a given line a</span>
 <span class="sd">                           template name and a pdb file name associated</span>
 
 <span class="sd">        Returns:</span>
@@ -195,12 +194,12 @@
 <span class="sd">        in a dictionary with key = res_1-res_2 and value = an array of the 30 dope scores.</span>
 
 <span class="sd">        Args:</span>
-<span class="sd">            dope file: The file dope.par containing energy values for each</span>
+<span class="sd">            dope_file (str): The file dope.par containing energy values for each</span>
 <span class="sd">                       amino acid pair.</span>
 
 <span class="sd">        Returns:</span>
 <span class="sd">            dict: A dictionary with key = res_1-res_2 and value = an array of</span>
-<span class="sd">                    the 30 dope energy values.</span>
+<span class="sd">            the 30 dope energy values.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">dope_dict</span> <span class="o">=</span> <span class="p">{}</span>
     <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">dope_file</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
@@ -221,16 +220,16 @@
 <span class="sd">        and gets all the coordinates of the CA atoms in the template&#39;s Residue list.</span>
 
 <span class="sd">        Args:</span>
-<span class="sd">            foldrec_file (file): The file containing N profil-profil alignments and their</span>
+<span class="sd">            foldrec_file (str): The file containing N profil-profil alignments and their</span>
 <span class="sd">                                 corresponding scores.</span>
 <span class="sd">            nb_templates (int): Number of alignments to retrieve from the file and chosen</span>
 <span class="sd">                                by the user.</span>
-<span class="sd">            metafold_dict (dictionary): A dictionary with key = template name and</span>
-<span class="sd">                                        value = pdb file.</span>
+<span class="sd">            metafold_dict (dictionary): A dictionary with key = template name</span>
+<span class="sd">                                        and value = pdb file.</span>
 
 <span class="sd">        Returns:</span>
-<span class="sd">            dict of Alignments: A dictionary with key = template name and</span>
-<span class="sd">                                      value = an Alignment object.</span>
+<span class="sd">            dict: A dictionary with key = template name and</span>
+<span class="sd">            value = an Alignment object.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="c1"># Regex :</span>
@@ -278,7 +277,9 @@
                     <span class="n">query_reg_count</span> <span class="o">+=</span> <span class="mi">1</span>
                 <span class="k">elif</span> <span class="n">query_reg_count</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
                     <span class="k">for</span> <span class="n">ind</span><span class="p">,</span> <span class="n">ss_conf</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">query_seq_found</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">2</span><span class="p">))):</span>
-                        <span class="n">query_seq</span><span class="p">[</span><span class="n">ind</span><span class="p">]</span><span class="o">.</span><span class="n">ss_conf</span> <span class="o">=</span> <span class="n">ss_conf</span>
+                        <span class="k">if</span> <span class="n">ss_conf</span> <span class="o">!=</span> <span class="s2">&quot;-&quot;</span><span class="p">:</span>
+                            <span class="n">ss_conf</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">ss_conf</span><span class="p">)</span>
+                        <span class="n">query_seq</span><span class="p">[</span><span class="n">ind</span><span class="p">]</span><span class="o">.</span><span class="n">ss_confidence</span> <span class="o">=</span> <span class="n">ss_conf</span>
                     <span class="n">query_reg_count</span> <span class="o">=</span> <span class="mi">0</span>
             <span class="c1"># A template sequence is founds :</span>
             <span class="k">if</span> <span class="n">template_seq_found</span><span class="p">:</span>
@@ -289,7 +290,6 @@
                     <span class="k">for</span> <span class="n">ind</span><span class="p">,</span> <span class="n">ss</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">template_seq_found</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">))):</span>
                         <span class="n">template_seq</span><span class="p">[</span><span class="n">ind</span><span class="p">]</span><span class="o">.</span><span class="n">ss</span> <span class="o">=</span> <span class="n">ss</span>
                     <span class="n">template_reg_count</span> <span class="o">=</span> <span class="mi">0</span>
-                
                     <span class="c1"># Add a new alignment object in the list :</span>
                     <span class="n">ali</span> <span class="o">=</span> <span class="n">Alignment</span><span class="p">(</span><span class="n">num</span><span class="p">,</span> <span class="n">score</span><span class="p">,</span>
                                     <span class="n">Query</span><span class="p">(</span><span class="n">query_seq</span><span class="p">,</span> <span class="n">query_first</span><span class="p">,</span> <span class="n">query_last</span><span class="p">),</span>
@@ -299,6 +299,41 @@
                     <span class="n">alignment_dict</span><span class="p">[</span><span class="n">template_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">ali</span>
                     <span class="n">count_templates</span> <span class="o">+=</span> <span class="mi">1</span>
     <span class="k">return</span> <span class="n">alignment_dict</span></div>
+
+
+<div class="viewcode-block" id="parse_benchmark"><a class="viewcode-back" href="../../parsing.html#src.parsing.parse_benchmark">[docs]</a><span class="k">def</span> <span class="nf">parse_benchmark</span><span class="p">(</span><span class="n">benchmark_file</span><span class="p">,</span> <span class="n">foldrec_file</span><span class="p">,</span> <span class="n">alignment_dict</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Extract the line of the benchmark file containing the benchmarks of</span>
+<span class="sd">        the studied query. Each benchmark template have an assigned structure</span>
+<span class="sd">        corresponding to the degree of similarity with the query</span>
+<span class="sd">        (&quot;Family&quot;, &quot;Superfamily&quot; or &quot;Fold&quot;). For a given benchmark template</span>
+<span class="sd">        object, the structure is stored in the benchmark item.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            benchmark_file (str): The path to the benchmark file.</span>
+<span class="sd">            foldrec_file (str): The path to the foldrec file.</span>
+<span class="sd">            alignment_dict (dictionary): A dictionary with key = template name</span>
+<span class="sd">                                         and value = an Alignment object.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># The name of the query is retrieved from the foldrec file pathway</span>
+    <span class="n">query_reg</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s2">&quot;^.*</span><span class="se">\\</span><span class="s2">/(</span><span class="se">\\</span><span class="s2">w*)&quot;</span><span class="p">)</span>
+    <span class="n">query_name</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">query_reg</span><span class="p">,</span> <span class="n">foldrec_file</span><span class="p">)</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">benchmark_file</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">file</span><span class="p">:</span>
+            <span class="c1"># Only the line containing the query name is extracted</span>
+            <span class="k">if</span> <span class="n">query_name</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="ow">in</span> <span class="n">line</span><span class="p">:</span>
+                <span class="c1"># List containing for each benchmark the template name and</span>
+                <span class="c1"># the associated fold_type</span>
+                <span class="n">template_fold_type</span> <span class="o">=</span> <span class="n">line</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;: &quot;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;, &quot;</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">template_fold_type</span><span class="p">:</span>
+                    <span class="c1"># The fold_type of the benchmark template is stored in</span>
+                    <span class="c1"># the benchmark item</span>
+                    <span class="n">template</span> <span class="o">=</span> <span class="n">i</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+                    <span class="n">fold_type</span> <span class="o">=</span> <span class="n">i</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
+                    <span class="k">if</span> <span class="n">template</span> <span class="ow">in</span> <span class="n">alignment_dict</span><span class="p">:</span>
+                        <span class="n">alignment_dict</span><span class="p">[</span><span class="n">template</span><span class="p">]</span><span class="o">.</span><span class="n">template</span><span class="o">.</span><span class="n">set_benchmark</span><span class="p">(</span><span class="n">fold_type</span><span class="p">)</span>
+                <span class="c1"># No need to continue because all benchmarks are stored</span>
+                <span class="k">break</span></div>
 </pre></div>
 
            </div>

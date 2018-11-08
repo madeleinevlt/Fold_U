@@ -1,6 +1,6 @@
 """
-    .. module:: writing
-      :synopsis: This module implements all the functions to create result files.
+    .. module:: Score
+      :synopsis: This module implements the Score class.
 """
 
 # Third-party modules
@@ -9,12 +9,12 @@ import os
 
 class Score:
     """
-    .. class:: Residue
+    .. class:: Score
 
-      This class groups informations about a residue.
+      This class groups informations about a score.
 
     Attributes:
-        iterator: An iterator of the generated scores.
+        iterator (iterator): An iterator of the generated scores.
     """
 
     def __init__(self, iterator):
@@ -29,9 +29,6 @@ class Score:
                 res_path (str): The path of the directory where to stock the created files.
                 nb_pdb (int): Number of pdb to create using the n first templates.
                 alignment_dict (dictionary): A dictionary containing Alignment objects.
-
-            Returns:
-                void
         """
         os.makedirs(res_path+"/pdb", exist_ok=True)
         with open(res_path+"/scores.out", "w") as file:

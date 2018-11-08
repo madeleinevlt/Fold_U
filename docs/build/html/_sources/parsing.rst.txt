@@ -1,5 +1,5 @@
-Parsing module
-**************
+Parsing
+*******
 
 .. automodule:: src.parsing
    :members:

@@ -1,5 +1,5 @@
-Template module
-***************
+Template
+********
 
 .. automodule:: src.template
    :members:

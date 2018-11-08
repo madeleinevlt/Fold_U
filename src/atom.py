@@ -11,8 +11,8 @@ class Atom:
       This class groups informations about an atom.
 
     Attributes:
-        name: Name of the atom
-        coords: 3D coordinates of the atom
+        name (str): Name of the atom
+        coords (Numpy array): 3D coordinates of the atom
     """
 
     def __init__(self, name):
@@ -29,9 +29,6 @@ class Atom:
             Sets the coordinates of the atom.
 
             Args:
-                coords (np array): x,y,z coordinates.
-
-            Returns:
-                void
+                coords (Numpy array): x,y,z coordinates.
         """
         self.coords = coords

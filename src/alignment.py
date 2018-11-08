@@ -7,14 +7,16 @@
 import numpy as np
 from Bio.SubsMat import MatrixInfo
 from Bio.SeqUtils import seq3
+import modeller as m
+import modeller.automodel as am
+from modeller.automodel import assess
+import contextlib
+import os
 
 
 def process(dist_range, gap_penality, dope_dict, ali):
     """
         Generates the threading and the blossum scores for a given Alignment object.
-
-        Args:
-            void
 
         Returns:
             tupple: (Sum of the different scores, Number of the Alignment,
@@ -25,6 +27,7 @@ def process(dist_range, gap_penality, dope_dict, ali):
     threading_score = ali.calculate_threading_score(dist_range, gap_penality, dope_dict)
     blossum_score = ali.calculate_blossum_score()
     return ali.num, ali.score, threading_score, blossum_score, ali.template.name, ali.template.benchmark
+
 
 
 class Alignment:
@@ -48,7 +51,6 @@ class Alignment:
         self.query = query
         self.template = template
 
-    #@fn_timer
     def calculate_threading_score(self, dist_range, gap_penalty, dope_dict):
         """
             Calculate the threading score of the query on the template sequence.
@@ -117,9 +119,6 @@ class Alignment:
             substitution scores for each amino acid pair. A positive score is given to the more
             likely substitutions while a negative score is given to the less likely substitutions.
 
-            Args:
-                void
-
             Returns:
                 int: The blossum score calculated.
         """
@@ -145,14 +144,11 @@ class Alignment:
 
             Args:
                 pdb_path (str): Path of the pdb file to create.
-
-            Returns:
-                void
         """
         with open(pdb_path, "w") as file:
             # Extra informations on the template used to generate the pdb file
-            file.write("REMARK Threading of query sequence on the {:s} template #{:d}.\n"\
-                .format(self.template.name, self.num))
+            file.write("REMARK Threading of query sequence on the {:s} template #{:d}.\n"
+                       .format(self.template.name, self.num))
             ind = 0
             count_atom = 1
             for count_res in range(self.query.first, self.query.last+1):
@@ -162,20 +158,115 @@ class Alignment:
                     ind += 1
                     continue
                 # # N "ATOM" line
-                file.write("{:6s}{:5d} {:^4s} {:>3s}{:>2s}{:4d}{:>12.3f}{:8.3f}{:8.3f}{:6.2f}{:6.2f}{:>12s}\n"\
-                    .format("ATOM", count_atom, "N", seq3(res_q.name).upper(), "A", count_res,\
-                    res_t.n_atom.coords[0], res_t.n_atom.coords[1], res_t.n_atom.coords[2], 1.00, 0, "N"))
+                file.write("{:6s}{:5d} {:^4s} {:>3s}{:>2s}{:4d}{:>12.3f}{:8.3f}{:8.3f}{:6.2f}{:6.2f}{:>12s}\n"
+                           .format("ATOM", count_atom, "N", seq3(res_q.name).upper(), "A", count_res,
+                                   res_t.n_atom.coords[0], res_t.n_atom.coords[1], res_t.n_atom.coords[2], 1.00, 0, "N"))
                 count_atom += 1
                 # CA "ATOM" line
-                file.write("{:6s}{:5d} {:^4s} {:>3s}{:>2s}{:4d}{:>12.3f}{:8.3f}{:8.3f}{:6.2f}{:6.2f}{:>12s}\n"\
-                    .format("ATOM", count_atom, "CA", seq3(res_q.name).upper(), "A", count_res,\
-                    res_t.ca_atom.coords[0], res_t.ca_atom.coords[1], res_t.ca_atom.coords[2], 1.00, 0, "C"))
+                file.write("{:6s}{:5d} {:^4s} {:>3s}{:>2s}{:4d}{:>12.3f}{:8.3f}{:8.3f}{:6.2f}{:6.2f}{:>12s}\n"
+                           .format("ATOM", count_atom, "CA", seq3(res_q.name).upper(), "A", count_res,
+                                   res_t.ca_atom.coords[0], res_t.ca_atom.coords[1], res_t.ca_atom.coords[2], 1.00, 0, "C"))
                 count_atom += 1
                 # C "ATOM" line
-                file.write("{:6s}{:5d} {:^4s} {:>3s}{:>2s}{:4d}{:>12.3f}{:8.3f}{:8.3f}{:6.2f}{:6.2f}{:>12s}\n"\
-                    .format("ATOM", count_atom, "C", seq3(res_q.name).upper(), "A", count_res,\
-                    res_t.c_atom.coords[0], res_t.c_atom.coords[1], res_t.c_atom.coords[2], 1.00, 0, "C"))
+                file.write("{:6s}{:5d} {:^4s} {:>3s}{:>2s}{:4d}{:>12.3f}{:8.3f}{:8.3f}{:6.2f}{:6.2f}{:>12s}\n"
+                           .format("ATOM", count_atom, "C", seq3(res_q.name).upper(), "A", count_res,
+                                   res_t.c_atom.coords[0], res_t.c_atom.coords[1], res_t.c_atom.coords[2], 1.00, 0, "C"))
                 count_atom += 1
                 ind += 1
             # The two last lines of the created pdb file ("END" and "TER" lines)
             file.write("END\n")
+
+    def write_alignment_for_modeller(self, res_path):
+        """
+            Modeller requires a specifically formatted alignment file ".ali",
+            following the PIR type format.
+            This function writes this .ali file for the current alignment between
+            the query and the template.
+
+            Example of an alignment.ali file for Modeller:
+            >P1;5fd1
+            structureX:5fd1:1:A:106:A:ferredoxin:Azotobacter vinelandii:1.90: 0.19
+            AFVVTDNCIKCKYTDCVEVCPVDCFYEGPNFLVIHPDECIDCALCEPECPAQAIFSEDEVPEDMQEFIQLNAELA
+            EVWPNITEKKDPLPDAEDWDGVKGKLQHLER*
+
+            >P1;1fdx
+            sequence:1fdx:1::54::ferredoxin:Peptococcus aerogenes:2.00:-1.00
+            AYVINDSC--IACGACKPECPVNIIQGS--IYAIDADSCIDCGSCASVCPVGAPNPED-----------------
+            -------------------------------*
+        """
+        ali_out_dir = res_path + "modeller/alignments/"
+        if not os.path.exists(ali_out_dir):
+            os.makedirs(ali_out_dir)
+        with open(ali_out_dir + self.template.name+".ali", "w") as ali_out:
+            template_len = len([res for res in self.template.residues if res.name != '-'])
+            ali_out.write(">P1;" + self.template.pdb)
+            ali_out.write("\nstructure:" + self.template.pdb
+                          + ":" + str(self.template.first) + ":@:" + str(template_len) + ":@::::\n")
+            ali_out.write(self.template.display() + "*")
+            ali_out.write("\n\n>P1;query")
+            ali_out.write("\nsequence:query:" + str(self.query.first) + ":@:"
+                          + str(self.query.last) + ":@::::\n")
+            ali_out.write(self.query.display() + "*")
+
+    def calculate_modeller_score(self, res_path):
+        """
+            * This function constructs a single comparative model for the query
+              sequence from the known template structure, using alignment.ali,
+              a PIR format alignment of query and template. The final model is
+              written into the PDB file.
+            * This function also returns the DOPE assessed score of the model
+              generated by MODELLER.
+              DOPE is the most reliable score at separating native-like models
+              from decoys (lower, i.e, more negative, DOPE scores tend to
+              correlate with more native-like models).
+
+            Args:
+                res_path (str): Path to the results folder
+
+            Returns:
+                float: The DOPE score of the model generated by MODELLER.
+        """
+        root_dir = os.getcwd()
+        modeller_out_dir = res_path + "modeller/"
+        ali_dir = "alignments/"
+        # MODELLER generates the result files in his current directory, so we must
+        # go to the results directory and come back to root dir afterwards.
+        os.chdir(modeller_out_dir)
+        # request no verbose output (still gives few that will be silenced afterwards)
+        m.log.none()
+        # create a new MODELLER environment to build this model in
+        m.env = m.environ()
+
+        # directories for input atom files
+        m.env.io.atom_files_directory = [root_dir + '/data/pdb/' + self.template.name]
+
+        a_model = am.automodel(m.env,
+                               # alignment filename
+                               alnfile=ali_dir + self.template.name + '.ali',
+                               # codes of the templates
+                               knowns=self.template.pdb,
+                               # code of the target
+                               sequence='query',
+                               # DOPEHR is very similar to DOPEHR but is obtained
+                               # at Higher Resolution (using a bin size of 0.125Å
+                               # rather than 0.5Å).
+                               assess_methods=assess.DOPEHR)
+        # index of the first and last model (determines how many models to calculate)
+        a_model.starting_model = 1
+        a_model.ending_model = 1
+
+        modeller_dope_score = 0
+        # This mutes all verbose logging from Modeller in the terminal
+        # with contextlib.redirect_stdout(None):
+        # do the actual comparative modeling
+        try:
+            a_model.make()
+            # Process the outputs of the only model generated
+            new_model_pdb = a_model.outputs[0]["name"]
+            modeller_dope_score = a_model.outputs[0]["DOPE-HR score"]
+            os.rename(new_model_pdb, self.template.pdb + ".pdb")
+        except m.ModellerError:
+            self.template.add_missing_residues_in_pdb()
+        # Go back to root directory
+        os.chdir(root_dir)
+        return modeller_dope_score
