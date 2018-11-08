@@ -58,7 +58,7 @@ thr_blossum = create_benchmarch_df(scores, thr_blossum_scores)
 ali_thr_blossum = create_benchmarch_df(scores, ali_thr_blossum_scores)
 
 
-png(filename="output", height=700, width=700)
+png(filename=output, height=700, width=700)
   par(mgp=c(2.5,1,0))
 
   colors = c("red", "orange", "green", "cyan", "blue", "purple")
