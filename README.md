@@ -54,7 +54,11 @@ The different scores are normalized using **min-max scaling method** (values bet
 
     Usage:
         ./fold_u FOLDREC_FILE [--nb_templates NUM] [--nb_pdb NUM] [--output PATH]
-                              [--metafold FILE] [--dope FILE] [--benchmark FILE]
+                              [--metafold FILE] [--dope FILE] [--benchmark FILE] [--cpu NUM]
+
+    Arguments:
+        FOLDREC_FILE                          N profile * profile alignment and
+                                              their corresponding score
 
     Options:
         -h, --help                            Show this
@@ -71,6 +75,8 @@ The different scores are normalized using **min-max scaling method** (values bet
                                               [default: data/dope.par]
         -b FILE, --benchmark FILE             Path to the benchmark.list file
                                               [default: data/benchmark.list]
+        -c NUM, --cpu NUM                     Number of cpus to use for parallelisation
+                                              [default: 2]
 ```
 
 ## Documentation
