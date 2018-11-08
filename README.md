@@ -8,7 +8,7 @@
 # Fold U: A Protein Structure Prediction Program
 
 <p align="center">
-  <img width="400" src="img/logo_foldu.svg" alt="logo_foldu"/>
+  <img width="400" src="img/logo_foldu.png" alt="logo_foldu"/>
 </p>
 
 This program is the second step (downstream) of a protein structure prediction project. This step consists of threading a query sequence on different given templates.
