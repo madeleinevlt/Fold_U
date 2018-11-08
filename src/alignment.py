@@ -4,7 +4,12 @@
 """
 
 # Third-party modules
+import sys
+sys.path.append("../bin/CCMpred/scripts/")
+from top_couplings import get_top_pairs
+
 import numpy as np
+from conkit.applications import CCMpredCommandline
 from Bio.SubsMat import MatrixInfo
 from Bio.SeqUtils import seq3
 
@@ -41,7 +46,7 @@ class Alignment:
             3) All elements of the energy matrix generated are finally sum.
 
             Args:
-                dist_range (list of int): Range of distances in angströms. Distances
+                dist_range (list of int): Range of distances in angstroms. Distances
                                           within this range only are taken into account
                 gap_penalty (int): Gap penalty
                 dope_dict (dictionary): A dictionary with key = res_1-res_2 and
@@ -161,3 +166,19 @@ class Alignment:
                 ind += 1
             # The two last lines of the created pdb file ("END" and "TER" lines)
             file.write("END\n")
+
+
+def calculate_co_evolution_score(file_aln, output_name):
+    """
+        Calcule the coevolution score of the query based on the MSA alignment with a chosen database
+        The co-evolution score represente the co-occurence of a pair of amino acid in a maximum of species. Two amino acid have co-evoluate if the occurence of one of this amino never occur whithout the other
+
+        Args:
+        file_aln obtained after conversion from file.fasta.hhr
+        output_mat define name of the matrix output
+        Returns:
+            void (create a file top_outputs.mat with the tops co-evolt scores)
+    """
+    ccmpred_cline = CCMpredCommandline(cmd ='bin/CCMpred/bin/ccmpred', alnfile= file_aln, matfile= output_name)
+    ccmpred_cline()
+    subprocess.call("./bin/CCMpred/scripts/top_couplings.py output.mat > tops_outputs.mat", shell=True)
