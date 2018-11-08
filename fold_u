@@ -4,7 +4,11 @@
 """
     Usage:
         ./fold_u FOLDREC_FILE [--nb_templates NUM] [--nb_pdb NUM] [--output PATH]
-                              [--metafold FILE] [--dope FILE] [--benchmark FILE]
+                              [--metafold FILE] [--dope FILE] [--benchmark FILE] [--cpu NUM]
+
+    Arguments:
+        FOLDREC_FILE                          N profile * profile alignment and
+                                              their corresponding score
 
     Options:
         -h, --help                            Show this
@@ -21,9 +25,12 @@
                                               [default: data/dope.par]
         -b FILE, --benchmark FILE             Path to the benchmark.list file
                                               [default: data/benchmark.list]
+        -c NUM, --cpu NUM                     Number of cpus to use for parallelisation
+                                              [default: 2]
 """
 
 # Third-party modules
+import os
 from multiprocessing import Pool, cpu_count
 from functools import partial
 from datetime import datetime
@@ -52,7 +59,9 @@ def check_args():
                                 error='--nb_pdb=NUM should be integer 1 <= N <= 413'),
         '--dope': Use(open, error='DOPE_FILE should be readable'),
         '--benchmark': Use(open, error='BENCHMARK_FILE should be readable'),
-        # -The output PATH is created (if not exists) at the end of the program
+        '--cpu': And(Use(int), lambda n: 1 <= n <= cpu_count(),\
+                                error='--cpus=NUM should be integer 1 <= N <= ' + str(cpu_count())),
+        # The output PATH is created (if not exists) at the end of the program
         # so we skip the check.
         object: object})
     try:
@@ -68,7 +77,6 @@ if __name__ == "__main__":
     ### Parse command line
     ######################
     ARGUMENTS = docopt(__doc__, version='fold_u 1.2')
-
     # Check the types and ranges of the command line arguments parsed by docopt
     check_args()
 
@@ -85,6 +93,8 @@ if __name__ == "__main__":
     BENCHMARK_FILE = ARGUMENTS["--benchmark"]
     # OUTPUT file
     OUTPUT_PATH = ARGUMENTS["--output"]
+    # Number of cpus for parallelisation
+    NB_PROC = int(ARGUMENTS["--cpu"])
 
 
     ### Parse data files
@@ -104,17 +114,19 @@ if __name__ == "__main__":
     #####################
 
     # Parallelization of the main loop
-    with Pool(processes=cpu_count()) as pool:
+    with Pool(processes=NB_PROC) as pool:
         FUNC = partial(process, DIST_RANGE, GAP_PENALTY, DOPE_DICT)
         # tqdm module enables an ETA progress bar for each alignment processed
         # imap_unordered can smooth things out by yielding faster-calculated values
         # ahead of slower-calculated values.
-        print("\nProcessing threading on templates ...\n\n")
+        os.system("clear")
+        print("\n" + str(cpu_count()) + " cpus detected, using " + str(NB_PROC))
+        print("\n\nProcessing alignments ...\n")
         RESULTS = Score([res_ali for res_ali in tqdm(pool.imap_unordered(FUNC,\
                     ALIGNMENT_DICT.values()), total=len(ALIGNMENT_DICT.values()))])
 
     ### Results : Score and PDB files
     #################################
     RESULTS.write_score(OUTPUT_PATH, NB_PDB, ALIGNMENT_DICT)
-    print("\nThe program ended successfully !\nThe results are stored in " + OUTPUT_PATH)
+    print("\n\nThe program ended successfully !\nThe results are stored in " + OUTPUT_PATH)
     print("\nTotal runtime: {} seconds".format(str(datetime.now() - START_TIME)))
