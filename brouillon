@@ -1,18 +1,23 @@
 ##Plan
 
 1) Download uniclust30_2018_08_hhsuite.tar.gz from http://wwwuser.gwdg.de/~compbiol/uniclust/2018_08/
-extract
+extract #ECHEC / ACHETER UN DISQUE DUR EXTERNE
 
-2) Run program in hhblits in bash
+2) Run program in hhblits in bash A TEST
 
 #run hhblits (input = query fasta, database, output = a3m)
-./hhblits -cpu 3 -i chemin/vers/fichier/fasta/query -maxfilt 100000 -realign_max 100000 -d /scratch/uniclust30_2018_08_hhsuite/uniclust30_2018_08/uniclust30_2018_08 -all -B 100000 -Z 100000 -e 0.001 -oa3m chemin/vers/output.a3m
+./bin/hh-suite/build/bin/hhblits -cpu 3 -i Q92630.fasta -maxfilt 100000 -realign_max 100000 -d -B 100000 -Z 100000 -e 0.001 -oa3m Q92630.oa3m
 
 #reformate a3m into fasta
-hh-suite/scripts/reformat.pl -r a3m fasta chemin/vers/fichier.a3m chemin/vers/fichier_output.fasta
+./bin/hh-suite/scripts/reformat.pl -r a3m fas test.a3m test.fasta
 
 #format fasta into aln
-CCMpred/scripts/convert_alignment.py chemin/vers/fichier_output.fasta fasta chemin/vers/fichier_out.aln
+./bin/CCMpred/scripts/convert_alignment.py test.fasta fasta test.aln
+
+
+./bin/CCMpred/bin/ccmpred test.aln output.mat
+
+./bin/CCMpred/scripts/top_couplings.py output.mat
 
 3) Run program with python
 
@@ -27,14 +32,6 @@ c. utiliser subprocess
 
 
 
-
-
-hhfilter (checker comment on fait ?
-
-hh-suite/scripts/reformat.pl -r a3m fasta chemin/vers/fichier.a3m chemin/vers/fichier_output.fasta
-
-CCMpred/scripts/convert_alignment.py chemin/vers/fichier_output.fasta fasta chemin/vers/fichier_out.aln
-
-CCMpred/scripts/top_couplings.py chemin/vers/fichier_out.aln
+str(my_seq)
 
 
