@@ -103,11 +103,6 @@ points(ali_thr_blossum$family_benchmark, pch=4, col=colors[6], cex=2.5, lwd=2)
 
 
 abline(b=ali$sum_benchmark[N]/N, a=0, lwd=3)
-legend("bottomright", cex=0.8, c("alignment score", "threading score", "blossum score", "alignment + threading scores", "threading + blossum scores", "alignment + threading + blossum scores"), lwd=3, col=colors, pch=4)
+legend("bottomright", cex=1.2, c("alignment score", "threading score", "blossum score", "alignment + threading scores", "threading + blossum scores", "alignment + threading + blossum scores"), lwd=3, col=colors, pch=4)
 
 dev.off()
-
-# png(filename="legend.png", height=700, width=700)
-# plot(c(0,10),c(0,10))
-# legend(c(5,5), cex=2, c("alignment score", "threading score", "threading + blossum scores"), lwd=3, col=c("green", "red", "blue"), pch=4)
-# dev.off()
