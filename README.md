@@ -30,6 +30,10 @@ Install the few required packages / modules:
 ```
 pip install -r requirements.txt
 ```
+Install R (for Ubuntu user)
+```
+sudo apt-get install r-base-score
+```
 
 ## Run the program
 fold_u takes in input **N profil-profil alignments and their corresponding score** (foldrec file).
