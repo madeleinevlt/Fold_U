@@ -3,43 +3,49 @@
 import Bio
 import sys
 import subprocess
-sys.path.append("bin/CCMpred/scripts/")
-from top_couplings import get_top_pairs
 
 from conkit.applications import CCMpredCommandline
 from conkit.applications import HHblitsCommandline
 
-def calculate_co_evolution_score(file_aln):
-    """
-        Calculates the coevolution score of the query based on the MSA alignment
-        with the uniclust30_2018_08_hhsuite. The co-evolution score representes
-        the co-occurence of a pair of amino acid in a maximum of species.
-        Two amino acid have co-evoluate if the occurence of one of this amino
-        never occur whithout the other
+def calculate_co_evolution_score(query,database_ref):
+ 	"""
+        Calculates co-evolution score of the query based on the MSA alignment
+        Co-evolution score measures co-occurence of a pair of amino acid in
+	ortholog sequences. Two amino acid have co-evoluated if the occurence
+	of one of this amino never occur whithout the other.
 
         Args:
-            file_aln obtained after conversion from file.fasta.hhr
+             query:file in .fasta
+             database_ref: database for hhblits
         Returns:
-            matrix containing all scores associated with each pair of amino
-            acids in the sequence
+            matrix containing scores associated with top co-evoluated pairs
+            of amino acids in the sequence
     """
-    #hhblits MSA input fasta output oa3m
-    #filter the sequences at a 90% identity threshold and E-value cutoff for inclusion in result alignment= 0.001  is included in the tool
+    # conkit command hhblits produces Multiple Sequence Alignment from fasta
+        #filter the sequences at a 90% identity threshold and E-value cutoff for
+        # inclusion in result alignment= 0.001 are included in the tool
+    #TO TEST
     hhblits_cline = HHblitsCommandline(
-        cmd = "chemin/hhblits", input="test.fasta", database="uniprot20_29Feb2012",
-        cpu = "3", matflix= "100000", oa3m = "chemin/vers/output.a3m", show_all,
+        cmd = "/bin/hh-suite/build/bin/hhblits", input =query,
+        database = database_ref ,cpu = "3", matflix = "100000",
+        oa3m = "query.a3m", show_all
     )
-    # -realign_max 100000  -B 100000 -Z 100000
     hhblits_cline()
-    #A3M formatted hhblits to fasta-formatted Alignment
-    subprocess.call("", shell=True)
+    #reformate a3m into fasta
+    reformat = subprocess.Popen(
+        ["./bin/hh-suite/scripts/reformat.pl","-r","a3m",
+        "fas","query.a3m","query.fasta"], stdout=subprocess.PIPE).communicate()[0]
+    #format fasta into aln
+    convert_alignment = subprocess.Popen(
+        ["./bin/CCMpred/scripts/convert_alignment.py","query.fasta","fasta",
+        "query.aln"], stdout=subprocess.PIPE).communicate()[0]
     #convert fasta to PSICOV format
     ccmpred_cline = CCMpredCommandline(
-        cmd ='bin/CCMpred/bin/ccmpred', alnfile= file_aln, matfile= "output.mat"
+        cmd ='bin/CCMpred/bin/ccmpred', alnfile= "query.aln", matfile= "query.mat"
     )
     ccmpred_cline()
-	subprocess.call("./bin/CCMpred/scripts/top_couplings.py output.mat > tops_outputs.mat", shell=True)
-
-
-
-calculate_co_evolution_score("bin/CCMpred/example/1atzA.aln")
+    #extract top coupling
+    subprocess.call(
+    "./bin/CCMpred/scripts/top_couplings.py query.mat > tops_outputs.mat",
+     shell=True
+     )
