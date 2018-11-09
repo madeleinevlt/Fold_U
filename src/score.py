@@ -68,6 +68,5 @@ class Score:
 
         # Only nb_pdb pdb files are created
         for i in range(nb_pdb):
-            print(scores_df.index[i])
             pdb_filename = res_path + "/pdb/top_" + str(i+1) + ".pdb"
             alignment_dict[scores_df.index[i]].write_pdb(pdb_filename)
