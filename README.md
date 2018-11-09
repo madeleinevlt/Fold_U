@@ -30,23 +30,32 @@ Install the few required packages / modules:
 ```
 pip install -r requirements.txt
 ```
+Install R (for Ubuntu user)
+```
+sudo apt-get install r-base-score
+```
 
 ## Run the program
 fold_u takes in input **N profil-profil alignments and their corresponding score** (foldrec file).
 
-### Run the toy example
+### Toy example
 
 #### Generation of the result files
-The `scores.out` and the **top 10 pdb structures** of the His_biosynth query sequence are stored in `results/His_biosynth` folder.
+The `scores.csv` and the **top 10 pdb structures** of the His_biosynth query sequence are stored in `results/His_biosynth` folder.
+The alignment, threading and blosum scores are normalized using the **min-max scaling method** (values between 0 and 1). The last score represents the sum of these 3 scores. It has also been normalized.
 ```
 ./fold_u data/foldrec/His_biosynth.foldrec -o results/His_biosynth
 ```
 
-#### Normalization and plot
-The different scores are normalized using **min-max scaling method** (values between 0 and 1) and the `benchmark_rank.png` generated plot represents the cumulative sum of benchmarks encountered along the ranking (from rank 1 to rank 412).
+#### Plot of the different scores
+The `benchmark_rank.png` generated plot represents the cumulative sum of benchmarks encountered along the ranking (from rank 1 to rank 412). A cross means a family or superfamily type banchmark.
 ```
 ./script/plot_scores.R results/His_biosynth
 ```
+
+<p align="center">
+  <img width="450" src="img/His_biosynth_benchmark_rank.png" alt="benchmark_rank.png"/>
+</p>
 
 ### Get help
 ```

@@ -17,18 +17,32 @@ class Template:
         name (str): Name of the template
         residues (list of Residue object): Template's sequence of residues as list of Residues
                                            objects
+        benchmark (int): Fold family type of the template: 3: Family, 2: Superfamily,
+                         1: Fold and 0: None
+                         It tells how similar the template is from the query structure.
+                         This is necessary to be able to benchmark the new scoring functions.
         pdb (str): PDB filename of the template
     """
 
     def __init__(self, name, residues):
         self.name = name
         self.residues = residues
+        self.benchmark = 0
         self.pdb = None
-        self.benchmark = "."
+
+    def set_benchmark(self, fold_type):
+        """
+            Sets the benchmark attribute of the template.
+
+            Args:
+                fold_type (int): 3: Family, 2: Superfamily, 1: Fold and 0: None
+        """
+        self.benchmark = fold_type
+
 
     def set_pdb_name(self, metafold_dict):
         """
-            Get the PDB file name of the current template from the template's name.
+            Set the pdb file name of the template from the template's name.
 
             Args:
                 metafold_dict: A dictionary with key = template name and value = pdb file
@@ -68,16 +82,3 @@ class Template:
                         if nb_atoms == 3:
                             count_res += 1
                             nb_atoms = 0
-
-    def set_benchmark(self, fold_type):
-        """
-            Sets the benchmark attribute of the template.
-            The benchmark attribute represents the fold family type of the
-            template: "Family", "Superfamily" or "Fold", that is to say how similar
-            the template is from the query. This is necessary to be
-            able to benchmark the new scoring functions.
-
-            Args:
-                fold_type (str): "Family", "Superfamily" or "Fold"
-        """
-        self.benchmark = fold_type

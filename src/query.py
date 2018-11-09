@@ -21,3 +21,13 @@ class Query:
         self.residues = residues
         self.first = first
         self.last = last
+
+    def get_size(self):
+        """
+            Get the size of the query sequence.
+
+            Returns:
+                int: The size of the query sequence.
+
+        """
+        return len(self.residues)
