@@ -95,7 +95,7 @@ png(filename=output, height=700, width=700)
     points(type_scores[[i]]$family_benchmark, pch=4, col=colors[i], cex=2.5, lwd=2)
   }
 
-  legend("bottomright", cex=1.2, lwd=3, col=colors, pch=4,
+  legend("bottomright", cex=1.4, lwd=3, col=colors, pch=4,
         c("random", "alignment score", "threading score",
           "blosum score", "alignment + threading + blosum scores"))
 dev.off()
