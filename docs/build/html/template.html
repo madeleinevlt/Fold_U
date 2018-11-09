@@ -195,6 +195,23 @@ objects</p>
 </dd></dl>
 
 <dl class="attribute">
+<dt id="src.template.Template.benchmark">
+<code class="descname">benchmark</code><a class="headerlink" href="#src.template.Template.benchmark" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fold family type of the template: 3: Family, 2: Superfamily,
+1: Fold and 0: None
+It tells how similar the template is from the query structure.
+This is necessary to be able to benchmark the new scoring functions.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">int</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
 <dt id="src.template.Template.pdb">
 <code class="descname">pdb</code><a class="headerlink" href="#src.template.Template.pdb" title="Permalink to this definition">¶</a></dt>
 <dd><p>PDB filename of the template</p>
@@ -217,16 +234,12 @@ objects</p>
 <dl class="method">
 <dt id="src.template.Template.set_benchmark">
 <code class="descname">set_benchmark</code><span class="sig-paren">(</span><em>fold_type</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/template.html#Template.set_benchmark"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.template.Template.set_benchmark" title="Permalink to this definition">¶</a></dt>
-<dd><p>Sets the benchmark attribute of the template.
-The benchmark attribute represents the fold family type of the
-template: “Family”, “Superfamily” or “Fold”, that is to say how similar
-the template is from the query. This is necessary to be
-able to benchmark the new scoring functions.</p>
+<dd><p>Sets the benchmark attribute of the template.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>fold_type</strong> (<em>str</em>) – “Family”, “Superfamily” or “Fold”</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>fold_type</strong> (<em>int</em>) – 3: Family, 2: Superfamily, 1: Fold and 0: None</td>
 </tr>
 </tbody>
 </table>
@@ -235,7 +248,7 @@ able to benchmark the new scoring functions.</p>
 <dl class="method">
 <dt id="src.template.Template.set_pdb_name">
 <code class="descname">set_pdb_name</code><span class="sig-paren">(</span><em>metafold_dict</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/template.html#Template.set_pdb_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.template.Template.set_pdb_name" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get the PDB file name of the current template from the template’s name.</p>
+<dd><p>Set the pdb file name of the template from the template’s name.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />

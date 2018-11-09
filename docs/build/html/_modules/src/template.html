@@ -170,18 +170,32 @@
 <span class="sd">        name (str): Name of the template</span>
 <span class="sd">        residues (list of Residue object): Template&#39;s sequence of residues as list of Residues</span>
 <span class="sd">                                           objects</span>
+<span class="sd">        benchmark (int): Fold family type of the template: 3: Family, 2: Superfamily,</span>
+<span class="sd">                         1: Fold and 0: None</span>
+<span class="sd">                         It tells how similar the template is from the query structure.</span>
+<span class="sd">                         This is necessary to be able to benchmark the new scoring functions.</span>
 <span class="sd">        pdb (str): PDB filename of the template</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">residues</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">residues</span> <span class="o">=</span> <span class="n">residues</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">benchmark</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">pdb</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">benchmark</span> <span class="o">=</span> <span class="s2">&quot;.&quot;</span>
+
+<div class="viewcode-block" id="Template.set_benchmark"><a class="viewcode-back" href="../../template.html#src.template.Template.set_benchmark">[docs]</a>    <span class="k">def</span> <span class="nf">set_benchmark</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fold_type</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Sets the benchmark attribute of the template.</span>
+
+<span class="sd">            Args:</span>
+<span class="sd">                fold_type (int): 3: Family, 2: Superfamily, 1: Fold and 0: None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">benchmark</span> <span class="o">=</span> <span class="n">fold_type</span></div>
+
 
 <div class="viewcode-block" id="Template.set_pdb_name"><a class="viewcode-back" href="../../template.html#src.template.Template.set_pdb_name">[docs]</a>    <span class="k">def</span> <span class="nf">set_pdb_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">metafold_dict</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">            Get the PDB file name of the current template from the template&#39;s name.</span>
+<span class="sd">            Set the pdb file name of the template from the template&#39;s name.</span>
 
 <span class="sd">            Args:</span>
 <span class="sd">                metafold_dict: A dictionary with key = template name and value = pdb file</span>
@@ -220,20 +234,7 @@
                             <span class="n">nb_atoms</span> <span class="o">+=</span> <span class="mi">1</span>
                         <span class="k">if</span> <span class="n">nb_atoms</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
                             <span class="n">count_res</span> <span class="o">+=</span> <span class="mi">1</span>
-                            <span class="n">nb_atoms</span> <span class="o">=</span> <span class="mi">0</span></div>
-
-<div class="viewcode-block" id="Template.set_benchmark"><a class="viewcode-back" href="../../template.html#src.template.Template.set_benchmark">[docs]</a>    <span class="k">def</span> <span class="nf">set_benchmark</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fold_type</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">            Sets the benchmark attribute of the template.</span>
-<span class="sd">            The benchmark attribute represents the fold family type of the</span>
-<span class="sd">            template: &quot;Family&quot;, &quot;Superfamily&quot; or &quot;Fold&quot;, that is to say how similar</span>
-<span class="sd">            the template is from the query. This is necessary to be</span>
-<span class="sd">            able to benchmark the new scoring functions.</span>
-
-<span class="sd">            Args:</span>
-<span class="sd">                fold_type (str): &quot;Family&quot;, &quot;Superfamily&quot; or &quot;Fold&quot;</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">benchmark</span> <span class="o">=</span> <span class="n">fold_type</span></div></div>
+                            <span class="n">nb_atoms</span> <span class="o">=</span> <span class="mi">0</span></div></div>
 </pre></div>
 
            </div>
