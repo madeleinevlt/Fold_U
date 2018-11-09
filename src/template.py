@@ -17,7 +17,8 @@ class Template:
         name (str): Name of the template
         residues (list of Residue object): Template's sequence of residues as list of Residues
                                            objects
-        benchmark (str): Fold family type of the template: "Family", "Superfamily", "Fold"
+        benchmark (int): Fold family type of the template: 3: Family, 2: Superfamily,
+                         1: Fold and 0: None
                          It tells how similar the template is from the query structure.
                          This is necessary to be able to benchmark the new scoring functions.
         pdb (str): PDB filename of the template
@@ -26,7 +27,7 @@ class Template:
     def __init__(self, name, residues):
         self.name = name
         self.residues = residues
-        self.benchmark = "."
+        self.benchmark = 0
         self.pdb = None
 
     def set_benchmark(self, fold_type):
@@ -34,7 +35,7 @@ class Template:
             Sets the benchmark attribute of the template.
 
             Args:
-                fold_type (str): "Family", "Superfamily" or "Fold"
+                fold_type (int): 3: Family, 2: Superfamily, 1: Fold and 0: None
         """
         self.benchmark = fold_type
 
