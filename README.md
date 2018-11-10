@@ -1,7 +1,7 @@
-[![Fold-U release](https://img.shields.io/badge/fold--u-v1.2-blue.svg)](https://github.com/meetU-MasterStudents/Fold_U/releases/tag/1.2)
+[![Fold-U release](https://img.shields.io/badge/fold--u-v1.2-blue.svg)](https://github.com/meetU-MasterStudents/Fold_U/releases/tag/v1.2)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 ![Python version](https://img.shields.io/badge/python-3-brightgreen.svg)
-[![Sphinx doc](https://img.shields.io/badge/doc-sphinx-brightgreen.svg)](https://meetu-masterstudents.github.io/Fold_U/)
+[![Documentation Status](https://readthedocs.org/projects/fold-u/badge/?version=latest)](https://fold-u.readthedocs.io/en/latest/?badge=latest)
 
 <br>
 
