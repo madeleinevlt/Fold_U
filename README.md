@@ -90,8 +90,7 @@ The `benchmark_rank.png` generated plot represents the cumulative sum of benchma
 
 ## Documentation
 
-The documentation of our program is generated with Sphinx and Read The Docs theme and is accessible at the following address:
-[https://meetu-masterstudents.github.io/Fold_U/](https://meetu-masterstudents.github.io/Fold_U/)
+The documentation of our program is generated with Sphinx and and built on [Read The Docs](https://fold-u.readthedocs.io/en/latest).
 
 ## Authors
 
