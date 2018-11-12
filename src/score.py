@@ -59,8 +59,9 @@ class Score:
         for index in ['alignment', 'threading', 'blosum']:
             scores_df[index] = normalize_score(scores_df[index])
         # Sum of the different scores and normalization
-        scores_df['sum scores'] = normalize_score(scores_df['alignment'] +
-                                  scores_df['threading'] + scores_df['blosum'])
+        scores_df['sum scores'] = normalize_score(scores_df['alignment']
+                                                  + scores_df['threading']
+                                                  + scores_df['blosum'])
         # Sort of the templates according to the sum score
         scores_df = scores_df.sort_values(by='sum scores', ascending=False)
         # A csv file containing the normalized scores is created

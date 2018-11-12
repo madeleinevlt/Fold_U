@@ -22,6 +22,9 @@ class Query:
         self.first = first
         self.last = last
 
+    def display(self):
+        return "".join(str(res.name) for res in self.residues)
+
     def get_size(self):
         """
             Get the size of the query sequence.
