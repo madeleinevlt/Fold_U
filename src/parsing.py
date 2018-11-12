@@ -22,7 +22,7 @@ def parse_metafold(metafold_file):
         a value in a dictionary
 
         Args:
-            metafold_file: A METAFOLD.list file containing for a given line a
+            metafold_file (str): A METAFOLD.list file containing for a given line a
                            template name and a pdb file name associated
 
         Returns:
@@ -41,12 +41,12 @@ def parse_dope(dope_file):
         in a dictionary with key = res_1-res_2 and value = an array of the 30 dope scores.
 
         Args:
-            dope file: The file dope.par containing energy values for each
+            dope_file (str): The file dope.par containing energy values for each
                        amino acid pair.
 
         Returns:
             dict: A dictionary with key = res_1-res_2 and value = an array of
-                    the 30 dope energy values.
+            the 30 dope energy values.
     """
     dope_dict = {}
     with open(dope_file, "r") as file:
@@ -59,6 +59,42 @@ def parse_dope(dope_file):
     return dope_dict
 
 
+def parse_benchmark(benchmark_file, foldrec_file, alignment_dict):
+    """
+        Extract the line of the benchmark file containing the benchmarks of
+        the studied query. Each benchmark template have an assigned structure
+        corresponding to the degree of similarity with the query
+        ("Family", "Superfamily" or "Fold"). For a given benchmark template
+        object, the structure is stored in the benchmark item.
+
+        Args:
+            benchmark_file (str): The path to the benchmark file.
+            foldrec_file (str): The path to the foldrec file.
+            alignment_dict (dictionary): A dictionary with key = template name
+                                         and value = an Alignment object.
+    """
+    fold_type_dict = {"Family":3, "Superfamily":2, "Fold":1}
+    # The name of the query is retrieved from the foldrec file pathway
+    query_reg = re.compile("^.*\\/(\\w*)")
+    query_name = re.search(query_reg, foldrec_file)
+    with open(benchmark_file, "r") as file:
+        for line in file:
+            # Only the line containing the query name is extracted
+            if query_name.group(1) in line:
+                # List containing for each benchmark the template name and
+                # the associated fold_type
+                template_fold_type = line[0:-1].split(": ")[1].split(", ")
+                for i in template_fold_type:
+                    # The fold_type of the benchmark template is stored in
+                    # the benchmark item
+                    template = i.split(" ")[0]
+                    fold_type = i.split(" ")[1]
+                    if template in alignment_dict:
+                        alignment_dict[template].template.set_benchmark(fold_type_dict[fold_type])
+                # No need to continue because all benchmarks are stored
+                break
+
+
 def parse_foldrec(foldrec_file, nb_templates, metafold_dict):
     """
         Extracts the score, the template name, the query and template sequences for
@@ -67,18 +103,16 @@ def parse_foldrec(foldrec_file, nb_templates, metafold_dict):
         and gets all the coordinates of the CA atoms in the template's Residue list.
 
         Args:
-            foldrec_file (file): The file containing N profil-profil alignments and their
-                                 corresponding scores.
+            foldrec_file (str): The file containing N profil-profil alignments and their
+                                corresponding scores.
             nb_templates (int): Number of alignments to retrieve from the file and chosen
                                 by the user.
-            metafold_dict (dictionary): A dictionary with key = template name and
-                                        value = pdb file.
+            metafold_dict (dictionary): A dictionary with key = template name
+                                        and value = pdb file.
 
         Returns:
-            dict of Alignments: A dictionary with key = template name and
-                                      value = an Alignment object.
+            dict: A dictionary with key = template name and value = an Alignment object.
     """
-
     # Regex :
     num_reg = re.compile("^No\\s*([0-9]+)")
     template_name_reg = re.compile("Alignment :.*vs\\s+([A-Za-z0-9-_]+)")
@@ -119,8 +153,8 @@ def parse_foldrec(foldrec_file, nb_templates, metafold_dict):
                     query_last = int(query_seq_found.group(3))
                     query_reg_count += 1
                 elif query_reg_count == 1:
-                    for ind, ss in enumerate(list(query_seq_found.group(2))):
-                        query_seq[ind].ss = ss
+                    for ind, sec_struct in enumerate(list(query_seq_found.group(2))):
+                        query_seq[ind].secondary_struct = sec_struct
                     query_reg_count += 1
                 elif query_reg_count == 2:
                     for ind, ss_conf in enumerate(list(query_seq_found.group(2))):
@@ -134,8 +168,8 @@ def parse_foldrec(foldrec_file, nb_templates, metafold_dict):
                     template_seq = [Residue(name) for name in list(template_seq_found.group(1))]
                     template_reg_count += 1
                 elif template_reg_count == 1:
-                    for ind, ss in enumerate(list(template_seq_found.group(1))):
-                        template_seq[ind].ss = ss
+                    for ind, sec_struct in enumerate(list(template_seq_found.group(1))):
+                        template_seq[ind].secondary_struct = sec_struct
                     template_reg_count = 0
                     # Add a new alignment object in the list :
                     ali = Alignment(num, score,

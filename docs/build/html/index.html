@@ -1,0 +1,339 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Fold U: A Protein Structure Prediction Program &mdash; Fold U 1.2 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Alignment" href="alignment.html" /> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="#" class="icon icon-home"> Fold U
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.2
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="alignment.html">Alignment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="template.html">Template</a></li>
+<li class="toctree-l1"><a class="reference internal" href="query.html">Query</a></li>
+<li class="toctree-l1"><a class="reference internal" href="residue.html">Residue</a></li>
+<li class="toctree-l1"><a class="reference internal" href="atom.html">Atom</a></li>
+<li class="toctree-l1"><a class="reference internal" href="score.html">Score</a></li>
+<li class="toctree-l1"><a class="reference internal" href="parsing.html">Parsing</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="#">Fold U</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="#">Docs</a> &raquo;</li>
+        
+      <li>Fold U: A Protein Structure Prediction Program</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/index.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <a class="reference external image-reference" href="https://github.com/meetU-MasterStudents/Fold_U/releases/tag/1.2"><img alt="Fold-U release" src="https://img.shields.io/badge/fold--u-v1.2-blue.svg" /></a>
+<a class="reference external image-reference" href="https://opensource.org/licenses/MIT"><img alt="License: MIT" src="https://img.shields.io/badge/License-MIT-yellow.svg" /></a>
+<a class="reference external image-reference" href="https://img.shields.io/badge/python-3-brightgreen.svg"><img alt="Python version" src="https://img.shields.io/badge/python-3-brightgreen.svg" /></a>
+<a class="reference external image-reference" href="https://meetu-masterstudents.github.io/Fold_U/"><img alt="Sphinx doc" src="https://img.shields.io/badge/doc-sphinx-brightgreen.svg" /></a>
+<p><span class="raw-html-m2r"><br></span></p>
+<div class="section" id="fold-u-a-protein-structure-prediction-program">
+<h1>Fold U: A Protein Structure Prediction Program<a class="headerlink" href="#fold-u-a-protein-structure-prediction-program" title="Permalink to this headline">¶</a></h1>
+<p align="center">
+  <img width="400" src="img/logo_foldu.png" alt="logo_foldu"/>
+</p><p>This program is the second step (downstream) of a protein structure prediction project. This step consists of threading a query sequence on different given templates.</p>
+<p>Our project is part of the Meet-U 2018-2019 competition.
+Meet-U is a collaborative pedagogical and research initiative between several Universities of Paris area. The course is intended to Master students (2nd year) in Bioinformatics. For more details, please refer to <a class="reference external" href="http://www.meet-u.org/">http://www.meet-u.org/</a>.</p>
+<div class="section" id="installation">
+<h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="clone-the-repository">
+<h3>Clone the repository<a class="headerlink" href="#clone-the-repository" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-guess notranslate"><div class="highlight"><pre><span></span>git clone https://github.com/meetU-MasterStudents/Fold_U.git
+cd Fold_U
+</pre></div>
+</div>
+</div>
+<div class="section" id="requirements">
+<h3>Requirements<a class="headerlink" href="#requirements" title="Permalink to this headline">¶</a></h3>
+<p>Install the few required packages / modules:</p>
+<div class="highlight-guess notranslate"><div class="highlight"><pre><span></span>pip install -r requirements.txt
+</pre></div>
+</div>
+<p>Install R (for Ubuntu user)</p>
+<div class="highlight-guess notranslate"><div class="highlight"><pre><span></span>sudo apt-get install r-base-score
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="run-the-program">
+<h2>Run the program<a class="headerlink" href="#run-the-program" title="Permalink to this headline">¶</a></h2>
+<p>fold_u takes in input <strong>N profil-profil alignments and their corresponding score</strong> (foldrec file).</p>
+<div class="section" id="toy-example">
+<h3>Toy example<a class="headerlink" href="#toy-example" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="generation-of-the-result-files">
+<h4>Generation of the result files<a class="headerlink" href="#generation-of-the-result-files" title="Permalink to this headline">¶</a></h4>
+<p>The <code class="docutils literal notranslate"><span class="pre">scores.csv</span></code> and the <strong>top 10 pdb structures</strong> of the His_biosynth query sequence are stored in <code class="docutils literal notranslate"><span class="pre">results/His_biosynth</span></code> folder.
+The alignment, threading and blosum scores are normalized using the <strong>min-max scaling method</strong> (values between 0 and 1). The last score represents the sum of these 3 scores. It has also been normalized.</p>
+<div class="highlight-guess notranslate"><div class="highlight"><pre><span></span>./fold_u data/foldrec/His_biosynth.foldrec -o results/His_biosynth
+</pre></div>
+</div>
+</div>
+<div class="section" id="plot-of-the-different-scores">
+<h4>Plot of the different scores<a class="headerlink" href="#plot-of-the-different-scores" title="Permalink to this headline">¶</a></h4>
+<p>The <code class="docutils literal notranslate"><span class="pre">benchmark_rank.png</span></code> generated plot represents the cumulative sum of benchmarks encountered along the ranking (from rank 1 to rank 412). A cross means a family or superfamily type banchmark.</p>
+<div class="highlight-guess notranslate"><div class="highlight"><pre><span></span>./script/plot_scores.R results/His_biosynth
+</pre></div>
+</div>
+<p align="center">
+  <img width="450" src="img/His_biosynth_benchmark_rank.png" alt="benchmark_rank.png"/>
+</p></div>
+</div>
+<div class="section" id="get-help">
+<h3>Get help<a class="headerlink" href="#get-help" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-guess notranslate"><div class="highlight"><pre><span></span>./fold_u -h
+
+    Usage:
+        ./fold_u FOLDREC_FILE [--nb_templates NUM] [--nb_pdb NUM] [--output PATH]
+                              [--metafold FILE] [--dope FILE] [--benchmark FILE] [--cpu NUM]
+
+    Arguments:
+        FOLDREC_FILE                          N profile * profile alignment and
+                                              their corresponding score
+
+    Options:
+        -h, --help                            Show this
+        -n NUM, --nb_templates NUM            First n templates to retrieve from
+                                              the foldrec file [default: 413]
+        -p NUM, --nb_pdb NUM                  Number of pdb to create
+                                              [default: 10]
+        -o PATH, --output PATH                Path to the directory containing
+                                              the result files (scores and pdb)
+                                              [default: ./results]
+        -m FILE, --metafold FILE              Path to the metafold.list file
+                                              [default: data/metafold.list]
+        -d FILE, --dope FILE                  Path to the dope.par file
+                                              [default: data/dope.par]
+        -b FILE, --benchmark FILE             Path to the benchmark.list file
+                                              [default: data/benchmark.list]
+        -c NUM, --cpu NUM                     Number of cpus to use for parallelisation
+                                              [default: 2]
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="documentation">
+<h2>Documentation<a class="headerlink" href="#documentation" title="Permalink to this headline">¶</a></h2>
+<p>The documentation of our program is generated with Sphinx and Read The Docs theme and is accessible at the following address:
+<a class="reference external" href="https://meetu-masterstudents.github.io/Fold_U/">https://meetu-masterstudents.github.io/Fold_U/</a></p>
+</div>
+<div class="section" id="authors">
+<h2>Authors<a class="headerlink" href="#authors" title="Permalink to this headline">¶</a></h2>
+<p>We are master students in bioinformatics at Paris Diderot University.</p>
+<ul class="simple">
+<li><a class="reference external" href="https://github.com/gabrielctn">Gabriel Cretin</a></li>
+<li><a class="reference external" href="https://github.com/kabhel">Hélène Kabbech</a></li>
+<li><a class="reference external" href="https://github.com/tomgutman">Tom Gutman</a></li>
+<li><a class="reference external" href="https://github.com/FloraMika">Flora Mikaeloff</a></li>
+<li><a class="reference external" href="https://github.com/franzx5">Franz-Arnold Ake</a></li>
+</ul>
+</div>
+<div class="section" id="acknowledgment">
+<h2>Acknowledgment<a class="headerlink" href="#acknowledgment" title="Permalink to this headline">¶</a></h2>
+<p>Thanks to <a class="reference external" href="https://www.linkedin.com/in/maitewho/">Maïté Cretin</a> for the nice logo.</p>
+</div>
+<div class="section" id="license">
+<h2>License<a class="headerlink" href="#license" title="Permalink to this headline">¶</a></h2>
+<p>This project is licensed under the MIT License.</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="alignment.html">Alignment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="template.html">Template</a></li>
+<li class="toctree-l1"><a class="reference internal" href="query.html">Query</a></li>
+<li class="toctree-l1"><a class="reference internal" href="residue.html">Residue</a></li>
+<li class="toctree-l1"><a class="reference internal" href="atom.html">Atom</a></li>
+<li class="toctree-l1"><a class="reference internal" href="score.html">Score</a></li>
+<li class="toctree-l1"><a class="reference internal" href="parsing.html">Parsing</a></li>
+</ul>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="alignment.html" class="btn btn-neutral float-right" title="Alignment" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Gabriel Cretin, Hélène Kabbech, Tom Gutman, Flora Mikaeloff, Franz Arnold
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+
+  
+
+  <script type="text/javascript" src="_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

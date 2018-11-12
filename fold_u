@@ -3,57 +3,65 @@
 
 """
     Usage:
-        fold_u.py FOLDREC_FILE [--nb_templates NUM] [--nb_pdb NUM] [--output PATH]
-                               [--metafold FILE] [--dope FILE]
+        ./fold_u FOLDREC_FILE [--nb_templates NUM] [--nb_pdb NUM] [--output PATH]
+                              [--metafold FILE] [--dope FILE] [--benchmark FILE] [--cpu NUM]
+
+    Arguments:
+        FOLDREC_FILE                          N profile * profile alignment and
+                                              their corresponding score
 
     Options:
         -h, --help                            Show this
         -n NUM, --nb_templates NUM            First n templates to retrieve from
-                                              the foldrec file [default: 100]
+                                              the foldrec file [default: 413]
         -p NUM, --nb_pdb NUM                  Number of pdb to create
                                               [default: 10]
         -o PATH, --output PATH                Path to the directory containing
                                               the result files (scores and pdb)
-                                              [default: res/]
+                                              [default: ./results]
         -m FILE, --metafold FILE              Path to the metafold.list file
-                                              [default: data/METAFOLD.list]
+                                              [default: data/metafold.list]
         -d FILE, --dope FILE                  Path to the dope.par file
                                               [default: data/dope.par]
+        -b FILE, --benchmark FILE             Path to the benchmark.list file
+                                              [default: data/benchmark.list]
+        -c NUM, --cpu NUM                     Number of cpus to use for parallelisation
+                                              [default: 2]
 """
 
 # Third-party modules
+import os
 from multiprocessing import Pool, cpu_count
+from functools import partial
+from datetime import datetime
 from tqdm import tqdm
 from docopt import docopt
 from schema import Schema, And, Use, SchemaError
 
 # Local modules
 import src.parsing as parsing
+from src.alignment import process
 from src.score import Score
 
 DIST_RANGE = [5, 15]
-GAP_PENALTY = 1
-
+GAP_PENALTY = 0
 
 def check_args():
     """
         Checks and validates the types of inputs parsed by docopt from command line.
-
-        Args:
-            void
-
-        Returns:
-            void
     """
     schema = Schema({
         'FOLDREC_FILE': Use(open, error='FOLDREC_FILE should be readable'),
         '--metafold': Use(open, error='METAFOLD_FILE should be readable'),
-        '--dope': Use(open, error='DOPE_FILE should be readable'),
         '--nb_templates': And(Use(int), lambda n: 1 <= n <= 413,\
                                 error='--nb_templates=NUM should be integer 1 <= N <= 413'),
         '--nb_pdb': And(Use(int), lambda n: 1 <= n <= 413,\
                                 error='--nb_pdb=NUM should be integer 1 <= N <= 413'),
-        # -The output PATH is created (if not exists) at the end of the program
+        '--dope': Use(open, error='DOPE_FILE should be readable'),
+        '--benchmark': Use(open, error='BENCHMARK_FILE should be readable'),
+        '--cpu': And(Use(int), lambda n: 1 <= n <= cpu_count(),\
+                                error='--cpus=NUM should be integer 1 <= N <= ' + str(cpu_count())),
+        # The output PATH is created (if not exists) at the end of the program
         # so we skip the check.
         object: object})
     try:
@@ -62,33 +70,13 @@ def check_args():
         exit(err)
 
 
-def process(ali):
-    """
-        Generates the threading and the physics-based scores for a given Alignment object.
-
-        Args:
-            ali (alignment object): An object of the class Alignment
-
-        Returns:
-            tupple: Sum of the different scores and alignment's informations (num and name)
-
-    """
-    ali.write_alignment_for_modeller(OUTPUT_PATH)
-    modeller_score = ali.calculate_modeller_score(OUTPUT_PATH)
-    # print(modeller_score)
-    # Calculate the threading score of all alignments
-    threading_score = ali.calculate_threading_score(DIST_RANGE, GAP_PENALTY, DOPE_DICT)
-    physics_based_score = ali.calculate_physics_score()
-    return threading_score + physics_based_score, ali.num, ali.template.name
-
-
 if __name__ == "__main__":
 
+    START_TIME = datetime.now()
 
     ### Parse command line
     ######################
-    ARGUMENTS = docopt(__doc__, version='fold-U 1.1')
-
+    ARGUMENTS = docopt(__doc__, version='fold_u 1.2')
     # Check the types and ranges of the command line arguments parsed by docopt
     check_args()
 
@@ -101,8 +89,12 @@ if __name__ == "__main__":
     METAFOLD_FILE = ARGUMENTS["--metafold"]
     # DOPE file
     DOPE_FILE = ARGUMENTS["--dope"]
-    # SCORES file
+    # BENCHMARK file
+    BENCHMARK_FILE = ARGUMENTS["--benchmark"]
+    # OUTPUT file
     OUTPUT_PATH = ARGUMENTS["--output"]
+    # Number of cpus for parallelisation
+    NB_PROC = int(ARGUMENTS["--cpu"])
 
 
     ### Parse data files
@@ -112,6 +104,8 @@ if __name__ == "__main__":
     METAFOLD_DICT = parsing.parse_metafold(METAFOLD_FILE)
     # Parse Foldrec file
     ALIGNMENT_DICT = parsing.parse_foldrec(FOLDREC_FILE, NB_TEMPLATES, METAFOLD_DICT)
+    # Set the benchmark of the query
+    parsing.parse_benchmark(BENCHMARK_FILE, FOLDREC_FILE, ALIGNMENT_DICT)
     # Parse DOPE file
     DOPE_DICT = parsing.parse_dope(DOPE_FILE)
 
@@ -119,18 +113,20 @@ if __name__ == "__main__":
     ### Main calculations
     #####################
 
-    # Parallelization of the main loop: threading calculations
-    POOL = Pool(processes=1)
-    # tqdm module enables an ETA progress bar of alignments
-    # imap_unordered can smooth things out by yielding faster-calculated values
-    # ahead of slower-calculated values.
-    print("\nProcessing threading on templates ...\n\n")
-    RESULTS = Score([res_ali for res_ali in tqdm(POOL.imap_unordered(process,\
-                ALIGNMENT_DICT.values()), total=len(ALIGNMENT_DICT.values()))])
-    POOL.close()
-    POOL.join()
+    # Parallelization of the main loop
+    with Pool(processes=NB_PROC) as pool:
+        FUNC = partial(process, DIST_RANGE, GAP_PENALTY, DOPE_DICT)
+        # tqdm module enables an ETA progress bar for each alignment processed
+        # imap_unordered can smooth things out by yielding faster-calculated values
+        # ahead of slower-calculated values.
+        os.system("clear")
+        print("\n" + str(cpu_count()) + " cpus detected, using " + str(NB_PROC))
+        print("\n\nProcessing alignments ...\n")
+        RESULTS = Score([res_ali for res_ali in tqdm(pool.imap_unordered(FUNC,\
+                    ALIGNMENT_DICT.values()), total=len(ALIGNMENT_DICT.values()))])
 
     ### Results : Score and PDB files
     #################################
     RESULTS.write_score(OUTPUT_PATH, NB_PDB, ALIGNMENT_DICT)
-    print("\nThe program ended successfully !\nThe results are stored in " + OUTPUT_PATH)
+    print("\n\nThe program ended successfully !\nThe results are stored in " + OUTPUT_PATH)
+    print("\nTotal runtime: {} seconds".format(str(datetime.now() - START_TIME)))

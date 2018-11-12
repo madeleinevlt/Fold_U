@@ -22,41 +22,44 @@ class Template:
       This class groups informations about a template sequence/structure.
 
     Attributes:
-        name: Name of the template
-        residues: Template's sequence of residues as list of Residues objects
-        pdb: PDB filename of the template
+        name (str): Name of the template
+        residues (list of Residue object): Template's sequence of residues as list of Residues
+                                           objects
+        benchmark (int): Fold family type of the template: 3: Family, 2: Superfamily,
+                         1: Fold and 0: None
+                         It tells how similar the template is from the query structure.
+                         This is necessary to be able to benchmark the new scoring functions.
+        pdb (str): PDB filename of the template
     """
 
     def __init__(self, name, residues):
         self.name = name            # ex: Agglutinin
         self.residues = residues
-        self.pdb = None             # ex: 1jlxa1
-        self.first = None
+        self.benchmark = 0
+        self.pdb = None
 
-    def display(self):
-        return "".join(str(res.name) for res in self.residues)
+    def set_benchmark(self, fold_type):
+        """
+            Sets the benchmark attribute of the template.
+
+            Args:
+                fold_type (int): 3: Family, 2: Superfamily, 1: Fold and 0: None
+        """
+        self.benchmark = fold_type
+
 
     def set_pdb_name(self, metafold_dict):
         """
-            Get the PDB name of the current template from the template's name.
+            Set the pdb file name of the template from the template's name.
 
             Args:
                 metafold_dict: A dictionary with key = template name and value = pdb file
-
-            Returns:
-                void
         """
         self.pdb = metafold_dict[self.name].split(".")[0]
 
     def parse_pdb(self, pdb_path):
         """
             Parse the pdb file and set the CA coordinates.
-
-            Args:
-                void
-
-            Returns:
-                void
         """
         count_res = 0
         nb_atoms = 0
