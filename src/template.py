@@ -8,6 +8,7 @@ from src.residue import Residue
 
 # Third-party modules
 import numpy as np
+import sys
 import os
 import wget
 from Bio import SeqIO
@@ -36,7 +37,12 @@ class Template:
         self.name = name            # ex: Agglutinin
         self.residues = residues
         self.benchmark = 0
-        self.pdb = None
+        self.pdb = None             # ex: 1jlxa1
+        self.first = None
+        self.missing_residues = False
+
+    def display(self):
+        return "".join(str(res.name) for res in self.residues)
 
     def set_benchmark(self, fold_type):
         """
@@ -47,7 +53,6 @@ class Template:
         """
         self.benchmark = fold_type
 
-
     def set_pdb_name(self, metafold_dict):
         """
             Set the pdb file name of the template from the template's name.
@@ -56,6 +61,12 @@ class Template:
                 metafold_dict: A dictionary with key = template name and value = pdb file
         """
         self.pdb = metafold_dict[self.name].split(".")[0]
+
+    def set_missing_resides(self):
+        """
+        This a setter for the missing_residues attribute.
+        """
+        self.missing_residues = True
 
     def parse_pdb(self, pdb_path):
         """
@@ -66,16 +77,19 @@ class Template:
         """
         count_res = 0
         nb_atoms = 0
+        ref_id = None
         flag = True
         with open(pdb_path + self.name + "/" + self.pdb + ".atm", 'r') as file:
             for line in file:
                 line_type = line[0:6].strip()
                 name_at = line[12:16].strip()
                 if line_type == "ATOM" and (name_at == "N" or name_at == "CA" or name_at == "C"):
+                    res_id = int(line[22:26].strip())
                     # In some PDBs the residues ids do not start at 1
                     # so we remember the first id number
                     if flag:
-                        self.first = int(line[22:26].strip())
+                        self.first = res_id
+                        ref_id = res_id
                         flag = False
                     x_coord = float(line[30:38].strip())
                     y_coord = float(line[38:46].strip())
@@ -91,6 +105,11 @@ class Template:
                                 .set_coords(np.array([x_coord, y_coord, z_coord]))
                             nb_atoms += 1
                         elif line_type == "ATOM" and name_at == "CA":
+                            # Check for missing residues using residues ids (continuous or not)
+                            if res_id != ref_id + 1 or res_id == ref_id:
+                                self.missing_residues = True
+                            else:
+                                ref_id += 1
                             self.residues[count_res].c_atom\
                                 .set_coords(np.array([x_coord, y_coord, z_coord]))
                             nb_atoms += 1
@@ -101,80 +120,76 @@ class Template:
                         if nb_atoms == 3:
                             count_res += 1
                             nb_atoms = 0
+            print(self.missing_residues)
 
-
-    def reindex_pdb_by_index(self, pdb_file):
+    def reindex_pdb_by_index(self, start_index, pdb_txt):
         """
             Original code: https://zhanglab.ccmb.med.umich.edu/reindex_pdb/reindex_pdb.py
             Reindex residue number of PDB format text
 
             Args:
-                pdb_file (str): PDB to be reindexed
+                pdb_txt (str): PDB to be reindexed
         """
-        re_indexed_pdb=''
-        current_old_index='' # residue number in origin PDB
-        warn_chainID='' # warning about new chain ID
+        re_indexed_pdb = ''
+        current_old_index = ''  # residue number in origin PDB
+        warn_chainID = ''  # warning about new chain ID
 
-        for line in pdb_file.splitlines():
-            if len(line)<27 or (not line.startswith("ATOM  ") and \
-                not line.startswith("HETATM") and not line.startswith("TER")):
-                re_indexed_pdb+=line+'\n'
+        for line in pdb_txt.splitlines():
+            if len(line) < 27 or (not line.startswith("ATOM  ")
+                                  and not line.startswith("HETATM")
+                                  and not line.startswith("TER")):
+                re_indexed_pdb += line+'\n'
                 continue
-            elif not line[16] in ['A',' ']: # alternative location identifier
+            elif not line[16] in ['A', ' ']:  # alternative location identifier
                 continue
-            resSeq=line[22:27] # residue sequence number
-            current_chainID=line[21] # chain identifier
+            resSeq = line[22:27]  # residue sequence number
+            current_chainID = line[21]  # chain identifier
 
-            if not current_old_index: # first residue encountered
-                current_old_index=resSeq # residue number in origin PDB
-                current_new_index=int(startindex)
-                chainID=current_chainID
-                resSeq_new=str(current_new_index)
-                resSeq_new=' '*(4-len(resSeq_new))+resSeq_new+' '
-            elif current_chainID!=chainID:
-                if warn_chainID!=current_chainID:
+            if not current_old_index:  # first residue encountered
+                current_old_index = resSeq  # residue number in origin PDB
+                current_new_index = int(start_index)
+                chainID = current_chainID
+                resSeq_new = str(current_new_index)
+                resSeq_new = ' '*(4-len(resSeq_new))+resSeq_new+' '
+            elif current_chainID != chainID:
+                if warn_chainID != current_chainID:
                     sys.stderr.write(
-                        "Warning! Discarding chain '%s'\n"%current_chainID)
-                    warn_chainID=current_chainID
+                        "Warning! Discarding chain '%s'\n" % current_chainID)
+                    warn_chainID = current_chainID
                 continue
-            elif resSeq!=current_old_index:
-                current_new_index+=1
-                current_old_index=resSeq
-                resSeq_new=str(current_new_index)
-                resSeq_new=' '*(4-len(resSeq_new))+resSeq_new+' '
-            re_indexed_pdb+=line[:16]+' '+line[17:22]+resSeq_new+line[27:]+'\n'
+            elif resSeq != current_old_index:
+                current_new_index += 1
+                current_old_index = resSeq
+                resSeq_new = str(current_new_index)
+                resSeq_new = ' '*(4-len(resSeq_new))+resSeq_new+' '
+            re_indexed_pdb += line[:16]+' '+line[17:22]+resSeq_new+line[27:]+'\n'
         return re_indexed_pdb
-
 
     def reindex_pdb(self, pdb_path):
         """
         Original code: https://zhanglab.ccmb.med.umich.edu/reindex_pdb/reindex_pdb.py
         Parse template's PDB file, reindex it according to start index.
         """
-        pdb_file = pdb_path + self.name + "/" + self.pdb + ".atm"
-        fp=open(pdb_file,'rU')
-        pdb_txt=''
+        pdb_file = pdb_path + "/" + self.pdb + ".atm"
+        fp = open(pdb_file, 'rU')
+        pdb_txt = ''
         for line in fp.read().splitlines():
             if line.startswith("END"):
-                if clean:
-                    line=line.replace("ENDMDL","END   ")
-                pdb_txt+=line+'\n'
+                pdb_txt += line+'\n'
                 break
             if line.startswith("ATOM  ") or line.startswith("TER") or (
-                not line[:6] in ["DBREF ","SEQADV","MODRES","HELIX ","SHEET ","SSBOND","SITE  "]):
-                pdb_txt+=line+'\n'
+                    not line[:6] in ["DBREF ", "SEQADV", "MODRES", "HELIX ", "SHEET ", "SSBOND", "SITE  "]):
+                pdb_txt += line+'\n'
         fp.close()
-        re_indexed_pdb = self.reindex_pdb_by_index(pdb_txt)
-        return re_indexed_pdb
-
+        re_indexed_pdb = self.reindex_pdb_by_index(self.first, pdb_txt)
+        # Write the new PDB
+        with open(pdb_file + ".new", "w") as f_out:
+            f_out.write(re_indexed_pdb)
 
     def get_fasta_file(self):
         """
         Retrieve the full FASTA amino acid sequence (gapless) of the template,
         and write it to an alignment file.
-
-        Args:
-            void
 
         Returns:
             str: Path to the FASTA file containing the sequence of the template.
