@@ -60,6 +60,9 @@ class Template:
     def parse_pdb(self, pdb_path):
         """
             Parse the pdb file and set the CA coordinates.
+
+            Args:
+                pdb_path: Path to the directory containing .atm file of the actual template.
         """
         count_res = 0
         nb_atoms = 0
@@ -78,9 +81,9 @@ class Template:
                     y_coord = float(line[38:46].strip())
                     z_coord = float(line[46:54].strip())
                     if count_res <= len(self.residues):
-                        # Skip gaps in the template
                         if count_res == len(self.residues):
                             break
+                        # Skip gaps in the template
                         while self.residues[count_res].name == "-":
                             count_res += 1
                         if line_type == "ATOM" and name_at == "N":
@@ -98,6 +101,72 @@ class Template:
                         if nb_atoms == 3:
                             count_res += 1
                             nb_atoms = 0
+
+
+    def reindex_pdb_by_index(self, pdb_file):
+        """
+            Original code: https://zhanglab.ccmb.med.umich.edu/reindex_pdb/reindex_pdb.py
+            Reindex residue number of PDB format text
+
+            Args:
+                pdb_file (str): PDB to be reindexed
+        """
+        re_indexed_pdb=''
+        current_old_index='' # residue number in origin PDB
+        warn_chainID='' # warning about new chain ID
+
+        for line in pdb_file.splitlines():
+            if len(line)<27 or (not line.startswith("ATOM  ") and \
+                not line.startswith("HETATM") and not line.startswith("TER")):
+                re_indexed_pdb+=line+'\n'
+                continue
+            elif not line[16] in ['A',' ']: # alternative location identifier
+                continue
+            resSeq=line[22:27] # residue sequence number
+            current_chainID=line[21] # chain identifier
+
+            if not current_old_index: # first residue encountered
+                current_old_index=resSeq # residue number in origin PDB
+                current_new_index=int(startindex)
+                chainID=current_chainID
+                resSeq_new=str(current_new_index)
+                resSeq_new=' '*(4-len(resSeq_new))+resSeq_new+' '
+            elif current_chainID!=chainID:
+                if warn_chainID!=current_chainID:
+                    sys.stderr.write(
+                        "Warning! Discarding chain '%s'\n"%current_chainID)
+                    warn_chainID=current_chainID
+                continue
+            elif resSeq!=current_old_index:
+                current_new_index+=1
+                current_old_index=resSeq
+                resSeq_new=str(current_new_index)
+                resSeq_new=' '*(4-len(resSeq_new))+resSeq_new+' '
+            re_indexed_pdb+=line[:16]+' '+line[17:22]+resSeq_new+line[27:]+'\n'
+        return re_indexed_pdb
+
+
+    def reindex_pdb(self, pdb_path):
+        """
+        Original code: https://zhanglab.ccmb.med.umich.edu/reindex_pdb/reindex_pdb.py
+        Parse template's PDB file, reindex it according to start index.
+        """
+        pdb_file = pdb_path + self.name + "/" + self.pdb + ".atm"
+        fp=open(pdb_file,'rU')
+        pdb_txt=''
+        for line in fp.read().splitlines():
+            if line.startswith("END"):
+                if clean:
+                    line=line.replace("ENDMDL","END   ")
+                pdb_txt+=line+'\n'
+                break
+            if line.startswith("ATOM  ") or line.startswith("TER") or (
+                not line[:6] in ["DBREF ","SEQADV","MODRES","HELIX ","SHEET ","SSBOND","SITE  "]):
+                pdb_txt+=line+'\n'
+        fp.close()
+        re_indexed_pdb = self.reindex_pdb_by_index(pdb_txt)
+        return re_indexed_pdb
+
 
     def get_fasta_file(self):
         """
