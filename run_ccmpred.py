@@ -1,11 +1,16 @@
-#a mettre dans alignements (avec les autres socires)
+#! coding: utf-8
+# Meet-U
 
+#Script to compute fonction for getting from an query seq an top couplings co-ev scores
+
+#Librairies imported
 import Bio
-import sys
 import subprocess
 
 from conkit.applications import CCMpredCommandline
 from conkit.applications import HHblitsCommandline
+
+
 
 def calculate_co_evolution_score(query,database_ref):
  	"""
@@ -24,22 +29,27 @@ def calculate_co_evolution_score(query,database_ref):
     # conkit command hhblits produces Multiple Sequence Alignment from fasta
         #filter the sequences at a 90% identity threshold and E-value cutoff for
         # inclusion in result alignment= 0.001 are included in the tool
-    #TO TEST
-    hhblits_cline = HHblitsCommandline(
-        cmd = "/bin/hh-suite/build/bin/hhblits", input =query,
-        database = database_ref ,cpu = "3", matflix = "100000",
-        oa3m = "query.a3m", show_all
-    )
+    
+
+    #Getting multiple Alignment from a query sequence (FASTA format)
+    hhblits_cline = HHblitsCommandline(cmd = "/bin/hh-suite/build/bin/hhblits", 
+    	input =query,
+	 	database = database_ref ,cpu = "3", matflix = "100000",
+	 	oa3m = "query.a3m", show_all)
     hhblits_cline()
+
     #reformate a3m into fasta
     reformat = subprocess.Popen(
         ["./bin/hh-suite/scripts/reformat.pl","-r","a3m",
-        "fas","query.a3m","query.fasta"], stdout=subprocess.PIPE).communicate()[0]
+        "fas","query.a3m","query.fasta"], stdout=subprocess.PIPE).communicate()[0]  #why comunicate & others juste need to run the process and gives a file !
+
+    
     #format fasta into aln
     convert_alignment = subprocess.Popen(
         ["./bin/CCMpred/scripts/convert_alignment.py","query.fasta","fasta",
-        "query.aln"], stdout=subprocess.PIPE).communicate()[0]
-    #convert fasta to PSICOV format
+        "query.aln"], stdout=subprocess.PIPE).communicate()[0]					#same !
+
+    #CCMpred
     ccmpred_cline = CCMpredCommandline(
         cmd ='bin/CCMpred/bin/ccmpred', alnfile= "query.aln", matfile= "query.mat"
     )
