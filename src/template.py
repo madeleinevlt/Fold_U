@@ -77,7 +77,7 @@ class Template:
         """
         count_res = 0
         nb_atoms = 0
-        ref_id = None
+        ref_id = 0
         flag = True
         with open(pdb_path + self.name + "/" + self.pdb + ".atm", 'r') as file:
             for line in file:
@@ -85,6 +85,14 @@ class Template:
                 name_at = line[12:16].strip()
                 if line_type == "ATOM" and (name_at == "N" or name_at == "CA" or name_at == "C"):
                     res_id = int(line[22:26].strip())
+                    # Check for missing residues using residues ids (continuous or not)
+                    if flag == False:
+                        if res_id == ref_id: # atom of same residue
+                            pass
+                        elif res_id != ref_id + 1:
+                            self.missing_residues = True
+                        elif res_id == ref_id + 1:
+                            ref_id += 1
                     # In some PDBs the residues ids do not start at 1
                     # so we remember the first id number
                     if flag:
@@ -95,21 +103,16 @@ class Template:
                     y_coord = float(line[38:46].strip())
                     z_coord = float(line[46:54].strip())
                     if count_res <= len(self.residues):
+                        # Skip gaps in the template
+                        while count_res < len(self.residues) and self.residues[count_res].name == "-":
+                            count_res += 1
                         if count_res == len(self.residues):
                             break
-                        # Skip gaps in the template
-                        while self.residues[count_res].name == "-":
-                            count_res += 1
                         if line_type == "ATOM" and name_at == "N":
                             self.residues[count_res].ca_atom\
                                 .set_coords(np.array([x_coord, y_coord, z_coord]))
                             nb_atoms += 1
                         elif line_type == "ATOM" and name_at == "CA":
-                            # Check for missing residues using residues ids (continuous or not)
-                            if res_id != ref_id + 1 or res_id == ref_id:
-                                self.missing_residues = True
-                            else:
-                                ref_id += 1
                             self.residues[count_res].c_atom\
                                 .set_coords(np.array([x_coord, y_coord, z_coord]))
                             nb_atoms += 1
@@ -120,7 +123,6 @@ class Template:
                         if nb_atoms == 3:
                             count_res += 1
                             nb_atoms = 0
-            print(self.missing_residues)
 
     def reindex_pdb_by_index(self, start_index, pdb_txt):
         """
@@ -183,7 +185,7 @@ class Template:
         fp.close()
         re_indexed_pdb = self.reindex_pdb_by_index(self.first, pdb_txt)
         # Write the new PDB
-        with open(pdb_file + ".new", "w") as f_out:
+        with open(pdb_file, "w") as f_out:
             f_out.write(re_indexed_pdb)
 
     def get_fasta_file(self):
@@ -213,17 +215,18 @@ class Template:
             print("Initial error: " + str(e))
         return file_name
 
-    def add_gaps_in_template_sequence(self):
+    def add_gaps_in_template_sequence(self, fasta_file):
         """
             This function replaces the missing residues of the template's
             sequence
+
+            Args:
+                fasta_file (str): File name of the fasta file downloaded
 
             Returns:
                 (str, str): Tuple: The full FASTA sequence and the new sequence
                 with gaps instead of missing residues.
         """
-        # Fetch FASTA file from RCSB PDB database
-        fasta_file = self.get_fasta_file()
         # Parse the file to get sequence
         sequence = list(SeqIO.parse(fasta_file, "fasta"))[0].seq
         new_seq = ""
@@ -238,7 +241,6 @@ class Template:
         # Assign the new residues
         new_residues = [Residue(name) for name in new_seq]
         self.residues = new_residues
-
         return str(sequence), new_seq
 
     def write_template_alignment(self):
@@ -251,12 +253,19 @@ class Template:
             Returns:
                 str: Path to the new (gapless) PDB file of the template.
         """
-        fasta_seq, new_template_seq = self.add_gaps_in_template_sequence()
+        # Fetch FASTA file from RCSB PDB database
+        fasta_file = self.get_fasta_file()
+        fasta_seq, new_template_seq = self.add_gaps_in_template_sequence(fasta_file)
         with open("alignments/" + self.name+".ali", "w") as ali_out:
             ali_out.write(">P1;" + self.pdb)
-            ali_out.write("\nstructure:" + self.pdb
-                          + ":" + str(self.first)
-                          + ":@:" + str(len(new_template_seq)) + ":@::::\n")
+            if self.first == 1:
+                ali_out.write("\nstructure:" + self.pdb
+                              + ":" + str(self.first)
+                              + ":@:" + str(len(new_template_seq)) + ":@::::\n")
+            else:
+                ali_out.write("\nstructure:" + self.pdb
+                              + ":" + str(self.first)
+                              + ":@:" + str(len(new_template_seq) + self.first - 1) + ":@::::\n")
             ali_out.write(new_template_seq + "*")
             ali_out.write("\n>P1;"+self.pdb+"_fill")
             ali_out.write("\nsequence:::::::::\n")
@@ -269,26 +278,18 @@ class Template:
             which are consequently not integrated in the PDB file because no
             coordinates could be determined for the faulty residues.
             We can use MODELLER to "fill in" these missing residues by treating
-            the original structure (without the missing residues) as a template,
+            the original structure (FASTA, without the missing residues) as a template,
             and building a comparative model using the full sequence.
 
             Args:
                 dir_to_atm (str): Path to template's .atm file
                 ali_dir (str): Path to the alignment files.
-
-            Returns:
-                str: Path to the new (gapless) PDB file of the template.
         """
         m.log.verbose()
         m.env = m.environ()
 
         # directories for input atom files
         m.env.io.atom_files_directory = [dir_to_atm]
-
-        # class MyModel(automodel):
-        #     def select_atoms(self):
-        #         return selection(self.residue_range('133', '135'),
-        #                          self.residue_range('217', '230'))
 
         a_model = am.automodel(m.env,
                                # alignment filename

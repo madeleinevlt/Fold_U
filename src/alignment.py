@@ -11,7 +11,8 @@ import modeller as m
 import modeller.automodel as am
 from modeller.automodel import assess
 import contextlib
-import os
+import os, re
+import pathlib
 from glob import glob
 
 
@@ -24,14 +25,13 @@ def process(dist_range, gap_penality, dope_dict, output_path, ali):
             Template's name, Template's benchmark)
 
     """
-    ali.write_alignment_for_modeller(output_path)
+    print(ali.template.name, ali.template.pdb)
     modeller_score = ali.calculate_modeller_score(output_path)
-    print(modeller_score)
     # Calculate the threading score of all alignments
-    threading_score = ali.calculate_threading_score(dist_range, gap_penality, dope_dict)
-    blosum_score = ali.calculate_blosum_score()
-    return ali.num, ali.score, threading_score, blosum_score,\
-        ali.template.name, ali.template.benchmark
+    # threading_score = ali.calculate_threading_score(dist_range, gap_penality, dope_dict)
+    # blosum_score = ali.calculate_blosum_score()
+    # return ali.num, ali.score, threading_score, blosum_score,\
+    #     ali.template.name, ali.template.benchmark
 
 
 class Alignment:
@@ -192,7 +192,7 @@ class Alignment:
             # The two last lines of the created pdb file ("END" and "TER" lines)
             file.write("END\n")
 
-    def write_alignment_for_modeller(self, res_path):
+    def write_alignment_for_modeller(self, ali_path):
         """
             Modeller requires a specifically formatted alignment file ".ali",
             following the PIR type format.
@@ -210,14 +210,19 @@ class Alignment:
             AYVINDSC--IACGACKPECPVNIIQGS--IYAIDADSCIDCGSCASVCPVGAPNPED-----------------
             -------------------------------*
         """
-        ali_out_dir = res_path + "/modeller/alignments/"
-        if not os.path.exists(ali_out_dir):
-            os.makedirs(ali_out_dir)
-        with open(ali_out_dir + self.template.name+".ali", "w") as ali_out:
+        with open(ali_path + self.template.name+".ali", "w") as ali_out:
             template_len = len([res for res in self.template.residues if res.name != '-'])
             ali_out.write(">P1;" + self.template.pdb)
-            ali_out.write("\nstructure:" + self.template.pdb
-                          + ":" + str(self.template.first) + ":@:" + str(template_len) + ":@::::\n")
+            if self.template.first == 1:
+                ali_out.write("\nstructure:" + self.template.pdb
+                          + ":" + str(self.template.first) + ":@:"
+                          + str(template_len)
+                          + ":@::::\n")
+            else:
+                ali_out.write("\nstructure:" + self.template.pdb
+                          + ":" + str(self.template.first) + ":@:"
+                          + str(template_len + self.template.first - 1)
+                          + ":@::::\n")
             ali_out.write(self.template.display() + "*")
             ali_out.write("\n>P1;query")
             ali_out.write("\nsequence:query:" + str(self.query.first) + ":@:"
@@ -245,9 +250,11 @@ class Alignment:
         root_dir = os.getcwd()
         modeller_out_dir = res_path + "/modeller/"
         ali_dir = "alignments/"
+        pathlib.Path(modeller_out_dir + ali_dir).mkdir(parents=True, exist_ok=True)
         # MODELLER generates the result files in his current directory, so we must
         # go to the results directory and come back to root dir afterwards.
         os.chdir(modeller_out_dir)
+        self.write_alignment_for_modeller("./alignments/")
         # request no verbose output (still gives few that will be silenced afterwards)
         m.log.none()
         # create a new MODELLER environment to build this model in
@@ -268,41 +275,50 @@ class Alignment:
                                # at Higher Resolution (using a bin size of 0.125Å
                                # rather than 0.5Å).
                                assess_methods=assess.DOPEHR)
+        a_model.very_fast()
         # index of the first and last model (determines how many models to calculate)
         a_model.starting_model = 1
         a_model.ending_model = 1
 
         modeller_dope_score = 0
         # Redirect Modeller's verbose into nothingness, nil, chaos and abysses.
-        # with contextlib.redirect_stdout(None):
-        if self.template.missing_residues:
-            # do the actual comparative modeling
-            a_model.make()
-            # Process the outputs of the only model generated
-            new_model_pdb = a_model.outputs[0]["name"]
-            modeller_dope_score = a_model.outputs[0]["DOPE-HR score"]
-            os.rename(new_model_pdb, self.template.pdb + ".pdb")
-
-        else:
-            # Here there is a problem of missing residues
-            self.template.reindex_pdb(path_to_atm)
-            # Write new alignement between gap template and FASTA template
-            self.template.write_template_alignment()
-            # Write the new PDB file of the tempalate
-            self.template.build_new_pdb_with_modeller(path_to_atm, ali_dir)
-            # Parse the new PDB to get new residues and their coordinates
-            # generated by MODELLER
-            self.template.parse_pdb(root_dir + "/data/pdb/")
-            # Re-write the alignement between the query and the new template
-            self.write_alignment_for_modeller("alignments/")
-            # Calculate the Modeller score
-            modeller_dope_score = self.new_modeller(path_to_atm)
+        with contextlib.redirect_stdout(None):
+            if self.template.missing_residues is False:
+                try:
+                    # do the actual comparative modeling. This command can raise exceptions.
+                    a_model.make()
+                    print(self.template.missing_residues, self.template.pdb, "CACA\n\n\n")
+                    # Process the outputs of the only model generated
+                    new_model_pdb = a_model.outputs[0]["name"]
+                    modeller_dope_score = a_model.outputs[0]["DOPE-HR score"]
+                    os.rename(new_model_pdb, self.template.pdb + ".pdb")
+                # For any other Modeller issue with PDB than missing residue, we just reindex it
+                except m.ModellerError as e:
+                    print(self.template.missing_residues, self.template.pdb, "COUCOU\n\n\n", e)
+                    # PDB reindexation of residues ids
+                    self.template.reindex_pdb(path_to_atm)
+                    # do the actual comparative modeling
+                    a_model.make()
+                    # Process the outputs of the only model generated
+                    new_model_pdb = a_model.outputs[0]["name"]
+                    modeller_dope_score = a_model.outputs[0]["DOPE-HR score"]
+                    os.rename(new_model_pdb, self.template.pdb + ".pdb")
+            else: # The template's PDB has missing residues so we "fill" it with a new MODELLER template
+                print(self.template.missing_residues, self.template.pdb, "BEBE\n\n\n")
+                # Write new alignement between gap template and FASTA template
+                self.template.write_template_alignment()
+                # Write the new PDB file of the tempalate
+                self.template.build_new_pdb_with_modeller(path_to_atm, ali_dir)
+                # Parse the new PDB to get new residues and their coordinates generated by MODELLER
+                self.template.parse_pdb(root_dir + "/data/pdb/")
+                # Insert the gaps of the new template at the same positions in the query
+                self.query.add_gaps_in_query(self.template)
+                # Re-write the alignement between the query and the new template
+                self.write_alignment_for_modeller("./alignments/")
+                # Calculate the Modeller score
+                modeller_dope_score = self.new_modeller(path_to_atm)
         # remove useless files generated by MODELLER
-        for file in glob('./query*'):
-            try:
-                os.remove(file)
-            except OSError:
-                pass
+        clean_modeller_outputs(".", "^.*\\.(?!pdb).*$")
         # Go back to root directory
         os.chdir(root_dir)
         return modeller_dope_score
@@ -327,6 +343,7 @@ class Alignment:
                                # at Higher Resolution (using a bin size of 0.125Å
                                # rather than 0.5Å).
                                assess_methods=assess.DOPEHR)
+        a_model.very_fast()
         # index of the first and last model (determines how many models to calculate)
         a_model.starting_model = 1
         a_model.ending_model = 1
