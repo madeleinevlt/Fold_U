@@ -27,7 +27,7 @@ class Template:
     def __init__(self, name, residues):
         self.name = name
         self.residues = residues
-        self.benchmark = 0
+        self.benchmark = "."
         self.pdb = None
 
     def set_benchmark(self, fold_type):
