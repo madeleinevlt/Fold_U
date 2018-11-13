@@ -3,6 +3,7 @@
    :synopsis: This module implements the Query class.
 """
 
+from src.residue import Residue
 
 class Query:
     """
@@ -34,3 +35,14 @@ class Query:
 
         """
         return len(self.residues)
+
+    def add_gaps_in_query(self, template):
+        """
+        This functions inserts the same gaps that occur in the template, in the query.
+
+        Args:
+            template (Template object): The current alignment's template
+        """
+        occ_ind = [i for i, res in enumerate(template.residues) if res.name == "-"]
+        for i in occ_ind:
+            self.residues[i:i] = [Residue("-")]
