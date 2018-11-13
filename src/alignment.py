@@ -335,3 +335,15 @@ class Alignment:
         modeller_dope_score = a_model.outputs[0]["DOPE-HR score"]
         os.rename(new_model_pdb, self.template.pdb + ".pdb")
         return modeller_dope_score
+
+def clean_modeller_outputs(dir, pattern):
+    """
+    Removes files matching the pattern in the directory given in argument.
+
+    Args:
+        dir (str): Path to directory to clean
+        pattern (str): Regex expression for files to remove
+    """
+    for file in os.listdir(dir):
+        if re.search(pattern, file):
+            os.remove(os.path.join(dir, file))
