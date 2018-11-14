@@ -8,54 +8,58 @@ import Bio
 import subprocess
 
 from conkit.applications import CCMpredCommandline
-from conkit.applications import HHblitsCommandline
 
 
-
-def calculate_co_evolution_score(query,database_ref):
- 	"""
+def calculate_co_evolution_score(aln_file,distance_matrix):
+    """
         Calculates co-evolution score of the query based on the MSA alignment
         Co-evolution score measures co-occurence of a pair of amino acid in
-	ortholog sequences. Two amino acid have co-evoluated if the occurence
-	of one of this amino never occur whithout the other.
+        ortholog sequences. Two amino acid have co-evoluated if the occurence
+        of one of this amino never occur whithout the other.
 
         Args:
-             query:file in .fasta
-             database_ref: database for hhblits
+            aln_file:clustal file in .aln
+            distance_matrix: distance matrix of the query against itself
         Returns:
-            matrix containing scores associated with top co-evoluated pairs
-            of amino acids in the sequence
+            score_co-evolution
     """
-    # conkit command hhblits produces Multiple Sequence Alignment from fasta
-        #filter the sequences at a 90% identity threshold and E-value cutoff for
-        # inclusion in result alignment= 0.001 are included in the tool
-    
-
-    #Getting multiple Alignment from a query sequence (FASTA format)
-    hhblits_cline = HHblitsCommandline(cmd = "/bin/hh-suite/build/bin/hhblits", 
-    	input =query,
-	 	database = database_ref ,cpu = "3", matflix = "100000",
-	 	oa3m = "query.a3m", show_all)
-    hhblits_cline()
-
-    #reformate a3m into fasta
-    reformat = subprocess.Popen(
-        ["./bin/hh-suite/scripts/reformat.pl","-r","a3m",
-        "fas","query.a3m","query.fasta"], stdout=subprocess.PIPE).communicate()[0]  #why comunicate & others juste need to run the process and gives a file !
-
-    
-    #format fasta into aln
-    convert_alignment = subprocess.Popen(
-        ["./bin/CCMpred/scripts/convert_alignment.py","query.fasta","fasta",
-        "query.aln"], stdout=subprocess.PIPE).communicate()[0]					#same !
-
-    #CCMpred
+    #Parsing aln file in order to get query + gaps
+    with open(aln_file,'r') as file:
+        data = file.read()
+        query = data.split('\n', 1)[0]
+        #repport index of gaps
+    i_gap =[i for i, e in enumerate(query) if e == "-"]
+    #Predict contacts
     ccmpred_cline = CCMpredCommandline(
-        cmd ='bin/CCMpred/bin/ccmpred', alnfile= "query.aln", matfile= "query.mat"
+        cmd ='bin/CCMpred/bin/ccmpred', alnfile= aln_file, matfile= "contact.mat"
     )
     ccmpred_cline()
-    #extract top coupling
+    #Extract 30 top coupling
     subprocess.call(
-    "./bin/CCMpred/scripts/top_couplings.py query.mat > tops_outputs.mat",
-     shell=True
-     )
+        "./bin/CCMpred/scripts/top_couplings.py contact.mat > top_output.mat",
+        shell=True
+    )
+    #parsing top_coupling
+    dic_top_score= {}
+    with open("top_output.mat", "r") as file:
+        index = 1
+        file.readline()
+        for line in file:
+            if float(line[0:2]) not in i_gap and float(line[3:5]) not in i_gap:
+                dic_top_score[index] = [float(line[0:2]), float(line[3:5]),
+                float(line[6:19])]
+                index += 1
+    #re-indexing
+    for i, val in dic_top_score.items():
+        for pos_gap in range(len(i_gap)-1):
+            if val[0] > i_gap[pos_gap] and val[0] < i_gap[pos_gap+1]:
+                val[0] = val[0]+1
+            if val[1] > i_gap[pos_gap] and val[1] < i_gap[pos_gap+1]:
+                val[1] = val[1]+1
+    #compare top 30/ distance_matrix
+    for i, val in dic_top_score.items():
+        if distance_matrix[val[0],val[1]] < 7:
+            score_co-evo = score_co-evo +1
+        else:
+            score_co-evo = score_co-evo -1
+    return score_co-evo

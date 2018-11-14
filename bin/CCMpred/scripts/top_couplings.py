@@ -21,6 +21,7 @@ def main():
     top = get_top_pairs(mat, opt.num_contacts, opt.min_separation)
 
     print("#i\tj\tconfidence")
+    dic ={}
     for i, j, coupling in zip(top[0], top[1], mat[top]):
         print("{0}\t{1}\t{2}".format(i, j, coupling))
 
