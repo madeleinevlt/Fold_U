@@ -74,7 +74,7 @@ def parse_benchmark(benchmark_file, foldrec_file, alignment_dict):
                                          and value = an Alignment object.
     """
     # The name of the query is retrieved from the foldrec file pathway
-    query_reg = re.compile("^.*\\/(\\w*)")
+    query_reg = re.compile("^.*\\/(\\S*)\\.")
     query_name = re.search(query_reg, foldrec_file)
     with open(benchmark_file, "r") as file:
         for line in file:
