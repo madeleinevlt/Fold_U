@@ -34,4 +34,4 @@ for query in os.listdir("data/foldrec"):
             for structure in structures:
                 if type == structure:
                     structures_count[structure] += 1
-                benchmarking_scores[score][structure][i+1] = structures_count[structure]
+                benchmarking_scores[score][structure][i+1] += structures_count[structure]
