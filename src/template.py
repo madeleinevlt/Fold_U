@@ -258,14 +258,17 @@ class Template:
         fasta_seq, new_template_seq = self.add_gaps_in_template_sequence(fasta_file)
         with open("alignments/" + self.name+".ali", "w") as ali_out:
             ali_out.write(">P1;" + self.pdb)
-            if self.first == 1:
-                ali_out.write("\nstructure:" + self.pdb
+            # if self.first == 1:
+            #     ali_out.write("\nstructure:" + self.pdb
+            #                   + ":" + str(self.first)
+            #                   + ":@:" + str(len(new_template_seq)) + ":@::::\n")
+            # else:
+            #     ali_out.write("\nstructure:" + self.pdb
+            #                   + ":" + str(self.first)
+            #                   + ":@:" + str(len(new_template_seq) + self.first - 1) + ":@::::\n")
+            ali_out.write("\nstructure:" + self.pdb
                               + ":" + str(self.first)
                               + ":@:" + str(len(new_template_seq)) + ":@::::\n")
-            else:
-                ali_out.write("\nstructure:" + self.pdb
-                              + ":" + str(self.first)
-                              + ":@:" + str(len(new_template_seq) + self.first - 1) + ":@::::\n")
             ali_out.write(new_template_seq + "*")
             ali_out.write("\n>P1;"+self.pdb+"_fill")
             ali_out.write("\nsequence:::::::::\n")
