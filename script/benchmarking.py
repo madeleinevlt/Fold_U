@@ -6,9 +6,10 @@ import os
 from subprocess import call
 import pandas as pd
 import numpy as np
+import matplotlib.pyplot as plt
 
 structures = ["Family", "Superfamily", "Fold"]
-scores = ["alignment", "threading", "blosum", "sum scores"]
+scores = ["alignment", "threading", "sum scores"]
 # A dictionary of pandas DataFrames is created for each score
 # Each DataFrame will contain the cumulative sum of benchmarks for each structure (= 3 columns)
 benchmarking_scores = {}
