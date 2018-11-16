@@ -13,7 +13,7 @@ scores = ["alignment", "threading", "blosum", "sum scores"]
 # Each DataFrame will contain the cumulative sum of benchmarks for each structure (= 3 columns)
 benchmarking_scores = {}
 for score in scores:
-    benchmarking_scores[score] = pd.DataFrame(np.zeros((413,3)), columns=structures)
+    benchmarking_scores[score] = pd.DataFrame(np.zeros((413,3), dtype=np.int64), columns=structures)
 # For each query,
 for query in os.listdir("data/foldrec"):
     query = query.split(".")[0]
