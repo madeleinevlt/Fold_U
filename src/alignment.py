@@ -46,6 +46,44 @@ class Alignment:
         self.query = query
         self.template = template
 
+
+        def calculate_distance(self):
+            """
+            Calculate distance
+            """
+            query = self.query.residues
+            template = self.template.residues
+
+            query_size = self.query.get_size()
+            # This sets a numpy matrix of shape query * query which will contain all
+            # the energies corresponding to distances between all pairs of residues
+            # between the query and itself: the coordinates are the ones from the template.
+            distance = np.empty((query_size, query_size), dtype=object)
+            # Filling the matrix afterwards with "NaN" is faster
+            energy.fill(np.nan)
+
+            for i, row_res in enumerate(query):
+                # There is a gap in the query or the template
+                elif row_res.name == "-" or template[i].name == "-":
+                    # The whole line is set with gap penalty value
+                    distance[i, (i + 2):] = 0
+                    continue
+                for j in range(i + 1, query_size - 1):
+                    col_res = query[j]
+                    # There is a gap in the query or the template
+                    elif col_res.name == "-" or template[j].name == "-":
+                        # The whole column is set with gap penalty value
+                        distance[:(j - 1), j] = 0
+                        continue
+                    else:
+                        # Calculate to distance between two residues
+                        distance[i, j] = template[i].calculate_distance(template[j])
+                        # Keep distances only in a defined range because we don't want to
+                        # take into account directly bonded residues (dist < ~5 A) and too far residues
+            # Return the sum of energy matrix with numpy's "Nan" interpreted as zeros
+            return distance
+
+
     def calculate_threading_score(self, dist_range, gap_penalty, dope_dict):
         """
             Calculate the threading score of the query on the template sequence.
