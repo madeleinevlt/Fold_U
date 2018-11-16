@@ -36,3 +36,31 @@ for query in os.listdir("data/foldrec"):
                 if type == structure:
                     structures_count[structure] += 1
                 benchmarking_scores[score][structure][i+1] += structures_count[structure]
+
+
+def plot_benchmark(benchmark_type):
+    """
+        Create one plot for one benchmark type for all the foldrec files.
+
+        Args:
+            benchmark_type (str) : one of the three following : "Family", "Superfamily", "Fold"
+    """
+    ali_structure = benchmarking_scores["alignment"][benchmark_type]  
+    thr_structure = benchmarking_scores["threading"][benchmark_type]  
+    #blo_structure = benchmarking_scores["blosum"][benchmark_type]  #score pretty bad so not useful but kept for the report
+    sum_structure = benchmarking_scores["sum scores"][benchmark_type]  
+
+    len_matrix = len(benchmarking_scores["sum scores"][benchmark_type].index) 
+    rank = [ i for i in benchmarking_scores["sum scores"]["Family"].index]
+
+    plt.plot(rank, ali_structure.values, "b", label="alignment")
+    plt.plot(rank, thr_structure.values,"#ffa201", label="threading")
+    #plt.plot(rank, blo_structure.values, "#33b74b", label="blosum")
+    plt.plot(rank, sum_structure.values, "r", label="sum scores")
+    plt.title("Global scores comparison using "+ benchmark_type +" Benchmarks")
+    plt.ylabel('Benchmarks')
+    plt.xlabel('rank')
+    plt.legend(loc='lower right')
+    plt.axis([0, 413, 0, max(ali_structure+1)])
+    plt.show()
+
