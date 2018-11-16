@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>src.residue &mdash; fold-u 1.0 documentation</title>
+  <title>src.residue &mdash; Fold U 1.2 documentation</title>
   
 
   
@@ -46,7 +46,7 @@
           
 
           
-            <a href="../../index.html" class="icon icon-home"> fold-u
+            <a href="../../index.html" class="icon icon-home"> Fold U
           
 
           
@@ -56,7 +56,7 @@
             
             
               <div class="version">
-                1.0
+                1.2
               </div>
             
           
@@ -81,14 +81,13 @@
             
             
               <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../README.html">README</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../alignment.html">Alignment module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../query.html">Query module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../template.html">Template module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../residue.html">Residue module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../atom.html">Atom module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../parsing.html">Parsing module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../time.html">Time module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../alignment.html">Alignment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../template.html">Template</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../query.html">Query</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../residue.html">Residue</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../atom.html">Atom</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../score.html">Score</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../parsing.html">Parsing</a></li>
 </ul>
 
             
@@ -103,7 +102,7 @@
       <nav class="wy-nav-top" aria-label="top navigation">
         
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../../index.html">fold-u</a>
+          <a href="../../index.html">Fold U</a>
         
       </nav>
 
@@ -171,8 +170,8 @@
 <span class="sd">      This class groups informations about a residue.</span>
 
 <span class="sd">    Attributes:</span>
-<span class="sd">        name: Name of the residue (1 letter code)</span>
-<span class="sd">        ca_coords: 3D coordinates of the residue</span>
+<span class="sd">        name (str): Name of the residue (1 letter code)</span>
+<span class="sd">        ca_coords (Numpy array): 3D coordinates of the residue</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
@@ -180,21 +179,24 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">ca_atom</span> <span class="o">=</span> <span class="n">Atom</span><span class="p">(</span><span class="s2">&quot;CA&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">c_atom</span> <span class="o">=</span> <span class="n">Atom</span><span class="p">(</span><span class="s2">&quot;C&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">n_atom</span> <span class="o">=</span> <span class="n">Atom</span><span class="p">(</span><span class="s2">&quot;N&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">ss</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">secondary_struct</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ss_confidence</span> <span class="o">=</span> <span class="kc">None</span>
 
 <div class="viewcode-block" id="Residue.calculate_distance"><a class="viewcode-back" href="../../residue.html#src.residue.Residue.calculate_distance">[docs]</a>    <span class="k">def</span> <span class="nf">calculate_distance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">residue</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">            Calculate Euclidian distance between two residues with THE most efficient method.</span>
-<span class="sd">            Formula: distance = sqrt((xa-xb)**2 + (ya-yb)**2 + (za-zb)**2)</span>
+
+<span class="sd">            :math: `distance = \\sqrt{(x_a-x_b)^2+(y_a-y_b)^2+(z_a-z_b)^2}`</span>
 
 <span class="sd">            Args:</span>
 <span class="sd">                residue (object): An object of the Residue class.</span>
 
 <span class="sd">            Returns:</span>
-<span class="sd">                dist (float): The calculated distance.</span>
+<span class="sd">                float: The calculated distance.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">a_min_b</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ca_atom</span><span class="o">.</span><span class="n">coords</span> <span class="o">-</span> <span class="n">residue</span><span class="o">.</span><span class="n">ca_atom</span><span class="o">.</span><span class="n">coords</span>
+        <span class="c1"># The Numpy&#39;s &quot;einsum&quot; function is the most efficient way to calculate a distance</span>
+        <span class="c1">#  accordingly to this benchmarking: https://stackoverflow.com/a/47775357/6401758</span>
         <span class="n">dist</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span><span class="s1">&#39;i,i-&gt;&#39;</span><span class="p">,</span> <span class="n">a_min_b</span><span class="p">,</span> <span class="n">a_min_b</span><span class="p">))</span>
         <span class="k">return</span> <span class="n">dist</span></div></div>
 </pre></div>

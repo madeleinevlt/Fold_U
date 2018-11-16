@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>src.template &mdash; fold-u 1.0 documentation</title>
+  <title>src.template &mdash; Fold U 1.2 documentation</title>
   
 
   
@@ -46,7 +46,7 @@
           
 
           
-            <a href="../../index.html" class="icon icon-home"> fold-u
+            <a href="../../index.html" class="icon icon-home"> Fold U
           
 
           
@@ -56,7 +56,7 @@
             
             
               <div class="version">
-                1.0
+                1.2
               </div>
             
           
@@ -81,14 +81,13 @@
             
             
               <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../README.html">README</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../alignment.html">Alignment module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../query.html">Query module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../template.html">Template module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../residue.html">Residue module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../atom.html">Atom module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../parsing.html">Parsing module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../time.html">Time module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../alignment.html">Alignment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../template.html">Template</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../query.html">Query</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../residue.html">Residue</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../atom.html">Atom</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../score.html">Score</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../parsing.html">Parsing</a></li>
 </ul>
 
             
@@ -103,7 +102,7 @@
       <nav class="wy-nav-top" aria-label="top navigation">
         
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../../index.html">fold-u</a>
+          <a href="../../index.html">Fold U</a>
         
       </nav>
 
@@ -168,39 +167,44 @@
 <span class="sd">      This class groups informations about a template sequence/structure.</span>
 
 <span class="sd">    Attributes:</span>
-<span class="sd">        name: Name of the template</span>
-<span class="sd">        residues: Template&#39;s sequence of residues as list of Residues objects</span>
-<span class="sd">        pdb: PDB filename of the template</span>
+<span class="sd">        name (str): Name of the template</span>
+<span class="sd">        residues (list of Residue object): Template&#39;s sequence of residues as list of Residues</span>
+<span class="sd">                                           objects</span>
+<span class="sd">        benchmark (int): Fold family type of the template: 3: Family, 2: Superfamily,</span>
+<span class="sd">                         1: Fold and 0: None</span>
+<span class="sd">                         It tells how similar the template is from the query structure.</span>
+<span class="sd">                         This is necessary to be able to benchmark the new scoring functions.</span>
+<span class="sd">        pdb (str): PDB filename of the template</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">residues</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">residues</span> <span class="o">=</span> <span class="n">residues</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">benchmark</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">pdb</span> <span class="o">=</span> <span class="kc">None</span>
+
+<div class="viewcode-block" id="Template.set_benchmark"><a class="viewcode-back" href="../../template.html#src.template.Template.set_benchmark">[docs]</a>    <span class="k">def</span> <span class="nf">set_benchmark</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fold_type</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Sets the benchmark attribute of the template.</span>
+
+<span class="sd">            Args:</span>
+<span class="sd">                fold_type (int): 3: Family, 2: Superfamily, 1: Fold and 0: None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">benchmark</span> <span class="o">=</span> <span class="n">fold_type</span></div>
+
 
 <div class="viewcode-block" id="Template.set_pdb_name"><a class="viewcode-back" href="../../template.html#src.template.Template.set_pdb_name">[docs]</a>    <span class="k">def</span> <span class="nf">set_pdb_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">metafold_dict</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">            Get the PDB file name of the current template from the template&#39;s name.</span>
+<span class="sd">            Set the pdb file name of the template from the template&#39;s name.</span>
 
 <span class="sd">            Args:</span>
-<span class="sd">                self: The current alignment&#39;s template.</span>
-<span class="sd">                dictionary: A dictionary with key = template name and value = pdb file</span>
-
-<span class="sd">            Returns:</span>
-<span class="sd">                void</span>
+<span class="sd">                metafold_dict: A dictionary with key = template name and value = pdb file</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">pdb</span> <span class="o">=</span> <span class="n">metafold_dict</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">]</span></div>
 
 <div class="viewcode-block" id="Template.parse_pdb"><a class="viewcode-back" href="../../template.html#src.template.Template.parse_pdb">[docs]</a>    <span class="k">def</span> <span class="nf">parse_pdb</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">            Parse the pdb file and set the CA coordinates.</span>
-
-<span class="sd">            Args:</span>
-<span class="sd">                void</span>
-
-<span class="sd">            Returns:</span>
-<span class="sd">                void</span>
-
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">count_res</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="n">nb_atoms</span> <span class="o">=</span> <span class="mi">0</span>
@@ -217,13 +221,16 @@
                         <span class="k">while</span> <span class="bp">self</span><span class="o">.</span><span class="n">residues</span><span class="p">[</span><span class="n">count_res</span><span class="p">]</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;-&quot;</span><span class="p">:</span>
                             <span class="n">count_res</span> <span class="o">+=</span> <span class="mi">1</span>
                         <span class="k">if</span> <span class="n">line_type</span> <span class="o">==</span> <span class="s2">&quot;ATOM&quot;</span> <span class="ow">and</span> <span class="n">name_at</span> <span class="o">==</span> <span class="s2">&quot;N&quot;</span><span class="p">:</span>
-                            <span class="bp">self</span><span class="o">.</span><span class="n">residues</span><span class="p">[</span><span class="n">count_res</span><span class="p">]</span><span class="o">.</span><span class="n">ca_atom</span><span class="o">.</span><span class="n">set_coords</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">x_coord</span><span class="p">,</span> <span class="n">y_coord</span><span class="p">,</span> <span class="n">z_coord</span><span class="p">]))</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">residues</span><span class="p">[</span><span class="n">count_res</span><span class="p">]</span><span class="o">.</span><span class="n">ca_atom</span>\
+                            <span class="o">.</span><span class="n">set_coords</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">x_coord</span><span class="p">,</span> <span class="n">y_coord</span><span class="p">,</span> <span class="n">z_coord</span><span class="p">]))</span>
                             <span class="n">nb_atoms</span> <span class="o">+=</span> <span class="mi">1</span>
                         <span class="k">elif</span> <span class="n">line_type</span> <span class="o">==</span> <span class="s2">&quot;ATOM&quot;</span> <span class="ow">and</span> <span class="n">name_at</span> <span class="o">==</span> <span class="s2">&quot;CA&quot;</span><span class="p">:</span>
-                            <span class="bp">self</span><span class="o">.</span><span class="n">residues</span><span class="p">[</span><span class="n">count_res</span><span class="p">]</span><span class="o">.</span><span class="n">c_atom</span><span class="o">.</span><span class="n">set_coords</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">x_coord</span><span class="p">,</span> <span class="n">y_coord</span><span class="p">,</span> <span class="n">z_coord</span><span class="p">]))</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">residues</span><span class="p">[</span><span class="n">count_res</span><span class="p">]</span><span class="o">.</span><span class="n">c_atom</span>\
+                            <span class="o">.</span><span class="n">set_coords</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">x_coord</span><span class="p">,</span> <span class="n">y_coord</span><span class="p">,</span> <span class="n">z_coord</span><span class="p">]))</span>
                             <span class="n">nb_atoms</span> <span class="o">+=</span> <span class="mi">1</span>
                         <span class="k">elif</span> <span class="n">line_type</span> <span class="o">==</span> <span class="s2">&quot;ATOM&quot;</span> <span class="ow">and</span> <span class="n">name_at</span> <span class="o">==</span> <span class="s2">&quot;C&quot;</span><span class="p">:</span>
-                            <span class="bp">self</span><span class="o">.</span><span class="n">residues</span><span class="p">[</span><span class="n">count_res</span><span class="p">]</span><span class="o">.</span><span class="n">n_atom</span><span class="o">.</span><span class="n">set_coords</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">x_coord</span><span class="p">,</span> <span class="n">y_coord</span><span class="p">,</span> <span class="n">z_coord</span><span class="p">]))</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">residues</span><span class="p">[</span><span class="n">count_res</span><span class="p">]</span><span class="o">.</span><span class="n">n_atom</span>\
+                            <span class="o">.</span><span class="n">set_coords</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">x_coord</span><span class="p">,</span> <span class="n">y_coord</span><span class="p">,</span> <span class="n">z_coord</span><span class="p">]))</span>
                             <span class="n">nb_atoms</span> <span class="o">+=</span> <span class="mi">1</span>
                         <span class="k">if</span> <span class="n">nb_atoms</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
                             <span class="n">count_res</span> <span class="o">+=</span> <span class="mi">1</span>

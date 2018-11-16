@@ -11,7 +11,8 @@ class Query:
       This class groups informations about a query sequence.
 
     Attributes:
-        residues: Template's sequence of residues as list of Residues objects
+        residues (list of Residue objects): Template's sequence of residues as list of Residues
+                                            objects
         first (int): First residue of the query sequence.
         last (int): Last residue of the query sequence.
     """
@@ -20,3 +21,13 @@ class Query:
         self.residues = residues
         self.first = first
         self.last = last
+
+    def get_size(self):
+        """
+            Get the size of the query sequence.
+
+            Returns:
+                int: The size of the query sequence.
+
+        """
+        return len(self.residues)

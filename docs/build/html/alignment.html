@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Alignment module &mdash; fold-u 1.0 documentation</title>
+  <title>Alignment &mdash; Fold U 1.2 documentation</title>
   
 
   
@@ -28,8 +28,8 @@
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Query module" href="query.html" />
-    <link rel="prev" title="README" href="README.html" /> 
+    <link rel="next" title="Template" href="template.html" />
+    <link rel="prev" title="Fold U: A Protein Structure Prediction Program" href="index.html" /> 
 
   
   <script src="_static/js/modernizr.min.js"></script>
@@ -48,7 +48,7 @@
           
 
           
-            <a href="index.html" class="icon icon-home"> fold-u
+            <a href="index.html" class="icon icon-home"> Fold U
           
 
           
@@ -58,7 +58,7 @@
             
             
               <div class="version">
-                1.0
+                1.2
               </div>
             
           
@@ -83,14 +83,13 @@
             
             
               <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="README.html">README</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Alignment module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="query.html">Query module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="template.html">Template module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="residue.html">Residue module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="atom.html">Atom module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="parsing.html">Parsing module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="time.html">Time module</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Alignment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="template.html">Template</a></li>
+<li class="toctree-l1"><a class="reference internal" href="query.html">Query</a></li>
+<li class="toctree-l1"><a class="reference internal" href="residue.html">Residue</a></li>
+<li class="toctree-l1"><a class="reference internal" href="atom.html">Atom</a></li>
+<li class="toctree-l1"><a class="reference internal" href="score.html">Score</a></li>
+<li class="toctree-l1"><a class="reference internal" href="parsing.html">Parsing</a></li>
 </ul>
 
             
@@ -105,7 +104,7 @@
       <nav class="wy-nav-top" aria-label="top navigation">
         
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="index.html">fold-u</a>
+          <a href="index.html">Fold U</a>
         
       </nav>
 
@@ -136,7 +135,7 @@
     
       <li><a href="index.html">Docs</a> &raquo;</li>
         
-      <li>Alignment module</li>
+      <li>Alignment</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -156,7 +155,7 @@
            <div itemprop="articleBody">
             
   <div class="section" id="module-src.alignment">
-<span id="alignment-module"></span><h1>Alignment module<a class="headerlink" href="#module-src.alignment" title="Permalink to this headline">¶</a></h1>
+<span id="alignment"></span><h1>Alignment<a class="headerlink" href="#module-src.alignment" title="Permalink to this headline">¶</a></h1>
 <span class="target" id="module-Alignment"></span><dl class="class">
 <dt id="src.alignment.Alignment">
 <em class="property">class </em><code class="descclassname">src.alignment.</code><code class="descname">Alignment</code><span class="sig-paren">(</span><em>num</em>, <em>score</em>, <em>query</em>, <em>template</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/alignment.html#Alignment"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.alignment.Alignment" title="Permalink to this definition">¶</a></dt>
@@ -184,6 +183,14 @@
 <dt id="src.alignment.Alignment.score">
 <code class="descname">score</code><a class="headerlink" href="#src.alignment.Alignment.score" title="Permalink to this definition">¶</a></dt>
 <dd><p>Score of the alignment</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">float</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="attribute">
@@ -191,6 +198,14 @@
 <code class="descname">query</code><a class="headerlink" href="#src.alignment.Alignment.query" title="Permalink to this definition">¶</a></dt>
 <dd><p>Instance of a Query object as
 <code class="docutils literal notranslate"><span class="pre">Query(query_residues,</span> <span class="pre">query_first,</span> <span class="pre">query_last)</span></code></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">Query object</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="attribute">
@@ -198,15 +213,43 @@
 <code class="descname">template</code><a class="headerlink" href="#src.alignment.Alignment.template" title="Permalink to this definition">¶</a></dt>
 <dd><p>Instance of a Template object as
 <code class="docutils literal notranslate"><span class="pre">Template(template_name,</span> <span class="pre">template_residues)</span></code></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">Template object</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
-<dt id="src.alignment.Alignment.calculate_energy">
-<code class="descname">calculate_energy</code><span class="sig-paren">(</span><em>dist_range</em>, <em>gap_penalty</em>, <em>dope_dict</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/alignment.html#Alignment.calculate_energy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.alignment.Alignment.calculate_energy" title="Permalink to this definition">¶</a></dt>
-<dd><p>Calculate the matrix of distances of pair residues of the query sequence,
-using the coordinates of the template sequence: threading of the query
-on the template sequence. The distance calculation is optimized.
-The calculated distance is then convert into a dope energy value.</p>
+<dt id="src.alignment.Alignment.calculate_blosum_score">
+<code class="descname">calculate_blosum_score</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/alignment.html#Alignment.calculate_blosum_score"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.alignment.Alignment.calculate_blosum_score" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate a blosum score using the blosum62 matrix. This matrix contains
+substitution scores for each amino acid pair. A positive score is given to the more
+likely substitutions while a negative score is given to the less likely substitutions.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The blosum score calculated.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">int</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="src.alignment.Alignment.calculate_threading_score">
+<code class="descname">calculate_threading_score</code><span class="sig-paren">(</span><em>dist_range</em>, <em>gap_penalty</em>, <em>dope_dict</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/alignment.html#Alignment.calculate_threading_score"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.alignment.Alignment.calculate_threading_score" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the threading score of the query on the template sequence.
+1) For each pair residues of the query sequence the distance between them is
+calculated using the coordinates of the template sequence.The distance calculation
+is optimized.
+2) The calculated distance is then convert into a dope energy value.
+3) All elements of the energy matrix generated are finally sum.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -220,15 +263,10 @@ value = an array of 30 dope energy values.</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><dl class="docutils">
-<dt>2D matrix containing energy between pairs of residues</dt>
-<dd><p class="first last">of the query sequence threaded on the template.</p>
-</dd>
-</dl>
-</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The threading score calculated. Sum of the energy matrix.</p>
 </td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">numpy 2D array</p>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">float</p>
 </td>
 </tr>
 </tbody>
@@ -245,12 +283,27 @@ value = an array of 30 dope energy values.</li>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>pdb_path</strong> (<em>str</em>) – Path of the pdb file to create.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">void</td>
-</tr>
 </tbody>
 </table>
 </dd></dl>
 
+</dd></dl>
+
+<dl class="function">
+<dt id="src.alignment.process">
+<code class="descclassname">src.alignment.</code><code class="descname">process</code><span class="sig-paren">(</span><em>dist_range</em>, <em>gap_penality</em>, <em>dope_dict</em>, <em>ali</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/alignment.html#process"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.alignment.process" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates the threading and the blosum scores for a given Alignment object.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">(Sum of the different scores, Number of the Alignment,
+Template’s name, Template’s benchmark)</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">tuple</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </div>
@@ -263,10 +316,10 @@ value = an array of 30 dope energy values.</li>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="query.html" class="btn btn-neutral float-right" title="Query module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="template.html" class="btn btn-neutral float-right" title="Template" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="README.html" class="btn btn-neutral" title="README" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="index.html" class="btn btn-neutral" title="Fold U: A Protein Structure Prediction Program" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
