@@ -3,12 +3,14 @@
 
 """
     Usage:
-        ./fold_u FOLDREC_FILE [--nb_templates NUM] [--nb_pdb NUM] [--output PATH]
-                              [--metafold FILE] [--dope FILE] [--benchmark FILE] [--cpu NUM]
+        ./fold_u FOLDREC_FILE ALN_FILE [--nb_templates NUM] [--nb_pdb NUM] [--output PATH]
+                              [--metafold FILE] [--dope FILE] [--benchmark FILE]
+                              [--aln_file FILE] [--cpu NUM]
 
     Arguments:
         FOLDREC_FILE                          N profile * profile alignment and
                                               their corresponding score
+        ALN_FILE                              Path to the alignment file
 
     Options:
         -h, --help                            Show this
@@ -52,6 +54,7 @@ def check_args():
     """
     schema = Schema({
         'FOLDREC_FILE': Use(open, error='FOLDREC_FILE should be readable'),
+        'ALN_FILE': Use(open, error='ALN_FILE should be readable'),
         '--metafold': Use(open, error='METAFOLD_FILE should be readable'),
         '--nb_templates': And(Use(int), lambda n: 1 <= n <= 413,\
                                 error='--nb_templates=NUM should be integer 1 <= N <= 413'),
@@ -81,6 +84,8 @@ if __name__ == "__main__":
     check_args()
 
     FOLDREC_FILE = ARGUMENTS["FOLDREC_FILE"]
+    # Get the alignment file
+    ALN_FILE = ARGUMENTS["ALN_FILE"]
     # Process the first n templates only
     NB_TEMPLATES = int(ARGUMENTS["--nb_templates"])
     # Create the first n pdb templates
@@ -96,7 +101,6 @@ if __name__ == "__main__":
     # Number of cpus for parallelisation
     NB_PROC = int(ARGUMENTS["--cpu"])
 
-
     ### Parse data files
     ####################
 
@@ -109,13 +113,12 @@ if __name__ == "__main__":
     # Parse DOPE file
     DOPE_DICT = parsing.parse_dope(DOPE_FILE)
 
-
     ### Main calculations
     #####################
 
     # Parallelization of the main loop
     with Pool(processes=NB_PROC) as pool:
-        FUNC = partial(process, DIST_RANGE, GAP_PENALTY, DOPE_DICT)
+        FUNC = partial(process, DIST_RANGE, GAP_PENALTY, DOPE_DICT, ALN_FILE)
         # tqdm module enables an ETA progress bar for each alignment processed
         # imap_unordered can smooth things out by yielding faster-calculated values
         # ahead of slower-calculated values.

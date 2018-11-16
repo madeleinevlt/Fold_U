@@ -51,6 +51,7 @@ def calculate_co_evolution_score(aln_file,distance_matrix):
                 index += 1
     #re-indexing
     for i, val in dic_top_score.items():
+        
         for pos_gap in range(len(i_gap)-1):
             if val[0] > i_gap[pos_gap] and val[0] < i_gap[pos_gap+1]:
                 val[0] = val[0]+1
