@@ -6,7 +6,6 @@
 # Third-party modules
 import sys
 from bin.CCMpred.scripts.top_couplings import get_top_pairs
-
 import numpy as np
 from conkit.applications import CCMpredCommandline
 from Bio.SubsMat import MatrixInfo
@@ -246,9 +245,8 @@ class Alignment:
         """
         #Parsing aln file in order to get query + gaps
         with open(self.aln,'r') as file:
-            data = file.read()
-            query = data.split('\n', 1)[0]
-            #repport index of gaps
+            query = self.aln.readline().split('\n')[0]
+        #repport index of gaps
         i_gap =[i for i, e in enumerate(query) if e == "-"]
         #Predict contacts
         ccmpred_cline = CCMpredCommandline(
@@ -262,28 +260,23 @@ class Alignment:
         )
         #parsing top_coupling
         dic_top_score= {}
+        index = 1
         with open("top_output.mat", "r") as file:
-            index = 1
             file.readline()
             for line in file:
-                if float(line[0:2]) not in i_gap and float(line[3:5]) not in i_gap:
-                    dic_top_score[index] = [float(line[0:2]), float(line[3:5]),
-                    float(line[6:19])]
-                    index += 1
-        #re-indexing
-        for i, val in dic_top_score.items():
-            for pos_gap in range(len(i_gap)-1):
-                if val[0] > i_gap[pos_gap] and val[0] < i_gap[pos_gap+1]:
-                    val[0] = val[0]-1
-                if val[1] > i_gap[pos_gap] and val[1] < i_gap[pos_gap+1]:
-                    val[1] = val[1]-1
+                aa1 = int(line[0:2])
+                aa2 = int(line[3:5])
+                conf = float(line[6:19])
+                if aa1 not in i_gap and aa2 not in i_gap:
+                    dic_top_score[index] = [aa1-len([gap for gap in i_gap if gap < aa1]),
+                    aa2-len([gap for gap in i_gap if gap < aa1]), conf]
+                    index +=1
         #compare top 30/ distance_matrix
+        TP = 0
         for i, val in dic_top_score.items():
-            if distance_matrix[val[0],val[1]] < 8.5:
-                score_co_evo = score_co_evo +1
-            else:
-                score_co_evo = score_co_evo -1
-        return score_co_evo
-
-for i, val in dic_top_score.items():
-    val[0] = val[0] -len([gap for gap in i_gap if gap < val[0]])
+            pos_aa1 = val[0]
+            pos_aa2 = val[1]
+            if distance_matrix[pos_aa1,pos_aa2] < 8.5:
+                TP +=1
+        score_co_evolution = TP/len(dic_top_score)
+        return score_co_evolution
