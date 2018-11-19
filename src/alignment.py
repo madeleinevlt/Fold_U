@@ -7,13 +7,13 @@
 import sys
 from bin.CCMpred.scripts.top_couplings import get_top_pairs
 import numpy as np
-from conkit.applications import CCMpredCommandline
 from Bio.SubsMat import MatrixInfo
 from Bio.SeqUtils import seq3
 import subprocess
+import pandas as pd
 
 
-def process(dist_range, gap_penality, dope_dict, aln_file, ali):
+def process(dist_range, gap_penality, dope_dict, top_pos_dict, ali):
     """
         Generates the threading and the blosum scores for a given Alignment object.
 
@@ -22,12 +22,11 @@ def process(dist_range, gap_penality, dope_dict, aln_file, ali):
             Template's name, Template's benchmark)
 
     """
-    ali.set_aln_file(aln_file)
     # Calculate the threading score of all alignments
     threading_score = ali.calculate_threading_score(dist_range, gap_penality, dope_dict)
     blosum_score = ali.calculate_blosum_score()
     distance_matrix = ali.calculate_distance()
-    ccmpred_score = ali.calculate_co_evolution_score(distance_matrix)
+    ccmpred_score = ali.calculate_co_evolution_score(top_pos_dict, distance_matrix)
     return ali.num, ali.score, threading_score, blosum_score, ccmpred_score,\
            ali.template.name, ali.template.benchmark
 
@@ -53,9 +52,6 @@ class Alignment:
         self.query = query
         self.template = template
         self.aln = None
-
-    def set_aln_file(self, aln_file):
-        self.aln = aln_file
 
     def calculate_distance(self):
         """
@@ -230,7 +226,7 @@ class Alignment:
             file.write("END\n")
 
 
-    def calculate_co_evolution_score(self, distance_matrix):
+    def calculate_co_evolution_score(self, top_pos_dict, distance_matrix):
         """
             Calculates co-evolution score of the query based on the MSA alignment
             Co-evolution score measures co-occurence of a pair of amino acid in
@@ -243,40 +239,24 @@ class Alignment:
             Returns:
                 score_co_evolution
         """
-        #Parsing aln file in order to get query + gaps
-        with open(self.aln,'r') as file:
-            query = self.aln.readline().split('\n')[0]
-        #repport index of gaps
-        i_gap =[i for i, e in enumerate(query) if e == "-"]
-        #Predict contacts
-        ccmpred_cline = CCMpredCommandline(
-            cmd ='bin/CCMpred/bin/ccmpred', alnfile= self.aln, matfile= "contact.mat"
-        )
-        ccmpred_cline()
-        #Extract 30 top coupling
-        subprocess.call(
-            "./bin/CCMpred/scripts/top_couplings.py contact.mat > top_output.mat",
-            shell=True
-        )
-        #parsing top_coupling
-        dic_top_score= {}
-        index = 1
-        with open("top_output.mat", "r") as file:
-            file.readline()
-            for line in file:
-                aa1 = int(line[0:2])
-                aa2 = int(line[3:5])
-                conf = float(line[6:19])
-                if aa1 not in i_gap and aa2 not in i_gap:
-                    dic_top_score[index] = [aa1-len([gap for gap in i_gap if gap < aa1]),
-                    aa2-len([gap for gap in i_gap if gap < aa1]), conf]
-                    index +=1
-        #compare top 30/ distance_matrix
-        TP = 0
-        for i, val in dic_top_score.items():
-            pos_aa1 = val[0]
-            pos_aa2 = val[1]
-            if distance_matrix[pos_aa1,pos_aa2] < 8.5:
-                TP +=1
-        score_co_evolution = TP/len(dic_top_score)
-        return score_co_evolution
+        score_co_evolt = 0 #initialisation à 0
+
+        for top_position in top_pos_dict.values():
+            #checker dans la matrice de distance si les positions < 8 angströms
+            # print("position i j", top_position)
+            if distance_matrix[top_position[0], top_position[1]] != None:
+                if distance_matrix[top_position[0], top_position[1]] < 8:
+                    score_co_evolt += 1 #incrementation du score_co_evo
+            elif distance_matrix[top_position[1], top_position[0]] != None:
+                if distance_matrix[top_position[1], top_position[0]] < 8:
+                    score_co_evolt += 1 #incrementation du score_co_evo
+        print("co_evo_score", score_co_evolt)
+
+        #update
+        '''
+        ne peut pas marcher ~ generera un index out of bounds
+        du fait d'une taille de matrice de distance variable (selon la query des alignements locaux[gaps_inclus])
+        pour des indices des positions tops fixes (=taille de la query complete [sans gaps])
+        '''
+        return score_co_evolt
+
