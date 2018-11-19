@@ -250,7 +250,6 @@ class Alignment:
             elif distance_matrix[top_position[1], top_position[0]] != None:
                 if distance_matrix[top_position[1], top_position[0]] < 8:
                     score_co_evolt += 1 #incrementation du score_co_evo
-        print("co_evo_score", score_co_evolt)
 
         #update
         '''
@@ -259,4 +258,3 @@ class Alignment:
         pour des indices des positions tops fixes (=taille de la query complete [sans gaps])
         '''
         return score_co_evolt
-

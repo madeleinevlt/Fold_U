@@ -25,7 +25,7 @@ def parse_alignement(aln_file):
 
         Args:
             aln_file (str): multiple alignement file in .aln
-            
+
         Returns:
             dict: A dictionary with key = ranking of tops positions and value = tuple of index of positions ~ [i,j]
     """
@@ -37,18 +37,17 @@ def parse_alignement(aln_file):
 
     #Reindexing
     list_index_pos_nongaps = [i for i, e in enumerate(query) if e != "-"] #save "non_gap" positions index
-    print(list_index_pos_nongaps)
     #Calculs of co-ev score & generation of top_ouputs matrix
     ccmpred_cline = CCMpredCommandline(
-        cmd ='./bin/CCMpred/bin/ccmpred', alnfile= alnfile, matfile= "contact.mat" 
+        cmd ='./bin/CCMpred/bin/ccmpred', alnfile= aln_file, matfile= "contact.mat"
     )
-    # ccmpred_cline()
+    ccmpred_cline()
     #default_value for the tops ~ 30
     subprocess.call(
         "./bin/CCMpred/scripts/top_couplings.py contact.mat > top_output.mat", shell=True
     )
 
-    #further ameliorations 
+    #further ameliorations
     #directly recuperate values of top_output mat for the next operations in stdout
     #in order to avoid to reopen the file top_output
     #check subprocess.call options or subprocess.Popen
@@ -66,7 +65,6 @@ def parse_alignement(aln_file):
                 pos_j = list_index_pos_nongaps.index(int(value[1]))
                 top_position_dict[i] = (pos_i, pos_j)
     return top_position_dict
-
 
 
 def parse_metafold(metafold_file):
