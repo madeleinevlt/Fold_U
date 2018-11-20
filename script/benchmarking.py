@@ -19,6 +19,8 @@ def plot_benchmark(structure, scores, rank):
             scores (list):
             rank (list): 
     """
+    os.makedirs("results/img", exist_ok=True)
+
     ali_structure = benchmarking_scores[scores[0]][structure].values
     thr_structure = benchmarking_scores[scores[1]][structure].values
     sum_structure = benchmarking_scores[scores[2]][structure].values
@@ -32,7 +34,7 @@ def plot_benchmark(structure, scores, rank):
     plt.ylabel("benchmark")
     plt.xlabel("rank")
     plt.legend(loc="lower right")
-    plt.savefig("img/" + structure + "_global_plot.png")
+    plt.savefig("results/img/" + structure + "_global_plot.png")
     plt.show()
 
 
