@@ -27,6 +27,7 @@ def plot_benchmark(structure, scores, rank):
     plt.plot(rank, ali_structure, "b", label=scores[0])
     plt.plot(rank, thr_structure, "#ffa201", label=scores[1])
     plt.plot(rank, sum_structure, "r", label=scores[2])
+    plt.plot([0,len(ali_structure)],[0,max(ali_structure)], "k", label="random")
     plt.title("Global scores comparison using " + structure + " benchmarks")
     plt.ylabel("benchmark")
     plt.xlabel("rank")
