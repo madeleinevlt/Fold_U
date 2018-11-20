@@ -119,6 +119,7 @@ def parse_foldrec(foldrec_file, nb_templates, metafold_dict):
     score_reg = re.compile("^Score :\\s+([-0-9\\.]+)")
     query_seq_reg = re.compile("^Query\\s*([0-9]+)\\s*([A-Z0-9-]+)\\s*([0-9]+)")
     template_seq_reg = re.compile("^Template\\s*[0-9]+\\s*([A-Z-]+)")
+    empty_query_reg = re.compile("^Query\\s+\\d\\s-+\\s+\\d.*$")
 
     alignment_dict = {}
     count_templates = 0
@@ -136,6 +137,7 @@ def parse_foldrec(foldrec_file, nb_templates, metafold_dict):
             score_found = re.search(score_reg, line)
             query_seq_found = re.search(query_seq_reg, line)
             template_seq_found = re.search(template_seq_reg, line)
+            empty_query_found = re.search(empty_query_reg, line)
             # A num is found :
             if num_found:
                 num = int(num_found.group(1))
@@ -145,6 +147,11 @@ def parse_foldrec(foldrec_file, nb_templates, metafold_dict):
             # A score is found :
             if score_found:
                 score = float(score_found.group(1))
+            # Empty alignement (the query = gaps only)
+            if empty_query_found and query_reg_count == 2:
+                print("Skipping alignement "+str(num)+" in which the query is only composed of gaps")
+                for i in range(5):
+                    next(file)
             # A query sequence is found :
             if query_seq_found:
                 if query_reg_count == 0:
