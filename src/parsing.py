@@ -18,53 +18,52 @@ from src.query import Query
 from src.template import Template
 
 
-def parse_alignement(aln_file):
+def predict_30_top_contacts_ccmpred(aln_file):
     """
-       Extract and calculate the tops positions of residues based on
-       co-evolution score
+       Extract N tops couplings based on co-evolution score. Co-evolution score
+       is calculated between two non-consecutive amino acids by ccmpred based on
+       MSA alignment.Co-evolution score measures co-occurence of a pair of amino
+       acid in ortholog sequences. Two amino acid have co-evoluated if the
+       occurence of one of this amino never occur whithout the other.
 
         Args:
-            aln_file (str): multiple alignement file in .aln
+            aln_file (str): multiple alignement (clustal) file in .aln
+            N (float): number of top coupling expected (TO DO)
 
         Returns:
-            dict: A dictionary with key = ranking of tops positions and value = tuple of index of positions ~ [i,j]
+            dict: A dictionary with key = ranking of coupling based on ss_confidence
+            and value = index aa1, index aa2, confidence
     """
-    top_position_dict = {}
+    top_couplings_dict = {}
 
-    #Parsing aln file & Reindexing
+    #Parsing aln file+gaps
     with open(aln_file, "r") as alnfile:
         query = alnfile.readline().split('\n')[0]
 
-    #Reindexing
+    #Get indexes of query
     list_index_pos_nongaps = [i for i, e in enumerate(query) if e != "-"] #save "non_gap" positions index
-    #Calculs of co-ev score & generation of top_ouputs matrix
+    #Predict contacts
     ccmpred_cline = CCMpredCommandline(
         cmd ='./bin/CCMpred/bin/ccmpred', alnfile= aln_file, matfile= "contact.mat"
     )
     ccmpred_cline()
-    #default_value for the tops ~ 30
+    # extract 30 top coupling
     subprocess.call(
-        "./bin/CCMpred/scripts/top_couplings.py contact.mat > top_output.mat", shell=True
+        "./bin/CCMpred/scripts/top_couplings.py contact.mat > 30_top_coupling.mat", shell=True
     )
-
-    #further ameliorations
-    #directly recuperate values of top_output mat for the next operations in stdout
-    #in order to avoid to reopen the file top_output
-    #check subprocess.call options or subprocess.Popen
-
-    #open top_output.mat
-    with open("top_output.mat", "r") as tp_file:
+    #parse top coupling
+    with open("30_top_coupling.mat", "r") as tp_file:
         liste_data = tp_file.read().split('\n')
-    #delete header and file_end character ""
+        #delete header and file_end character ""
         liste_data = liste_data[1:len(liste_data)-1]
-        #verif si les positions tops ne correspondent pas des gaps_positions
         for i, value in enumerate(liste_data):
             value = value.split("\t")
+            #do not parse gaps associated with top couplings
             if int(value[0]) in list_index_pos_nongaps and int(value[1]) in list_index_pos_nongaps:
-                pos_i = list_index_pos_nongaps.index(int(value[0]))
-                pos_j = list_index_pos_nongaps.index(int(value[1]))
-                top_position_dict[i] = (pos_i, pos_j)
-    return top_position_dict
+                index_i = list_index_pos_nongaps.index(int(value[0]))
+                index_j = list_index_pos_nongaps.index(int(value[1]))
+                top_couplings_dict[i] = (index_i, index_j)
+    return top_couplings_dict
 
 
 def parse_metafold(metafold_file):

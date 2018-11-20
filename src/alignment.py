@@ -226,35 +226,26 @@ class Alignment:
             file.write("END\n")
 
 
-    def calculate_co_evolution_score(self, top_pos_dict, distance_matrix):
+    def calculate_contact_score(self, top_couplings_dict, distance_matrix):
         """
-            Calculates co-evolution score of the query based on the MSA alignment
-            Co-evolution score measures co-occurence of a pair of amino acid in
-            ortholog sequences. Two amino acid have co-evoluated if the occurence
-            of one of this amino never occur whithout the other.
+            Compare top 30 contacts in the query with corresponding calculated
+            distances
 
             Args:
-                aln_file:clustal file in .aln
+                top_couplings_dict: top ranking couplings indexes in the query
                 distance_matrix: distance matrix of the query against itself
             Returns:
-                score_co_evolution
+                contact_score
         """
-        score_co_evolt = 0 #initialisation à 0
+        TP = 0
 
-        for top_position in top_pos_dict.values():
-            #checker dans la matrice de distance si les positions < 8 angströms
-            # print("position i j", top_position)
+        for top_position in top_couplings_dict.values():
+            #as matrix is triange, get matrix [i,j]
             if distance_matrix[top_position[0], top_position[1]] != None:
                 if distance_matrix[top_position[0], top_position[1]] < 8:
-                    score_co_evolt += 1 #incrementation du score_co_evo
+                    TP += 1
             elif distance_matrix[top_position[1], top_position[0]] != None:
                 if distance_matrix[top_position[1], top_position[0]] < 8:
-                    score_co_evolt += 1 #incrementation du score_co_evo
-
-        #update
-        '''
-        ne peut pas marcher ~ generera un index out of bounds
-        du fait d'une taille de matrice de distance variable (selon la query des alignements locaux[gaps_inclus])
-        pour des indices des positions tops fixes (=taille de la query complete [sans gaps])
-        '''
-        return score_co_evolt
+                    TP += 1
+            contact_score = TP/len(dic_top_score)
+        return contact_score

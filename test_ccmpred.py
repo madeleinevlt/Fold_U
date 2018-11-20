@@ -1,15 +1,24 @@
-score_co_evolt = 0
+from conkit.applications import CCMpredCommandline
+import subprocess
+import random
+import numpy as np
+
+distance = np.empty((71,71), dtype=object)
+
+for i in range(len(distance)):
+    for j in range(len(distance)):
+        distance[i,j]=np.random.uniform(3, 15)
+
 #Parsing aln file et Reindexing
-with open(self.aln, "r") as aln_file:
+with open("1atzA.aln", "r") as aln_file:
     query = aln_file.readline().split('\n')[0]
 
-    #Reindexing
-    list_index_pos_nongaps = []
-    list_index_pos_nongaps.append([i for i, e in enumerate(query) if e != "-"]) #ajoute les position "ali" des res
+    #repport index of gaps
+    i_gap =[i for i, e in enumerate(query) if e == "-"]
 
     #Calculs des score de co-ev puis generation de la matrice top_ouputs
     ccmpred_cline = CCMpredCommandline(
-        cmd ='./bin/CCMpred/bin/ccmpred', alnfile= self.aln, matfile= "contact.mat"
+        cmd ='./bin/CCMpred/bin/ccmpred', alnfile= "1atzA.aln", matfile= "contact.mat"
     )
     ccmpred_cline()
     #default_value for the tops ~ 30
@@ -17,18 +26,35 @@ with open(self.aln, "r") as aln_file:
         "./bin/CCMpred/scripts/top_couplings.py contact.mat > top_output.mat",
         shell=True
     )
-#Lecture top_outputs et some verifs
-with open("top_output.mat", "r") as top_output_file:
-    lines = top_output_file.read()
-    for line in lines.split('\n'):
-        #verif si les tops ne correspondent pas des gaps_positions
-        if line[0:2] in list_index_pos_nongaps and line[3:5] in list_index_pos_nongaps:
-            #checker dans la matrice de distance si les positions < 8angströms
-                pos_i = list_index_pos_nongaps.index(line[0:2])
-                pos_j = list_index_pos_nongaps.index(line[3:5])
-                #incrementer score_co_evolution si verifié
-                if distance_matrix[pos_i][pos_j] < 8:
-                    score_co_evolt +=1
-        ligne = top_output_file.readline()
+#parsing top_coupling
+index = 1
+dic_top_score= {}
+with open("top_output.mat", "r") as file:
+    file.readline()
+    for line in file:
+        aa1 = float(line[0:2])
+        aa2 = float(line[3:5])
+        conf = float(line[6:19])
+        if aa1 not in i_gap and aa2 not in i_gap:
+            dic_top_score[index] = [aa1-len([gap for gap in i_gap if gap < aa1]),aa2-len([gap for gap in i_gap if gap < aa1]), conf]
+            index +=1
+
+TP = 0
+for i, val in dic_top_score.items():
+    pos_aa1 = int(val[0])
+    pos_aa2 = int(val[1])
+        if distance[pos_aa1,pos_aa2] < 8.5:
+            TP +=1
+score_co_evolution = TP/len(dic_top_score)
+
 print(score_co_evolt)
-return score_co_evolt
+
+
+
+
+
+distance = np.empty((query_size, query_size), dtype=object)
+
+
+    
+
