@@ -13,7 +13,7 @@ import subprocess
 import pandas as pd
 
 
-def process(dist_range, gap_penality, dope_dict, top_pos_dict, ali):
+def process(dist_range, gap_penality, dope_dict, top_couplings_dict, ali):
     """
         Generates the threading and the blosum scores for a given Alignment object.
 
@@ -26,7 +26,7 @@ def process(dist_range, gap_penality, dope_dict, top_pos_dict, ali):
     threading_score = ali.calculate_threading_score(dist_range, gap_penality, dope_dict)
     blosum_score = ali.calculate_blosum_score()
     distance_matrix = ali.calculate_distance()
-    ccmpred_score = ali.calculate_co_evolution_score(top_pos_dict, distance_matrix)
+    ccmpred_score = ali.calculate_contact_score(top_couplings_dict, distance_matrix)
     return ali.num, ali.score, threading_score, blosum_score, ccmpred_score,\
            ali.template.name, ali.template.benchmark
 
@@ -247,5 +247,5 @@ class Alignment:
             elif distance_matrix[top_position[1], top_position[0]] != None:
                 if distance_matrix[top_position[1], top_position[0]] < 8:
                     TP += 1
-            contact_score = TP/len(dic_top_score)
+            contact_score = TP/len(top_couplings_dict)
         return contact_score
