@@ -87,7 +87,7 @@ class Template:
                     res_id = int(line[22:26].strip())
                     # Check for missing residues using residues ids (continuous or not)
                     if flag == False:
-                        if res_id == ref_id: # atom of same residue
+                        if res_id == ref_id:  # atom of same residue
                             pass
                         elif res_id != ref_id + 1:
                             self.missing_residues = True
@@ -124,69 +124,72 @@ class Template:
                             count_res += 1
                             nb_atoms = 0
 
-    def reindex_pdb_by_index(self, start_index, pdb_txt):
-        """
-            Original code: https://zhanglab.ccmb.med.umich.edu/reindex_pdb/reindex_pdb.py
-            Reindex residue number of PDB format text
+    def reindex_pdb_by_index(self, start_index=1, pdb_txt=''):
+        '''
+        reindex residue number of PDB format text
 
-            Args:
-                pdb_txt (str): PDB to be reindexed
-        """
-        re_indexed_pdb = ''
+        options:
+            start_index - index of first residue
+            pdb_txt     - text of input PDB to be reindexed
+        '''
+        pdb_txt_reindex = ''
         current_old_index = ''  # residue number in origin PDB
-        warn_chainID = ''  # warning about new chain ID
+        warn_chain_id = ''  # warning about new chain ID
 
         for line in pdb_txt.splitlines():
             if len(line) < 27 or (not line.startswith("ATOM  ")
-                                  and not line.startswith("HETATM")
-                                  and not line.startswith("TER")):
-                re_indexed_pdb += line+'\n'
+                                  and not line.startswith("HETATM") and not line.startswith("TER")):
+                pdb_txt_reindex += line+'\n'
                 continue
             elif not line[16] in ['A', ' ']:  # alternative location identifier
                 continue
-            resSeq = line[22:27]  # residue sequence number
-            current_chainID = line[21]  # chain identifier
+            res_seq = line[22:27]  # residue sequence number
+            current_chain_id = line[21]  # chain identifier
 
             if not current_old_index:  # first residue encountered
-                current_old_index = resSeq  # residue number in origin PDB
+                current_old_index = res_seq  # residue number in origin PDB
                 current_new_index = int(start_index)
-                chainID = current_chainID
-                resSeq_new = str(current_new_index)
-                resSeq_new = ' '*(4-len(resSeq_new))+resSeq_new+' '
-            elif current_chainID != chainID:
-                if warn_chainID != current_chainID:
+                chain_id = current_chain_id
+                res_seq_new = str(current_new_index)
+                res_seq_new = ' '*(4-len(res_seq_new))+res_seq_new+' '
+            elif current_chain_id != chain_id:
+                if warn_chain_id != current_chain_id:
                     sys.stderr.write(
-                        "Warning! Discarding chain '%s'\n" % current_chainID)
-                    warn_chainID = current_chainID
+                        "Warning! Discarding chain '%s'\n" % current_chain_id)
+                    warn_chain_id = current_chain_id
                 continue
-            elif resSeq != current_old_index:
+            elif res_seq != current_old_index:
                 current_new_index += 1
-                current_old_index = resSeq
-                resSeq_new = str(current_new_index)
-                resSeq_new = ' '*(4-len(resSeq_new))+resSeq_new+' '
-            re_indexed_pdb += line[:16]+' '+line[17:22]+resSeq_new+line[27:]+'\n'
-        return re_indexed_pdb
+                current_old_index = res_seq
+                res_seq_new = str(current_new_index)
+                res_seq_new = ' '*(4-len(res_seq_new))+res_seq_new+' '
+            pdb_txt_reindex += line[:16]+' '+line[17:22]+res_seq_new+line[27:]+'\n'
+        return pdb_txt_reindex
 
-    def reindex_pdb(self, pdb_path):
-        """
-        Original code: https://zhanglab.ccmb.med.umich.edu/reindex_pdb/reindex_pdb.py
-        Parse template's PDB file, reindex it according to start index.
-        """
+
+    def reindex_pdb(self, start_index, pdb_path, clean=True):
+        '''parse PDB file "infile", reindex it according to start index or
+        sequence file "start_index", and return the text of renumbered PDB
+        '''
         pdb_file = pdb_path + "/" + self.pdb + ".atm"
-        fp = open(pdb_file, 'rU')
+        f_in = open(pdb_file, 'rU')
         pdb_txt = ''
-        for line in fp.read().splitlines():
+        for line in f_in.read().splitlines():
             if line.startswith("END"):
+                if clean:
+                    line = line.replace("ENDMDL", "END   ")
                 pdb_txt += line+'\n'
                 break
-            if line.startswith("ATOM  ") or line.startswith("TER") or (
-                    not line[:6] in ["DBREF ", "SEQADV", "MODRES", "HELIX ", "SHEET ", "SSBOND", "SITE  "]):
+            if (line.startswith("ATOM  ") or line.startswith("TER")\
+                or (not clean and not line[:6]\
+                    in ["DBREF ", "SEQADV", "MODRES", "HELIX ", "SHEET ", "SSBOND", "SITE  "])):
                 pdb_txt += line+'\n'
-        fp.close()
-        re_indexed_pdb = self.reindex_pdb_by_index(self.first, pdb_txt)
+        f_in.close()
+
+        pdb_txt_reindex = self.reindex_pdb_by_index(start_index, pdb_txt)
         # Write the new PDB
         with open(pdb_file, "w") as f_out:
-            f_out.write(re_indexed_pdb)
+            f_out.write(pdb_txt_reindex)
 
     def get_fasta_file(self):
         """
@@ -213,7 +216,10 @@ class Template:
             print("Errors encountered while downloading FASTA file of "
                   + self.pdb + ".atm template.")
             print("Initial error: " + str(e))
-        return file_name
+        # Rename the fasta file to xx_fill.seq
+        new_file_name = self.pdb+"_fill.seq"
+        os.rename(file_name, new_file_name)
+        return new_file_name
 
     def add_gaps_in_template_sequence(self, fasta_file):
         """
@@ -249,9 +255,6 @@ class Template:
             the alignment between the sequence of the template containing
             missing residues and the new sequence of the template in which
             holes were replaced by gaps "-".
-
-            Returns:
-                str: Path to the new (gapless) PDB file of the template.
         """
         # Fetch FASTA file from RCSB PDB database
         fasta_file = self.get_fasta_file()
@@ -300,7 +303,7 @@ class Template:
                                # codes of the templates
                                knowns=self.pdb,
                                # code of the target
-                               sequence=self.pdb)
+                               sequence=self.pdb+"_fill")
         a_model.starting_model = 1
         a_model.ending_model = 1
 
