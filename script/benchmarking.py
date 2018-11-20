@@ -32,7 +32,9 @@ def plot_benchmark(structure, scores, rank):
     plt.ylabel("benchmark")
     plt.xlabel("rank")
     plt.legend(loc="lower right")
+    plt.savefig("img/" + structure + "_global_plot.png")
     plt.show()
+
 
 if __name__ == "__main__":
     structures = ["Family", "Superfamily", "Fold"]
