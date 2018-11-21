@@ -85,6 +85,7 @@ class Alignment:
                     # Keep distances only in a defined range because we don't want to
                     # take into account directly bonded residues (dist < ~5 A) and too far residues
         # Return the sum of energy matrix with numpy's "Nan" interpreted as zeros
+        np.save("outfile.txt", distance)
         return distance
 
 
