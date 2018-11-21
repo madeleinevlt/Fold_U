@@ -18,7 +18,7 @@ from src.query import Query
 from src.template import Template
 
 
-def predict_30_top_contacts_ccmpred(aln_file, ntops):
+def predict_top_contacts(aln_file, ntops):
     """
        Extract N tops couplings based on co-evolution score. Co-evolution score
        is calculated between two non-consecutive amino acids by ccmpred based on
@@ -34,26 +34,26 @@ def predict_30_top_contacts_ccmpred(aln_file, ntops):
             dict: A dictionary with key = ranking of coupling based on ss_confidence
             and value = index aa1, index aa2, confidence
     """
-    top_couplings_dict = {}
-
     #Parsing aln file+gaps
     with open(aln_file, "r") as alnfile:
-        query = alnfile.readline().split('\n')[0]
+        query_seq = alnfile.readline()[:-1].replace("-", "")
 
     #Get indexes of query
-    list_index_pos_nongaps = [i for i, e in enumerate(query) if e != "-"] #save "non_gap" positions index
+    list_index_pos_nongaps = [i for i, e in enumerate(query_seq)] #save "non_gap" positions index
     #Predict contacts
     ccmpred_cline = CCMpredCommandline(
-        cmd ='./bin/CCMpred/bin/ccmpred', alnfile= aln_file, matfile= "contact.mat"
+        cmd ='./CCMpred/bin/ccmpred', alnfile= aln_file, matfile= "data/ccmpred/contact.mat"
     )
     ccmpred_cline()
     # extract ntops top coupling
     top_couplings = subprocess.check_output(
-        ["./bin/CCMpred/scripts/top_couplings.py -n %s %s" %(ntops,"contact.mat")], shell=True
+        ["./CCMpred/scripts/top_couplings.py -n %s %s" %(ntops,"data/ccmpred/contact.mat")], shell=True
     ).decode('utf-8').split('\n')
-    
+    print(top_couplings)
+
     #delete header and file_end character ""
     top_couplings = top_couplings[1:len(top_couplings)-1]
+    top_couplings_dict = {}
     for i, value in enumerate(top_couplings):
         value = value.split("\t")
         #do not parse gaps associated with top couplings

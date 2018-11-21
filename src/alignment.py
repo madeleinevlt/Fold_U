@@ -5,7 +5,7 @@
 
 # Third-party modules
 import sys
-from bin.CCMpred.scripts.top_couplings import get_top_pairs
+from CCMpred.scripts.top_couplings import get_top_pairs
 import numpy as np
 from Bio.SubsMat import MatrixInfo
 from Bio.SeqUtils import seq3
