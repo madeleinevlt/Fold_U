@@ -34,7 +34,7 @@ def process(dist_range, gap_penalty, dope_dict, output_path, ali):
            ali.template.name, ali.template.benchmark
 
 
-def clean_modeller_outputs(dir, pattern):
+def clean_modeller_outputs():
     """
     Removes files matching the pattern in the directory given in argument.
 
