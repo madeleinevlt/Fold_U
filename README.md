@@ -44,15 +44,15 @@ The alignment, threading and blosum scores are normalized using the **min-max sc
 
 ### Benchmarking
 
-The score results are generated for each query (foldrec file). Each plot represents the cumulative sum of benchmarks encountered along the ranking (from rank 1 to rank 412) according to a benchmark type ("Family", "Superfamily" or "Fold") which correspond to the degree of similarity with the query.
+The score results are generated for each query (foldrec file). Each plot represents the cumulative sum of benchmarks encountered along the ranking (from rank 1 to rank 412) for each calculated scores and for a specific benchmark type ("Family", "Superfamily" or "Fold") which correspond to the degree of similarity with the query.
 ```
 ./script/benchmarking.py
 ```
 
 <p align="center">
-  <img width="400" src="results/plot/Family_plot.png" alt="Family"/>
-  <img width="400" src="results/plot/Superfamily_plot.png" alt="Superfamily"/>
-  <img width="400" src="results/plot/Fold_plot.png" alt="Fold"/>
+  <img width="450" src="results/plot/Family_plot.png" alt="Family"/>
+  <img width="450" src="results/plot/Superfamily_plot.png" alt="Superfamily"/>
+  <img width="450" src="results/plot/Fold_plot.png" alt="Fold"/>
 </p>
 
 ### Get help
