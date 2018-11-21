@@ -27,40 +27,38 @@ def predict_top_contacts(aln_file, ntops):
        occurence of one of this amino never occur whithout the other.
 
         Args:
-            aln_file (str): multiple alignement (clustal) file in .aln
-            ntops (int): number of top coupling expected (TO DO)
+            aln_file (str): Multiple alignement (clustal) file
+            ntops (int): Number of top coupling expected
 
         Returns:
             dict: A dictionary with key = ranking of coupling based on ss_confidence
             and value = index aa1, index aa2, confidence
     """
-    #Parsing aln file+gaps
-    with open(aln_file, "r") as alnfile:
-        query_seq = alnfile.readline()[:-1].replace("-", "")
+    # Retrieve the query sequence
+    with open(aln_file, "r") as file:
+        query_seq = file.readline()[:-1].replace("-", "")
 
-    #Get indexes of query
-    list_index_pos_nongaps = [i for i, e in enumerate(query_seq)] #save "non_gap" positions index
-    #Predict contacts
+    # Run ccmpred : Prediction of contacts
     ccmpred_cline = CCMpredCommandline(
-        cmd ='./CCMpred/bin/ccmpred', alnfile= aln_file, matfile= "data/ccmpred/contact.mat"
+        cmd ='./CCMpred/bin/ccmpred', alnfile=aln_file, matfile="data/ccmpred/contact.mat"
     )
     ccmpred_cline()
-    # extract ntops top coupling
+    # Extract ntops coupling
     top_couplings = subprocess.check_output(
-        ["./CCMpred/scripts/top_couplings.py -n %s %s" %(ntops,"data/ccmpred/contact.mat")], shell=True
-    ).decode('utf-8').split('\n')
+        ["./CCMpred/scripts/top_couplings.py -n {} {}".
+        format(str(ntops), "data/ccmpred/contact.mat")], shell=True
+    ).decode('utf-8').split('\n')[1:-1]
     print(top_couplings)
 
-    #delete header and file_end character ""
-    top_couplings = top_couplings[1:len(top_couplings)-1]
     top_couplings_dict = {}
-    for i, value in enumerate(top_couplings):
-        value = value.split("\t")
+    index_list = [i for i, e in enumerate(query_seq)]
+    for k, value in enumerate(top_couplings):
+        values = value.split("\t")
+        index_i = int(values[0])
+        index_j = int(values[1])
         #do not parse gaps associated with top couplings
-        if int(value[0]) in list_index_pos_nongaps and int(value[1]) in list_index_pos_nongaps:
-            index_i = list_index_pos_nongaps.index(int(value[0]))
-            index_j = list_index_pos_nongaps.index(int(value[1]))
-            top_couplings_dict[i] = (index_i, index_j)
+        if (index_i in index_list) and (index_j in index_list):
+            top_couplings_dict[k] = (index_i, index_j)
     return top_couplings_dict
 
 
