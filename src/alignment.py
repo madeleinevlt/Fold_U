@@ -13,7 +13,7 @@ import subprocess
 import pandas as pd
 
 
-def process(dist_range, gap_penality, dope_dict, top_couplings_dict, ali):
+def process(dist_range, gap_penality, dope_dict, top_couplings_dict, query_index, ali):
     """
         Generates the threading and the blosum scores for a given Alignment object.
 
@@ -23,9 +23,14 @@ def process(dist_range, gap_penality, dope_dict, top_couplings_dict, ali):
 
     """
     # Calculate the threading score of all alignments
+    print(ali.template.name)
     threading_score = ali.calculate_threading_score(dist_range, gap_penality, dope_dict)
     blosum_score = ali.calculate_blosum_score()
-    distance_matrix = ali.calculate_distance()
+    distance_matrix = ali.calculate_distance(query_index)
+    print(distance_matrix)
+    # for i in distance_matrix.shape[0]:
+    #     for j in distance_matrix.shape[1]:
+    #         print(distance_matrix[i, j], end=" ")
     ccmpred_score = ali.calculate_contact_score(top_couplings_dict, distance_matrix)
     return ali.num, ali.score, threading_score, blosum_score, ccmpred_score,\
            ali.template.name, ali.template.benchmark
@@ -53,49 +58,44 @@ class Alignment:
         self.template = template
         self.aln = None
 
-    def calculate_distance(self):
+    def calculate_distance(self, query_index):
         """
         Calculate distance
         """
-        query = self.query.residues
-        template = self.template.residues
+        distance = np.empty((query_index[1], query_index[1]), dtype=object)
+        k = 0
+        print("self.query.first {}".format(self.query.first))
+        while k < self.query.first-1:
+            distance[k, (k+1):] = "x"
+            k += 1
+        print(k)
 
-        first = 3
-        last = 7
-        len_query = 8
-        distance = np.empty((len_query, len_query), dtype=object)
-        i = 0
-        while i < first:
-            distance[i, :] = 'x'
-            distance[i+1:, i] = 'x'
-            i += 1
-        i=8
-        while i > last:
-            distance[i, :] = 'x'
-            distance[i+1:, i] = 'x'
-            i += 1
-
-
-        for i, row_res in enumerate(query):
+        query_size = self.query.get_size()
+        query_residues = [res for res in self.query.residues if res != "-"]
+        template_residues = [res for res in self.template.residues if res != "-"]
+        for i, row_res in enumerate(query_residues):
             # There is a gap in the query or the template
-            if row_res.name == "-" or template[i].name == "-":
+            if row_res.name == "-" or template_residues[i].name == "-":
                 # The whole line is set with gap penalty value
-                distance[i, (i + 2):] = 0
+                distance[i+k, (i+k+1):] = "x"
                 continue
             for j in range(i + 1, query_size - 1):
-                col_res = query[j]
+                col_res = query_residues[j]
                 # There is a gap in the query or the template
-                if col_res.name == "-" or template[j].name == "-":
+                if col_res.name == "-" or template_residues[j].name == "-":
                     # The whole column is set with gap penalty value
-                    distance[:(j - 1), j] = 0
+                    distance[:(j+k-1), j+k] = "x"
                     continue
                 else:
                     # Calculate to distance between two residues
-                    distance[i, j] = template[i].calculate_distance(template[j])
+                    print(i+k, j+k)
+                    distance[i+k, j+k] = template_residues[i].calculate_distance(template_residues[j])
                     # Keep distances only in a defined range because we don't want to
                     # take into account directly bonded residues (dist < ~5 A) and too far residues
-        # Return the sum of energy matrix with numpy's "Nan" interpreted as zeros
-        np.save("outfile.txt", distance)
+        k = i
+        while query_index[1] > k > self.query.last-1:
+            distance[k, (k+1):] = "x"
+            k += 1
         return distance
 
 

@@ -52,7 +52,7 @@ def predict_top_contacts(aln_file, ntops):
 
     # Create a dictionary of top couplings
     top_couplings_dict = {}
-    index_list = [i for i, e in enumerate(query_seq)]
+    index_list = [i for i, _ in enumerate(query_seq)]
     for k, value in enumerate(top_couplings):
         values = value.split("\t")
         index_i = int(values[0])
@@ -106,7 +106,7 @@ def parse_dope(dope_file):
     return dope_dict
 
 
-def parse_benchmark(benchmark_file, foldrec_file, alignment_dict):
+def parse_benchmark(query_name, benchmark_file, alignment_dict):
     """
         Extract the line of the benchmark file containing the benchmarks of
         the studied query. Each benchmark template have an assigned structure
@@ -115,18 +115,15 @@ def parse_benchmark(benchmark_file, foldrec_file, alignment_dict):
         object, the structure is stored in the benchmark item.
 
         Args:
+        	query_name (str): Name of the query
             benchmark_file (str): The path to the benchmark file.
-            foldrec_file (str): The path to the foldrec file.
             alignment_dict (dictionary): A dictionary with key = template name
                                          and value = an Alignment object.
     """
-    # The name of the query is retrieved from the foldrec file pathway
-    query_reg = re.compile("^.*\\/(\\S*)\\.")
-    query_name = re.search(query_reg, foldrec_file)
     with open(benchmark_file, "r") as file:
         for line in file:
             # Only the line containing the query name is extracted
-            if query_name.group(1) in line:
+            if query_name in line:
                 # List containing for each benchmark the template name and
                 # the associated fold_type
                 template_fold_type = line[0:-1].split(": ")[1].split(", ")
