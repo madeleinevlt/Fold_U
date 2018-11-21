@@ -19,7 +19,8 @@ def plot_benchmark(structure, scores, rank):
             scores (list):
             rank (list): 
     """
-    os.makedirs("results/img", exist_ok=True)
+    OUTPUT_PATH = "results/plot/"
+    os.makedirs(OUTPUT_PATH, exist_ok=True)
 
     ali_structure = benchmarking_scores[scores[0]][structure].values
     thr_structure = benchmarking_scores[scores[1]][structure].values
@@ -34,8 +35,9 @@ def plot_benchmark(structure, scores, rank):
     plt.ylabel("benchmark")
     plt.xlabel("rank")
     plt.legend(loc="lower right")
-    plt.savefig("results/img/" + structure + "_global_plot.png")
+    plt.savefig(OUTPUT_PATH + structure + "_plot.png")
     plt.show()
+    print("\nThe plots are stored in " + OUTPUT_PATH)
 
 
 if __name__ == "__main__":
