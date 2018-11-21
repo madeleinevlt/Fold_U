@@ -20,10 +20,15 @@ class Query:
 
     def __init__(self, residues, first, last):
         self.residues = residues
+        # This is a "temporary" list of residues for Modeller, which we will modify only
+        # in order to make the PIR alignment (by inserting gaps).
+        self.modeller_residues = residues
         self.first = first
         self.last = last
 
-    def display(self):
+    def display(self, modeller=False):
+        if modeller:
+            return "".join(str(res.name) for res in self.modeller_residues)
         return "".join(str(res.name) for res in self.residues)
 
     def get_size(self):
@@ -43,6 +48,8 @@ class Query:
         Args:
             template (Template object): The current alignment's template
         """
+        # Find the indexes of gaps in the template
         occ_ind = [i for i, res in enumerate(template.residues) if res.name == "-"]
         for i in occ_ind:
-            self.residues[i:i] = [Residue("-")]
+            # Insert the gaps in the query
+            self.modeller_residues[i:i] = [Residue("-")]
