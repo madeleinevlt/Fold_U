@@ -14,7 +14,9 @@ import wget
 from Bio import SeqIO
 import modeller as m
 import modeller.automodel as am
+import logging
 
+logging.basicConfig(filename="run_warnings.log", level=logging.DEBUG)
 
 class Template:
     """
@@ -79,7 +81,7 @@ class Template:
         nb_atoms = 0
         ref_id = 0
         flag = True
-        with open(pdb_path + self.name + "/" + self.pdb + ".atm", 'r') as file:
+        with open(pdb_path, 'r') as file:
             for line in file:
                 line_type = line[0:6].strip()
                 name_at = line[12:16].strip()
@@ -154,8 +156,8 @@ class Template:
                 res_seq_new = ' '*(4-len(res_seq_new))+res_seq_new+' '
             elif current_chain_id != chain_id:
                 if warn_chain_id != current_chain_id:
-                    sys.stderr.write(
-                        "Warning! Discarding chain '%s'\n" % current_chain_id)
+                    logging.debug("Warning! Discarding chain '{}' in template {}.atm\n".format(
+                                                                        current_chain_id, self.pdb))
                     warn_chain_id = current_chain_id
                 continue
             elif res_seq != current_old_index:
