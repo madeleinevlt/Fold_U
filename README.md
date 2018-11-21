@@ -42,14 +42,17 @@ The alignment, threading and blosum scores are normalized using the **min-max sc
 ./fold_u data/foldrec/His_biosynth.foldrec -o results/His_biosynth
 ```
 
-### Generation of all the results and plot of the different scores
-The `benchmark_rank.png` generated plot represents the cumulative sum of benchmarks encountered along the ranking (from rank 1 to rank 412). A cross means a family or superfamily type banchmark.
+### Benchmarking
+
+The score results are generated for each query (foldrec file). Each plot represents the cumulative sum of benchmarks encountered along the ranking (from rank 1 to rank 412) for each calculated scores and for a specific benchmark type ("Family", "Superfamily" or "Fold") which correspond to the degree of similarity with the query.
 ```
-./script/benchmarking
+./script/benchmarking.py
 ```
 
 <p align="center">
-  <img width="450" src="img/His_biosynth_benchmark_rank.png" alt="benchmark_rank.png"/>
+  <img width="425" src="results/plot/Family_plot.png" alt="Family"/>
+  <img width="425" src="results/plot/Superfamily_plot.png" alt="Superfamily"/>
+  <img width="425" src="results/plot/Fold_plot.png" alt="Fold"/>
 </p>
 
 ### Get help
