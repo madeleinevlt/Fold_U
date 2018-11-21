@@ -143,6 +143,11 @@ def parse_foldrec(foldrec_file, nb_templates, metafold_dict):
                 num = int(num_found.group(1))
             # A template name is found :
             if template_name_found:
+                # These templates currently have more than 1 chain, so we skip them
+                if template_name_found.group(1) in ["bromodomain", "rhv"]:
+                    # We skip the alignment
+                    for i in range(10):
+                        next(file)
                 template_name = template_name_found.group(1)
             # A score is found :
             if score_found:
@@ -150,6 +155,7 @@ def parse_foldrec(foldrec_file, nb_templates, metafold_dict):
             # Empty alignement (the query = gaps only)
             if empty_query_found and query_reg_count == 2:
                 print("Skipping alignement "+str(num)+" in which the query is only composed of gaps")
+                # We skip the alignment
                 for i in range(5):
                     next(file)
             # A query sequence is found :
