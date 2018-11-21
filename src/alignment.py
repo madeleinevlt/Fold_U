@@ -60,11 +60,21 @@ class Alignment:
         query = self.query.residues
         template = self.template.residues
 
-        query_size = self.query.get_size()
-        # This sets a numpy matrix of shape query * query which will contain all
-        # the energies corresponding to distances between all pairs of residues
-        # between the query and itself: the coordinates are the ones from the template.
-        distance = np.empty((query_size, query_size), dtype=object)
+        first = 3
+        last = 7
+        len_query = 8
+        distance = np.empty((len_query, len_query), dtype=object)
+        i = 0
+        while i < first:
+            distance[i, :] = 'x'
+            distance[i+1:, i] = 'x'
+            i += 1
+        i=8
+        while i > last:
+            distance[i, :] = 'x'
+            distance[i+1:, i] = 'x'
+            i += 1
+
 
         for i, row_res in enumerate(query):
             # There is a gap in the query or the template
@@ -239,7 +249,6 @@ class Alignment:
                 contact_score
         """
         TP = 0
-
         for top_position in top_couplings_dict.values():
             #as matrix is triange, get matrix [i,j]
             if distance_matrix[top_position[0], top_position[1]] != None:
