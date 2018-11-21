@@ -1,4 +1,4 @@
-#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+#IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
 
 #IncludeRegexScan: ^.*$
 
@@ -6,7 +6,7 @@
 
 #IncludeRegexTransform: 
 
-/home/franz/Master/projets/CCMpred/src/ccmpred.c
+/home/franz/Master/projets/Fold_U/bin/CCMpred/src/ccmpred.c
 stdbool.h
 -
 stdio.h
@@ -26,29 +26,29 @@ locale.h
 math.h
 -
 ccmpred.h
-/home/franz/Master/projets/CCMpred/src/ccmpred.h
+/home/franz/Master/projets/Fold_U/bin/CCMpred/src/ccmpred.h
 sequence.h
-/home/franz/Master/projets/CCMpred/src/sequence.h
+/home/franz/Master/projets/Fold_U/bin/CCMpred/src/sequence.h
 io.h
-/home/franz/Master/projets/CCMpred/src/io.h
+/home/franz/Master/projets/Fold_U/bin/CCMpred/src/io.h
 conjugrad.h
-/home/franz/Master/projets/CCMpred/src/conjugrad.h
+/home/franz/Master/projets/Fold_U/bin/CCMpred/src/conjugrad.h
 util.h
-/home/franz/Master/projets/CCMpred/src/util.h
+/home/franz/Master/projets/Fold_U/bin/CCMpred/src/util.h
 parseopt.h
-/home/franz/Master/projets/CCMpred/src/parseopt.h
+/home/franz/Master/projets/Fold_U/bin/CCMpred/src/parseopt.h
 meta.h
-/home/franz/Master/projets/CCMpred/src/meta.h
+/home/franz/Master/projets/Fold_U/bin/CCMpred/src/meta.h
 cuda.h
 -
 cuda_runtime_api.h
 -
 evaluate_cuda.h
-/home/franz/Master/projets/CCMpred/src/evaluate_cuda.h
+/home/franz/Master/projets/Fold_U/bin/CCMpred/src/evaluate_cuda.h
 omp.h
 -
 evaluate_cpu_omp.h
-/home/franz/Master/projets/CCMpred/src/evaluate_cpu_omp.h
+/home/franz/Master/projets/Fold_U/bin/CCMpred/src/evaluate_cpu_omp.h
 unistd.h
 -
 curses.h
@@ -56,9 +56,9 @@ curses.h
 term.h
 -
 evaluate_cpu.h
-/home/franz/Master/projets/CCMpred/src/evaluate_cpu.h
+/home/franz/Master/projets/Fold_U/bin/CCMpred/src/evaluate_cpu.h
 
-/home/franz/Master/projets/CCMpred/src/evaluate_cpu.c
+/home/franz/Master/projets/Fold_U/bin/CCMpred/src/evaluate_cpu.c
 math.h
 -
 stdbool.h
@@ -74,19 +74,19 @@ string.h
 unistd.h
 -
 conjugrad.h
-/home/franz/Master/projets/CCMpred/src/conjugrad.h
+/home/franz/Master/projets/Fold_U/bin/CCMpred/src/conjugrad.h
 sequence.h
-/home/franz/Master/projets/CCMpred/src/sequence.h
+/home/franz/Master/projets/Fold_U/bin/CCMpred/src/sequence.h
 ccmpred.h
-/home/franz/Master/projets/CCMpred/src/ccmpred.h
+/home/franz/Master/projets/Fold_U/bin/CCMpred/src/ccmpred.h
 evaluate_cpu.h
-/home/franz/Master/projets/CCMpred/src/evaluate_cpu.h
+/home/franz/Master/projets/Fold_U/bin/CCMpred/src/evaluate_cpu.h
 util.h
-/home/franz/Master/projets/CCMpred/src/util.h
+/home/franz/Master/projets/Fold_U/bin/CCMpred/src/util.h
 reweighting.h
-/home/franz/Master/projets/CCMpred/src/reweighting.h
+/home/franz/Master/projets/Fold_U/bin/CCMpred/src/reweighting.h
 
-/home/franz/Master/projets/CCMpred/src/evaluate_cpu_omp.c
+/home/franz/Master/projets/Fold_U/bin/CCMpred/src/evaluate_cpu_omp.c
 math.h
 -
 stdbool.h
@@ -102,21 +102,21 @@ string.h
 unistd.h
 -
 conjugrad.h
-/home/franz/Master/projets/CCMpred/src/conjugrad.h
+/home/franz/Master/projets/Fold_U/bin/CCMpred/src/conjugrad.h
 sequence.h
-/home/franz/Master/projets/CCMpred/src/sequence.h
+/home/franz/Master/projets/Fold_U/bin/CCMpred/src/sequence.h
 ccmpred.h
-/home/franz/Master/projets/CCMpred/src/ccmpred.h
+/home/franz/Master/projets/Fold_U/bin/CCMpred/src/ccmpred.h
 evaluate_cpu_omp.h
-/home/franz/Master/projets/CCMpred/src/evaluate_cpu_omp.h
+/home/franz/Master/projets/Fold_U/bin/CCMpred/src/evaluate_cpu_omp.h
 util.h
-/home/franz/Master/projets/CCMpred/src/util.h
+/home/franz/Master/projets/Fold_U/bin/CCMpred/src/util.h
 reweighting.h
-/home/franz/Master/projets/CCMpred/src/reweighting.h
+/home/franz/Master/projets/Fold_U/bin/CCMpred/src/reweighting.h
 omp.h
 -
 
-/home/franz/Master/projets/CCMpred/src/io.c
+/home/franz/Master/projets/Fold_U/bin/CCMpred/src/io.c
 assert.h
 -
 stdio.h
@@ -126,19 +126,19 @@ stdlib.h
 string.h
 -
 ccmpred.h
-/home/franz/Master/projets/CCMpred/src/ccmpred.h
+/home/franz/Master/projets/Fold_U/bin/CCMpred/src/ccmpred.h
 io.h
-/home/franz/Master/projets/CCMpred/src/io.h
+/home/franz/Master/projets/Fold_U/bin/CCMpred/src/io.h
 conjugrad.h
-/home/franz/Master/projets/CCMpred/src/conjugrad.h
+/home/franz/Master/projets/Fold_U/bin/CCMpred/src/conjugrad.h
 msgpack.h
 -
 jansson.h
 -
 meta.h
-/home/franz/Master/projets/CCMpred/src/meta.h
+/home/franz/Master/projets/Fold_U/bin/CCMpred/src/meta.h
 
-/home/franz/Master/projets/CCMpred/src/meta.c
+/home/franz/Master/projets/Fold_U/bin/CCMpred/src/meta.c
 time.h
 -
 stdlib.h
@@ -150,25 +150,25 @@ jansson.h
 msgpack.h
 -
 meta.h
-/home/franz/Master/projets/CCMpred/src/meta.h
+/home/franz/Master/projets/Fold_U/bin/CCMpred/src/meta.h
 
-/home/franz/Master/projets/CCMpred/src/numdif.c
+/home/franz/Master/projets/Fold_U/bin/CCMpred/src/numdif.c
 stdio.h
 -
 arithmetic.h
-/home/franz/Master/projets/CCMpred/src/arithmetic.h
+/home/franz/Master/projets/Fold_U/bin/CCMpred/src/arithmetic.h
 ccmpred.h
-/home/franz/Master/projets/CCMpred/src/ccmpred.h
+/home/franz/Master/projets/Fold_U/bin/CCMpred/src/ccmpred.h
 
-/home/franz/Master/projets/CCMpred/src/parseopt.c
+/home/franz/Master/projets/Fold_U/bin/CCMpred/src/parseopt.c
 stdlib.h
 -
 stdio.h
 -
 parseopt.h
-/home/franz/Master/projets/CCMpred/src/parseopt.h
+/home/franz/Master/projets/Fold_U/bin/CCMpred/src/parseopt.h
 
-/home/franz/Master/projets/CCMpred/src/reweighting.c
+/home/franz/Master/projets/Fold_U/bin/CCMpred/src/reweighting.c
 math.h
 -
 string.h
@@ -180,11 +180,11 @@ stdio.h
 stdint.h
 -
 ccmpred.h
-/home/franz/Master/projets/CCMpred/src/ccmpred.h
+/home/franz/Master/projets/Fold_U/bin/CCMpred/src/ccmpred.h
 reweighting.h
-/home/franz/Master/projets/CCMpred/src/reweighting.h
+/home/franz/Master/projets/Fold_U/bin/CCMpred/src/reweighting.h
 
-/home/franz/Master/projets/CCMpred/src/sequence.c
+/home/franz/Master/projets/Fold_U/bin/CCMpred/src/sequence.c
 stdlib.h
 -
 stdio.h
@@ -194,7 +194,7 @@ ctype.h
 string.h
 -
 
-/home/franz/Master/projets/CCMpred/src/util.c
+/home/franz/Master/projets/Fold_U/bin/CCMpred/src/util.c
 assert.h
 -
 math.h
@@ -206,9 +206,9 @@ stdlib.h
 string.h
 -
 conjugrad.h
-/home/franz/Master/projets/CCMpred/src/conjugrad.h
+/home/franz/Master/projets/Fold_U/bin/CCMpred/src/conjugrad.h
 ccmpred.h
-/home/franz/Master/projets/CCMpred/src/ccmpred.h
+/home/franz/Master/projets/Fold_U/bin/CCMpred/src/ccmpred.h
 
 include/ccmpred.h
 conjugrad.h

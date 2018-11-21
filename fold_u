@@ -113,7 +113,7 @@ if __name__ == "__main__":
     # Parse DOPE file
     DOPE_DICT = parsing.parse_dope(DOPE_FILE)
     #Parse Alignement file
-    TOP_COUPLINGS_DICT = parsing.predict_30_top_contacts_ccmpred(ALN_FILE)
+    TOP_COUPLINGS_DICT = parsing.predict_30_top_contacts_ccmpred(ALN_FILE, 30)
 
     ### Main calculations
     #####################
