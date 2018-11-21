@@ -130,6 +130,6 @@ if __name__ == "__main__":
 
     ### Results : Score and PDB files
     #################################
-    # RESULTS.write_score(OUTPUT_PATH, NB_PDB, ALIGNMENT_DICT)
+    RESULTS.write_score(OUTPUT_PATH, NB_PDB, ALIGNMENT_DICT)
     print("\n\nThe program ended successfully !\nThe results are stored in " + OUTPUT_PATH)
     print("\nTotal runtime: {} seconds".format(str(datetime.now() - START_TIME)))
