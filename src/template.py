@@ -38,7 +38,7 @@ class Template:
     def __init__(self, name, residues):
         self.name = name            # ex: Agglutinin
         self.residues = residues
-        self.benchmark = 0
+        self.benchmark = "."
         self.pdb = None             # ex: 1jlxa1
         self.first = None
         self.missing_residues = False

@@ -73,9 +73,8 @@ def parse_benchmark(benchmark_file, foldrec_file, alignment_dict):
             alignment_dict (dictionary): A dictionary with key = template name
                                          and value = an Alignment object.
     """
-    fold_type_dict = {"Family":3, "Superfamily":2, "Fold":1}
     # The name of the query is retrieved from the foldrec file pathway
-    query_reg = re.compile("^.*\\/(\\S*)\.")
+    query_reg = re.compile("^.*\\/(\\S*)\\.")
     query_name = re.search(query_reg, foldrec_file)
     with open(benchmark_file, "r") as file:
         for line in file:
@@ -90,7 +89,7 @@ def parse_benchmark(benchmark_file, foldrec_file, alignment_dict):
                     template = i.split(" ")[0]
                     fold_type = i.split(" ")[1]
                     if template in alignment_dict:
-                        alignment_dict[template].template.set_benchmark(fold_type_dict[fold_type])
+                        alignment_dict[template].template.set_benchmark(fold_type)
                 # No need to continue because all benchmarks are stored
                 break
 

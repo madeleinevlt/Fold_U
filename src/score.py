@@ -18,7 +18,11 @@ def normalize_score(score_type):
         Returns:
             Pandas Series: The score normalized
     """
-    return((score_type - min(score_type)) / (max(score_type) - min(score_type)))
+    try:
+        normalized = (score_type - min(score_type)) / (max(score_type) - min(score_type))
+    except:
+        normalized = 0
+    return normalized
     # Use sklearn module instead
     # https://web.archive.org/web/20160520170701/http://chrisalbon.com:80/python/pandas_normalize_column.html
 

@@ -1,7 +1,7 @@
-[![Fold-U release](https://img.shields.io/badge/fold--u-v1.2-blue.svg)](https://github.com/meetU-MasterStudents/Fold_U/releases/tag/1.2)
+[![Fold-U release](https://img.shields.io/badge/fold--u-v1.2-blue.svg)](https://github.com/meetU-MasterStudents/Fold_U/releases/tag/v1.2)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 ![Python version](https://img.shields.io/badge/python-3-brightgreen.svg)
-[![Sphinx doc](https://img.shields.io/badge/doc-sphinx-brightgreen.svg)](https://meetu-masterstudents.github.io/Fold_U/)
+[![Documentation Status](https://readthedocs.org/projects/fold-u/badge/?version=latest)](https://fold-u.readthedocs.io/en/latest/?badge=latest)
 
 <br>
 
@@ -30,10 +30,6 @@ Install the few required packages / modules:
 ```
 pip install -r requirements.txt
 ```
-Install R (for Ubuntu user) :
-```
-sudo apt-get install r-base-score
-```
 
 MODELLER is also required, and can be installed easily with Conda:
 ```
@@ -46,21 +42,23 @@ fold_u takes in input **N profil-profil alignments and their corresponding score
 
 ### Toy example
 
-#### Generation of the result files
 The `scores.csv` and the **top 10 pdb structures** of the His_biosynth query sequence are stored in `results/His_biosynth` folder.
 The alignment, threading and blosum scores are normalized using the **min-max scaling method** (values between 0 and 1). The last score represents the sum of these 3 scores. It has also been normalized.
 ```
 ./fold_u data/foldrec/His_biosynth.foldrec -o results/His_biosynth
 ```
 
-#### Plot of the different scores
-The `benchmark_rank.png` generated plot represents the cumulative sum of benchmarks encountered along the ranking (from rank 1 to rank 412). A cross means a family or superfamily type banchmark.
+### Benchmarking
+
+The score results are generated for each query (foldrec file). Each plot represents the cumulative sum of benchmarks encountered along the ranking (from rank 1 to rank 412) for each calculated scores and for a specific benchmark type ("Family", "Superfamily" or "Fold") which correspond to the degree of similarity with the query.
 ```
-./script/plot_scores.R results/His_biosynth
+./script/benchmarking.py
 ```
 
 <p align="center">
-  <img width="450" src="img/His_biosynth_benchmark_rank.png" alt="benchmark_rank.png"/>
+  <img width="425" src="results/plot/Family_plot.png" alt="Family"/>
+  <img width="425" src="results/plot/Superfamily_plot.png" alt="Superfamily"/>
+  <img width="425" src="results/plot/Fold_plot.png" alt="Fold"/>
 </p>
 
 ### Get help
@@ -96,8 +94,7 @@ The `benchmark_rank.png` generated plot represents the cumulative sum of benchma
 
 ## Documentation
 
-The documentation of our program is generated with Sphinx and Read The Docs theme and is accessible at the following address:
-[https://meetu-masterstudents.github.io/Fold_U/](https://meetu-masterstudents.github.io/Fold_U/)
+The documentation of our program is generated with Sphinx and and built on [Read The Docs](https://fold-u.readthedocs.io/en/latest).
 
 ## Authors
 
