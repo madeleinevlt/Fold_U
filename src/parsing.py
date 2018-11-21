@@ -43,20 +43,21 @@ def predict_top_contacts(aln_file, ntops):
         cmd ='./CCMpred/bin/ccmpred', alnfile=aln_file, matfile="data/ccmpred/contact.mat"
     )
     ccmpred_cline()
+
     # Extract ntops coupling
     top_couplings = subprocess.check_output(
         ["./CCMpred/scripts/top_couplings.py -n {} {}".
         format(str(ntops), "data/ccmpred/contact.mat")], shell=True
     ).decode('utf-8').split('\n')[1:-1]
-    print(top_couplings)
 
+    # Create a dictionary of top couplings
     top_couplings_dict = {}
     index_list = [i for i, e in enumerate(query_seq)]
     for k, value in enumerate(top_couplings):
         values = value.split("\t")
         index_i = int(values[0])
         index_j = int(values[1])
-        #do not parse gaps associated with top couplings
+        # Do not parse gaps associated with top couplings
         if (index_i in index_list) and (index_j in index_list):
             top_couplings_dict[k] = (index_i, index_j)
     return top_couplings_dict
