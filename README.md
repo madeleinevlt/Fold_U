@@ -50,9 +50,9 @@ The score results are generated for each query (foldrec file). Each plot represe
 ```
 
 <p align="center">
-  <img width="450" src="results/plot/Family_plot.png" alt="Family"/>
-  <img width="450" src="results/plot/Superfamily_plot.png" alt="Superfamily"/>
-  <img width="450" src="results/plot/Fold_plot.png" alt="Fold"/>
+  <img width="425" src="results/plot/Family_plot.png" alt="Family"/>
+  <img width="425" src="results/plot/Superfamily_plot.png" alt="Superfamily"/>
+  <img width="425" src="results/plot/Fold_plot.png" alt="Fold"/>
 </p>
 
 ### Get help
