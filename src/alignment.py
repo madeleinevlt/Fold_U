@@ -133,6 +133,32 @@ class Alignment:
                 score += blosum62[(res_t.name, res_q.name)]
         return score
 
+    def calculate_ss_score(self):
+        """
+        This function calculates a score based on the secondary structure prediction of the query.
+        We consider only PSIPRED predictions with a confidence >= 7 on the scale 0-9.
+        The reason is that we want secondary structure predictions that have at least a Q3 accuracy
+        of 80% (cf. doi:[10.1186/1471-2164-11-S4-S4])
+        We use the average three-state prediction accuracy (Q3) to measure the accuracy of the
+        secondary structure prediction of PSIPRED.
+        score = 100*(N - total_incorrect) / N
+
+        Returns:
+            float: Q3, the secondary structure score, as the proportion of well predicted secondary
+            structure predictions
+        """
+        score = 0
+        total = 0
+        total_incorrect = 0
+        for ind, res_q in enumerate(ali.query.residues):
+            res_t = ali.template.residues[ind]
+            if res_q.ss == "-" or res_t.ss == "-":
+                continue
+            if res_q.ss_confidence < 7:
+                total_incorrect += 1
+        score = 100 * (total - total_incorrect) / total
+    return score
+
     def write_pdb(self, pdb_path):
         """
             Write a pdb file by threading the query sequence on the template CA coordinates.
