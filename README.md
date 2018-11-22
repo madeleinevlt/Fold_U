@@ -30,31 +30,29 @@ Install the few required packages / modules:
 ```
 pip install -r requirements.txt
 ```
-Install R (for Ubuntu user) :
-```
-sudo apt-get install r-base-score
-```
 
 ## Run the program
-fold_u takes in input **N profil-profil alignments and their corresponding score** (foldrec file) and returns a `score.csv` file and the **top N pdb structures**.
+`fold_u` takes in input **N profil-profil alignments and their corresponding score** (foldrec file) and returns a `score.csv` file and the **top N pdb structures**.
 
 ### Toy example
 
-#### Generation of the result files
 The `scores.csv` and the **top 10 pdb structures** of the His_biosynth query sequence are stored in `results/His_biosynth` folder.
 The alignment, threading and blosum scores are normalized using the **min-max scaling method** (values between 0 and 1). The last score represents the sum of these 3 scores. It has also been normalized.
 ```
 ./fold_u data/foldrec/His_biosynth.foldrec -o results/His_biosynth
 ```
 
-#### Plot of the different scores
-The `benchmark_rank.png` generated plot represents the cumulative sum of benchmarks encountered along the ranking (from rank 1 to rank 412). A cross means a family or superfamily type banchmark.
+### Benchmarking
+
+The score results are generated for each query (foldrec file). Each plot represents the cumulative sum of benchmarks encountered along the ranking (from rank 1 to rank 412) for each calculated scores and for a specific benchmark type ("Family", "Superfamily" or "Fold") which correspond to the degree of similarity with the query.
 ```
-./script/plot_scores.R results/His_biosynth
+./script/benchmarking.py
 ```
 
 <p align="center">
-  <img width="450" src="img/His_biosynth_benchmark_rank.png" alt="benchmark_rank.png"/>
+  <img width="425" src="results/plot/Family_plot.png" alt="Family"/>
+  <img width="425" src="results/plot/Superfamily_plot.png" alt="Superfamily"/>
+  <img width="425" src="results/plot/Fold_plot.png" alt="Fold"/>
 </p>
 
 ### Get help
