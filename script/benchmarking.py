@@ -42,7 +42,7 @@ def plot_benchmark(structure, scores, rank):
 
 if __name__ == "__main__":
     structures = ["Family", "Superfamily", "Fold"]
-    scores = ["alignment", "threading", "sum scores"]
+    scores = ["alignment", "threading", "blosum", "sum scores"]
     # A dictionary of pandas DataFrames is created for each score
     # Each DataFrame will contain the cumulative sum of benchmarks for each structure (= 3 columns)
     benchmarking_scores = {}
