@@ -3,7 +3,7 @@
 
 # Third-party modules
 import os
-from subprocess import call
+import subprocess
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
@@ -17,18 +17,20 @@ def plot_benchmark(structure, scores, rank):
         Args:
             structure (str) : one of the three following : "Family", "Superfamily", "Fold"
             scores (list):
-            rank (list): 
+            rank (list):
     """
     OUTPUT_PATH = "results/plot/"
     os.makedirs(OUTPUT_PATH, exist_ok=True)
 
     ali_structure = benchmarking_scores[scores[0]][structure].values
     thr_structure = benchmarking_scores[scores[1]][structure].values
-    sum_structure = benchmarking_scores[scores[2]][structure].values
+    ss_structure = benchmarking_scores[scores[2]][structure].values
+    sum_structure = benchmarking_scores[scores[3]][structure].values
 
     plt.figure(num=structure) # Window's name
     plt.plot(rank, ali_structure, "b", label=scores[0])
     plt.plot(rank, thr_structure, "#ffa201", label=scores[1])
+    plt.plot(rank, ss_structure, "#00B200", label=scores[1])
     plt.plot(rank, sum_structure, "r", label=scores[2])
     plt.plot([0,len(ali_structure)],[0,max(ali_structure)], "k", label="random")
     plt.title("Global scores comparison using " + structure + " benchmarks")
@@ -42,7 +44,7 @@ def plot_benchmark(structure, scores, rank):
 
 if __name__ == "__main__":
     structures = ["Family", "Superfamily", "Fold"]
-    scores = ["alignment", "threading", "sum scores"]
+    scores = ["alignment", "threading", "secondary_structure", "sum scores"]
     # A dictionary of pandas DataFrames is created for each score
     # Each DataFrame will contain the cumulative sum of benchmarks for each structure (= 3 columns)
     benchmarking_scores = {}
@@ -53,7 +55,7 @@ if __name__ == "__main__":
         query = query.split(".")[0]
         # The Fold_U program is run on the current query if results are not
         if not os.path.isfile("results/" + query + "/scores.csv"):
-            call([" ./fold_u data/foldrec/" + query + ".foldrec -o results/" + query], shell=True)
+            subprocess.Popen(["./fold_u", "data/foldrec/" + query + ".foldrec", "-o", "results/" + query, "--cpu", "8"], stdout=subprocess.PIPE).communicate()
         # Score results are stored in a pandas DataFrame
         query_scores = pd.read_csv("results/" + query + "/scores.csv", index_col=0)
         for score in scores:

@@ -20,9 +20,10 @@ def process(dist_range, gap_penality, dope_dict, ali):
     """
     # Calculate the threading score of all alignments
     threading_score = ali.calculate_threading_score(dist_range, gap_penality, dope_dict)
+    ss_score = ali.calculate_ss_score()
     blosum_score = ali.calculate_blosum_score()
-    return ali.num, ali.score, threading_score, blosum_score,\
-           ali.template.name, ali.template.benchmark
+    return ali.num, ali.score, threading_score, blosum_score, ss_score,\
+        ali.template.name, ali.template.benchmark
 
 
 class Alignment:
@@ -147,17 +148,19 @@ class Alignment:
             float: Q3, the secondary structure score, as the proportion of well predicted secondary
             structure predictions
         """
-        score = 0
-        total = 0
+        total = self.query.get_size()
         total_incorrect = 0
-        for ind, res_q in enumerate(ali.query.residues):
-            res_t = ali.template.residues[ind]
+        for ind, res_q in enumerate(self.query.residues):
+            res_t = self.template.residues[ind]
             if res_q.ss == "-" or res_t.ss == "-":
                 continue
             if res_q.ss_confidence < 7:
                 total_incorrect += 1
-        score = 100 * (total - total_incorrect) / total
-    return score
+        try:
+            score = 100 * (total - total_incorrect) / total
+        except ZeroDivisionError as e:
+            print(str(e), "\n\nError ss_score: the query seems to be empty")
+        return score
 
     def write_pdb(self, pdb_path):
         """
@@ -180,29 +183,29 @@ class Alignment:
                     continue
                 # # N "ATOM" line
                 file.write("{:6s}{:5d} {:^4s} {:>3s}{:>2s}{:4d}{:>12.3f}{:8.3f}{:8.3f}{:6.2f}{:6.2f}{:>12s}\n"
-                           .format("ATOM", count_atom, "N", seq3(res_q.name).upper(), "A",\
+                           .format("ATOM", count_atom, "N", seq3(res_q.name).upper(), "A",
                                    count_res,
-                                   res_t.n_atom.coords[0],\
-                                   res_t.n_atom.coords[1],\
-                                   res_t.n_atom.coords[2],\
+                                   res_t.n_atom.coords[0],
+                                   res_t.n_atom.coords[1],
+                                   res_t.n_atom.coords[2],
                                    1.00, 0, "N"))
                 count_atom += 1
                 # CA "ATOM" line
                 file.write("{:6s}{:5d} {:^4s} {:>3s}{:>2s}{:4d}{:>12.3f}{:8.3f}{:8.3f}{:6.2f}{:6.2f}{:>12s}\n"
-                           .format("ATOM", count_atom, "CA", seq3(res_q.name).upper(), "A",\
+                           .format("ATOM", count_atom, "CA", seq3(res_q.name).upper(), "A",
                                    count_res,
-                                   res_t.ca_atom.coords[0],\
-                                   res_t.ca_atom.coords[1],\
-                                   res_t.ca_atom.coords[2],\
+                                   res_t.ca_atom.coords[0],
+                                   res_t.ca_atom.coords[1],
+                                   res_t.ca_atom.coords[2],
                                    1.00, 0, "C"))
                 count_atom += 1
                 # C "ATOM" line
                 file.write("{:6s}{:5d} {:^4s} {:>3s}{:>2s}{:4d}{:>12.3f}{:8.3f}{:8.3f}{:6.2f}{:6.2f}{:>12s}\n"
-                           .format("ATOM", count_atom, "C", seq3(res_q.name).upper(), "A",\
+                           .format("ATOM", count_atom, "C", seq3(res_q.name).upper(), "A",
                                    count_res,
-                                   res_t.c_atom.coords[0],\
-                                   res_t.c_atom.coords[1],\
-                                   res_t.c_atom.coords[2],\
+                                   res_t.c_atom.coords[0],
+                                   res_t.c_atom.coords[1],
+                                   res_t.c_atom.coords[2],
                                    1.00, 0, "C"))
                 count_atom += 1
                 ind += 1
