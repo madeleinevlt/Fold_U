@@ -35,12 +35,15 @@ def predict_top_contacts(aln_file, ntops):
             and value = index aa1, index aa2, confidence
     """
     # Retrieve the query sequence
-    with open(aln_file, "r") as file:
+    aln_file_2 = aln_file.split(".")[0]+".psicov"
+    out = subprocess.Popen(["./CCMpred/scripts/convert_alignment.py", aln_file, "fasta", aln_file_2], stdout=subprocess.PIPE).communicate()[0]
+
+    with open(aln_file_2, "r") as file:
         query_seq = file.readline()[:-1].replace("-", "")
 
     # Run ccmpred : Prediction of contacts
     ccmpred_cline = CCMpredCommandline(
-        cmd ='./CCMpred/bin/ccmpred', alnfile=aln_file, matfile="data/ccmpred/contact.mat"
+        cmd ='./CCMpred/bin/ccmpred', alnfile=aln_file_2, matfile="data/ccmpred/contact.mat"
     )
     ccmpred_cline()
 

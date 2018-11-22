@@ -9,7 +9,6 @@ from CCMpred.scripts.top_couplings import get_top_pairs
 import numpy as np
 from Bio.SubsMat import MatrixInfo
 from Bio.SeqUtils import seq3
-import subprocess
 import pandas as pd
 
 
@@ -64,15 +63,16 @@ class Alignment:
         """
         distance = np.empty((query_index[1], query_index[1]), dtype=object)
         k = 0
-        print("self.query.first {}".format(self.query.first))
         while k < self.query.first-1:
             distance[k, (k+1):] = "x"
             k += 1
-        print(k)
-
+        print("###############################")
         query_size = self.query.get_size()
-        query_residues = [res for res in self.query.residues if res != "-"]
-        template_residues = [res for res in self.template.residues if res != "-"]
+        query_len = len([res for res in self.query.residues if res != "-"])
+        template_len = len([res for res in self.template.residues if res != "-"])
+        print(query_len, template_len)
+        print("\n\n")
+
         for i, row_res in enumerate(query_residues):
             # There is a gap in the query or the template
             if row_res.name == "-" or template_residues[i].name == "-":
@@ -88,7 +88,7 @@ class Alignment:
                     continue
                 else:
                     # Calculate to distance between two residues
-                    print(i+k, j+k)
+                    # print(i+k, j+k)
                     distance[i+k, j+k] = template_residues[i].calculate_distance(template_residues[j])
                     # Keep distances only in a defined range because we don't want to
                     # take into account directly bonded residues (dist < ~5 A) and too far residues
