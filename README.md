@@ -32,7 +32,7 @@ pip install -r requirements.txt
 ```
 
 ## Run the program
-fold_u takes in input **N profil-profil alignments and their corresponding score** (foldrec file) and returns a `score.csv` file and the **top N pdb structures**.
+`fold_u` takes in input **N profil-profil alignments and their corresponding score** (foldrec file) and returns a `score.csv` file and the **top N pdb structures**.
 
 ### Toy example
 
