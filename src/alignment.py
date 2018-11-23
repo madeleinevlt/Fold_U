@@ -148,18 +148,28 @@ class Alignment:
             float: Q3, the secondary structure score, as the proportion of well predicted secondary
             structure predictions
         """
-        total = self.query.get_size()
         total_incorrect = 0
-        for ind, res_q in enumerate(self.query.residues):
-            res_t = self.template.residues[ind]
-            if res_q.secondary_struct == "-" or res_t.secondary_struct == "-":
-                continue
-            if res_q.ss_confidence < 7:
+        score = 0
+        query_len = self.query.get_size()
+        query_ind = 0
+        templ_ind = 0
+        ind = 0
+        while ind < query_len:
+            while query_ind < query_len and self.query.residues[query_ind].name == "-":
+                query_ind += 1
+            while templ_ind < query_len and self.template.residues[templ_ind].name == "-":
+                templ_ind += 1
+            if (query_ind < query_len and templ_ind < query_len and
+            self.query.residues[query_ind].secondary_struct != self.template.residues[templ_ind].secondary_struct):
                 total_incorrect += 1
+            ind += 1
         try:
-            score = 100 * (total - total_incorrect) / total
+            #gapless_query_len = len([res for res in self.query.residues if res.name != "-"])
+            print(query_len, total_incorrect)
+            score = (query_len - total_incorrect) / query_len
         except ZeroDivisionError as e:
-            print(str(e), "\n\nError ss_score: the query seems to be empty")
+            print(str(e), "\n\nError ss_score: the query seems to be of size null")
+        #print(score)
         return score
 
     def write_pdb(self, pdb_path):

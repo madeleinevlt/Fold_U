@@ -49,13 +49,17 @@ if __name__ == "__main__":
     # Each DataFrame will contain the cumulative sum of benchmarks for each structure (= 3 columns)
     benchmarking_scores = {}
     for score in scores:
-        benchmarking_scores[score] = pd.DataFrame(np.zeros((413,3), dtype=np.int64), columns=structures)
+        benchmarking_scores[score] = pd.DataFrame(np.zeros((413,3), dtype=np.float64), columns=structures)
     # For each query,
-    for query in os.listdir("data/foldrec"):
+    all_foldrecs = os.listdir("data/foldrec")
+    for ind, query in enumerate(all_foldrecs, 1):
         query = query.split(".")[0]
         # The Fold_U program is run on the current query if results are not
         if not os.path.isfile("results/" + query + "/scores.csv"):
-            subprocess.Popen(["./fold_u", "data/foldrec/" + query + ".foldrec", "-o", "results/" + query, "--cpu", "8"], stdout=subprocess.PIPE).communicate()
+            print("\nProcessing query {} / {} : {}\n".format(ind, len(all_foldrecs), query))
+            p = subprocess.Popen(["./fold_u", "data/foldrec/" + query + ".foldrec", "-o", "results/" + query, "--cpu", "4"], stdout=subprocess.PIPE).communicate()[0]
+            for i in p.decode("UTF-8").split("\n")[1:]:
+                print(i)
         # Score results are stored in a pandas DataFrame
         query_scores = pd.read_csv("results/" + query + "/scores.csv", index_col=0)
         for score in scores:
