@@ -152,7 +152,7 @@ class Alignment:
         total_incorrect = 0
         for ind, res_q in enumerate(self.query.residues):
             res_t = self.template.residues[ind]
-            if res_q.ss == "-" or res_t.ss == "-":
+            if res_q.secondary_struct == "-" or res_t.secondary_struct == "-":
                 continue
             if res_q.ss_confidence < 7:
                 total_incorrect += 1
