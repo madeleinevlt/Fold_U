@@ -57,8 +57,6 @@ class Score:
         for _, ali_score, thr_score, blosum_score, ccmpred_score, name, benchmark in sorted(self.iterator):
             scores_df.loc[name] = [benchmark, ali_score, thr_score, blosum_score, ccmpred_score]
 
-        # The first row is removed because it corresponds to the query
-        scores_df = scores_df.drop(scores_df.index[0])
         # Normalization of the scores
         for index in ['alignment', 'threading', 'blosum', 'ccmpred']:
             scores_df[index] = normalize_score(scores_df[index])
@@ -66,9 +64,9 @@ class Score:
         scores_df['sum scores'] = normalize_score(scores_df['alignment'] +
                                   scores_df['threading'] + scores_df['ccmpred'])
         # Sort of the templates according to the sum score
-        scores_df = scores_df.sort_values(by='sum scores', ascending=False)
+        scores_df = scores_df.sort_values(by="sum scores", ascending=False)
         # A csv file containing the normalized scores is created
-        scores_df.to_csv(res_path+'/scores.csv')
+        scores_df.to_csv(res_path+"/scores.csv")
 
         # Only nb_pdb pdb files are created
         for i in range(nb_pdb):
