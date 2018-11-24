@@ -46,7 +46,7 @@ if __name__ == "__main__":
     # Each DataFrame will contain the cumulative sum of benchmarks for each structure (= 3 columns)
     benchmarking_scores = {}
     for score in scores:
-        benchmarking_scores[score] = pd.DataFrame(np.zeros((405,3), dtype=np.float64), columns=structures)
+        benchmarking_scores[score] = pd.DataFrame(np.zeros((406,3), dtype=np.float64), columns=structures)
     # For each query,
     all_foldrecs = os.listdir("data/foldrec")
     for ind, query in enumerate(all_foldrecs, 1):
