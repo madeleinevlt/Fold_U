@@ -20,7 +20,8 @@ def normalize_score(score_type):
     """
     try:
         normalized = (score_type - min(score_type)) / (max(score_type) - min(score_type))
-    except:
+    except ZeroDivisionError:
+        print("\nError: normalize_score: Division by 0\n")
         normalized = 0
     return normalized
     # Use sklearn module instead
