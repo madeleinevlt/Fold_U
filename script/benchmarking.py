@@ -20,16 +20,16 @@ import matplotlib.pyplot as plt
 from matplotlib import cycler
 
 
-def plot_structure_benchmark(benchmarking_scores, struct, scores, rank):
+def plot_structure_benchmark(output_path, benchmarking_scores, struct, scores, rank):
     """
         Create one plot for one benchmark type for all the foldrec files.
 
         Args:
-            struct (str) : one of the three following : "Family", "Superfamily", "Fold"
-            scores (list):
-            rank (list):
+            output_path (str): The path to store png file.
+            structure (str): One of the three following : "Family", "Superfamily", "Fold".
+            scores (list): A list of score name.
+            rank (list): A list of rank from 1 to N.
     """
-    output_path = "results/plot/"
     os.makedirs(output_path, exist_ok=True)
 
     ali_struct = benchmarking_scores[scores[0]][struct].values
@@ -71,6 +71,7 @@ if __name__ == "__main__":
             p = subprocess.Popen(["./fold_u", "data/foldrec/" + query + ".foldrec",
                                   "-o", "results/" + query, "--cpu", str(cpu_count())],
                                  stdout=subprocess.PIPE).communicate()[0]
+        print("--------------------------------------------------------------------")
         # Score results are stored in a pandas DataFrame
         query_scores = pd.read_csv("results/" + query + "/scores.csv", index_col=0)
         for score in SCORES:
@@ -101,5 +102,6 @@ if __name__ == "__main__":
     plt.rc('patch', edgecolor='#E6E6E6')
     plt.rc('lines', linewidth=1.5)
 
+    OUTPUT_PATH = "results/plot/"
     for structure in STRUCTURES:
-        plot_structure_benchmark(BENCHMARKING_SCORES, structure, SCORES, RANK)
+        plot_structure_benchmark(OUTPUT_PATH, BENCHMARKING_SCORES, structure, SCORES, RANK)
