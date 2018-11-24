@@ -56,9 +56,6 @@ class Score:
         scores_df = pd.DataFrame(columns=["benchmark", "alignment", "threading", "blosum"])
         for _, ali_score, thr_score, blosum_score, name, benchmark in sorted(self.iterator):
             scores_df.loc[name] = [benchmark, ali_score, thr_score, blosum_score]
-
-        # The first row is removed because it corresponds to the query
-        scores_df = scores_df.drop(scores_df.index[0])
         # Normalization of the scores
         for index in ["alignment", "threading", "blosum"]:
             scores_df[index] = normalize_score(scores_df[index])
