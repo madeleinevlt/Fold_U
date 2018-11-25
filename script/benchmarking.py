@@ -51,6 +51,31 @@ def plot_structure_benchmark(output_path, benchmarking_scores, struct, scores, r
     plt.show()
     print("The plot for '" + struct + "' is stored in " + output_path)
 
+def top_N(output_path, BENCHMARKING_SCORES, score, n):
+    """
+        Create a top_N_stats.txt file showing statistics based on the benchmark.list files
+
+        Args:
+            output_path (str): The path to store stat file.
+            score (str): the score you want some stats on
+            n (str): a maximum rank number
+
+    """
+    os.makedirs(output_path, exist_ok=True)
+
+    structures = ["Family", "Superfamily", "Fold"]
+    rank = {}
+    max_rank = {}
+    for structure in structures:
+        rank[structure] = BENCHMARKING_SCORES[score][structure][n]
+        max_rank[structure] = max(BENCHMARKING_SCORES[score][structure])
+    str = "          Family      Superfamily      Fold \ntop {0}    {1}/{2}       {3}/{4}      {5}/{6} \n%           {7:.2f}          {8:.2f}          {9:.2f}".format(n, rank["Family"], max_rank["Family"],rank["Superfamily"],
+        max_rank["Superfamily"], rank["Fold"], max_rank["Fold"],
+        rank["Family"]/max_rank["Family"],rank["Superfamily"]/max_rank["Superfamily"],
+        rank["Fold"]/max_rank["Fold"])
+    with  open(output_path + "top_N_stats.txt", "w") as fileout:
+        fileout.write(str)
+
 
 if __name__ == "__main__":
     STRUCTURES = ["Family", "Superfamily", "Fold"]
@@ -106,3 +131,5 @@ if __name__ == "__main__":
     OUTPUT_PATH = "results/plot/"
     for structure in STRUCTURES:
         plot_structure_benchmark(OUTPUT_PATH, BENCHMARKING_SCORES, structure, SCORES, RANK)
+    OUTPUT_PATH = "results/top_N/"
+    top_N(OUTPUT_PATH, BENCHMARKING_SCORES, "sum scores", 10)
