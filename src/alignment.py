@@ -7,6 +7,8 @@
 import numpy as np
 from Bio.SubsMat import MatrixInfo
 from Bio.SeqUtils import seq3
+from Bio.PDB import PDBParser
+from Bio.PDB import NACCESS as nac
 
 
 def process(dist_range, gap_penality, dope_dict, ali):
@@ -182,3 +184,11 @@ class Alignment:
                 ind += 1
             # The two last lines of the created pdb file ("END" and "TER" lines)
             file.write("END\n")
+
+    def calculate_access_score(self, predicted_model_pdb, naccess_bin_path):
+        '''
+        ...some bullshit
+        '''
+        structure_predicted_model = PDBParser().get_structure(
+            "predicted_model", predicted_model_pdb, naccess= naccess_bin_path
+        )
