@@ -15,7 +15,7 @@ def plot_benchmark(output_path, structure, scores, rank):
         Create one plot for one benchmark type for all the foldrec files.
 
         Args:
-            output_path (str): The path to store png file. 
+            output_path (str): The path to store png file.
             structure (str): One of the three following : "Family", "Superfamily", "Fold".
             scores (list): A list of score name.
             rank (list): A list of rank from 1 to N.
@@ -37,6 +37,31 @@ def plot_benchmark(output_path, structure, scores, rank):
     plt.legend(loc="lower right")
     plt.savefig(output_path + structure + "_plot.png")
     plt.show()
+
+def top_N(output_path, score, n):
+    """
+        Create a top_N_stats.txt file showing statistics based on the benchmark.list files
+
+        Args:
+            output_path (str): The path to store stat file.
+            score (str): the score you want some stats on
+            n (str): a maximum rank number
+
+    """
+    os.makedirs(output_path, exist_ok=True)
+
+    structures = ["Family", "Superfamily", "Fold"]
+    rank = {}
+    max_rank = {}
+    for structure in structures:
+        rank[structure] = benchmarking_scores[score][structure][n]
+        max_rank[structure] = max(benchmarking_scores[score][structure])
+    str = "          Family      Superfamily      Fold \ntop {0}    {1}/{2}       {3}/{4}      {5}/{6} \n%           {7:.2f}          {8:.2f}          {9:.2f}".format(n, rank["Family"], max_rank["Family"],rank["Superfamily"],
+        max_rank["Superfamily"], rank["Fold"], max_rank["Fold"],
+        rank["Family"]/max_rank["Family"],rank["Superfamily"]/max_rank["Superfamily"],
+        rank["Fold"]/max_rank["Fold"])
+    with  open(output_path + "top_N_stats.txt", "w") as fileout:
+        fileout.write(str)
 
 
 if __name__ == "__main__":
@@ -91,3 +116,5 @@ if __name__ == "__main__":
     for structure in structures:
         plot_benchmark(output_path, structure, scores, rank)
     print("\nThe plots are stored in " + output_path + "\n")
+    output_path = "results/top_N/"
+    top_N(output_path, "sum scores", 10)
