@@ -65,13 +65,14 @@ if __name__ == "__main__":
     print("Processing all benchmarks ...\n")
     for ind, query in enumerate(ALL_FOLDRECS, 1):
         query = query.split(".")[0]
-        # The Fold_U program is run on the current query if results are not
+        # The Fold_U program is run on the current query if results are not already generated
         if not os.path.isfile("results/" + query + "/scores.csv"):
             print("\nProcessing query {} / {} : {}\n".format(ind, len(ALL_FOLDRECS), query))
             p = subprocess.Popen(["./fold_u", "data/foldrec/" + query + ".foldrec",
                                   "-o", "results/" + query, "--cpu", str(cpu_count())],
                                  stdout=subprocess.PIPE).communicate()[0]
-        print("--------------------------------------------------------------------")
+            rows, columns = os.popen('stty size', 'r').read().split()
+            print("\n" + "-"*int(columns))
         # Score results are stored in a pandas DataFrame
         query_scores = pd.read_csv("results/" + query + "/scores.csv", index_col=0)
         for score in SCORES:
