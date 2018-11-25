@@ -59,7 +59,7 @@ if __name__ == "__main__":
     # Each DataFrame will contain the cumulative sum of benchmarks for each structure (= 3 columns)
     BENCHMARKING_SCORES = {}
     for score in SCORES:
-        BENCHMARKING_SCORES[score] = pd.DataFrame(np.zeros((413, 3)), columns=STRUCTURES)
+        BENCHMARKING_SCORES[score] = pd.DataFrame(np.zeros((405, 3)), columns=STRUCTURES)
     # For each query,
     ALL_FOLDRECS = os.listdir("data/foldrec")
     print("Processing all benchmarks ...\n")
