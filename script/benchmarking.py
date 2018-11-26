@@ -38,7 +38,7 @@ def plot_benchmark(output_path, structure, scores, rank):
     plt.savefig(output_path + structure + "_plot.png")
     plt.show()
 
-def top_N(output_path, score, n):
+def top_N(output_path, structure, score, n):
     """
         Create a top_N_stats.txt file showing statistics based on the benchmark.list files
 
@@ -47,21 +47,22 @@ def top_N(output_path, score, n):
             score (str): the score you want some stats on
             n (str): a maximum rank number
 
+        Return:
+            a str "top_N_results" table summarizing the topN results
+
     """
     os.makedirs(output_path, exist_ok=True)
 
-    structures = ["Family", "Superfamily", "Fold"]
     rank = {}
     max_rank = {}
     for structure in structures:
         rank[structure] = benchmarking_scores[score][structure][n]
         max_rank[structure] = max(benchmarking_scores[score][structure])
-    str = "          Family      Superfamily      Fold \ntop {0}    {1}/{2}       {3}/{4}      {5}/{6} \n%           {7:.2f}          {8:.2f}          {9:.2f}".format(n, rank["Family"], max_rank["Family"],rank["Superfamily"],
+    top_N_results = "\tFamily\t\tSuperfamily\tFold\ntop{0}\t{1}/{2}\t\t{3}/{4}\t\t{5}/{6}\n%\t{7:.2f}\t\t{8:.2f}\t\t{9:.2f}".format(n, rank["Family"], max_rank["Family"],rank["Superfamily"],
         max_rank["Superfamily"], rank["Fold"], max_rank["Fold"],
         rank["Family"]/max_rank["Family"],rank["Superfamily"]/max_rank["Superfamily"],
         rank["Fold"]/max_rank["Fold"])
-    with  open(output_path + "top_N_stats.txt", "w") as fileout:
-        fileout.write(str)
+    return top_N_results
 
 
 if __name__ == "__main__":
@@ -117,4 +118,7 @@ if __name__ == "__main__":
         plot_benchmark(output_path, structure, scores, rank)
     print("\nThe plots are stored in " + output_path + "\n")
     output_path = "results/top_N/"
-    top_N(output_path, "sum scores", 10)
+    for i in [10,50,100]:
+        print(top_N(output_path, structures, "sum scores", i))
+    #with  open(output_path + "top_N_stats.txt", "w") as fileout:
+        #fileout.write(top_N_results)
