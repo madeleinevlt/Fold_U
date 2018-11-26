@@ -4,8 +4,8 @@
 # Third-party modules
 import os
 import subprocess
-import pandas as pd
 import numpy as np
+import pandas as pd
 import matplotlib.pyplot as plt
 from matplotlib import cycler
 
@@ -30,7 +30,7 @@ def plot_benchmark(output_path, structure, scores, rank):
     plt.plot(rank, ali_structure, "b", label=scores[0])
     plt.plot(rank, thr_structure, "#ffa201", label=scores[1])
     plt.plot(rank, sum_structure, "r", label=scores[2])
-    plt.plot([0,len(ali_structure)],[0,max(ali_structure)], "k", label="random")
+    plt.plot([0, len(ali_structure)], [0, max(ali_structure)], "k", label="random")
     plt.title("Global scores comparison using " + structure + " benchmarks")
     plt.ylabel("benchmark")
     plt.xlabel("rank")
@@ -38,7 +38,7 @@ def plot_benchmark(output_path, structure, scores, rank):
     plt.savefig(output_path + structure + "_plot.png")
     plt.show()
 
-def top_N(structure, score, n):
+def top_n(structure, score, topn):
     """
         Create a top_N_stats.txt file showing statistics based on the benchmark.list files
 
@@ -55,12 +55,9 @@ def top_N(structure, score, n):
     rank = {}
     max_rank = {}
     for structure in structures:
-        rank[structure] = benchmarking_scores[score][structure][n]
+        rank[structure] = benchmarking_scores[score][structure][topn]
         max_rank[structure] = max(benchmarking_scores[score][structure])
-    top_N_results = "\tFamily\t\tSuperfamily\tFold\ntop{0}\t{1}/{2}\t\t{3}/{4}\t\t{5}/{6}\n%\t{7:.2f}\t\t{8:.2f}\t\t{9:.2f}".format(n, rank["Family"], max_rank["Family"],rank["Superfamily"],
-        max_rank["Superfamily"], rank["Fold"], max_rank["Fold"],
-        rank["Family"]/max_rank["Family"],rank["Superfamily"]/max_rank["Superfamily"],
-        rank["Fold"]/max_rank["Fold"])
+    top_N_results = "\tFamily\t\tSuperfamily\tFold\ntop{0}\t{1}/{2}\t\t{3}/{4}\t\t{5}/{6}\n%\t{7:.2f}\t\t{8:.2f}\t\t{9:.2f}".format(topn, rank["Family"], max_rank["Family"], rank["Superfamily"], max_rank["Superfamily"], rank["Fold"], max_rank["Fold"], rank["Family"]/max_rank["Family"], rank["Superfamily"]/max_rank["Superfamily"], rank["Fold"]/max_rank["Fold"])
     return top_N_results
 
 
@@ -71,7 +68,7 @@ if __name__ == "__main__":
     # Each DataFrame will contain the cumulative sum of benchmarks for each structure (= 3 columns)
     benchmarking_scores = {}
     for score in scores:
-        benchmarking_scores[score] = pd.DataFrame(np.zeros((406,3), dtype=np.float64), columns=structures)
+        benchmarking_scores[score] = pd.DataFrame(np.zeros((406, 3), dtype=np.float64), columns=structures)
     # For each query,
     all_foldrecs = os.listdir("data/foldrec")
     for ind, query in enumerate(all_foldrecs, 1):
@@ -117,7 +114,7 @@ if __name__ == "__main__":
         plot_benchmark(output_path, structure, scores, rank)
     print("\nThe plots are stored in " + output_path + "\n")
     output_path = "results/top_N/"
-    for i in [10,50,100]:
-        print(top_N(structures, "sum scores", i))
+    for i in [10, 50, 100]:
+        print(top_n(structures, "sum scores", i))
     #with  open(output_path + "top_N_stats.txt", "w") as fileout:
         #fileout.write(top_N_results)
