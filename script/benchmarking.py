@@ -1,16 +1,21 @@
 #! /usr/bin/env python3
 # -*- coding: utf-8 -*-
+
 """
 .. module:: benchmarking
-   :synopsis: This module implements the functions necessary for the benchmark
-                of our program.
+   :synopsis: This module runs the program "fold_u" on all of the benchmarks. It then generates
+              plots to visualize the contribution of each and every score to the re-ranking of
+              models/templates.
+              Three plots are generated, one for each structure type of benchmark
+              "Fold", "Superfamily" and "Family".
 """
+
 # Third-party modules
 import os
 import subprocess
 from multiprocessing import cpu_count
-import numpy as np
 import pandas as pd
+import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib import cycler
 
@@ -32,44 +37,49 @@ def plot_benchmark(output_path, struct, scores, rank, benchmarking_scores):
     """
     os.makedirs(output_path, exist_ok=True)
 
-    ali_structure = benchmarking_scores[scores[0]][struct].values
-    thr_structure = benchmarking_scores[scores[1]][struct].values
-    sum_structure = benchmarking_scores[scores[2]][struct].values
+    ali_struct = benchmarking_scores[scores[0]][struct].values
+    thr_struct = benchmarking_scores[scores[1]][struct].values
+    ss_struct = benchmarking_scores[scores[2]][struct].values
+    sum_struct = benchmarking_scores[scores[3]][struct].values
 
-    plt.figure(num=struct) # Window's name
-    plt.plot(rank, ali_structure, "b", label=scores[0])
-    plt.plot(rank, thr_structure, "#ffa201", label=scores[1])
-    plt.plot(rank, sum_structure, "r", label=scores[2])
-    plt.plot([0, len(ali_structure)], [0, max(ali_structure)], "k", label="random")
+    plt.figure(num=struct)  # Window's name
+    plt.plot(rank, ali_struct, "b", label=scores[0])
+    plt.plot(rank, thr_struct, "#ffa201", label=scores[1])
+    plt.plot(rank, ss_struct, "#00B200", label=scores[2])
+    plt.plot(rank, sum_struct, "r", label=scores[3])
+    plt.plot([0, len(ali_struct)], [0, max(ali_struct)], "k", label="random")
     plt.title("Global scores comparison using " + struct + " benchmarks")
     plt.ylabel("benchmark")
     plt.xlabel("rank")
     plt.legend(loc="lower right")
     plt.savefig(output_path + struct + "_plot.png")
     plt.show()
+    print("The plot for '" + struct + "' is stored in " + output_path)
 
-def top_n(structures, scores, topn, benchmarking_scores):
+def top_n(structures, scores, top_n, benchmarking_scores):
     """
         Create a top_N_stats.txt file showing statistics based on the
         benchmark.list files
 
         Args:
-            output_path (str): The path to store stat file.
-            score (str): the score you want some stats on
-            n (str): a maximum rank number
+            structures (list): List containing fold types: "Family", "Superfamily", "Fold"
+            scores (str): the score you want some stats on
+            top_n (str): a maximum rank number
+            benchmarking_scores (dict): a dictionnary containing benchmarking
+                                        data for each type of score for
+                                        different types of structures.
 
-        Return:
-            a str "top_n_results" table summarizing the topN results
+        Returns:
+            a str "top_n_results" table summarizing the top_n results
 
     """
-
     rank = {}
     max_rank = {}
     for struct in structures:
-        rank[struct] = benchmarking_scores[scores][struct][topn]
+        rank[struct] = benchmarking_scores[scores][struct][top_n]
         max_rank[struct] = max(benchmarking_scores[scores][struct])
     line1 = "\tFamily\t\tSuperfamily\tFold\n"
-    line2 =  "top{0}\t{1}/{2}\t\t{3}/{4}\t\t{5}/{6}\n".format(topn,
+    line2 =  "top{0}\t{1}/{2}\t\t{3}/{4}\t\t{5}/{6}\n".format(top_n,
                                                         rank["Family"],
                                                         max_rank["Family"],
                                                         rank["Superfamily"],
@@ -86,30 +96,25 @@ def top_n(structures, scores, topn, benchmarking_scores):
 
 if __name__ == "__main__":
     STRUCTURES = ["Family", "Superfamily", "Fold"]
-    SCORES = ["alignment", "threading", "sum scores"]
+    SCORES = ["alignment", "threading", "secondary_structure", "sum scores"]
     # A dictionary of pandas DataFrames is created for each score
-    # Each DataFrame will contain the cumulative sum of benchmarks for each
-    # structure (= 3 columns)
+    # Each DataFrame will contain the cumulative sum of benchmarks for each structure (= 3 columns)
     BENCHMARKING_SCORES = {}
     for score in SCORES:
-        BENCHMARKING_SCORES[score] = pd.DataFrame(np.zeros((406, 3)),
-                                                  columns=STRUCTURES)
+        BENCHMARKING_SCORES[score] = pd.DataFrame(np.zeros((405, 3)), columns=STRUCTURES)
     # For each query,
     ALL_FOLDRECS = os.listdir("data/foldrec")
+    print("Processing all benchmarks ...\n")
     for ind, query in enumerate(ALL_FOLDRECS, 1):
         query = query.split(".")[0]
-        # The Fold_U program is run on the current query if results are not
+        # The Fold_U program is run on the current query if results are not already generated
         if not os.path.isfile("results/" + query + "/scores.csv"):
-            print("\nProcessing query {} / {} : {}\n"\
-                    .format(ind, len(ALL_FOLDRECS), query))
-            p = subprocess.Popen(["./fold_u",
-                                  "data/foldrec/" + query + ".foldrec",
-                                  "-o", "results/" + query,
-                                  "--cpu", str(cpu_count())],\
-                                  stdout=subprocess.PIPE).communicate()[0]
-            for i in p.decode("UTF-8").split("\n")[1:]:
-                print(i)
-            print("--------------------------------------------------------------------")
+            print("\nProcessing query {} / {} : {}\n".format(ind, len(ALL_FOLDRECS), query))
+            p = subprocess.Popen(["./fold_u", "data/foldrec/" + query + ".foldrec",
+                                  "-o", "results/" + query, "--cpu", str(cpu_count())],
+                                 stdout=subprocess.PIPE).communicate()[0]
+            rows, columns = os.popen('stty size', 'r').read().split()
+            print("\n" + "-"*int(columns))
         # Score results are stored in a pandas DataFrame
         query_scores = pd.read_csv("results/" + query + "/scores.csv", index_col=0)
         for score in SCORES:
@@ -147,5 +152,5 @@ if __name__ == "__main__":
     for i in [10, 50, 100]:
         print(top_n(STRUCTURES, "sum scores", i, BENCHMARKING_SCORES))
         print("\t----------------------------------------")
-    #with  open(output_path + "top_N_stats.txt", "w") as fileout:
-        #fileout.write(top_n_results)
+    # with  open(output_path + "top_N_stats.txt", "w") as fileout:
+        # fileout.write(top_n_results)

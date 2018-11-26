@@ -28,14 +28,13 @@ def process(dist_range, gap_penalty, dope_dict, output_path, ali):
     #print(ali.template.name, ali.template.pdb)
     # Calculate the threading score of all alignments and find the initial templates
     threading_score = ali.calculate_threading_score(dist_range, gap_penalty, dope_dict)
-    # Write the alignment's threading model
-    # pathlib.Path("results/threading/"+ali.template.name).mkdir(parents=True, exist_ok=True)
-    # ali.write_pdb("results/threading/" + ali.template.name + "/" + ali.template.pdb + "_thr.atm")
     # Calculate the modeller score of all alignments
     modeller_score = ali.calculate_modeller_score(output_path)
+    # Calculate secondary structure score
+    ss_score = ali.calculate_ss_score()
     # Calculate the BLOSUM score of all alignments
     blosum_score = ali.calculate_blosum_score()
-    return ali.num, ali.score, threading_score, modeller_score, blosum_score,\
+    return ali.num, ali.score, threading_score, modeller_score, ss_score, blosum_score,\
            ali.template.name, ali.template.benchmark
 
 
@@ -160,6 +159,53 @@ class Alignment:
             # If not, the corresponding key is (res_2, res_1)
             else:
                 score += blosum62[(res_t.name, res_q.name)]
+        return score
+
+    def calculate_ss_score(self):
+        """
+        This function calculates a score based on the secondary structure prediction of the query.
+        We consider only PSIPRED predictions with a confidence >= 7 on the scale 0-9.
+        The reason is that we want secondary structure predictions that have at least a Q3 accuracy
+        of 80% (cf. doi:[10.1186/1471-2164-11-S4-S4])
+        We use the average three-state prediction accuracy (Q3) to measure the accuracy of the
+        secondary structure prediction of PSIPRED.
+        The formula is: score = (N - total_incorrect) / N
+
+        With N = length of the gapless query and total_incorrect = all the incorrectly predicted
+        secondary structures with a confidence score < 7 (True negatives)
+
+        Returns:
+            float: Q3, the secondary structure score, as the proportion of well predicted secondary
+            structure predictions
+        """
+        total_incorrect = 0
+        score = 0
+        query_ind = 0
+        templ_ind = 0
+        ind = 0
+        query_len = self.query.get_size()
+        while ind < query_len:
+            # Skip gaps in secondary structure predictions
+            while query_ind < query_len and self.query.residues[query_ind].secondary_struct == "-":
+                query_ind += 1
+            while (templ_ind < query_len\
+                    and self.template.residues[templ_ind].secondary_struct == "-"):
+                templ_ind += 1
+            # Count incorrect secondary structure predictions of query according to the template
+            if (query_ind < query_len and templ_ind < query_len\
+                and self.query.residues[query_ind].ss_confidence < 7\
+                    and self.query.residues[query_ind].secondary_struct\
+                    != self.template.residues[templ_ind].secondary_struct):
+                total_incorrect += 1
+            ind += 1
+            query_ind += 1
+            templ_ind += 1
+        try:
+            # Calculate Q3
+            gapless_query_len = len([res for res in self.query.residues if res.name != "-"])
+            score = (gapless_query_len - total_incorrect) / gapless_query_len
+        except ZeroDivisionError as err:
+            print(str(err), "\n\nError ss_score: the query seems to be of size null")
         return score
 
     def write_pdb(self, pdb_path):
