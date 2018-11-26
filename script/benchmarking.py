@@ -38,7 +38,7 @@ def plot_benchmark(output_path, structure, scores, rank):
     plt.savefig(output_path + structure + "_plot.png")
     plt.show()
 
-def top_N(output_path, structure, score, n):
+def top_N(structure, score, n):
     """
         Create a top_N_stats.txt file showing statistics based on the benchmark.list files
 
@@ -51,7 +51,6 @@ def top_N(output_path, structure, score, n):
             a str "top_N_results" table summarizing the topN results
 
     """
-    os.makedirs(output_path, exist_ok=True)
 
     rank = {}
     max_rank = {}
@@ -119,6 +118,6 @@ if __name__ == "__main__":
     print("\nThe plots are stored in " + output_path + "\n")
     output_path = "results/top_N/"
     for i in [10,50,100]:
-        print(top_N(output_path, structures, "sum scores", i))
+        print(top_N(structures, "sum scores", i))
     #with  open(output_path + "top_N_stats.txt", "w") as fileout:
         #fileout.write(top_N_results)
