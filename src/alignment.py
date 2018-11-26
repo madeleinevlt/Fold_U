@@ -13,6 +13,7 @@ from modeller.automodel import assess
 import contextlib
 import os, re
 import pathlib
+from pathlib import Path
 
 
 def process(dist_range, gap_penalty, dope_dict, output_path, ali):
@@ -25,12 +26,16 @@ def process(dist_range, gap_penalty, dope_dict, output_path, ali):
 
     """
     #print(ali.template.name, ali.template.pdb)
-    modeller_score = ali.calculate_modeller_score(output_path)
-    # Calculate the threading score of all alignments
+    # Calculate the threading score of all alignments and find the initial templates
     threading_score = ali.calculate_threading_score(dist_range, gap_penalty, dope_dict)
+    # Write the alignment's threading model
+    # pathlib.Path("results/threading/"+ali.template.name).mkdir(parents=True, exist_ok=True)
+    # ali.write_pdb("results/threading/" + ali.template.name + "/" + ali.template.pdb + "_thr.atm")
+    # Calculate the modeller score of all alignments
+    modeller_score = ali.calculate_modeller_score(output_path)
     # Calculate the BLOSUM score of all alignments
     blosum_score = ali.calculate_blosum_score()
-    return ali.num, ali.score, modeller_score, threading_score, blosum_score,\
+    return ali.num, ali.score, threading_score, modeller_score, blosum_score,\
            ali.template.name, ali.template.benchmark
 
 

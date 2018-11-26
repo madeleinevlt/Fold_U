@@ -143,7 +143,8 @@ def parse_foldrec(foldrec_file, nb_templates, metafold_dict):
             # A template name is found :
             if template_name_found:
                 # These templates currently have more than 1 chain, so we skip them
-                if template_name_found.group(1) in ["bromodomain", "rhv", "Peptidase_A6"]:
+                if template_name_found.group(1) in ["bromodomain", "rhv", "Peptidase_A6", "ins",
+                                                    "Arg_repressor_C", "SAM_decarbox", "prc"]:
                     # We skip the alignment
                     for i in range(10):
                         next(file)
@@ -188,6 +189,7 @@ def parse_foldrec(foldrec_file, nb_templates, metafold_dict):
                                     Query(query_seq, query_first, query_last),
                                     Template(template_name, template_seq))
                     ali.template.set_pdb_name(metafold_dict)
+                    ali.template.parse_pdb("data/pdb/"+ali.template.name+"/"+ali.template.pdb+".atm")
                     alignment_dict[template_name] = ali
                     count_templates += 1
     return alignment_dict

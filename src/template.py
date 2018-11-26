@@ -41,7 +41,6 @@ class Template:
         self.benchmark = "."
         self.pdb = None             # ex: 1jlxa1
         self.first = None
-        self.missing_residues = False
 
     def display(self):
         return "".join(str(res.name) for res in self.residues)
@@ -63,12 +62,6 @@ class Template:
                 metafold_dict: A dictionary with key = template name and value = pdb file
         """
         self.pdb = metafold_dict[self.name].split(".")[0]
-
-    def set_missing_resides(self):
-        """
-        This a setter for the missing_residues attribute.
-        """
-        self.missing_residues = True
 
     def parse_pdb(self, pdb_path):
         """
