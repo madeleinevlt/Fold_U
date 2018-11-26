@@ -185,10 +185,52 @@ class Alignment:
             # The two last lines of the created pdb file ("END" and "TER" lines)
             file.write("END\n")
 
-    def calculate_access_score(self, predicted_model_pdb, naccess_bin_path):
+    def calculate_access_score(self, predicted_model_pdb, naccess_bin_path, threshold):
         '''
         ...some bullshit
         '''
+        #generate PDB_model
         structure_predicted_model = PDBParser().get_structure(
-            "predicted_model", predicted_model_pdb, naccess= naccess_bin_path
-        )
+            "predicted_model", predicted_model_pdb)[0]
+        structure_template_model = PDBParser().get_structure(
+            "template_model", self.template.pdb)[0]
+
+        #generate accesbilities files
+        rsa_data_predicted_model, asa_data_predicted_model = nac.run_naccess(
+            structure_predicted_model, predicted_model_pdb, naccess= naccess_bin_path)
+
+        rsa_data_template_model, asa_data_template_model = nac.run_naccess(
+            structure_template_model, self.template.pdb, naccess= naccess_bin_path)
+
+        #Parse the naccess output .rsa file to retrieve the
+        #relative  % of solvant accessible area for each CA
+        predicted_model_rsa = nac.process_rsa_data(rsa_data_predicted_model)
+        template_model_rsa = nac.process_rsa_data(rsa_data_template_model)
+
+        #Keep only residues with a relative accesibilities  threshold
+        predicted_model_accessible_residues = keep_accessible_residues(predicted_model_rsa, threshold)
+        template_model_accessible_residues = keep_accessible_residues(template_model_rsa, threshold)
+
+
+        #
+
+
+
+#Function to compute Accesible residues
+#**************************************
+def keep_accessible_residues(naccess_rsa, threshold):
+    """From the output of naccess we keep only accessible residues
+    which have a all_atoms_rel value > 30 (arbitrary threshold)
+    Args:
+    naccess_rsa (dict): A dictionnary containing the output of naccess's calculations
+    threshold (int): all_atom_rel value 
+    Returns:
+    dict: Keys are the residue ids and as value their solvant accessible area
+    """
+    accessible_residues_dict = {}
+    for (chain_id, res_id), data_dict in naccess_rsa.items():
+        for key, val in data_dict.items():
+            if key == "all_atoms_rel" and val >= threshold:
+                accessible_residues_dict[res_id[1]] = val
+    return accessible_residues_dict
+
