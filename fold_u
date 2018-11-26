@@ -13,7 +13,7 @@
     Options:
         -h, --help                            Show this
         -n NUM, --nb_templates NUM            First n templates to retrieve from
-                                              the foldrec file [default: 413]
+                                              the foldrec file [default: 405]
         -p NUM, --nb_pdb NUM                  Number of pdb to create
                                               [default: 10]
         -o PATH, --output PATH                Path to the directory containing
@@ -54,10 +54,10 @@ def check_args():
     schema = Schema({
         'FOLDREC_FILE': Use(open, error='FOLDREC_FILE should be readable'),
         '--metafold': Use(open, error='METAFOLD_FILE should be readable'),
-        '--nb_templates': And(Use(int), lambda n: 1 <= n <= 413,\
-                                error='--nb_templates=NUM should be integer 1 <= N <= 413'),
-        '--nb_pdb': And(Use(int), lambda n: 1 <= n <= 413,\
-                                error='--nb_pdb=NUM should be integer 1 <= N <= 413'),
+        '--nb_templates': And(Use(int), lambda n: 1 <= n <= 405,\
+                                error='--nb_templates=NUM should be integer 1 <= N <= 405'),
+        '--nb_pdb': And(Use(int), lambda n: 1 <= n <= 405,\
+                                error='--nb_pdb=NUM should be integer 1 <= N <= 405'),
         '--dope': Use(open, error='DOPE_FILE should be readable'),
         '--benchmark': Use(open, error='BENCHMARK_FILE should be readable'),
         '--cpu': And(Use(int), lambda n: 1 <= n <= cpu_count(),\
@@ -121,7 +121,7 @@ if __name__ == "__main__":
         # imap_unordered can smooth things out by yielding faster-calculated values
         # ahead of slower-calculated values.
         os.system("clear")
-        print("\n" + str(cpu_count()) + " cpus detected, using " + str(NB_PROC))
+        print("\n\n" + str(cpu_count()) + " cpus detected, using " + str(NB_PROC))
         print("\n\nProcessing alignments ...\n")
         RESULTS = Score([res_ali for res_ali in tqdm(pool.imap_unordered(FUNC,\
                     ALIGNMENT_DICT.values()), total=len(ALIGNMENT_DICT.values()))])
@@ -131,5 +131,5 @@ if __name__ == "__main__":
     ### Results : Score and PDB files
     #################################
     RESULTS.write_score(OUTPUT_PATH, NB_PDB, ALIGNMENT_DICT)
-    print("\n\nThe program ended successfully !\nThe results are stored in " + OUTPUT_PATH)
+    print("\nThe program ended successfully !\nThe results are stored in " + OUTPUT_PATH)
     print("\nTotal runtime: {} seconds".format(str(datetime.now() - START_TIME)))

@@ -67,9 +67,9 @@ class Score:
                                                   + scores_df['modeller']
                                                   + scores_df['threading'])
         # Sort of the templates according to the sum score
-        scores_df = scores_df.sort_values(by='sum scores', ascending=False)
+        scores_df = scores_df.sort_values(by="sum scores", ascending=False)
         # A csv file containing the normalized scores is created
-        scores_df.to_csv(res_path+'/scores.csv')
+        scores_df.to_csv(res_path+"/scores.csv")
 
         # Only nb_pdb pdb files are created
         for i in range(nb_pdb):

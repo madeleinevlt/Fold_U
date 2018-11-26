@@ -3,24 +3,24 @@
 
 # Third-party modules
 import os
-from subprocess import call
+import subprocess
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib import cycler
 
 
-def plot_benchmark(structure, scores, rank):
+def plot_benchmark(output_path, structure, scores, rank):
     """
         Create one plot for one benchmark type for all the foldrec files.
 
         Args:
-            structure (str) : one of the three following : "Family", "Superfamily", "Fold"
-            scores (list):
-            rank (list): 
+            output_path (str): The path to store png file. 
+            structure (str): One of the three following : "Family", "Superfamily", "Fold".
+            scores (list): A list of score name.
+            rank (list): A list of rank from 1 to N.
     """
-    OUTPUT_PATH = "results/plot/"
-    os.makedirs(OUTPUT_PATH, exist_ok=True)
+    os.makedirs(output_path, exist_ok=True)
 
     ali_structure = benchmarking_scores[scores[0]][structure].values
     thr_structure = benchmarking_scores[scores[1]][structure].values
@@ -35,9 +35,8 @@ def plot_benchmark(structure, scores, rank):
     plt.ylabel("benchmark")
     plt.xlabel("rank")
     plt.legend(loc="lower right")
-    plt.savefig(OUTPUT_PATH + structure + "_plot.png")
+    plt.savefig(output_path + structure + "_plot.png")
     plt.show()
-    print("\nThe plots are stored in " + OUTPUT_PATH)
 
 
 if __name__ == "__main__":
@@ -47,13 +46,18 @@ if __name__ == "__main__":
     # Each DataFrame will contain the cumulative sum of benchmarks for each structure (= 3 columns)
     benchmarking_scores = {}
     for score in scores:
-        benchmarking_scores[score] = pd.DataFrame(np.zeros((413,3), dtype=np.int64), columns=structures)
+        benchmarking_scores[score] = pd.DataFrame(np.zeros((406,3), dtype=np.float64), columns=structures)
     # For each query,
-    for query in os.listdir("data/foldrec"):
+    all_foldrecs = os.listdir("data/foldrec")
+    for ind, query in enumerate(all_foldrecs, 1):
         query = query.split(".")[0]
         # The Fold_U program is run on the current query if results are not
         if not os.path.isfile("results/" + query + "/scores.csv"):
-            call([" ./fold_u data/foldrec/" + query + ".foldrec -o results/" + query], shell=True)
+            print("\nProcessing query {} / {} : {}\n".format(ind, len(all_foldrecs), query))
+            p = subprocess.Popen(["./fold_u", "data/foldrec/" + query + ".foldrec", "-o", "results/" + query, "--cpu", "4"], stdout=subprocess.PIPE).communicate()[0]
+            for i in p.decode("UTF-8").split("\n")[1:]:
+                print(i)
+            print("--------------------------------------------------------------------")
         # Score results are stored in a pandas DataFrame
         query_scores = pd.read_csv("results/" + query + "/scores.csv", index_col=0)
         for score in scores:
@@ -73,9 +77,8 @@ if __name__ == "__main__":
     rank = [i for i in benchmarking_scores[scores[0]][structures[0]].index]
 
     # plot settings
-    colors = cycler('color',
-                    ['#EE6666', '#3388BB', '#9988DD',
-                     '#EECC55', '#88BB44', '#FFBBBB'])
+    colors = cycler('color', ['#EE6666', '#3388BB', '#9988DD',
+                              '#EECC55', '#88BB44', '#FFBBBB'])
     plt.rc('axes', facecolor='#E6E6E6', edgecolor='none',
            axisbelow=True, grid=True, prop_cycle=colors)
     plt.rc('grid', color='w', linestyle='solid')
@@ -84,5 +87,7 @@ if __name__ == "__main__":
     plt.rc('patch', edgecolor='#E6E6E6')
     plt.rc('lines', linewidth=1.5)
 
+    output_path = "results/plot/"
     for structure in structures:
-        plot_benchmark(structure, scores, rank)
+        plot_benchmark(output_path, structure, scores, rank)
+    print("\nThe plots are stored in " + output_path + "\n")
