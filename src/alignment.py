@@ -12,7 +12,11 @@ from Bio.SeqUtils import seq3
 import pandas as pd
 
 
+<<<<<<< HEAD
 def process(dist_range, gap_penality, dope_dict, top_couplings_dict, query_index, ali):
+=======
+def process(dist_range, dope_dict, ali):
+>>>>>>> origin/dev
     """
         Generates the threading and the blosum scores for a given Alignment object.
 
@@ -22,8 +26,12 @@ def process(dist_range, gap_penality, dope_dict, top_couplings_dict, query_index
 
     """
     # Calculate the threading score of all alignments
+<<<<<<< HEAD
     print(ali.template.name)
     threading_score = ali.calculate_threading_score(dist_range, gap_penality, dope_dict)
+=======
+    threading_score = ali.calculate_threading_score(dist_range, dope_dict)
+>>>>>>> origin/dev
     blosum_score = ali.calculate_blosum_score()
     distance_matrix = ali.calculate_distance(query_index)
     print(distance_matrix)
@@ -97,7 +105,7 @@ class Alignment:
     return distance
 
 
-    def calculate_threading_score(self, dist_range, gap_penalty, dope_dict):
+    def calculate_threading_score(self, dist_range, dope_dict):
         """
             Calculate the threading score of the query on the template sequence.
             1) For each pair residues of the query sequence the distance between them is
@@ -109,7 +117,6 @@ class Alignment:
             Args:
                 dist_range (list of int): Range of distances in angstroms. Distances
                                           within this range only are taken into account
-                gap_penalty (int): Gap penalty
                 dope_dict (dictionary): A dictionary with key = res_1-res_2 and
                                         value = an array of 30 dope energy values.
 
@@ -128,23 +135,13 @@ class Alignment:
         energy.fill(np.nan)
 
         for i, row_res in enumerate(query):
-            # The gap was already treated
-            if i <= (query_size - 3) and energy[i, (i + 2)] == gap_penalty:
-                continue
             # There is a gap in the query or the template
-            elif row_res.name == "-" or template[i].name == "-":
-                # The whole line is set with gap penalty value
-                energy[i, (i + 2):] = gap_penalty
+            if row_res.name == "-" or template[i].name == "-":
                 continue
             for j in range(i + 2, query_size - 1):
                 col_res = query[j]
-                # The gap was already treated
-                if energy[i, j] == gap_penalty:
-                    continue
                 # There is a gap in the query or the template
-                elif col_res.name == "-" or template[j].name == "-":
-                    # The whole column is set with gap penalty value
-                    energy[:(j - 1), j] = gap_penalty
+                if col_res.name == "-" or template[j].name == "-":
                     continue
                 else:
                     # Calculate to distance between two residues
