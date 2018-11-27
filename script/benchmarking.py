@@ -39,14 +39,16 @@ def plot_benchmark(output_path, struct, scores, rank, benchmarking_scores):
 
     ali_struct = benchmarking_scores[scores[0]][struct].values
     thr_struct = benchmarking_scores[scores[1]][struct].values
-    ss_struct = benchmarking_scores[scores[2]][struct].values
-    sum_struct = benchmarking_scores[scores[3]][struct].values
+    mod_struct = benchmarking_scores[scores[2]][struct].values
+    ss_struct = benchmarking_scores[scores[3]][struct].values
+    sum_struct = benchmarking_scores[scores[4]][struct].values
 
     plt.figure(num=struct)  # Window's name
     plt.plot(rank, ali_struct, "b", label=scores[0])
     plt.plot(rank, thr_struct, "#ffa201", label=scores[1])
-    plt.plot(rank, ss_struct, "#00B200", label=scores[2])
-    plt.plot(rank, sum_struct, "r", label=scores[3])
+    plt.plot(rank, mod_struct, "#EE82EE", label=scores[2])
+    plt.plot(rank, ss_struct, "#00B200", label=scores[3])
+    plt.plot(rank, sum_struct, "r", label=scores[4])
     plt.plot([0, len(ali_struct)], [0, max(ali_struct)], "k", label="random")
     plt.title("Global scores comparison using " + struct + " benchmarks")
     plt.ylabel("benchmark")
@@ -96,7 +98,7 @@ def top_n(structures, scores, top_n, benchmarking_scores):
 
 if __name__ == "__main__":
     STRUCTURES = ["Family", "Superfamily", "Fold"]
-    SCORES = ["alignment", "threading", "secondary_structure", "sum scores"]
+    SCORES = ["alignment", "threading", "modeller", "secondary_structure", "sum scores"]
     # A dictionary of pandas DataFrames is created for each score
     # Each DataFrame will contain the cumulative sum of benchmarks for each structure (= 3 columns)
     BENCHMARKING_SCORES = {}
@@ -106,6 +108,8 @@ if __name__ == "__main__":
     ALL_FOLDRECS = os.listdir("data/foldrec")
     print("Processing all benchmarks ...\n")
     for ind, query in enumerate(ALL_FOLDRECS, 1):
+        # if ind == 8:
+        #     break
         query = query.split(".")[0]
         # The Fold_U program is run on the current query if results are not already generated
         if not os.path.isfile("results/" + query + "/scores.csv"):
