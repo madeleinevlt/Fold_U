@@ -103,13 +103,11 @@ if __name__ == "__main__":
     # Each DataFrame will contain the cumulative sum of benchmarks for each structure (= 3 columns)
     BENCHMARKING_SCORES = {}
     for score in SCORES:
-        BENCHMARKING_SCORES[score] = pd.DataFrame(np.zeros((405, 3)), columns=STRUCTURES)
+        BENCHMARKING_SCORES[score] = pd.DataFrame(np.zeros((399, 3)), columns=STRUCTURES)
     # For each query,
     ALL_FOLDRECS = os.listdir("data/foldrec")
     print("Processing all benchmarks ...\n")
     for ind, query in enumerate(ALL_FOLDRECS, 1):
-        # if ind == 8:
-        #     break
         query = query.split(".")[0]
         # The Fold_U program is run on the current query if results are not already generated
         if not os.path.isfile("results/" + query + "/scores.csv"):
