@@ -57,46 +57,44 @@ class Alignment:
         self.template = template
         self.aln = None
 
-    def calculate_distance(self, query_index):
+    def calculate_distance(self, size):
         """
         Calculate distance
         """
-        distance = np.empty((query_index[1], query_index[1]), dtype=object)
-        k = 0
-        while k < self.query.first-1:
-            distance[k, (k+1):] = "x"
-            k += 1
-        print("###############################")
-        query_size = self.query.get_size()
-        query_len = len([res for res in self.query.residues if res != "-"])
-        template_len = len([res for res in self.template.residues if res != "-"])
-        print(query_len, template_len)
-        print("\n\n")
+    # size = len(index_list)
+    distance = np.empty((size, size), dtype=object)
+    k = 0
+    while k < ali.query.first-1:
+        distance[k, (k+1):] = "x"
+        k += 1
 
-        for i, row_res in enumerate(query_residues):
-            # There is a gap in the query or the template
-            if row_res.name == "-" or template_residues[i].name == "-":
-                # The whole line is set with gap penalty value
-                distance[i+k, (i+k+1):] = "x"
+    query_size = ali.query.get_size()
+
+    index_i = 0
+    for i in range(k, ali.query.last):
+        while index_i < query_size and ali.query.residues[index_i].name == "-":
+            index_i += 1
+        if index_i < query_size and ali.template.residues[index_i].name == "-":
+            distance[i, (i+1):] = "e"
+            index_i += 1
+            continue
+        index_j = index_i + 1
+        for j in range(i+1, ali.query.last):
+            while index_j < query_size and ali.query.residues[index_j].name == "-":
+                index_j += 1
+            if index_j < query_size and ali.template.residues[index_j].name == "-":
+                distance[j, (j+1):] = "o"
+                index_j += 1
                 continue
-            for j in range(i + 1, query_size - 1):
-                col_res = query_residues[j]
-                # There is a gap in the query or the template
-                if col_res.name == "-" or template_residues[j].name == "-":
-                    # The whole column is set with gap penalty value
-                    distance[:(j+k-1), j+k] = "x"
-                    continue
-                else:
-                    # Calculate to distance between two residues
-                    # print(i+k, j+k)
-                    distance[i+k, j+k] = template_residues[i].calculate_distance(template_residues[j])
-                    # Keep distances only in a defined range because we don't want to
-                    # take into account directly bonded residues (dist < ~5 A) and too far residues
-        k = i
-        while query_index[1] > k > self.query.last-1:
-            distance[k, (k+1):] = "x"
-            k += 1
-        return distance
+            if distance[i, j] != "x":
+                distance[i, j] = ali.template.residues[index_i].calculate_distance(ali.template.residues[index_j])
+            index_j += 1
+        index_i += 1
+
+    while i < size-1:
+        distance[:i, (i+1):] = "x"
+        i += 1
+    return distance
 
 
     def calculate_threading_score(self, dist_range, gap_penalty, dope_dict):
