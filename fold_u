@@ -122,13 +122,8 @@ if __name__ == "__main__":
     #####################
 
     # Parallelization of the main loop
-<<<<<<< HEAD
     with Pool(processes=1) as pool:
-        FUNC = partial(process, DIST_RANGE, GAP_PENALTY, DOPE_DICT, TOP_COUPLINGS_DICT, QUERY_INDEX)
-=======
-    with Pool(processes=NB_PROC) as pool:
-        FUNC = partial(process, DIST_RANGE, DOPE_DICT)
->>>>>>> origin/dev
+        FUNC = partial(process, DIST_RANGE, DOPE_DICT, TOP_COUPLINGS_DICT, QUERY_INDEX)
         # tqdm module enables an ETA progress bar for each alignment processed
         # imap_unordered can smooth things out by yielding faster-calculated values
         # ahead of slower-calculated values.

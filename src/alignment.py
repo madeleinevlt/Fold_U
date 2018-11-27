@@ -12,11 +12,7 @@ from Bio.SeqUtils import seq3
 import pandas as pd
 
 
-<<<<<<< HEAD
-def process(dist_range, gap_penality, dope_dict, top_couplings_dict, query_index, ali):
-=======
-def process(dist_range, dope_dict, ali):
->>>>>>> origin/dev
+def process(dist_range, dope_dict, top_couplings_dict, query_index, ali):
     """
         Generates the threading and the blosum scores for a given Alignment object.
 
@@ -26,15 +22,9 @@ def process(dist_range, dope_dict, ali):
 
     """
     # Calculate the threading score of all alignments
-<<<<<<< HEAD
-    print(ali.template.name)
-    threading_score = ali.calculate_threading_score(dist_range, gap_penality, dope_dict)
-=======
     threading_score = ali.calculate_threading_score(dist_range, dope_dict)
->>>>>>> origin/dev
     blosum_score = ali.calculate_blosum_score()
     distance_matrix = ali.calculate_distance(query_index)
-    print(distance_matrix)
     # for i in distance_matrix.shape[0]:
     #     for j in distance_matrix.shape[1]:
     #         print(distance_matrix[i, j], end=" ")
