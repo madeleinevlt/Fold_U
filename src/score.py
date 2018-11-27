@@ -54,21 +54,22 @@ class Score:
         os.makedirs(res_path+"/pdb", exist_ok=True)
 
         # A dataframe is created with pandas and elements of the iterator are stored
-        scores_df = pd.DataFrame(columns=['benchmark', 'alignment', 'threading', 'modeller', 'secondary_structure'])
-        for _, ali_score, thr_score, modeller_score, ss_score, _, name, benchmark in sorted(self.iterator):
-            scores_df.loc[name] = [benchmark, ali_score, thr_score, modeller_score, ss_score]
+        scores_df = pd.DataFrame(columns=['benchmark', 'alignment', 'threading', 'modeller', 'secondary_structure', 'access_score'])
+        for _, ali_score, thr_score, modeller_score, ss_score, access_score, _, name, benchmark in sorted(self.iterator):
+            scores_df.loc[name] = [benchmark, ali_score, thr_score, modeller_score, ss_score, access_score]
 
         # The first row is removed because it corresponds to the query
         scores_df = scores_df.drop(scores_df.index[0])
         # Normalization of the scores.
         # Not the ss_score because it is already between 0-1
-        for index in ['alignment', 'threading', 'modeller']:
+        for index in ['alignment', 'threading', 'modeller', 'access_score']:
             scores_df[index] = normalize_score(scores_df[index])
         # Sum of the different scores and normalization
         scores_df['sum scores'] = normalize_score(scores_df['alignment']
                                                   + scores_df['threading']
                                                   + scores_df['modeller']
-                                                  + scores_df['secondary_structure'])
+                                                  + scores_df['secondary_structure']
+                                                  + scores_df['access_score'])
         # Sort of the templates according to the sum score
         scores_df = scores_df.sort_values(by="sum scores", ascending=False)
         # A csv file containing the normalized scores is created

@@ -22,7 +22,7 @@ import logging
 logging.basicConfig(filename="run_warnings.log", level=logging.WARNING)
 
 
-def process(dist_range, gap_penalty, dope_dict, output_path, ali):
+def process(dist_range, gap_penalty, dope_dict, output_path, naccess_bin_path, ali):
     """
         Generates the threading and the blosum scores for a given Alignment object.
 
@@ -39,9 +39,10 @@ def process(dist_range, gap_penalty, dope_dict, output_path, ali):
     # Calculate secondary structure score
     ss_score = ali.calculate_ss_score()
     # Calculate the BLOSUM score of all alignments
-    blosum_score = ali.calculate_blosum_score()
-    access_score = ali.calculate_access_score(predicted_model, naccess_bin_path, 20)
-    return ali.num, ali.score, threading_score, modeller_score, ss_score, blosum_score,\
+    #blosum_score = ali.calculate_blosum_score()
+    blosum_score = 0
+    access_score = ali.calculate_access_score(naccess_bin_path, 20)
+    return ali.num, ali.score, threading_score, modeller_score, ss_score, access_score, blosum_score,\
         ali.template.name, ali.template.benchmark
 
 
@@ -265,53 +266,54 @@ class Alignment:
             # The two last lines of the created pdb file ("END" and "TER" lines)
             file.write("END\n")
 
-    def calculate_access_score(self, predicted_model_pdb, naccess_bin_path, threshold):
+    def calculate_access_score(self, naccess_bin_path, threshold):
         '''
             Calculate the accessibility score between the predicted model
             and the template pdb structure.
+
             Args:
-                predicted_model_pdb (String): Path to the predicted model PDB
                 naccess_bin (String): Path to the naccess binary
                 threshold cutoff (int): Cutoff for relative accessibility residue values
 
             Returns:
                 float: The Accessibility score calculated
         '''
+        # Path to the predicted model PDB
+        predicted_model_pdb = "data/pdb/"+self.template.name+"/"+self.template.pdb+".atm"
+        initial_template = "data/pdb/"+self.template.name+"/"+self.template.pdb.split("_")[0]+".atm"
         #generate PDB_model
-        structure_predicted_model = PDBParser().get_structure(
+        structure_predicted_model = PDBParser(QUIET=True).get_structure(
             "predicted_model", predicted_model_pdb)[0]
-        structure_template_model = PDBParser().get_structure(
-            "template_model", self.template.pdb)[0]
+        structure_template_model = PDBParser(QUIET=True).get_structure(
+            "template_model", initial_template)[0]
         #generate accessibilities files
         rsa_data_predicted_model, asa_data_predicted_model = nac.run_naccess(
             structure_predicted_model, predicted_model_pdb, naccess= naccess_bin_path)
         rsa_data_template_model, asa_data_template_model = nac.run_naccess(
-            structure_template_model, self.template.pdb, naccess= naccess_bin_path)
+            structure_template_model, initial_template, naccess= naccess_bin_path)
         #Parse the naccess output .rsa file to retrieve the
         #relative  % of solvant accessible area for each CA
         predicted_model_rsa = nac.process_rsa_data(rsa_data_predicted_model)
         template_model_rsa = nac.process_rsa_data(rsa_data_template_model)
         #Keep only residues with a relative accessibilities  threshold
-        predicted_model_accessible_residues = keep_accessible_residues(predicted_model_rsa, threshold)
-        template_model_accessible_residues = keep_accessible_residues(template_model_rsa, threshold)
+        predicted_model_accessible_residues = self.keep_accessible_residues(predicted_model_rsa, threshold)
+        template_model_accessible_residues = self.keep_accessible_residues(template_model_rsa, threshold)
         #Get the common accesible residues
         common_residues_number = len(set(predicted_model_accessible_residues).intersection(template_model_accessible_residues))
         #normalization
         return(common_residues_number/len(predicted_model_accessible_residues))
 
+    def keep_accessible_residues(self, naccess_rsa, threshold):
+        """
+            From the output of naccess we keep only accessible residues which have a
+            all_atoms_rel value > 30 (arbitrary threshold)
 
+            Args:
+                naccess_rsa (dict): A dictionnary containing the output of naccess's calculations
+                threshold (int): all_atom_rel value
 
-
-    #Function to compute Accesible residues
-    #**************************************
-    def keep_accessible_residues(naccess_rsa, threshold):
-        """From the output of naccess we keep only accessible residues
-        which have a all_atoms_rel value > 30 (arbitrary threshold)
-        Args:
-        naccess_rsa (dict): A dictionnary containing the output of naccess's calculations
-        threshold (int): all_atom_rel value
-        Returns:
-        dict: Keys are the residue ids and as value their solvant accessible area
+            Returns:
+                dict: Keys are the residue ids and as value their solvant accessible area
         """
         accessible_residues_dict = {}
         for (chain_id, res_id), data_dict in naccess_rsa.items():
