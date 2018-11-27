@@ -118,6 +118,7 @@ def parse_foldrec(foldrec_file, nb_templates, metafold_dict):
     score_reg = re.compile("^Score :\\s+([-0-9\\.]+)")
     query_seq_reg = re.compile("^Query\\s*([0-9]+)\\s*([A-Z0-9-]+)\\s*([0-9]+)")
     template_seq_reg = re.compile("^Template\\s*[0-9]+\\s*([A-Z-]+)")
+    empty_query_reg = re.compile("^Query\\s+\\d\\s-+\\s+\\d.*$")
 
     alignment_dict = {}
     count_templates = 0
@@ -135,15 +136,29 @@ def parse_foldrec(foldrec_file, nb_templates, metafold_dict):
             score_found = re.search(score_reg, line)
             query_seq_found = re.search(query_seq_reg, line)
             template_seq_found = re.search(template_seq_reg, line)
+            empty_query_found = re.search(empty_query_reg, line)
             # A num is found :
             if num_found:
                 num = int(num_found.group(1))
             # A template name is found :
             if template_name_found:
+                # These templates currently have more than 1 chain, so we skip them
+                if template_name_found.group(1) in ["bromodomain", "rhv", "Peptidase_A6", "ins",
+                                                    "Arg_repressor_C", "SAM_decarbox", "prc",
+                                                    "Chorismate_mut"]:
+                    # We skip the alignment
+                    for i in range(10):
+                        next(file)
                 template_name = template_name_found.group(1)
             # A score is found :
             if score_found:
                 score = float(score_found.group(1))
+            # Empty alignement (the query = gaps only)
+            if empty_query_found and query_reg_count == 2:
+                print("Skipping alignement "+str(num)+" in which the query is only composed of gaps")
+                # We skip the alignment
+                for i in range(5):
+                    next(file)
             # A query sequence is found :
             if query_seq_found:
                 if query_reg_count == 0:
@@ -175,7 +190,7 @@ def parse_foldrec(foldrec_file, nb_templates, metafold_dict):
                                     Query(query_seq, query_first, query_last),
                                     Template(template_name, template_seq))
                     ali.template.set_pdb_name(metafold_dict)
-                    ali.template.parse_pdb()
+                    ali.template.parse_pdb("data/pdb/"+ali.template.name+"/"+ali.template.pdb+".atm")
                     alignment_dict[template_name] = ali
                     count_templates += 1
     return alignment_dict
