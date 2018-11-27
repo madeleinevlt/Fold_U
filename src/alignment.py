@@ -34,6 +34,7 @@ def process(dist_range, gap_penalty, dope_dict, output_path, ali):
     threading_score = ali.calculate_threading_score(dist_range, gap_penalty, dope_dict)
     # Calculate the modeller score of all alignments
     modeller_score = ali.calculate_modeller_score(output_path)
+    print(threading_score, modeller_score)
     # Calculate secondary structure score
     ss_score = ali.calculate_ss_score()
     # Calculate the BLOSUM score of all alignments
@@ -138,7 +139,7 @@ class Alignment:
                         interval_index = round(int((dist * 30) / 15))
                         energy[i, j] = dope_dict[row_res.name + col_res.name][interval_index]
         # Return the sum of energy matrix with numpy's "Nan" interpreted as zeros
-        return -np.nansum(energy)
+        return np.nansum(energy) * (-1)
 
     def calculate_blosum_score(self):
         """
@@ -373,4 +374,4 @@ class Alignment:
         clean_modeller_outputs()
         # Go back to root directory
         os.chdir(root_dir)
-        return modeller_dope_score
+        return modeller_dope_score * (-1)
