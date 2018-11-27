@@ -11,7 +11,7 @@ from Bio.PDB import PDBParser
 from Bio.PDB import NACCESS as nac
 
 
-def process(dist_range, gap_penality, dope_dict, ali):
+def process(dist_range, gap_penality, dope_dict, ali, predicted_model, naccess_bin_path):
     """
         Generates the threading and the blosum scores for a given Alignment object.
 
@@ -212,8 +212,8 @@ class Alignment:
         predicted_model_accessible_residues = keep_accessible_residues(predicted_model_rsa, threshold)
         template_model_accessible_residues = keep_accessible_residues(template_model_rsa, threshold)
 
-
-        #
+        #Get the common accesible residues
+        len(set(predicted_model_accessible_residues).intersection(template_model_accessible_residues))
 
 
 
