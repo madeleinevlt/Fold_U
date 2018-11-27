@@ -188,32 +188,38 @@ class Alignment:
 
     def calculate_access_score(self, predicted_model_pdb, naccess_bin_path, threshold):
         '''
-        ...some bullshit
+            Calculate the accessibility score between the predicted model
+            and the template pdb structure.
+            Args:
+                predicted_model_pdb (String): Path to the predicted model PDB
+                naccess_bin (String): Path to the naccess binary
+                threshold cutoff (int): Cutoff for relative accessibility residue values
+
+            Returns:
+                float: The Accessibility score calculated
         '''
         #generate PDB_model
         structure_predicted_model = PDBParser().get_structure(
             "predicted_model", predicted_model_pdb)[0]
         structure_template_model = PDBParser().get_structure(
             "template_model", self.template.pdb)[0]
-
-        #generate accesbilities files
+        #generate accessibilities files
         rsa_data_predicted_model, asa_data_predicted_model = nac.run_naccess(
             structure_predicted_model, predicted_model_pdb, naccess= naccess_bin_path)
-
         rsa_data_template_model, asa_data_template_model = nac.run_naccess(
             structure_template_model, self.template.pdb, naccess= naccess_bin_path)
-
         #Parse the naccess output .rsa file to retrieve the
         #relative  % of solvant accessible area for each CA
         predicted_model_rsa = nac.process_rsa_data(rsa_data_predicted_model)
         template_model_rsa = nac.process_rsa_data(rsa_data_template_model)
-
-        #Keep only residues with a relative accesibilities  threshold
+        #Keep only residues with a relative accessibilities  threshold
         predicted_model_accessible_residues = keep_accessible_residues(predicted_model_rsa, threshold)
         template_model_accessible_residues = keep_accessible_residues(template_model_rsa, threshold)
-
         #Get the common accesible residues
-        len(set(predicted_model_accessible_residues).intersection(template_model_accessible_residues))
+        common_residues_number = len(set(predicted_model_accessible_residues).intersection(template_model_accessible_residues))
+        #normalization
+        return(common_residues_number/len(predicted_model_accessible_residues))
+
 
 
 
@@ -224,7 +230,7 @@ def keep_accessible_residues(naccess_rsa, threshold):
     which have a all_atoms_rel value > 30 (arbitrary threshold)
     Args:
     naccess_rsa (dict): A dictionnary containing the output of naccess's calculations
-    threshold (int): all_atom_rel value 
+    threshold (int): all_atom_rel value
     Returns:
     dict: Keys are the residue ids and as value their solvant accessible area
     """
@@ -234,4 +240,3 @@ def keep_accessible_residues(naccess_rsa, threshold):
             if key == "all_atoms_rel" and val >= threshold:
                 accessible_residues_dict[res_id[1]] = val
     return accessible_residues_dict
-
