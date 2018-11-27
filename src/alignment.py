@@ -23,6 +23,7 @@ def process(dist_range, gap_penality, dope_dict, ali):
     # Calculate the threading score of all alignments
     threading_score = ali.calculate_threading_score(dist_range, gap_penality, dope_dict)
     blosum_score = ali.calculate_blosum_score()
+    access_score = ali.calculate_access_score(predicted_model, naccess_bin_path, 20)
     return ali.num, ali.score, threading_score, blosum_score,\
            ali.template.name, ali.template.benchmark
 
