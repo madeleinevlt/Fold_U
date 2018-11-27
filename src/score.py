@@ -60,13 +60,14 @@ class Score:
 
         # The first row is removed because it corresponds to the query
         scores_df = scores_df.drop(scores_df.index[0])
-        # Normalization of the scores
+        # Normalization of the scores.
+        # Not the ss_score because it is already between 0-1
         for index in ['alignment', 'threading', 'modeller']:
             scores_df[index] = normalize_score(scores_df[index])
         # Sum of the different scores and normalization
         scores_df['sum scores'] = normalize_score(scores_df['alignment']
-                                                  + scores_df['threading'],
-                                                  + scores_df['modeller'],
+                                                  + scores_df['threading']
+                                                  + scores_df['modeller']
                                                   + scores_df['secondary_structure'])
         # Sort of the templates according to the sum score
         scores_df = scores_df.sort_values(by="sum scores", ascending=False)
