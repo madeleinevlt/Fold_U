@@ -3,20 +3,11 @@
    :synopsis: This module implements the Template class.
 """
 
-# Local modules
-from src.residue import Residue
-
 # Third-party modules
 import numpy as np
-import sys
-import os
-import wget
-from Bio import SeqIO
-import modeller as m
-import modeller.automodel as am
 import logging
 
-logging.basicConfig(filename="run_warnings.log", level=logging.DEBUG)
+logging.basicConfig(filename="run_warnings.log", level=logging.WARNING)
 
 class Template:
     """
@@ -149,7 +140,7 @@ class Template:
                 res_seq_new = ' '*(4-len(res_seq_new))+res_seq_new+' '
             elif current_chain_id != chain_id:
                 if warn_chain_id != current_chain_id:
-                    logging.debug("Warning! Discarding chain '{}' in template {}.atm\n".format(
+                    logging.warning("Warning! Discarding chain '{}' in template {}.atm\n".format(
                                                                         current_chain_id, self.pdb))
                     warn_chain_id = current_chain_id
                 continue

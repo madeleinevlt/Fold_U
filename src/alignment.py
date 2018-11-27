@@ -11,9 +11,13 @@ import modeller as m
 import modeller.automodel as am
 from modeller.automodel import assess
 import contextlib
-import os, re
+import os
+import re
 import pathlib
-from pathlib import Path
+import logging
+
+
+logging.basicConfig(filename="run_warnings.log", level=logging.WARNING)
 
 
 def process(dist_range, gap_penalty, dope_dict, output_path, ali):
@@ -35,7 +39,7 @@ def process(dist_range, gap_penalty, dope_dict, output_path, ali):
     # Calculate the BLOSUM score of all alignments
     blosum_score = ali.calculate_blosum_score()
     return ali.num, ali.score, threading_score, modeller_score, ss_score, blosum_score,\
-           ali.template.name, ali.template.benchmark
+        ali.template.name, ali.template.benchmark
 
 
 def clean_modeller_outputs():
@@ -46,7 +50,7 @@ def clean_modeller_outputs():
         dir (str): Path to directory to clean
         pattern (str): Regex expression for files to remove
     """
-    modeller_dir = "./results/modeller/"
+    modeller_dir = "."
     pattern = "^[^\\.].*\\.(?!pdb).*$"
     for file in os.listdir(modeller_dir):
         if re.search(pattern, file):
@@ -188,13 +192,13 @@ class Alignment:
             # Skip gaps in secondary structure predictions
             while query_ind < query_len and self.query.residues[query_ind].secondary_struct == "-":
                 query_ind += 1
-            while (templ_ind < query_len\
+            while (templ_ind < query_len
                     and self.template.residues[templ_ind].secondary_struct == "-"):
                 templ_ind += 1
             # Count incorrect secondary structure predictions of query according to the template
-            if (query_ind < query_len and templ_ind < query_len\
-                and self.query.residues[query_ind].ss_confidence < 7\
-                    and self.query.residues[query_ind].secondary_struct\
+            if (query_ind < query_len and templ_ind < query_len
+                and self.query.residues[query_ind].ss_confidence < 7
+                    and self.query.residues[query_ind].secondary_struct
                     != self.template.residues[templ_ind].secondary_struct):
                 total_incorrect += 1
             ind += 1
@@ -281,14 +285,14 @@ class Alignment:
             ali_out.write(">P1;" + self.template.pdb)
             if self.template.first == 1:
                 ali_out.write("\nstructure:" + self.template.pdb
-                          + ":" + str(self.template.first) + ":@:"
-                          + str(template_len)
-                          + ":@::::\n")
+                              + ":" + str(self.template.first) + ":@:"
+                              + str(template_len)
+                              + ":@::::\n")
             else:
                 ali_out.write("\nstructure:" + self.template.pdb
-                          + ":" + str(self.template.first) + ":@:"
-                          + str(template_len + self.template.first - 1)
-                          + ":@::::\n")
+                              + ":" + str(self.template.first) + ":@:"
+                              + str(template_len + self.template.first - 1)
+                              + ":@::::\n")
             ali_out.write(self.template.display() + "*")
             ali_out.write("\n>P1;query_" + self.template.name)
             ali_out.write("\nsequence:::::::::\n")
@@ -336,23 +340,28 @@ class Alignment:
 
             # directories for input atom files
             m.env.io.atom_files_directory = [path_to_atm]
-            a_model = am.automodel( m.env,
-                               # alignment filename
-                               alnfile=ali_dir + self.template.name + '.ali',
-                               # codes of the templates
-                               knowns=self.template.pdb,
-                               # code of the target
-                               sequence='query_' + self.template.name,
-                               # DOPEHR is very similar to DOPEHR but is obtained at
-                               # Higher Resolution (using a bin size of 0.125Å
-                               # rather than 0.5Å).
-                               assess_methods=assess.DOPEHR)
+            a_model = am.automodel(m.env,
+                                   # alignment filename
+                                   alnfile=ali_dir + self.template.name + '.ali',
+                                   # codes of the templates
+                                   knowns=self.template.pdb,
+                                   # code of the target
+                                   sequence='query_' + self.template.name,
+                                   # DOPEHR is very similar to DOPEHR but is obtained at
+                                   # Higher Resolution (using a bin size of 0.125Å
+                                   # rather than 0.5Å).
+                                   assess_methods=assess.DOPEHR)
             a_model.very_fast()
             # index of the first and last model (determines how many models to calculate)
             a_model.starting_model = 1
             a_model.ending_model = 1
             modeller_dope_score = 0
-            a_model.make()
+            try:
+                a_model.make()
+            except m.ModellerError as err:
+                logging.warning("Modeller error with " + self.template.name + " | "
+                            + self.template.pdb + "\n", str(err))
+                pass
         new_model_pdb = a_model.outputs[0]["name"]
         modeller_dope_score = a_model.outputs[0]["DOPE-HR score"]
         os.rename(new_model_pdb, path_to_atm + "/" + self.template.pdb + "_mod.atm")
@@ -360,6 +369,8 @@ class Alignment:
         # of residues
         self.template.parse_pdb(path_to_atm + "/" + self.template.pdb + "_mod.atm")
         self.template.pdb = self.template.pdb + "_mod"
+        # remove useless files generated by MODELLER
+        clean_modeller_outputs()
         # Go back to root directory
         os.chdir(root_dir)
         return modeller_dope_score
