@@ -59,40 +59,40 @@ class Alignment:
         """
         Calculate distance
         """
-    # size = len(index_list)
-    distance = np.empty((size, size), dtype=object)
-    k = 0
-    while k < ali.query.first-1:
-        distance[k, (k+1):] = "x"
-        k += 1
+        # size = len(index_list)
+        distance = np.empty((size, size), dtype=object)
+        k = 0
+        while k < ali.query.first-1:
+            distance[k, (k+1):] = "x"
+            k += 1
 
-    query_size = ali.query.get_size()
+        query_size = ali.query.get_size()
 
-    index_i = 0
-    for i in range(k, ali.query.last):
-        while index_i < query_size and ali.query.residues[index_i].name == "-":
-            index_i += 1
-        if index_i < query_size and ali.template.residues[index_i].name == "-":
-            distance[i, (i+1):] = "e"
-            index_i += 1
-            continue
-        index_j = index_i + 1
-        for j in range(i+1, ali.query.last):
-            while index_j < query_size and ali.query.residues[index_j].name == "-":
-                index_j += 1
-            if index_j < query_size and ali.template.residues[index_j].name == "-":
-                distance[j, (j+1):] = "o"
-                index_j += 1
+        index_i = 0
+        for i in range(k, ali.query.last):
+            while index_i < query_size and ali.query.residues[index_i].name == "-":
+                index_i += 1
+            if index_i < query_size and ali.template.residues[index_i].name == "-":
+                distance[i, (i+1):] = "e"
+                index_i += 1
                 continue
-            if distance[i, j] != "x":
-                distance[i, j] = ali.template.residues[index_i].calculate_distance(ali.template.residues[index_j])
-            index_j += 1
-        index_i += 1
+            index_j = index_i + 1
+            for j in range(i+1, ali.query.last):
+                while index_j < query_size and ali.query.residues[index_j].name == "-":
+                    index_j += 1
+                if index_j < query_size and ali.template.residues[index_j].name == "-":
+                    distance[j, (j+1):] = "o"
+                    index_j += 1
+                    continue
+                if distance[i, j] != "x":
+                    distance[i, j] = ali.template.residues[index_i].calculate_distance(ali.template.residues[index_j])
+                index_j += 1
+            index_i += 1
 
-    while i < size-1:
-        distance[:i, (i+1):] = "x"
-        i += 1
-    return distance
+        while i < size-1:
+            distance[:i, (i+1):] = "x"
+            i += 1
+        return distance
 
 
     def calculate_threading_score(self, dist_range, dope_dict):

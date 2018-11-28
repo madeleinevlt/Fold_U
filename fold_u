@@ -108,8 +108,6 @@ if __name__ == "__main__":
     METAFOLD_DICT = parsing.parse_metafold(METAFOLD_FILE)
     # Parse Foldrec file
     ALIGNMENT_DICT = parsing.parse_foldrec(FOLDREC_FILE, NB_TEMPLATES, METAFOLD_DICT)
-    # The number of the first and last residue of our query are stored for the calculate_distance function
-    QUERY_INDEX = (ALIGNMENT_DICT[QUERY_NAME].query.first, ALIGNMENT_DICT[QUERY_NAME].query.last)
     # Set the benchmark of the query
     parsing.parse_benchmark(QUERY_NAME, BENCHMARK_FILE, ALIGNMENT_DICT)
     # Parse DOPE file

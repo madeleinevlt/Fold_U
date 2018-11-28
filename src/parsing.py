@@ -36,16 +36,19 @@ def predict_top_contacts(aln_file, ntops):
     """
     # Retrieve the query sequence
     aln_file_2 = aln_file.split(".")[0]+".psicov"
-    out = subprocess.Popen(["./CCMpred/scripts/convert_alignment.py", aln_file, "fasta", aln_file_2], stdout=subprocess.PIPE).communicate()[0]
-
-    with open(aln_file_2, "r") as file:
-        query_seq = file.readline()[:-1].replace("-", "")
+    out = subprocess.Popen(["./CCMpred/scripts/convert_alignment.py", aln_file, "fasta", aln_file_2],
+                           stdout=subprocess.PIPE).communicate()[0]
 
     # Run ccmpred : Prediction of contacts
     ccmpred_cline = CCMpredCommandline(
         cmd ='./CCMpred/bin/ccmpred', alnfile=aln_file_2, matfile="data/ccmpred/contact.mat"
     )
     ccmpred_cline()
+
+    with open(aln_file_2, "r") as file:
+        query_seq = file.readline()[:-1]
+    index_list = [i for i, e in enumerate(query_seq) if e != "-"] #save "non_gap" positions index
+
 
     # Extract ntops coupling
     top_couplings = subprocess.check_output(
@@ -55,7 +58,6 @@ def predict_top_contacts(aln_file, ntops):
 
     # Create a dictionary of top couplings
     top_couplings_dict = {}
-    index_list = [i for i, _ in enumerate(query_seq)]
     for k, value in enumerate(top_couplings):
         values = value.split("\t")
         index_i = int(values[0])
