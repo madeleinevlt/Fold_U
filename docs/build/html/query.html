@@ -168,41 +168,31 @@
 <dl class="attribute">
 <dt id="src.query.Query.residues">
 <code class="descname">residues</code><a class="headerlink" href="#src.query.Query.residues" title="Permalink to this definition">¶</a></dt>
-<dd><p>Template’s sequence of residues as list of Residues
+<dd><p><em>list of Residue objects</em> – Template’s sequence of residues as list of Residues
 objects</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">list of Residue objects</td>
-</tr>
-</tbody>
-</table>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="src.query.Query.first">
 <code class="descname">first</code><a class="headerlink" href="#src.query.Query.first" title="Permalink to this definition">¶</a></dt>
-<dd><p>First residue of the query sequence.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">int</td>
-</tr>
-</tbody>
-</table>
+<dd><p><em>int</em> – First residue of the query sequence.</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="src.query.Query.last">
 <code class="descname">last</code><a class="headerlink" href="#src.query.Query.last" title="Permalink to this definition">¶</a></dt>
-<dd><p>Last residue of the query sequence.</p>
+<dd><p><em>int</em> – Last residue of the query sequence.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="src.query.Query.add_gaps_in_query">
+<code class="descname">add_gaps_in_query</code><span class="sig-paren">(</span><em>template</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/query.html#Query.add_gaps_in_query"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.query.Query.add_gaps_in_query" title="Permalink to this definition">¶</a></dt>
+<dd><p>This functions inserts the same gaps that occur in the template, in the query.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">int</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>template</strong> (<em>Template object</em>) – The current alignment’s template</td>
 </tr>
 </tbody>
 </table>
@@ -248,7 +238,7 @@ objects</p>
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2018, Gabriel Cretin, Hélène Kabbech, Tom Gutman, Flora Mikaeloff, Franz Arnold
+        &copy; Copyright 2018, Gabriel Cretin, Hélène Kabbech, Tom Gutman, Flora Mikaeloff, Franz Arnold.
 
     </p>
   </div>
@@ -267,14 +257,21 @@ objects</p>
 
   
 
-    
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-        <script type="text/javascript" src="_static/jquery.js"></script>
-        <script type="text/javascript" src="_static/underscore.js"></script>
-        <script type="text/javascript" src="_static/doctools.js"></script>
-        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'1.2',
+            LANGUAGE:'None',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 
   
 

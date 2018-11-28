@@ -168,67 +168,89 @@
 <dl class="attribute">
 <dt id="src.template.Template.name">
 <code class="descname">name</code><a class="headerlink" href="#src.template.Template.name" title="Permalink to this definition">¶</a></dt>
-<dd><p>Name of the template</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">str</td>
-</tr>
-</tbody>
-</table>
+<dd><p><em>str</em> – Name of the template</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="src.template.Template.residues">
 <code class="descname">residues</code><a class="headerlink" href="#src.template.Template.residues" title="Permalink to this definition">¶</a></dt>
-<dd><p>Template’s sequence of residues as list of Residues
+<dd><p><em>list of Residue object</em> – Template’s sequence of residues as list of Residues
 objects</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">list of Residue object</td>
-</tr>
-</tbody>
-</table>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="src.template.Template.benchmark">
 <code class="descname">benchmark</code><a class="headerlink" href="#src.template.Template.benchmark" title="Permalink to this definition">¶</a></dt>
-<dd><p>Fold family type of the template: 3: Family, 2: Superfamily,
+<dd><p><em>int</em> – Fold family type of the template: 3: Family, 2: Superfamily,
 1: Fold and 0: None
 It tells how similar the template is from the query structure.
 This is necessary to be able to benchmark the new scoring functions.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">int</td>
-</tr>
-</tbody>
-</table>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="src.template.Template.pdb">
 <code class="descname">pdb</code><a class="headerlink" href="#src.template.Template.pdb" title="Permalink to this definition">¶</a></dt>
-<dd><p>PDB filename of the template</p>
+<dd><p><em>str</em> – PDB filename of the template</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="src.template.Template.parse_pdb">
+<code class="descname">parse_pdb</code><span class="sig-paren">(</span><em>pdb_path</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/template.html#Template.parse_pdb"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.template.Template.parse_pdb" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parse the pdb file and set the CA coordinates.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">str</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>pdb_path</strong> – Path to the directory containing .atm file of the actual template.</td>
 </tr>
 </tbody>
 </table>
 </dd></dl>
 
 <dl class="method">
-<dt id="src.template.Template.parse_pdb">
-<code class="descname">parse_pdb</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/template.html#Template.parse_pdb"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.template.Template.parse_pdb" title="Permalink to this definition">¶</a></dt>
-<dd><p>Parse the pdb file and set the CA coordinates.</p>
+<dt id="src.template.Template.reindex_pdb">
+<code class="descname">reindex_pdb</code><span class="sig-paren">(</span><em>start_index</em>, <em>pdb_path</em>, <em>clean=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/template.html#Template.reindex_pdb"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.template.Template.reindex_pdb" title="Permalink to this definition">¶</a></dt>
+<dd><p>Original code from: <a class="reference external" href="https://zhanglab.ccmb.med.umich.edu/reindex_pdb/reindex_pdb.py">https://zhanglab.ccmb.med.umich.edu/reindex_pdb/reindex_pdb.py</a>
+* Parse PDB file
+* Reindex it according to start index
+* Write the new reindexed PDB</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>start_index</strong> (<em>int</em>) – Index of first residue</li>
+<li><strong>pdb_path</strong> (<em>str</em>) – Path to the directory containing the PDB to reindex</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="src.template.Template.reindex_pdb_by_index">
+<code class="descname">reindex_pdb_by_index</code><span class="sig-paren">(</span><em>start_index=1</em>, <em>pdb_txt=''</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/template.html#Template.reindex_pdb_by_index"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.template.Template.reindex_pdb_by_index" title="Permalink to this definition">¶</a></dt>
+<dd><p>Original code from: <a class="reference external" href="https://zhanglab.ccmb.med.umich.edu/reindex_pdb/reindex_pdb.py">https://zhanglab.ccmb.med.umich.edu/reindex_pdb/reindex_pdb.py</a>
+Reindex residue number of PDB format text</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>start_index</strong> (<em>int</em>) – Index of first residue</li>
+<li><strong>pdb_txt</strong> (<em>str</em>) – Text of input PDB to be reindexed</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Text of the reindexed PDB</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">str</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
@@ -283,7 +305,7 @@ This is necessary to be able to benchmark the new scoring functions.</p>
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2018, Gabriel Cretin, Hélène Kabbech, Tom Gutman, Flora Mikaeloff, Franz Arnold
+        &copy; Copyright 2018, Gabriel Cretin, Hélène Kabbech, Tom Gutman, Flora Mikaeloff, Franz Arnold.
 
     </p>
   </div>
@@ -302,14 +324,21 @@ This is necessary to be able to benchmark the new scoring functions.</p>
 
   
 
-    
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-        <script type="text/javascript" src="_static/jquery.js"></script>
-        <script type="text/javascript" src="_static/underscore.js"></script>
-        <script type="text/javascript" src="_static/doctools.js"></script>
-        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'1.2',
+            LANGUAGE:'None',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 
   
 
