@@ -9,6 +9,7 @@ import logging
 
 logging.basicConfig(filename="run_warnings.log", level=logging.WARNING)
 
+
 class Template:
     """
     .. class:: Template
@@ -31,6 +32,8 @@ class Template:
         self.residues = residues
         self.benchmark = "."
         self.pdb = None             # ex: 1jlxa1
+        self.reindexed_pdb = None   # ex: 1jlxa1_reindexed
+        self.modeller_pdb = None    # ex: 1jlxa1_mod
         self.first = None
 
     def display(self):
@@ -112,11 +115,15 @@ class Template:
 
     def reindex_pdb_by_index(self, start_index=1, pdb_txt=''):
         '''
-        reindex residue number of PDB format text
+        Original code from: https://zhanglab.ccmb.med.umich.edu/reindex_pdb/reindex_pdb.py
+        Reindex residue number of PDB format text
 
-        options:
-            start_index - index of first residue
-            pdb_txt     - text of input PDB to be reindexed
+        Args:
+            start_index (int): Index of first residue
+            pdb_txt (str): Text of input PDB to be reindexed
+
+        Returns:
+            str: Text of the reindexed PDB
         '''
         pdb_txt_reindex = ''
         current_old_index = ''  # residue number in origin PDB
@@ -152,10 +159,16 @@ class Template:
             pdb_txt_reindex += line[:16]+' '+line[17:22]+res_seq_new+line[27:]+'\n'
         return pdb_txt_reindex
 
-
     def reindex_pdb(self, start_index, pdb_path, clean=True):
-        '''parse PDB file "infile", reindex it according to start index or
-        sequence file "start_index", and return the text of renumbered PDB
+        '''
+            Original code from: https://zhanglab.ccmb.med.umich.edu/reindex_pdb/reindex_pdb.py
+            * Parse PDB file
+            * Reindex it according to start index
+            * Write the new reindexed PDB
+
+            Args:
+                start_index (int): Index of first residue
+                pdb_path (str): Path to the directory containing the PDB to reindex
         '''
         pdb_file = pdb_path + "/" + self.pdb + ".atm"
         f_in = open(pdb_file, 'rU')
@@ -166,13 +179,16 @@ class Template:
                     line = line.replace("ENDMDL", "END   ")
                 pdb_txt += line+'\n'
                 break
-            if (line.startswith("ATOM  ") or line.startswith("TER")\
-                or (not clean and not line[:6]\
+            if (line.startswith("ATOM  ") or line.startswith("TER")
+                or (not clean and not line[:6]
                     in ["DBREF ", "SEQADV", "MODRES", "HELIX ", "SHEET ", "SSBOND", "SITE  "])):
                 pdb_txt += line+'\n'
         f_in.close()
 
         pdb_txt_reindex = self.reindex_pdb_by_index(start_index, pdb_txt)
         # Write the new PDB
+        self.reindexed_pdb = self.pdb + "_reindexed"
+        # Set the new name of the template's PDB
+        pdb_file = pdb_path + "/" + self.reindexed_pdb + ".atm"
         with open(pdb_file, "w") as f_out:
             f_out.write(pdb_txt_reindex)

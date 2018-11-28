@@ -62,7 +62,7 @@ class Score:
         scores_df = scores_df.drop(scores_df.index[0])
         # Normalization of the scores.
         # Not the ss_score because it is already between 0-1
-        for index in ['alignment', 'threading', 'modeller', 'access_score']:
+        for index in ['alignment', 'threading', 'modeller']:
             scores_df[index] = normalize_score(scores_df[index])
         # Sum of the different scores and normalization
         scores_df['sum scores'] = normalize_score(scores_df['alignment']
