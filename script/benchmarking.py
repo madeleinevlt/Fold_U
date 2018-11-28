@@ -60,8 +60,9 @@ def plot_benchmark(output_path, struct, scores, rank, benchmarking_scores):
 
 def top_n(structures, scores, top_n, benchmarking_scores):
     """
-        Create a top_N_stats.txt file showing statistics based on the
-        benchmark.list files
+        Show statistics based on the benchmark.list files separately for each fold-type: "Fold",
+        "Family", "Superfamily".
+        Represent the strength/weaknesses of the different scores independantly and/or combined.
 
         Args:
             structures (list): List containing fold types: "Family", "Superfamily", "Fold"
@@ -80,19 +81,18 @@ def top_n(structures, scores, top_n, benchmarking_scores):
     for struct in structures:
         rank[struct] = benchmarking_scores[scores][struct][top_n]
         max_rank[struct] = max(benchmarking_scores[scores][struct])
-    line1 = "\tFamily\t\tSuperfamily\tFold\n"
-    line2 =  "top{0}\t{1}/{2}\t\t{3}/{4}\t\t{5}/{6}\n".format(top_n,
+    line1 =  "top{0}\t{1}/{2}\t\t{3}/{4}\t\t{5}/{6}\n".format(top_n,
                                                         rank["Family"],
                                                         max_rank["Family"],
                                                         rank["Superfamily"],
                                                         max_rank["Superfamily"],
                                                         rank["Fold"],
                                                         max_rank["Fold"])
-    line3 =  "    %\t{0:.2f}\t\t{1:.2f}\t\t{2:.2f}"\
-                .format(rank["Family"]/max_rank["Family"],
-                        rank["Superfamily"]/max_rank["Superfamily"],
-                        rank["Fold"]/max_rank["Fold"])
-    top_n_results = line1 + line2 + line3
+    line2 =  "\t{0:.2f} %\t\t{1:.2f} %\t\t{2:.2f} %"\
+                .format((rank["Family"]/max_rank["Family"])*100,
+                        (rank["Superfamily"]/max_rank["Superfamily"])*100,
+                        (rank["Fold"]/max_rank["Fold"])*100)
+    top_n_results = line1 + line2
     return top_n_results
 
 
@@ -151,7 +151,8 @@ if __name__ == "__main__":
         plot_benchmark(OUTPUT_PATH, structure, SCORES, RANK, BENCHMARKING_SCORES)
     print("\nThe plots are stored in " + OUTPUT_PATH + "\n")
     OUTPUT_PATH = "results/top_N/"
-    for i in [10, 50, 100]:
+    print("\tFamily\t\tSuperfamily\tFold\n")
+    for i in [5, 10, 50, 100]:
         print(top_n(STRUCTURES, "sum scores", i, BENCHMARKING_SCORES))
         print("\t----------------------------------------")
     # with  open(output_path + "top_N_stats.txt", "w") as fileout:
