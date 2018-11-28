@@ -8,6 +8,7 @@
 from conkit.applications import CCMpredCommandline
 import subprocess
 import re
+import os
 import numpy as np
 from Bio.SeqUtils import seq1
 
@@ -18,7 +19,32 @@ from src.query import Query
 from src.template import Template
 
 
-def predict_top_contacts(aln_file, ntops):
+def convert_aln_file(aln_file, aln_file_clustal):
+    """
+        Convert a multiple alignment file from fasta to clustal.
+        The first sequence of this multiple alignment is kept and
+        a list of non-gaps position index of this sequence is then generated. 
+
+        Args:
+            aln_file (str): Multiple alignement file (fasta format)
+            aln_file_clustal (str): Multiple alignemnt file (clustal format) to generated
+
+        Returns:
+            list: A list of "non_gap" position index
+    """
+
+    # Convertion from fasta to clustal
+    out = subprocess.Popen(["./CCMpred/scripts/convert_alignment.py", aln_file,
+                            "fasta", aln_file_clustal], stdout=subprocess.PIPE).communicate()[0]
+    # First line of this multiple alignment
+    with open(aln_file_clustal, "r") as file:
+        query_seq = file.readline()[:-1]
+        # "non_gap" positions index are saved into a list
+        index_list = [i for i, ele in enumerate(query_seq) if ele != "-"] 
+    return index_list
+
+
+def predict_top_contacts(aln_file, index_list, ntops):
     """
        Extract N tops couplings based on co-evolution score. Co-evolution score
        is calculated between two non-consecutive amino acids by ccmpred based on
@@ -27,33 +53,26 @@ def predict_top_contacts(aln_file, ntops):
        occurence of one of this amino never occur whithout the other.
 
         Args:
-            aln_file (str): Multiple alignement (clustal) file
+            aln_file (str): Multiple alignement file, clustal format
+            index_list (list): A list of "non_gap" position index
             ntops (int): Number of top coupling expected
 
         Returns:
             dict: A dictionary with key = ranking of coupling based on ss_confidence
             and value = index aa1, index aa2, confidence
     """
-    # Retrieve the query sequence
-    aln_file_2 = aln_file.split(".")[0]+".psicov"
-    out = subprocess.Popen(["./CCMpred/scripts/convert_alignment.py", aln_file, "fasta", aln_file_2],
-                           stdout=subprocess.PIPE).communicate()[0]
-
+    contact_output = "data/ccmpred/contact.mat"
+    os.makedirs("data/ccmpred/", exist_ok=True)
     # Run ccmpred : Prediction of contacts
     ccmpred_cline = CCMpredCommandline(
-        cmd ='./CCMpred/bin/ccmpred', alnfile=aln_file_2, matfile="data/ccmpred/contact.mat"
+        cmd ='./CCMpred/bin/ccmpred', alnfile=aln_file, matfile=contact_output
     )
     ccmpred_cline()
-
-    with open(aln_file_2, "r") as file:
-        query_seq = file.readline()[:-1]
-    index_list = [i for i, e in enumerate(query_seq) if e != "-"] #save "non_gap" positions index
-
 
     # Extract ntops coupling
     top_couplings = subprocess.check_output(
         ["./CCMpred/scripts/top_couplings.py -n {} {}".
-        format(str(ntops), "data/ccmpred/contact.mat")], shell=True
+        format(str(ntops), contact_output)], shell=True
     ).decode('utf-8').split('\n')[1:-1]
 
     # Create a dictionary of top couplings
@@ -65,6 +84,8 @@ def predict_top_contacts(aln_file, ntops):
         # Do not parse gaps associated with top couplings
         if (index_i in index_list) and (index_j in index_list):
             top_couplings_dict[k] = (index_i, index_j)
+            print(index_i, index_j)
+            print(index_list.index(index_i), index_list.index(index_j))
     return top_couplings_dict
 
 
