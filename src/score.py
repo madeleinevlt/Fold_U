@@ -20,7 +20,8 @@ def normalize_score(score_type):
     """
     try:
         normalized = (score_type - min(score_type)) / (max(score_type) - min(score_type))
-    except:
+    except ZeroDivisionError:
+        print("\nError: normalize_score: Division by 0\n")
         normalized = 0
     return normalized
     # Use sklearn module instead
@@ -53,16 +54,26 @@ class Score:
         os.makedirs(res_path+"/pdb", exist_ok=True)
 
         # A dataframe is created with pandas and elements of the iterator are stored
-        scores_df = pd.DataFrame(columns=['benchmark', 'alignment', 'threading', 'blosum', 'ccmpred'])
-        for _, ali_score, thr_score, blosum_score, ccmpred_score, name, benchmark in sorted(self.iterator):
-            scores_df.loc[name] = [benchmark, ali_score, thr_score, blosum_score, ccmpred_score]
+        scores_df = pd.DataFrame(columns=['benchmark', 'alignment', 'threading', 'modeller',
+                                'secondary_structure', 'solvent_accessibility', 'co-evolution'])
+        for _, ali_score, thr_score, modeller_score, ss_score,
+           access_score, ccmpred_score, name, benchmark in sorted(self.iterator):
+            scores_df.loc[name] = [benchmark, ali_score, thr_score, modeller_score,
+                                   ss_score, access_score, ccmpred_score]
 
-        # Normalization of the scores
-        for index in ['alignment', 'threading', 'blosum', 'ccmpred']:
+        # The first row is removed because it corresponds to the query
+        scores_df = scores_df.drop(scores_df.index[0])
+        # Normalization of the scores.
+        # Not the ss_score neither access_score because they are already between 0-1
+        for index in ['alignment', 'threading', 'modeller', 'co-evolution']:
             scores_df[index] = normalize_score(scores_df[index])
         # Sum of the different scores and normalization
-        scores_df['sum scores'] = normalize_score(scores_df['alignment'] +
-                                  scores_df['threading'] + scores_df['ccmpred'])
+        scores_df['sum scores'] = normalize_score(scores_df['alignment']
+                                                  + scores_df['threading']
+                                                  + scores_df['modeller']
+                                                  + scores_df['secondary_structure']
+                                                  + scores_df['solvent_accessibility']
+                                                  + scores_df['co-evolution'])
         # Sort of the templates according to the sum score
         scores_df = scores_df.sort_values(by="sum scores", ascending=False)
         # A csv file containing the normalized scores is created

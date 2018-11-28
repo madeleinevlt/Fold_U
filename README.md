@@ -31,6 +31,12 @@ Install the few required packages / modules:
 pip install -r requirements.txt
 ```
 
+MODELLER is also required, and can be installed easily with Conda:
+```
+conda install -c salilab modeller
+```
+You need to register to get a license key [here](https://salilab.org/modeller/registration.html), and follow instructions during installation to insert license key in the program.
+
 ## Run the program
 `fold_u` takes in input **N profil-profil alignments and their corresponding score** (foldrec file) and returns a `score.csv` file and the **top N pdb structures**.
 
