@@ -43,9 +43,7 @@ def process(dist_range, dope_dict, output_path, ali):
     modeller_score = ali.calculate_modeller_score(output_path)
     # Calculate secondary structure score
     ss_score = ali.calculate_ss_score()
-    # Calculate the BLOSUM score of all alignments
-    blosum_score = ali.calculate_blosum_score()
-    return ali.num, ali.score, threading_score, modeller_score, ss_score, blosum_score,\
+    return ali.num, ali.score, threading_score, modeller_score, ss_score,\
         ali.template.name, ali.template.benchmark
 
 
