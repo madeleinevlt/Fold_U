@@ -115,7 +115,8 @@ if __name__ == "__main__":
         if not os.path.isfile("results/" + query + "/scores.csv"):
             print("\nProcessing query {} / {} : {}\n".format(ind, len(ALL_FOLDRECS), query))
             p = subprocess.Popen(["./fold_u", "data/foldrec/" + query + ".foldrec",
-                                  "-o", "results/" + query, "--dssp", "/usr/bin/mkdssp", "--cpu", str(cpu_count())],
+                                  "-o", "results/" + query, "--dssp", "/usr/local/bin/mkdssp",
+                                  "--cpu", str(cpu_count())],
                                  stdout=subprocess.PIPE).communicate()[0]
             rows, columns = os.popen('stty size', 'r').read().split()
             print("\n" + "-"*int(columns))
