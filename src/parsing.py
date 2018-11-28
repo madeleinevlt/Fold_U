@@ -142,7 +142,7 @@ def parse_foldrec(foldrec_file, nb_templates, metafold_dict):
                 num = int(num_found.group(1))
             # A template name is found :
             if template_name_found:
-                # These templates currently have more than 1 chain, so we skip them
+                # These templates have more than 1 chain, so we must skip them
                 if template_name_found.group(1) in ["bromodomain", "rhv", "Peptidase_A6", "ins",
                                                     "Arg_repressor_C", "SAM_decarbox", "prc",
                                                     "Chorismate_mut"]:

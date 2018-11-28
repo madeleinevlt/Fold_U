@@ -55,7 +55,8 @@ class Score:
 
         # A dataframe is created with pandas and elements of the iterator are stored
         scores_df = pd.DataFrame(columns=['benchmark', 'alignment', 'threading', 'modeller', 'secondary_structure'])
-        for _, ali_score, thr_score, modeller_score, ss_score, _, name, benchmark in sorted(self.iterator):
+        # Sort the alignments by their alignment number (from the foldrec file) and fill dataframe.
+        for _, ali_score, thr_score, modeller_score, ss_score, name, benchmark in sorted(self.iterator):
             scores_df.loc[name] = [benchmark, ali_score, thr_score, modeller_score, ss_score]
 
         # The first row is removed because it corresponds to the query
