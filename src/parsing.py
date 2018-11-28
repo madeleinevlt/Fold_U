@@ -23,7 +23,7 @@ def convert_aln_file(aln_file, aln_file_clustal):
     """
         Convert a multiple alignment file from fasta to clustal.
         The first sequence of this multiple alignment is kept and
-        a list of non-gaps position index of this sequence is then generated. 
+        a list of non-gaps position index of this sequence is then generated.
 
         Args:
             aln_file (str): Multiple alignement file (fasta format)
@@ -40,11 +40,11 @@ def convert_aln_file(aln_file, aln_file_clustal):
     with open(aln_file_clustal, "r") as file:
         query_seq = file.readline()[:-1]
         # "non_gap" positions index are saved into a list
-        index_list = [i for i, ele in enumerate(query_seq) if ele != "-"] 
+        index_list = [i for i, ele in enumerate(query_seq) if ele != "-"]
     return index_list
 
 
-def predict_top_contacts(aln_file, index_list, ntops):
+def predict_top_contacts(aln_file, index_list):
     """
        Extract N tops couplings based on co-evolution score. Co-evolution score
        is calculated between two non-consecutive amino acids by ccmpred based on
@@ -55,12 +55,13 @@ def predict_top_contacts(aln_file, index_list, ntops):
         Args:
             aln_file (str): Multiple alignement file, clustal format
             index_list (list): A list of "non_gap" position index
-            ntops (int): Number of top coupling expected
 
         Returns:
             dict: A dictionary with key = ranking of coupling based on ss_confidence
             and value = index aa1, index aa2, confidence
     """
+    # Number of top coupling expected
+    ntops = int(len(index_list)/2)
     contact_output = "data/ccmpred/contact.mat"
     os.makedirs("data/ccmpred/", exist_ok=True)
     # Run ccmpred : Prediction of contacts
@@ -84,8 +85,6 @@ def predict_top_contacts(aln_file, index_list, ntops):
         # Do not parse gaps associated with top couplings
         if (index_i in index_list) and (index_j in index_list):
             top_couplings_dict[k] = (index_list.index(index_i), index_list.index(index_j))
-            print(index_i, index_j)
-            print(index_list.index(index_i), index_list.index(index_j))
     return top_couplings_dict
 
 
