@@ -8,7 +8,7 @@ import numpy as np
 from Bio.SubsMat import MatrixInfo
 from Bio.SeqUtils import seq3
 from Bio.PDB import PDBParser
-from Bio.PDB import NACCESS as nac
+from Bio.PDB import DSSP
 import modeller as m
 import modeller.automodel as am
 from modeller.automodel import assess
@@ -22,7 +22,7 @@ import logging
 logging.basicConfig(filename="run_warnings.log", level=logging.WARNING)
 
 
-def process(dist_range, dope_dict, output_path, naccess_bin_path, ali):
+def process(dist_range, dope_dict, output_path, dssp_bin_path, ali):
     """
         Generates the threading, modeller and secondary structure scores for a given Alignment.
 
@@ -40,12 +40,12 @@ def process(dist_range, dope_dict, output_path, naccess_bin_path, ali):
 
     """
     # Calculate the threading score of all alignments and find the initial templates
-    threading_score = ali.calculate_threading_score(dist_range, gap_penalty, dope_dict)
+    threading_score = ali.calculate_threading_score(dist_range, dope_dict)
     # Calculate the modeller score of all alignments
     modeller_score = ali.calculate_modeller_score(output_path)
     # Calculate secondary structure score
     ss_score = ali.calculate_ss_score()
-    access_score = ali.calculate_access_score(naccess_bin_path, 20)
+    access_score = ali.calculate_access_score(dssp_bin_path, 0.2)
     return ali.num, ali.score, threading_score, modeller_score, ss_score, access_score,\
         ali.template.name, ali.template.benchmark
 
@@ -86,7 +86,7 @@ class Alignment:
         self.query = query
         self.template = template
 
-    def calculate_threading_score(self, dist_range, gap_penalty, dope_dict):
+    def calculate_threading_score(self, dist_range, dope_dict):
         """
             Calculate the threading score of the query on the template sequence.
             1) For each pair residues of the query sequence the distance between them is
@@ -100,7 +100,6 @@ class Alignment:
             Args:
                 dist_range (list of int): Range of distances in angströms. Distances
                                           within this range only are taken into account
-                gap_penalty (int): Gap penalty
                 dope_dict (dictionary): A dictionary with key = res_1-res_2 and
                                         value = an array of 30 dope energy values.
 
@@ -109,6 +108,7 @@ class Alignment:
         """
         query = self.query.residues
         template = self.template.residues
+        gap_penalty = 0
 
         query_size = self.query.get_size()
         # This sets a numpy matrix of shape query * query which will contain all
@@ -272,7 +272,7 @@ class Alignment:
             # The two last lines of the created pdb file ("END" and "TER" lines)
             file.write("END\n")
 
-    def calculate_access_score(self, naccess_bin_path, threshold):
+    def calculate_access_score(self, dssp_bin_path, threshold):
         '''
             Calculate the accessibility score between the predicted model
             and the template pdb structure.
@@ -284,49 +284,41 @@ class Alignment:
             Returns:
                 float: The Accessibility score calculated
         '''
-        # Path to the predicted model PDB
+        # Path to the PDBs of predicted and template models
         predicted_model_pdb = "data/pdb/"+self.template.name+"/"+self.template.pdb+".atm"
-        initial_template = "data/pdb/"+self.template.name+"/"+self.template.pdb.split("_")[0]+".atm"
-        # Generate PDB_model
-        structure_predicted_model = PDBParser(QUIET=True).get_structure(
-            "predicted_model", predicted_model_pdb)[0]
-        structure_template_model = PDBParser(QUIET=True).get_structure(
-            "template_model", initial_template)[0]
-        # Generate accessibilities files
-        rsa_data_predicted_model, asa_data_predicted_model = nac.run_naccess(
-            structure_predicted_model, predicted_model_pdb, naccess= naccess_bin_path)
-        rsa_data_template_model, asa_data_template_model = nac.run_naccess(
-            structure_template_model, initial_template, naccess= naccess_bin_path)
-        # Parse the naccess output .rsa file to retrieve the
-        # Relative % of solvant accessible area for each CA
-        predicted_model_rsa = nac.process_rsa_data(rsa_data_predicted_model)
-        template_model_rsa = nac.process_rsa_data(rsa_data_template_model)
-        # Keep only residues with a relative accessibilities  threshold
-        predicted_model_accessible_residues = self.keep_accessible_residues(predicted_model_rsa, threshold)
-        template_model_accessible_residues = self.keep_accessible_residues(template_model_rsa, threshold)
-        # Get the common accesible residues
+        template_pdb = "data/pdb/"+self.template.name+"/"+self.template.pdb.split("_")[0]+".atm"
+        # Parse PDBs
+        predicted_model = PDBParser(QUIET=True).get_structure( "predicted_model", predicted_model_pdb)[0]
+        template_model = PDBParser(QUIET=True).get_structure( "template_model", template_pdb)[0]
+        # Run DSSP on both PDB files of the template and the Modeller's model
+        dssp_pred_model = DSSP(predicted_model, predicted_model_pdb, dssp=dssp_bin_path)
+        dssp_template_model = DSSP(template_model, template_pdb, dssp=dssp_bin_path)
+        # Parse the DSSP output to retrieve the relative % of solvant accessible area for each CA.
+        # Stock results in: dict = {res_index: res_rsa}
+        rsa_pred_model = {dssp_pred_model[key][0]: dssp_pred_model[key][3] for key in dssp_pred_model.keys()}
+        rsa_template_model = {dssp_template_model[key][3]: dssp_template_model[key][3] for key in dssp_template_model.keys()}
+
+        # Keep only residues with a relative accessibilities threshold
+        predicted_model_accessible_residues = self.keep_accessible_residues(rsa_pred_model, threshold)
+        template_model_accessible_residues = self.keep_accessible_residues(rsa_template_model, threshold)
+        # Get the common accessible residues
         common_residues_number = len(set(predicted_model_accessible_residues).intersection(template_model_accessible_residues))
         # Normalization
         return(common_residues_number/len(predicted_model_accessible_residues))
 
-    def keep_accessible_residues(self, naccess_rsa, threshold):
+    def keep_accessible_residues(self, dssp_rsa, threshold):
         """
-            From the output of naccess we keep only accessible residues which have a
-            all_atoms_rel value > 30 (arbitrary threshold)
+            From the output of DSSP we keep only accessible residues which have an RSA
+            value > threshold (arbitrary threshold)
 
             Args:
-                naccess_rsa (dict): A dictionnary containing the output of naccess's calculations
-                threshold (int): all_atom_rel value
+                dssp_rsa (dict): A dictionary as keys = residue index and value = RSA.
+                threshold (int): Relative solvant accessibility threshold.
 
             Returns:
-                dict: Keys are the residue ids and as value their solvant accessible area
+                dict: Keys are the residue ids and as value their solvant accessible area.
         """
-        accessible_residues_dict = {}
-        for (chain_id, res_id), data_dict in naccess_rsa.items():
-            for key, val in data_dict.items():
-                if key == "all_atoms_rel" and val >= threshold:
-                    accessible_residues_dict[res_id[1]] = val
-        return accessible_residues_dict
+        return {key: val for key, val in dssp_rsa.items() if val > threshold}
 
     def write_alignment_for_modeller(self, ali_path):
         """

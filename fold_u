@@ -3,7 +3,7 @@
 
 """
     Usage:
-        ./fold_u FOLDREC_FILE [--nb_templates NUM] [--nb_pdb NUM] [--output PATH] [--naccess PATH]
+        ./fold_u FOLDREC_FILE [--nb_templates NUM] [--nb_pdb NUM] [--output PATH] [--dssp PATH]
                               [--metafold FILE] [--dope FILE] [--benchmark FILE] [--cpu NUM]
 
     Arguments:
@@ -19,8 +19,8 @@
         -o PATH, --output PATH                Path to the directory containing
                                               the result files (scores and pdb)
                                               [default: ./results]
-        -a PATH, --naccess PATH               Path to the naccess software
-                                              binary [default: /usr/bin/naccess]
+        -a PATH, --dssp PATH                  Path to the dssp software
+                                              binary [default: /usr/local/bin/mkdssp]
         -m FILE, --metafold FILE              Path to the metafold.list file
                                               [default: data/metafold.list]
         -d FILE, --dope FILE                  Path to the dope.par file
@@ -60,7 +60,7 @@ def check_args():
                                 error='--nb_templates=NUM should be integer 1 <= N <= 405'),
         '--nb_pdb': And(Use(int), lambda n: 1 <= n <= 405,\
                                 error='--nb_pdb=NUM should be integer 1 <= N <= 405'),
-        '--naccess': Use(open, error='naccess should be readable'),
+        '--dssp': Use(open, error='dssp/mkdssp should be readable'),
         '--dope': Use(open, error='dope file should be readable'),
         '--benchmark': Use(open, error='BENCHMARK_FILE should be readable'),
         '--cpu': And(Use(int), lambda n: 1 <= n <= cpu_count(),\
@@ -97,8 +97,8 @@ if __name__ == "__main__":
     BENCHMARK_FILE = ARGUMENTS["--benchmark"]
     # OUTPUT file
     OUTPUT_PATH = ARGUMENTS["--output"]
-    # NACCESS path
-    NACCESS_PATH = ARGUMENTS["--naccess"]
+    # DSSP path
+    DSSP_PATH = ARGUMENTS["--dssp"]
     # Number of cpus for parallelisation
     NB_PROC = int(ARGUMENTS["--cpu"])
 
@@ -121,7 +121,7 @@ if __name__ == "__main__":
 
     # Parallelization of the main loop
     with Pool(processes=1) as pool:
-        FUNC = partial(process, DIST_RANGE, DOPE_DICT, OUTPUT_PATH, NACCESS_PATH)
+        FUNC = partial(process, DIST_RANGE, DOPE_DICT, OUTPUT_PATH, DSSP_PATH)
         # tqdm module enables an ETA progress bar for each alignment processed
         # imap_unordered can smooth things out by yielding faster-calculated values
         # ahead of slower-calculated values.
