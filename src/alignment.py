@@ -24,11 +24,7 @@ def process(dist_range, dope_dict, top_couplings_dict, index_list, ali):
     # Calculate the threading score of all alignments
     threading_score = ali.calculate_threading_score(dist_range, dope_dict)
     blosum_score = ali.calculate_blosum_score()
-    distance_matrix = ali.calculate_distance(index_list)
-    # for i in distance_matrix.shape[0]:
-    #     for j in distance_matrix.shape[1]:
-    #         print(distance_matrix[i, j], end=" ")
-    ccmpred_score = ali.calculate_contact_score(top_couplings_dict, distance_matrix)
+    ccmpred_score = ali.calculate_contact_score(index_list, top_couplings_dict)
     return ali.num, ali.score, threading_score, blosum_score, ccmpred_score,\
            ali.template.name, ali.template.benchmark
 
@@ -62,30 +58,30 @@ class Alignment:
         size = len(index_list)
         distance = np.empty((size, size), dtype=object)
         k = 0
-        while k < ali.query.first-1:
+        while k < self.query.first-1:
             distance[k, (k+1):] = "x"
             k += 1
 
-        query_size = ali.query.get_size()
+        query_size = self.query.get_size()
 
         index_i = 0
-        for i in range(k, ali.query.last):
-            while index_i < query_size and ali.query.residues[index_i].name == "-":
+        for i in range(k, self.query.last):
+            while index_i < query_size and self.query.residues[index_i].name == "-":
                 index_i += 1
-            if index_i < query_size and ali.template.residues[index_i].name == "-":
-                distance[i, (i+1):] = "e"
+            if index_i < query_size and self.template.residues[index_i].name == "-":
+                distance[i, (i+1):] = "x"
                 index_i += 1
                 continue
             index_j = index_i + 1
-            for j in range(i+1, ali.query.last):
-                while index_j < query_size and ali.query.residues[index_j].name == "-":
+            for j in range(i+1, self.query.last):
+                while index_j < query_size and self.query.residues[index_j].name == "-":
                     index_j += 1
-                if index_j < query_size and ali.template.residues[index_j].name == "-":
-                    distance[j, (j+1):] = "o"
+                if index_j < query_size and self.template.residues[index_j].name == "-":
+                    distance[j, (j+1):] = "x"
                     index_j += 1
                     continue
                 if distance[i, j] != "x":
-                    distance[i, j] = ali.template.residues[index_i].calculate_distance(ali.template.residues[index_j])
+                    distance[i, j] = self.template.residues[index_i].calculate_distance(self.template.residues[index_j])
                 index_j += 1
             index_i += 1
 
@@ -222,7 +218,7 @@ class Alignment:
             file.write("END\n")
 
 
-    def calculate_contact_score(self, top_couplings_dict, distance_matrix):
+    def calculate_contact_score(self, index_list, top_couplings_dict):
         """
             Compare top 30 contacts in the query with corresponding calculated
             distances
@@ -233,14 +229,15 @@ class Alignment:
             Returns:
                 contact_score
         """
+        distance_matrix = self.calculate_distance(index_list)
+        print(pd.DataFrame(distance_matrix))
         TP = 0
         for top_position in top_couplings_dict.values():
             #as matrix is triange, get matrix [i,j]
-            if distance_matrix[top_position[0], top_position[1]] != None:
-                if distance_matrix[top_position[0], top_position[1]] < 8:
-                    TP += 1
-            elif distance_matrix[top_position[1], top_position[0]] != None:
-                if distance_matrix[top_position[1], top_position[0]] < 8:
-                    TP += 1
-            contact_score = TP/len(top_couplings_dict)
+            dist = distance_matrix[top_position[0], top_position[1]]
+            dist_inv = distance_matrix[top_position[1], top_position[0]]
+            if (dist != None and dist != "x" and dist < 8)\
+            or (dist_inv != None and dist_inv != "x" and dist_inv < 8):
+                TP += 1
+        contact_score = TP/len(top_couplings_dict)
         return contact_score

@@ -83,7 +83,7 @@ def predict_top_contacts(aln_file, index_list, ntops):
         index_j = int(values[1])
         # Do not parse gaps associated with top couplings
         if (index_i in index_list) and (index_j in index_list):
-            top_couplings_dict[k] = (index_i, index_j)
+            top_couplings_dict[k] = (index_list.index(index_i), index_list.index(index_j))
             print(index_i, index_j)
             print(index_list.index(index_i), index_list.index(index_j))
     return top_couplings_dict
