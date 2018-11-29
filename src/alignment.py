@@ -49,7 +49,7 @@ def process(dist_range, dope_dict, output_path, dssp_bin_path, top_couplings_dic
     modeller_score = ali.calculate_modeller_score(output_path)
     # Calculate secondary structure score
     ss_score = ali.calculate_ss_score()
-    access_score = ali.calculate_access_score(dssp_bin_path, 0.2)
+    access_score = ali.calculate_access_score(dssp_bin_path, 0.3)
     ccmpred_score = ali.calculate_coevolution_score(index_list, top_couplings_dict)
     return ali.num, ali.score, threading_score, modeller_score, ss_score, access_score,\
            ccmpred_score, ali.template.name, ali.template.benchmark
