@@ -46,7 +46,7 @@ def process(dist_range, dope_dict, output_path, dssp_bin_path, ali):
     modeller_score = ali.calculate_modeller_score(output_path)
     # Calculate secondary structure score
     ss_score = ali.calculate_ss_score()
-    access_score = ali.calculate_access_score(dssp_bin_path, 0.2)
+    access_score = ali.calculate_access_score(dssp_bin_path, 0.3)
     return ali.num, ali.score, threading_score, modeller_score, ss_score, access_score,\
         ali.template.name, ali.template.benchmark
 
@@ -323,7 +323,7 @@ class Alignment:
             Returns:
                 dict: Keys are the residue ids and as value their solvant accessible area.
         """
-        return {key: val for key, val in dssp_rsa.items() if val < threshold}
+        return {key: val for key, val in dssp_rsa.items() if val > threshold}
 
     def write_alignment_for_modeller(self, ali_path):
         """
