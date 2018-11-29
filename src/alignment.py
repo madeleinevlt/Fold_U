@@ -381,7 +381,7 @@ class Alignment:
             Returns:
                 dict: Keys are the residue ids and as value their solvant accessible area.
         """
-        return {key: val for key, val in dssp_rsa.items() if val < threshold}
+        return {key: val for key, val in dssp_rsa.items() if val > threshold}
 
     def write_alignment_for_modeller(self, ali_path):
         """
