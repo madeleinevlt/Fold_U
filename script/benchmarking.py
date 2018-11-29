@@ -10,8 +10,8 @@
 # """
 """
     Usage:
-        ./script/benchmarking.py [--nb_templates NUM] [--output PATH] [--dssp PATH]
-                                 [--sscore SCORE] [--cpu NUM]
+        ./script/benchmarking.py [--nb_templates NUM] [--output PATH] [--dssp PATH] [--sscore SCORE]
+                                 [--cpu NUM]
 
     Options:
         -h, --help                            Show this
@@ -54,8 +54,7 @@ def check_args():
                         error='SCORES should be an existing score'),
         '--cpu': And(Use(int), lambda n: 1 <= n <= cpu_count(),
                      error='--cpus=NUM should be integer 1 <= N <= ' + str(cpu_count())),
-        # The output PATH is created (if not exists) at the end of the program
-        # so we skip the check.
+        # The output PATH is created (if not exists) at the end of the program so we skip the check.
         object: object})
     try:
         schema.validate(ARGUMENTS)

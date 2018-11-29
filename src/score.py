@@ -54,7 +54,8 @@ class Score:
         os.makedirs(res_path+"/pdb", exist_ok=True)
 
         # A dataframe is created with pandas and elements of the iterator are stored
-        scores_df = pd.DataFrame(columns=['benchmark', 'alignment', 'threading', 'modeller', 'secondary_structure', 'access_score'])
+        scores_df = pd.DataFrame(columns=['benchmark', 'alignment', 'threading', 'modeller',
+                                          'secondary_structure', 'access_score'])
         for _, ali_score, thr_score, modeller_score, ss_score, access_score, name, benchmark in sorted(self.iterator):
             scores_df.loc[name] = [benchmark, ali_score, thr_score, modeller_score, ss_score, access_score]
 
