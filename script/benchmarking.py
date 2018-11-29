@@ -20,7 +20,7 @@
         -o PATH, --output PATH                Path to the directory containing
                                               the result files (scores and plot)
                                               [default: ./results/top_n]
-        -a PATH, --dssp PATH                  Path to the dssp software
+        -d PATH, --dssp PATH                  Path to the dssp software
                                               binary [default: /usr/local/bin/mkdssp]
         -s SCORE, --sscore SCORE              selected score to calculate top_N
                                               [default: sum_scores]
@@ -49,7 +49,7 @@ def check_args():
                               error='--nb_templates=NUM should be integer 1 <= N <= 405'),
         '--dssp': Use(open, error='dssp/mkdssp should be readable'),
         '--sscore': And(Use(str), lambda s: s in ["alignment", "threading", "modeller",
-                                                  "secondary_structure", "access_score",
+                                                  "secondary_structure", "solvent_accessibility",
                                                   "sum_scores"],
                         error='SCORES should be an existing score'),
         '--cpu': And(Use(int), lambda n: 1 <= n <= cpu_count(),
@@ -161,7 +161,7 @@ if __name__ == "__main__":
     # The 3 different structures from benchmark
     STRUCTURES = ["Family", "Superfamily", "Fold"]
     # all the possible scores useful for plots
-    SCORES = ["alignment", "threading", "modeller", "secondary_structure", "access_score", "sum_scores"]
+    SCORES = ["alignment", "threading", "modeller", "secondary_structure", "solvent_accessibility", "sum_scores"]
     # A dictionary of pandas DataFrames is created for each score
     # Each DataFrame will contain the cumulative sum of benchmarks for each structure (= 3 columns)
     BENCHMARKING_SCORES = {}
@@ -176,6 +176,7 @@ if __name__ == "__main__":
         if not os.path.isfile("results/" + query + "/scores.csv"):
             print("\nProcessing query {} / {} : {}\n".format(ind, len(ALL_FOLDRECS), query))
             p = subprocess.Popen(["./fold_u", "data/foldrec/" + query + ".foldrec",
+            	                  "data/aln/" + query + ".fasta",
                                   "-o", "results/" + query, "--dssp", DSSP_PATH,
                                   "--cpu", NB_PROC],
                                  stdout=subprocess.PIPE).communicate()[0]
