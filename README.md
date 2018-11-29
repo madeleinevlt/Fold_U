@@ -43,7 +43,7 @@ You need to register to get a license key [here](https://salilab.org/modeller/re
 ### Toy example
 
 The `scores.csv` and the **top 10 pdb structures** of the His_biosynth query sequence are stored in `results/His_biosynth` folder.
-The alignment, threading and blosum scores are normalized using the **min-max scaling method** (values between 0 and 1). The last score represents the sum of these 3 scores. It has also been normalized.
+The alignment, threading and blosum_scores are normalized using the **min-max scaling method** (values between 0 and 1). The last score represents the sum of these 3 scores. It has also been normalized.
 ```
 ./fold_u data/foldrec/His_biosynth.foldrec -o results/His_biosynth
 ```
