@@ -1,13 +1,31 @@
 #! /usr/bin/env python3
 # -*- coding: utf-8 -*-
-
+# """
+# .. module:: benchmarking
+#    :synopsis: This module runs the program "fold_u" on all of the benchmarks. It then generates
+#               plots to visualize the contribution of each and every score to the re-ranking of
+#               models/templates.
+#               Three plots are generated, one for each structure type of benchmark
+#               "Fold", "Superfamily" and "Family".
+# """
 """
-.. module:: benchmarking
-   :synopsis: This module runs the program "fold_u" on all of the benchmarks. It then generates
-              plots to visualize the contribution of each and every score to the re-ranking of
-              models/templates.
-              Three plots are generated, one for each structure type of benchmark
-              "Fold", "Superfamily" and "Family".
+    Usage:
+        ./script/benchmarking.py [--nb_templates NUM] [--output PATH] [--dssp PATH] [--sscore SCORE]
+                                 [--cpu NUM]
+
+    Options:
+        -h, --help                            Show this
+        -n NUM, --nb_templates NUM            First n templates with the best
+                                              score [default: 100]
+        -o PATH, --output PATH                Path to the directory containing
+                                              the result files (scores and plot)
+                                              [default: ./results/top_n]
+        -a PATH, --dssp PATH                  Path to the dssp software
+                                              binary [default: /usr/local/bin/mkdssp]
+        -s SCORE, --sscore SCORE              selected score to calculate top_N
+                                              [default: sum_scores]
+        -c NUM, --cpu NUM                     Number of cpus to use for parallelisation
+                                              [default: 2]
 """
 
 # Third-party modules
@@ -18,6 +36,30 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib import cycler
+from docopt import docopt
+from schema import Schema, And, Use, SchemaError
+
+
+def check_args():
+    """
+        Checks and validates the types of inputs parsed by docopt from command line.
+    """
+    schema = Schema({
+        '--nb_templates': And(Use(int), lambda n: 1 <= n <= 405,
+                              error='--nb_templates=NUM should be integer 1 <= N <= 405'),
+        '--dssp': Use(open, error='dssp/mkdssp should be readable'),
+        '--sscore': And(Use(str), lambda s: s in ["alignment", "threading", "modeller",
+                                                  "secondary_structure", "access_score",
+                                                  "sum_scores"],
+                        error='SCORES should be an existing score'),
+        '--cpu': And(Use(int), lambda n: 1 <= n <= cpu_count(),
+                     error='--cpus=NUM should be integer 1 <= N <= ' + str(cpu_count())),
+        # The output PATH is created (if not exists) at the end of the program so we skip the check.
+        object: object})
+    try:
+        schema.validate(ARGUMENTS)
+    except SchemaError as err:
+        exit(err)
 
 
 def plot_benchmark(output_path, struct, scores, rank, benchmarking_scores):
@@ -60,6 +102,7 @@ def plot_benchmark(output_path, struct, scores, rank, benchmarking_scores):
     plt.show()
     print("The plot for '" + struct + "' is stored in " + output_path)
 
+
 def top_n(structures, scores, top_n, benchmarking_scores):
     """
         Show statistics based on the benchmark.list files separately for each fold-type: "Fold",
@@ -83,24 +126,42 @@ def top_n(structures, scores, top_n, benchmarking_scores):
     for struct in structures:
         rank[struct] = benchmarking_scores[scores][struct][top_n]
         max_rank[struct] = max(benchmarking_scores[scores][struct])
-    line1 =  "top{0}\t{1}/{2}\t\t{3}/{4}\t\t{5}/{6}\n".format(top_n,
-                                                        rank["Family"],
-                                                        max_rank["Family"],
-                                                        rank["Superfamily"],
-                                                        max_rank["Superfamily"],
-                                                        rank["Fold"],
-                                                        max_rank["Fold"])
-    line2 =  "\t{0:.2f} %\t\t{1:.2f} %\t\t{2:.2f} %"\
-                .format((rank["Family"]/max_rank["Family"])*100,
-                        (rank["Superfamily"]/max_rank["Superfamily"])*100,
-                        (rank["Fold"]/max_rank["Fold"])*100)
+    line1 = "top{0}\t{1}/{2}\t\t{3}/{4}\t\t{5}/{6}\n".format(top_n,
+                                                             rank["Family"],
+                                                             max_rank["Family"],
+                                                             rank["Superfamily"],
+                                                             max_rank["Superfamily"],
+                                                             rank["Fold"],
+                                                             max_rank["Fold"])
+    line2 = "\t{0:.2f} %\t\t{1:.2f} %\t\t{2:.2f} %"\
+        .format((rank["Family"]/max_rank["Family"])*100,
+                (rank["Superfamily"]/max_rank["Superfamily"])*100,
+                (rank["Fold"]/max_rank["Fold"])*100)
     top_n_results = line1 + line2
     return top_n_results
 
 
 if __name__ == "__main__":
+    ### Parse command line
+    ######################
+    ARGUMENTS = docopt(__doc__, version='fold_u 1.2')
+    # Check the types and ranges of the command line arguments parsed by docopt
+    check_args()
+
+    # Process the first n templates only
+    NB_TEMPLATES = int(ARGUMENTS["--nb_templates"])
+    # OUTPUT file
+    OUTPUT_PATH = ARGUMENTS["--output"]
+    # DSSP path
+    DSSP_PATH = ARGUMENTS["--dssp"]
+    # Number of cpus for parallelisation
+    NB_PROC = ARGUMENTS["--cpu"]
+    # Selected score you want to have info about
+    SELECTED_SCORE = ARGUMENTS["--sscore"]
+    # The 3 different structures from benchmark
     STRUCTURES = ["Family", "Superfamily", "Fold"]
-    SCORES = ["alignment", "threading", "modeller", "secondary_structure", "access_score", "sum scores"]
+    # all the possible scores useful for plots
+    SCORES = ["alignment", "threading", "modeller", "secondary_structure", "access_score", "sum_scores"]
     # A dictionary of pandas DataFrames is created for each score
     # Each DataFrame will contain the cumulative sum of benchmarks for each structure (= 3 columns)
     BENCHMARKING_SCORES = {}
@@ -115,8 +176,8 @@ if __name__ == "__main__":
         if not os.path.isfile("results/" + query + "/scores.csv"):
             print("\nProcessing query {} / {} : {}\n".format(ind, len(ALL_FOLDRECS), query))
             p = subprocess.Popen(["./fold_u", "data/foldrec/" + query + ".foldrec",
-                                  "-o", "results/" + query, "--dssp", "/usr/local/bin/mkdssp",
-                                  "--cpu", str(cpu_count())],
+                                  "-o", "results/" + query, "--dssp", DSSP_PATH,
+                                  "--cpu", NB_PROC],
                                  stdout=subprocess.PIPE).communicate()[0]
             rows, columns = os.popen('stty size', 'r').read().split()
             print("\n" + "-"*int(columns))
@@ -149,14 +210,23 @@ if __name__ == "__main__":
     plt.rc('patch', edgecolor='#E6E6E6')
     plt.rc('lines', linewidth=1.5)
 
-    OUTPUT_PATH = "results/plot/"
+    #OUTPUT_PATH = "results/plot/"
     for structure in STRUCTURES:
         plot_benchmark(OUTPUT_PATH, structure, SCORES, RANK, BENCHMARKING_SCORES)
     print("\nThe plots are stored in " + OUTPUT_PATH + "\n")
-    OUTPUT_PATH = "results/top_N/"
+    #OUTPUT_PATH = "results/top_N/"
+    if NB_TEMPLATES < 5:
+        n_top_n = 1
+    if NB_TEMPLATES >= 5 & NB_TEMPLATES <= 10:
+        n_tom_n = [5, 10]
+    if NB_TEMPLATES > 10 & NB_TEMPLATES <= 50:
+        n_top_n = [5, 10, 50]
+    if NB_TEMPLATES > 50 & NB_TEMPLATES <= 100:
+        n_top_n = [5, 10, 50, 100]
+    print("Table summarizing the top_{} results.".format(n_top_n))
     print("\tFamily\t\tSuperfamily\tFold\n")
-    for i in [5, 10, 50, 100]:
-        print(top_n(STRUCTURES, "sum scores", i, BENCHMARKING_SCORES))
+    for ind in n_top_n:
+        print(top_n(STRUCTURES, SELECTED_SCORE, i, BENCHMARKING_SCORES))
         print("\t----------------------------------------")
     # with  open(output_path + "top_N_stats.txt", "w") as fileout:
         # fileout.write(top_n_results)

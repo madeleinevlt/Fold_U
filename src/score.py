@@ -44,7 +44,7 @@ class Score:
     def write_score(self, res_path, nb_pdb, alignment_dict):
         """
             Creates a scores.csv file containing for each line a template's name and its different
-            scores. Creates the pdb files of the n best sum scores.
+            scores. Creates the pdb files of the n best sum_scores.
 
             Args:
                 res_path (str): The path of the directory where to stock the created files.
@@ -68,14 +68,14 @@ class Score:
         for index in ['alignment', 'threading', 'modeller', 'co-evolution']:
             scores_df[index] = normalize_score(scores_df[index])
         # Sum of the different scores and normalization
-        scores_df['sum scores'] = normalize_score(scores_df['alignment']
+        scores_df['sum_scores'] = normalize_score(scores_df['alignment']
                                                   + scores_df['threading']
                                                   + scores_df['modeller']
                                                   + scores_df['secondary_structure']
                                                   + scores_df['solvent_accessibility']
                                                   + scores_df['co-evolution'])
         # Sort of the templates according to the sum score
-        scores_df = scores_df.sort_values(by="sum scores", ascending=False)
+        scores_df = scores_df.sort_values(by="sum_scores", ascending=False)
         # A csv file containing the normalized scores is created
         scores_df.to_csv(res_path+"/scores.csv")
 
