@@ -303,10 +303,10 @@ class Alignment:
         rsa_template_model = {dssp_template_model[key][0]: dssp_template_model[key][3]
                               for key in dssp_template_model.keys()}
 
-        # Keep only residues with a relative accessibilities threshold
+        # Keep only residues under a relative accessibilities threshold: buried residues
         pred_access_residues = self.keep_accessible_residues(rsa_pred_model, threshold)
         template_access_residues = self.keep_accessible_residues(rsa_template_model, threshold)
-        # Get the common accessible residues
+        # Get the common buried residues
         common_residues_len = len(set(pred_access_residues).intersection(template_access_residues))
         # Normalization
         return common_residues_len/len(pred_access_residues)
@@ -323,7 +323,7 @@ class Alignment:
             Returns:
                 dict: Keys are the residue ids and as value their solvant accessible area.
         """
-        return {key: val for key, val in dssp_rsa.items() if val > threshold}
+        return {key: val for key, val in dssp_rsa.items() if val < threshold}
 
     def write_alignment_for_modeller(self, ali_path):
         """
