@@ -55,7 +55,7 @@ class Score:
 
         # A dataframe is created with pandas and elements of the iterator are stored
         scores_df = pd.DataFrame(columns=['benchmark', 'alignment', 'threading', 'modeller',
-                                'secondary_structure', 'solvent_accessibility', 'co-evolution'])
+                                'secondary_structure', 'access_score', 'co_evolution'])
         for _, ali_score, thr_score, modeller_score, ss_score,\
            access_score, ccmpred_score, name, benchmark in sorted(self.iterator):
             scores_df.loc[name] = [benchmark, ali_score, thr_score, modeller_score,
@@ -65,15 +65,15 @@ class Score:
         scores_df = scores_df.drop(scores_df.index[0])
         # Normalization of the scores.
         # Not the ss_score neither access_score because they are already between 0-1
-        for index in ['alignment', 'threading', 'modeller', 'co-evolution']:
+        for index in ['alignment', 'threading', 'modeller', 'co_evolution']:
             scores_df[index] = normalize_score(scores_df[index])
         # Sum of the different scores and normalization
         scores_df['sum_scores'] = normalize_score(scores_df['alignment']
                                                   + scores_df['threading']
                                                   + scores_df['modeller']
                                                   + scores_df['secondary_structure']
-                                                  + scores_df['solvent_accessibility']
-                                                  + scores_df['co-evolution'])
+                                                  + scores_df['access_score']
+                                                  + scores_df['co_evolution'])
         # Sort of the templates according to the sum score
         scores_df = scores_df.sort_values(by="sum_scores", ascending=False)
         # A csv file containing the normalized scores is created

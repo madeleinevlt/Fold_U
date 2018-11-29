@@ -49,7 +49,7 @@ def check_args():
                               error='--nb_templates=NUM should be integer 1 <= N <= 100'),
         '--dssp': Use(open, error='dssp/mkdssp should be readable'),
         '--sscore': And(Use(str), lambda s: s in ["alignment", "threading", "modeller",
-                                                  "secondary_structure", "solvent_accessibility",
+                                                  "secondary_structure", "access_score",
                                                   "sum_scores"],
                         error='SCORES should be an existing score'),
         '--cpu': And(Use(int), lambda n: 1 <= n <= cpu_count(),
@@ -84,7 +84,8 @@ def plot_benchmark(output_path, struct, scores, rank, benchmarking_scores):
     mod_struct = benchmarking_scores[scores[2]][struct].values
     ss_struct = benchmarking_scores[scores[3]][struct].values
     acc_struct = benchmarking_scores[scores[4]][struct].values
-    sum_struct = benchmarking_scores[scores[5]][struct].values
+    co_ev_struct = benchmarking_scores[scores[5]][struct].values
+    sum_struct = benchmarking_scores[scores[6]][struct].values
 
     plt.figure(num=struct)  # Window's name
     plt.plot(rank, ali_struct, "b", label=scores[0])
@@ -92,7 +93,8 @@ def plot_benchmark(output_path, struct, scores, rank, benchmarking_scores):
     plt.plot(rank, mod_struct, "#EE82EE", label=scores[2])
     plt.plot(rank, ss_struct, "#00B200", label=scores[3])
     plt.plot(rank, acc_struct, "#7a9a91", label=scores[4])
-    plt.plot(rank, sum_struct, "r", label=scores[5])
+    plt.plot(rank, co_ev_struct, "#d6e4f9", label=scores[5])
+    plt.plot(rank, sum_struct, "r", label=scores[6])
     plt.plot([0, len(ali_struct)], [0, max(ali_struct)], "k", label="random")
     plt.title("Global scores comparison using " + struct + " benchmarks")
     plt.ylabel("benchmark")
@@ -161,7 +163,8 @@ if __name__ == "__main__":
     # The 3 different structures from benchmark
     STRUCTURES = ["Family", "Superfamily", "Fold"]
     # all the possible scores useful for plots
-    SCORES = ["alignment", "threading", "modeller", "secondary_structure", "solvent_accessibility", "sum_scores"]
+    SCORES = ["alignment", "threading", "modeller", "secondary_structure", "access_score",
+              "co_evolution", "sum_scores"]
     # A dictionary of pandas DataFrames is created for each score
     # Each DataFrame will contain the cumulative sum of benchmarks for each structure (= 3 columns)
     BENCHMARKING_SCORES = {}
