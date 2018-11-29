@@ -39,19 +39,21 @@ from matplotlib import cycler
 from docopt import docopt
 from schema import Schema, And, Use, SchemaError
 
+
 def check_args():
     """
         Checks and validates the types of inputs parsed by docopt from command line.
     """
     schema = Schema({
-        '--nb_templates': And(Use(int), lambda n: 1 <= n <= 405,\
-                                error='--nb_templates=NUM should be integer 1 <= N <= 405'),
+        '--nb_templates': And(Use(int), lambda n: 1 <= n <= 405,
+                              error='--nb_templates=NUM should be integer 1 <= N <= 405'),
         '--dssp': Use(open, error='dssp/mkdssp should be readable'),
-        '--sscore': And(Use(str), lambda s: s in ["alignment", "threading",\
-         "modeller", "secondary_structure", "access_score","sum_scores"],\
-         error='SCORES should be an existing score'),
-        '--cpu': And(Use(int), lambda n: 1 <= n <= cpu_count(),\
-                                error='--cpus=NUM should be integer 1 <= N <= ' + str(cpu_count())),
+        '--sscore': And(Use(str), lambda s: s in ["alignment", "threading", "modeller",
+                                                  "secondary_structure", "access_score",
+                                                  "sum_scores"],
+                        error='SCORES should be an existing score'),
+        '--cpu': And(Use(int), lambda n: 1 <= n <= cpu_count(),
+                     error='--cpus=NUM should be integer 1 <= N <= ' + str(cpu_count())),
         # The output PATH is created (if not exists) at the end of the program
         # so we skip the check.
         object: object})
@@ -59,6 +61,7 @@ def check_args():
         schema.validate(ARGUMENTS)
     except SchemaError as err:
         exit(err)
+
 
 def plot_benchmark(output_path, struct, scores, rank, benchmarking_scores):
     """
@@ -100,6 +103,7 @@ def plot_benchmark(output_path, struct, scores, rank, benchmarking_scores):
     plt.show()
     print("The plot for '" + struct + "' is stored in " + output_path)
 
+
 def top_n(structures, scores, top_n, benchmarking_scores):
     """
         Show statistics based on the benchmark.list files separately for each fold-type: "Fold",
@@ -123,17 +127,17 @@ def top_n(structures, scores, top_n, benchmarking_scores):
     for struct in structures:
         rank[struct] = benchmarking_scores[scores][struct][top_n]
         max_rank[struct] = max(benchmarking_scores[scores][struct])
-    line1 =  "top{0}\t{1}/{2}\t\t{3}/{4}\t\t{5}/{6}\n".format(top_n,
-                                                        rank["Family"],
-                                                        max_rank["Family"],
-                                                        rank["Superfamily"],
-                                                        max_rank["Superfamily"],
-                                                        rank["Fold"],
-                                                        max_rank["Fold"])
-    line2 =  "\t{0:.2f} %\t\t{1:.2f} %\t\t{2:.2f} %"\
-                .format((rank["Family"]/max_rank["Family"])*100,
-                        (rank["Superfamily"]/max_rank["Superfamily"])*100,
-                        (rank["Fold"]/max_rank["Fold"])*100)
+    line1 = "top{0}\t{1}/{2}\t\t{3}/{4}\t\t{5}/{6}\n".format(top_n,
+                                                             rank["Family"],
+                                                             max_rank["Family"],
+                                                             rank["Superfamily"],
+                                                             max_rank["Superfamily"],
+                                                             rank["Fold"],
+                                                             max_rank["Fold"])
+    line2 = "\t{0:.2f} %\t\t{1:.2f} %\t\t{2:.2f} %"\
+        .format((rank["Family"]/max_rank["Family"])*100,
+                (rank["Superfamily"]/max_rank["Superfamily"])*100,
+                (rank["Fold"]/max_rank["Fold"])*100)
     top_n_results = line1 + line2
     return top_n_results
 
@@ -214,11 +218,11 @@ if __name__ == "__main__":
     #OUTPUT_PATH = "results/top_N/"
     if NB_TEMPLATES < 5:
         n_top_n = 1
-    if NB_TEMPLATES >= 5 & NB_TEMPLATES <=10:
+    if NB_TEMPLATES >= 5 & NB_TEMPLATES <= 10:
         n_tom_n = [5, 10]
-    if NB_TEMPLATES > 10 & NB_TEMPLATES <=50:
+    if NB_TEMPLATES > 10 & NB_TEMPLATES <= 50:
         n_top_n = [5, 10, 50]
-    if NB_TEMPLATES > 50 & NB_TEMPLATES <=100:
+    if NB_TEMPLATES > 50 & NB_TEMPLATES <= 100:
         n_top_n = [5, 10, 50, 100]
     print("Table summarizing the top_{} results.".format(n_top_n))
     print("\tFamily\t\tSuperfamily\tFold\n")
