@@ -37,6 +37,13 @@ conda install -c salilab modeller
 ```
 You need to register to get a license key [here](https://salilab.org/modeller/registration.html), and follow instructions during installation to insert license key in the program.
 
+
+To calculate the solvent accessibility score DSSP is also required:
+```
+sudo apt-get install dssp
+```
+Or you can download the [latest release](https://github.com/cmbi/xssp/releases/latest) and install from source.
+
 ## Run the program
 `fold_u` takes in input **N profil-profil alignments and their corresponding score** (foldrec file) and returns a `score.csv` file and the **top N pdb structures**.
 
