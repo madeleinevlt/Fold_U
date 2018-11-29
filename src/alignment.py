@@ -330,7 +330,7 @@ class Alignment:
             if (dist != None and dist != "x" and dist < 8)\
             or (dist_inv != None and dist_inv != "x" and dist_inv < 8):
                 TP += 1
-        contact_score = np.log10(1+TP/len(top_couplings_dict))
+        contact_score = np.log10(1+TP)
         return contact_score
 
     def calculate_access_score(self, dssp_bin_path, threshold):
