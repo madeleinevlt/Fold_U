@@ -41,14 +41,16 @@ def plot_benchmark(output_path, struct, scores, rank, benchmarking_scores):
     thr_struct = benchmarking_scores[scores[1]][struct].values
     mod_struct = benchmarking_scores[scores[2]][struct].values
     ss_struct = benchmarking_scores[scores[3]][struct].values
-    sum_struct = benchmarking_scores[scores[4]][struct].values
+    acc_struct = benchmarking_scores[scores[4]][struct].values
+    sum_struct = benchmarking_scores[scores[5]][struct].values
 
     plt.figure(num=struct)  # Window's name
     plt.plot(rank, ali_struct, "b", label=scores[0])
     plt.plot(rank, thr_struct, "#ffa201", label=scores[1])
     plt.plot(rank, mod_struct, "#EE82EE", label=scores[2])
     plt.plot(rank, ss_struct, "#00B200", label=scores[3])
-    plt.plot(rank, sum_struct, "r", label=scores[4])
+    plt.plot(rank, acc_struct, "#7a9a91", label=scores[4])
+    plt.plot(rank, sum_struct, "r", label=scores[5])
     plt.plot([0, len(ali_struct)], [0, max(ali_struct)], "k", label="random")
     plt.title("Global scores comparison using " + struct + " benchmarks")
     plt.ylabel("benchmark")
@@ -98,7 +100,7 @@ def top_n(structures, scores, top_n, benchmarking_scores):
 
 if __name__ == "__main__":
     STRUCTURES = ["Family", "Superfamily", "Fold"]
-    SCORES = ["alignment", "threading", "modeller", "secondary_structure", "sum scores"]
+    SCORES = ["alignment", "threading", "modeller", "secondary_structure", "access_score", "sum scores"]
     # A dictionary of pandas DataFrames is created for each score
     # Each DataFrame will contain the cumulative sum of benchmarks for each structure (= 3 columns)
     BENCHMARKING_SCORES = {}
@@ -113,7 +115,8 @@ if __name__ == "__main__":
         if not os.path.isfile("results/" + query + "/scores.csv"):
             print("\nProcessing query {} / {} : {}\n".format(ind, len(ALL_FOLDRECS), query))
             p = subprocess.Popen(["./fold_u", "data/foldrec/" + query + ".foldrec",
-                                  "-o", "results/" + query, "--cpu", str(cpu_count())],
+                                  "-o", "results/" + query, "--dssp", "/usr/local/bin/mkdssp",
+                                  "--cpu", str(cpu_count())],
                                  stdout=subprocess.PIPE).communicate()[0]
             rows, columns = os.popen('stty size', 'r').read().split()
             print("\n" + "-"*int(columns))

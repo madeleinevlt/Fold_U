@@ -224,7 +224,7 @@ def parse_foldrec(foldrec_file, nb_templates, metafold_dict):
                 score = float(score_found.group(1))
             # Empty alignement (the query = gaps only)
             if empty_query_found and query_reg_count == 2:
-                print("Skipping alignement "+str(num)+" in which the query is only composed of gaps")
+                print("Skipping alignement "+str(num)+". The query is only composed of gaps.")
                 # We skip the alignment
                 for i in range(5):
                     next(file)
