@@ -17,6 +17,18 @@ This program is the second step (downstream) of a protein structure prediction p
 Our project is part of the Meet-U 2018-2019 competition.
 Meet-U is a collaborative pedagogical and research initiative between several Universities of Paris area. The course is intended to Master students (2nd year) in Bioinformatics. For more details, please refer to [http://www.meet-u.org/](http://www.meet-u.org/).
 
+The overall strategy implemented is the following. The input file is generated during the
+first step (upstream team). This is a .foldrec file resulting from a profile-profile
+alignment. This foldrec file is parsed to extract the different information like the
+query and template sequences and the alignment score associated.  Then a threading step
+generating a threading score is performed using a DOPE matrix file. For each alignment
+from the .foldrec file, Modeller predicts a secondary structure by homology and generates
+a score and a new template pdb file which is then used to calculate several scores (secondary structure, solvent accessibility and co-evolution scores). Scores are then normalized using min-max
+algorithm and a reranking of the templates is performed.
+
+This program is also benchmarked using ROC style plots and Top N information to evaluate
+the power and the relevance of our proram.
+
 ## Installation
 
 ### Clone the repository
@@ -54,6 +66,15 @@ The alignment, threading and blosum_scores are normalized using the **min-max sc
 ```
 ./fold_u data/foldrec/His_biosynth.foldrec -o results/His_biosynth
 ```
+### Scores
+
+To improve the structure prediction of the query, several scores have been implemented:
+- **alignment score** : resulting from the profile -profile alignment
+- **threading score** : score based on the DOPE matrix
+- **modeller scores** :
+- **secondary structure score** :
+- **solvent accessibility score** :
+- **sum scores** : the addition of all previously mentionned scores
 
 ### Benchmarking
 
