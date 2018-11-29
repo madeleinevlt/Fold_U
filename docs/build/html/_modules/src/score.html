@@ -197,7 +197,7 @@
 <div class="viewcode-block" id="Score.write_score"><a class="viewcode-back" href="../../score.html#src.score.Score.write_score">[docs]</a>    <span class="k">def</span> <span class="nf">write_score</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">res_path</span><span class="p">,</span> <span class="n">nb_pdb</span><span class="p">,</span> <span class="n">alignment_dict</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">            Creates a scores.csv file containing for each line a template&#39;s name and its different</span>
-<span class="sd">            scores. Creates the pdb files of the n best sum scores.</span>
+<span class="sd">            scores. Creates the pdb files of the n best sum_scores.</span>
 
 <span class="sd">            Args:</span>
 <span class="sd">                res_path (str): The path of the directory where to stock the created files.</span>
@@ -218,13 +218,13 @@
         <span class="k">for</span> <span class="n">index</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;alignment&#39;</span><span class="p">,</span> <span class="s1">&#39;threading&#39;</span><span class="p">,</span> <span class="s1">&#39;modeller&#39;</span><span class="p">]:</span>
             <span class="n">scores_df</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="n">normalize_score</span><span class="p">(</span><span class="n">scores_df</span><span class="p">[</span><span class="n">index</span><span class="p">])</span>
         <span class="c1"># Sum of the different scores and normalization</span>
-        <span class="n">scores_df</span><span class="p">[</span><span class="s1">&#39;sum scores&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">normalize_score</span><span class="p">(</span><span class="n">scores_df</span><span class="p">[</span><span class="s1">&#39;alignment&#39;</span><span class="p">]</span>
+        <span class="n">scores_df</span><span class="p">[</span><span class="s1">&#39;sum_scores&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">normalize_score</span><span class="p">(</span><span class="n">scores_df</span><span class="p">[</span><span class="s1">&#39;alignment&#39;</span><span class="p">]</span>
                                                   <span class="o">+</span> <span class="n">scores_df</span><span class="p">[</span><span class="s1">&#39;threading&#39;</span><span class="p">]</span>
                                                   <span class="o">+</span> <span class="n">scores_df</span><span class="p">[</span><span class="s1">&#39;modeller&#39;</span><span class="p">]</span>
                                                   <span class="o">+</span> <span class="n">scores_df</span><span class="p">[</span><span class="s1">&#39;secondary_structure&#39;</span><span class="p">]</span>
                                                   <span class="o">+</span> <span class="n">scores_df</span><span class="p">[</span><span class="s1">&#39;access_score&#39;</span><span class="p">])</span>
         <span class="c1"># Sort of the templates according to the sum score</span>
-        <span class="n">scores_df</span> <span class="o">=</span> <span class="n">scores_df</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="s2">&quot;sum scores&quot;</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="n">scores_df</span> <span class="o">=</span> <span class="n">scores_df</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="s2">&quot;sum_scores&quot;</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
         <span class="c1"># A csv file containing the normalized scores is created</span>
         <span class="n">scores_df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">res_path</span><span class="o">+</span><span class="s2">&quot;/scores.csv&quot;</span><span class="p">)</span>
 
