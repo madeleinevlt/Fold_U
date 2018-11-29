@@ -20,7 +20,7 @@
         -o PATH, --output PATH                Path to the directory containing
                                               the result files (scores and plot)
                                               [default: ./results/top_n]
-        -a PATH, --dssp PATH                  Path to the dssp software
+        -d PATH, --dssp PATH                  Path to the dssp software
                                               binary [default: /usr/local/bin/mkdssp]
         -s SCORE, --sscore SCORE              selected score to calculate top_N
                                               [default: sum_scores]
@@ -45,8 +45,8 @@ def check_args():
         Checks and validates the types of inputs parsed by docopt from command line.
     """
     schema = Schema({
-        '--nb_templates': And(Use(int), lambda n: 1 <= n <= 405,
-                              error='--nb_templates=NUM should be integer 1 <= N <= 405'),
+        '--nb_templates': And(Use(int), lambda n: 1 <= n <= 100,
+                              error='--nb_templates=NUM should be integer 1 <= N <= 100'),
         '--dssp': Use(open, error='dssp/mkdssp should be readable'),
         '--sscore': And(Use(str), lambda s: s in ["alignment", "threading", "modeller",
                                                   "secondary_structure", "access_score",
@@ -133,7 +133,7 @@ def top_n(structures, scores, top_n, benchmarking_scores):
                                                              max_rank["Superfamily"],
                                                              rank["Fold"],
                                                              max_rank["Fold"])
-    line2 = "\t{0:.2f} %\t\t{1:.2f} %\t\t{2:.2f} %"\
+    line2 = "\t{0:>5.2f} % {1:>13.2f} %{2:>14.2f} %"\
         .format((rank["Family"]/max_rank["Family"])*100,
                 (rank["Superfamily"]/max_rank["Superfamily"])*100,
                 (rank["Fold"]/max_rank["Fold"])*100)
@@ -177,7 +177,7 @@ if __name__ == "__main__":
             print("\nProcessing query {} / {} : {}\n".format(ind, len(ALL_FOLDRECS), query))
             p = subprocess.Popen(["./fold_u", "data/foldrec/" + query + ".foldrec",
                                   "-o", "results/" + query, "--dssp", DSSP_PATH,
-                                  "--cpu", NB_PROC],
+                                  "--cpu", NB_PROC, "--nb_templates", "100"],
                                  stdout=subprocess.PIPE).communicate()[0]
             rows, columns = os.popen('stty size', 'r').read().split()
             print("\n" + "-"*int(columns))
@@ -215,18 +215,19 @@ if __name__ == "__main__":
         plot_benchmark(OUTPUT_PATH, structure, SCORES, RANK, BENCHMARKING_SCORES)
     print("\nThe plots are stored in " + OUTPUT_PATH + "\n")
     #OUTPUT_PATH = "results/top_N/"
-    if NB_TEMPLATES < 5:
-        n_top_n = 1
-    if NB_TEMPLATES >= 5 & NB_TEMPLATES <= 10:
-        n_tom_n = [5, 10]
-    if NB_TEMPLATES > 10 & NB_TEMPLATES <= 50:
+    n_top_n = [5]
+    if NB_TEMPLATES <= 5:
+        n_top_n = [5]
+    if NB_TEMPLATES >= 10:
+        n_top_n = [5, 10]
+    if NB_TEMPLATES >= 50:
         n_top_n = [5, 10, 50]
-    if NB_TEMPLATES > 50 & NB_TEMPLATES <= 100:
+    if NB_TEMPLATES >= 100:
         n_top_n = [5, 10, 50, 100]
-    print("Table summarizing the top_{} results.".format(n_top_n))
+    print("Table summarizing the top {} results.\n".format(n_top_n))
     print("\tFamily\t\tSuperfamily\tFold\n")
-    for ind in n_top_n:
-        print(top_n(STRUCTURES, SELECTED_SCORE, i, BENCHMARKING_SCORES))
+    for top in n_top_n:
+        print(top_n(STRUCTURES, SELECTED_SCORE, top-1, BENCHMARKING_SCORES))
         print("\t----------------------------------------")
     # with  open(output_path + "top_N_stats.txt", "w") as fileout:
         # fileout.write(top_n_results)
