@@ -46,8 +46,8 @@ def process(dist_range, dope_dict, output_path, dssp_bin_path, ali):
     modeller_score = ali.calculate_modeller_score(output_path)
     # Calculate secondary structure score
     ss_score = ali.calculate_ss_score()
-    access_score = ali.calculate_access_score(dssp_bin_path, 0.3)
-    return ali.num, ali.score, threading_score, modeller_score, ss_score, access_score,\
+    solvent_access = ali.calculate_solvent_access(dssp_bin_path, 0.3)
+    return ali.num, ali.score, threading_score, modeller_score, ss_score, solvent_access,\
         ali.template.name, ali.template.benchmark
 
 
@@ -275,7 +275,7 @@ class Alignment:
             # The two last lines of the created pdb file ("END" and "TER" lines)
             file.write("END\n")
 
-    def calculate_access_score(self, dssp_bin_path, threshold):
+    def calculate_solvent_access(self, dssp_bin_path, threshold):
         '''
             Calculate the accessibility score between the predicted model
             and the template pdb structure.

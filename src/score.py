@@ -55,9 +55,9 @@ class Score:
 
         # A dataframe is created with pandas and elements of the iterator are stored
         scores_df = pd.DataFrame(columns=['benchmark', 'alignment', 'threading', 'modeller',
-                                          'secondary_structure', 'access_score'])
-        for _, ali_score, thr_score, modeller_score, ss_score, access_score, name, benchmark in sorted(self.iterator):
-            scores_df.loc[name] = [benchmark, ali_score, thr_score, modeller_score, ss_score, access_score]
+                                          'secondary_structure', 'solvent_access'])
+        for _, ali_score, thr_score, modeller_score, ss_score, solvent_access, name, benchmark in sorted(self.iterator):
+            scores_df.loc[name] = [benchmark, ali_score, thr_score, modeller_score, ss_score, solvent_access]
 
         # The first row is removed because it corresponds to the query
         scores_df = scores_df.drop(scores_df.index[0])
@@ -70,7 +70,7 @@ class Score:
                                                   + scores_df['threading']
                                                   + scores_df['modeller']
                                                   + scores_df['secondary_structure']
-                                                  + scores_df['access_score'])
+                                                  + scores_df['solvent_access'])
         # Sort of the templates according to the sum score
         scores_df = scores_df.sort_values(by="sum_scores", ascending=False)
         # A csv file containing the normalized scores is created
