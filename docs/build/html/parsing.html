@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Parsing &mdash; Fold U 1.2 documentation</title>
+  <title>Parsing &mdash; Fold U 2.0 documentation</title>
   
 
   
@@ -57,7 +57,7 @@
             
             
               <div class="version">
-                1.2
+                2.0
               </div>
             
           
@@ -156,8 +156,34 @@
   <div class="section" id="module-src.parsing">
 <span id="parsing"></span><h1>Parsing<a class="headerlink" href="#module-src.parsing" title="Permalink to this headline">¶</a></h1>
 <span class="target" id="module-parsing"></span><dl class="function">
+<dt id="src.parsing.convert_aln_file">
+<code class="descclassname">src.parsing.</code><code class="descname">convert_aln_file</code><span class="sig-paren">(</span><em>aln_file</em>, <em>aln_file_clustal</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/parsing.html#convert_aln_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.parsing.convert_aln_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert a multiple alignment file from fasta to clustal.
+The first sequence of this multiple alignment is kept and
+a list of non-gaps position index of this sequence is then generated.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>aln_file</strong> (<em>str</em>) – Multiple alignement file (fasta format).</li>
+<li><strong>aln_file_clustal</strong> (<em>str</em>) – Multiple alignemnt file (clustal format) to generated.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">List of indexes corresponding to amino acids positions in aln file.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">list</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
 <dt id="src.parsing.parse_benchmark">
-<code class="descclassname">src.parsing.</code><code class="descname">parse_benchmark</code><span class="sig-paren">(</span><em>benchmark_file</em>, <em>foldrec_file</em>, <em>alignment_dict</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/parsing.html#parse_benchmark"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.parsing.parse_benchmark" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">src.parsing.</code><code class="descname">parse_benchmark</code><span class="sig-paren">(</span><em>query_name</em>, <em>benchmark_file</em>, <em>alignment_dict</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/parsing.html#parse_benchmark"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.parsing.parse_benchmark" title="Permalink to this definition">¶</a></dt>
 <dd><p>Extract the line of the benchmark file containing the benchmarks of
 the studied query. Each benchmark template have an assigned structure
 corresponding to the degree of similarity with the query
@@ -168,9 +194,9 @@ object, the structure is stored in the benchmark item.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>query_name</strong> (<em>str</em>) – Name of the query.</li>
 <li><strong>benchmark_file</strong> (<em>str</em>) – The path to the benchmark file.</li>
-<li><strong>foldrec_file</strong> (<em>str</em>) – The path to the foldrec file.</li>
-<li><strong>alignment_dict</strong> (<em>dictionary</em>) – A dictionary with key = template name
+<li><strong>alignment_dict</strong> (<em>dict</em>) – A dictionary with key = template name.
 and value = an Alignment object.</li>
 </ul>
 </td>
@@ -216,7 +242,7 @@ and gets all the coordinates of the CA atoms in the template’s Residue list.</
 corresponding scores.</li>
 <li><strong>nb_templates</strong> (<em>int</em>) – Number of alignments to retrieve from the file and chosen
 by the user.</li>
-<li><strong>metafold_dict</strong> (<em>dictionary</em>) – A dictionary with key = template name
+<li><strong>metafold_dict</strong> (<em>dict</em>) – A dictionary with key = template name
 and value = pdb file.</li>
 </ul>
 </td>
@@ -234,21 +260,42 @@ and value = pdb file.</li>
 <dl class="function">
 <dt id="src.parsing.parse_metafold">
 <code class="descclassname">src.parsing.</code><code class="descname">parse_metafold</code><span class="sig-paren">(</span><em>metafold_file</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/parsing.html#parse_metafold"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.parsing.parse_metafold" title="Permalink to this definition">¶</a></dt>
-<dd><p>Extracts the name of the metafold as a key and the associated pdb as
-a value in a dictionary</p>
+<dd><p>Extracts name of metafold as key and associated pdb as
+value in dictionary.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>metafold_file</strong> (<em>str</em>) – A METAFOLD.list file containing for a given line a
-template name and a pdb file name associated</td>
+template name and a pdb file name associated.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A dictionary with key = template name and value = pdb file</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A dictionary with key = template name and value = pdb file.</td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">dict</td>
 </tr>
 </tbody>
 </table>
+</dd></dl>
+
+<dl class="function">
+<dt id="src.parsing.predict_top_contacts">
+<code class="descclassname">src.parsing.</code><code class="descname">predict_top_contacts</code><span class="sig-paren">(</span><em>aln_file</em>, <em>index_list</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/parsing.html#predict_top_contacts"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.parsing.predict_top_contacts" title="Permalink to this definition">¶</a></dt>
+<dd><p>Extract N tops couplings based on co_evolution score. co_evolution score
+is calculated between two non-consecutive amino acids by ccmpred based on
+MSA alignment. Co_evolution score measures co-occurence of a pair of amino
+acid in ortholog sequences. Two amino acid have co-evoluated if the
+occurence of one of this amino never occur whithout the other.
+Nb top contacts = length(query)/2</p>
+<blockquote>
+<div><dl class="docutils">
+<dt>Args:</dt>
+<dd>aln_file (str): Multiple alignement file (clustal format).
+index_list (list): List of indexes corresponding to amino acids positions in aln file.</dd>
+<dt>Returns:</dt>
+<dd>dict: A dictionary with key = ranking of coupling based on ss_confidence
+and value = index aa1, index aa2</dd>
+</dl>
+</div></blockquote>
 </dd></dl>
 
 </div>
@@ -271,7 +318,7 @@ template name and a pdb file name associated</td>
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2018, Gabriel Cretin, Hélène Kabbech, Tom Gutman, Flora Mikaeloff, Franz Arnold
+        &copy; Copyright 2018, Gabriel Cretin, Hélène Kabbech, Tom Gutman, Flora Mikaeloff, Franz Arnold.
 
     </p>
   </div>
@@ -290,14 +337,21 @@ template name and a pdb file name associated</td>
 
   
 
-    
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-        <script type="text/javascript" src="_static/jquery.js"></script>
-        <script type="text/javascript" src="_static/underscore.js"></script>
-        <script type="text/javascript" src="_static/doctools.js"></script>
-        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'2.0',
+            LANGUAGE:'None',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 
   
 

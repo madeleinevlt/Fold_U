@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>src.template &mdash; Fold U 1.2 documentation</title>
+  <title>src.template &mdash; Fold U 2.0 documentation</title>
   
 
   
@@ -56,7 +56,7 @@
             
             
               <div class="version">
-                1.2
+                2.0
               </div>
             
           
@@ -156,8 +156,12 @@
 <span class="sd">   :synopsis: This module implements the Template class.</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="c1"># Third-party modules</span>
+<span class="c1"># Third-party modulesimport logging</span>
+<span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+
+<span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="s2">&quot;run_warnings.log&quot;</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">WARNING</span><span class="p">)</span>
 
 
 <div class="viewcode-block" id="Template"><a class="viewcode-back" href="../../template.html#src.template.Template">[docs]</a><span class="k">class</span> <span class="nc">Template</span><span class="p">:</span>
@@ -178,10 +182,22 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">residues</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>            <span class="c1"># ex: Agglutinin</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">residues</span> <span class="o">=</span> <span class="n">residues</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">benchmark</span> <span class="o">=</span> <span class="mi">0</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">pdb</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">benchmark</span> <span class="o">=</span> <span class="s2">&quot;.&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pdb</span> <span class="o">=</span> <span class="kc">None</span>             <span class="c1"># ex: 1jlxa1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">reindexed_pdb</span> <span class="o">=</span> <span class="kc">None</span>   <span class="c1"># ex: 1jlxa1_reindexed</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">modeller_pdb</span> <span class="o">=</span> <span class="kc">None</span>    <span class="c1"># ex: 1jlxa1_mod</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">first</span> <span class="o">=</span> <span class="kc">None</span>
+
+<div class="viewcode-block" id="Template.display"><a class="viewcode-back" href="../../template.html#src.template.Template.display">[docs]</a>    <span class="k">def</span> <span class="nf">display</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            This function prints the residues as a sequence</span>
+
+<span class="sd">            Returns:</span>
+<span class="sd">                str: Amino acid sequence.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">res</span><span class="o">.</span><span class="n">name</span><span class="p">)</span> <span class="k">for</span> <span class="n">res</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">residues</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="Template.set_benchmark"><a class="viewcode-back" href="../../template.html#src.template.Template.set_benchmark">[docs]</a>    <span class="k">def</span> <span class="nf">set_benchmark</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fold_type</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -192,7 +208,6 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">benchmark</span> <span class="o">=</span> <span class="n">fold_type</span></div>
 
-
 <div class="viewcode-block" id="Template.set_pdb_name"><a class="viewcode-back" href="../../template.html#src.template.Template.set_pdb_name">[docs]</a>    <span class="k">def</span> <span class="nf">set_pdb_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">metafold_dict</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">            Set the pdb file name of the template from the template&#39;s name.</span>
@@ -200,41 +215,137 @@
 <span class="sd">            Args:</span>
 <span class="sd">                metafold_dict: A dictionary with key = template name and value = pdb file</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">pdb</span> <span class="o">=</span> <span class="n">metafold_dict</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">]</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pdb</span> <span class="o">=</span> <span class="n">metafold_dict</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span></div>
 
-<div class="viewcode-block" id="Template.parse_pdb"><a class="viewcode-back" href="../../template.html#src.template.Template.parse_pdb">[docs]</a>    <span class="k">def</span> <span class="nf">parse_pdb</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Template.parse_pdb"><a class="viewcode-back" href="../../template.html#src.template.Template.parse_pdb">[docs]</a>    <span class="k">def</span> <span class="nf">parse_pdb</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pdb_path</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">            Parse the pdb file and set the CA coordinates.</span>
+
+<span class="sd">            Args:</span>
+<span class="sd">                pdb_path: Path to the directory containing .atm file of the actual template.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">count_res</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="n">nb_atoms</span> <span class="o">=</span> <span class="mi">0</span>
-        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;data/pdb/&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="s2">&quot;/&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">pdb</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+        <span class="n">flag</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">pdb_path</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
             <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">file</span><span class="p">:</span>
                 <span class="n">line_type</span> <span class="o">=</span> <span class="n">line</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">6</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
                 <span class="n">name_at</span> <span class="o">=</span> <span class="n">line</span><span class="p">[</span><span class="mi">12</span><span class="p">:</span><span class="mi">16</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
                 <span class="k">if</span> <span class="n">line_type</span> <span class="o">==</span> <span class="s2">&quot;ATOM&quot;</span> <span class="ow">and</span> <span class="p">(</span><span class="n">name_at</span> <span class="o">==</span> <span class="s2">&quot;N&quot;</span> <span class="ow">or</span> <span class="n">name_at</span> <span class="o">==</span> <span class="s2">&quot;CA&quot;</span> <span class="ow">or</span> <span class="n">name_at</span> <span class="o">==</span> <span class="s2">&quot;C&quot;</span><span class="p">):</span>
+                    <span class="n">res_id</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">line</span><span class="p">[</span><span class="mi">22</span><span class="p">:</span><span class="mi">26</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span>
+                    <span class="c1"># In some PDBs the residues ids do not start at 1</span>
+                    <span class="c1"># so we remember the first id number</span>
+                    <span class="k">if</span> <span class="n">flag</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">first</span> <span class="o">=</span> <span class="n">res_id</span>
+                        <span class="n">flag</span> <span class="o">=</span> <span class="kc">False</span>
                     <span class="n">x_coord</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">line</span><span class="p">[</span><span class="mi">30</span><span class="p">:</span><span class="mi">38</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span>
                     <span class="n">y_coord</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">line</span><span class="p">[</span><span class="mi">38</span><span class="p">:</span><span class="mi">46</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span>
                     <span class="n">z_coord</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">line</span><span class="p">[</span><span class="mi">46</span><span class="p">:</span><span class="mi">54</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span>
                     <span class="k">if</span> <span class="n">count_res</span> <span class="o">&lt;=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">residues</span><span class="p">):</span>
                         <span class="c1"># Skip gaps in the template</span>
-                        <span class="k">while</span> <span class="bp">self</span><span class="o">.</span><span class="n">residues</span><span class="p">[</span><span class="n">count_res</span><span class="p">]</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;-&quot;</span><span class="p">:</span>
+                        <span class="k">while</span> <span class="n">count_res</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">residues</span><span class="p">)</span> <span class="ow">and</span> \
+                              <span class="bp">self</span><span class="o">.</span><span class="n">residues</span><span class="p">[</span><span class="n">count_res</span><span class="p">]</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;-&quot;</span><span class="p">:</span>
                             <span class="n">count_res</span> <span class="o">+=</span> <span class="mi">1</span>
+                        <span class="k">if</span> <span class="n">count_res</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">residues</span><span class="p">):</span>
+                            <span class="k">break</span>
                         <span class="k">if</span> <span class="n">line_type</span> <span class="o">==</span> <span class="s2">&quot;ATOM&quot;</span> <span class="ow">and</span> <span class="n">name_at</span> <span class="o">==</span> <span class="s2">&quot;N&quot;</span><span class="p">:</span>
-                            <span class="bp">self</span><span class="o">.</span><span class="n">residues</span><span class="p">[</span><span class="n">count_res</span><span class="p">]</span><span class="o">.</span><span class="n">ca_atom</span>\
-                            <span class="o">.</span><span class="n">set_coords</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">x_coord</span><span class="p">,</span> <span class="n">y_coord</span><span class="p">,</span> <span class="n">z_coord</span><span class="p">]))</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">residues</span><span class="p">[</span><span class="n">count_res</span><span class="p">]</span><span class="o">.</span><span class="n">n_atom</span>\
+                                <span class="o">.</span><span class="n">set_coords</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">x_coord</span><span class="p">,</span> <span class="n">y_coord</span><span class="p">,</span> <span class="n">z_coord</span><span class="p">]))</span>
                             <span class="n">nb_atoms</span> <span class="o">+=</span> <span class="mi">1</span>
                         <span class="k">elif</span> <span class="n">line_type</span> <span class="o">==</span> <span class="s2">&quot;ATOM&quot;</span> <span class="ow">and</span> <span class="n">name_at</span> <span class="o">==</span> <span class="s2">&quot;CA&quot;</span><span class="p">:</span>
-                            <span class="bp">self</span><span class="o">.</span><span class="n">residues</span><span class="p">[</span><span class="n">count_res</span><span class="p">]</span><span class="o">.</span><span class="n">c_atom</span>\
-                            <span class="o">.</span><span class="n">set_coords</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">x_coord</span><span class="p">,</span> <span class="n">y_coord</span><span class="p">,</span> <span class="n">z_coord</span><span class="p">]))</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">residues</span><span class="p">[</span><span class="n">count_res</span><span class="p">]</span><span class="o">.</span><span class="n">ca_atom</span>\
+                                <span class="o">.</span><span class="n">set_coords</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">x_coord</span><span class="p">,</span> <span class="n">y_coord</span><span class="p">,</span> <span class="n">z_coord</span><span class="p">]))</span>
+                            <span class="n">nb_atoms</span> <span class="o">+=</span> <span class="mi">1</span>
+                        <span class="k">elif</span> <span class="n">line_type</span> <span class="o">==</span> <span class="s2">&quot;ATOM&quot;</span> <span class="ow">and</span> <span class="n">name_at</span> <span class="o">==</span> <span class="s2">&quot;CB&quot;</span><span class="p">:</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">residues</span><span class="p">[</span><span class="n">count_res</span><span class="p">]</span><span class="o">.</span><span class="n">cb_atom</span>\
+                                <span class="o">.</span><span class="n">set_coords</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">x_coord</span><span class="p">,</span> <span class="n">y_coord</span><span class="p">,</span> <span class="n">z_coord</span><span class="p">]))</span>
                             <span class="n">nb_atoms</span> <span class="o">+=</span> <span class="mi">1</span>
                         <span class="k">elif</span> <span class="n">line_type</span> <span class="o">==</span> <span class="s2">&quot;ATOM&quot;</span> <span class="ow">and</span> <span class="n">name_at</span> <span class="o">==</span> <span class="s2">&quot;C&quot;</span><span class="p">:</span>
-                            <span class="bp">self</span><span class="o">.</span><span class="n">residues</span><span class="p">[</span><span class="n">count_res</span><span class="p">]</span><span class="o">.</span><span class="n">n_atom</span>\
-                            <span class="o">.</span><span class="n">set_coords</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">x_coord</span><span class="p">,</span> <span class="n">y_coord</span><span class="p">,</span> <span class="n">z_coord</span><span class="p">]))</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">residues</span><span class="p">[</span><span class="n">count_res</span><span class="p">]</span><span class="o">.</span><span class="n">c_atom</span>\
+                                <span class="o">.</span><span class="n">set_coords</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">x_coord</span><span class="p">,</span> <span class="n">y_coord</span><span class="p">,</span> <span class="n">z_coord</span><span class="p">]))</span>
                             <span class="n">nb_atoms</span> <span class="o">+=</span> <span class="mi">1</span>
                         <span class="k">if</span> <span class="n">nb_atoms</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
                             <span class="n">count_res</span> <span class="o">+=</span> <span class="mi">1</span>
-                            <span class="n">nb_atoms</span> <span class="o">=</span> <span class="mi">0</span></div></div>
+                            <span class="n">nb_atoms</span> <span class="o">=</span> <span class="mi">0</span></div>
+
+<div class="viewcode-block" id="Template.reindex_pdb_by_index"><a class="viewcode-back" href="../../template.html#src.template.Template.reindex_pdb_by_index">[docs]</a>    <span class="k">def</span> <span class="nf">reindex_pdb_by_index</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">start_index</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">pdb_txt</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Original code from: https://zhanglab.ccmb.med.umich.edu/reindex_pdb/reindex_pdb.py</span>
+<span class="sd">        Reindex residue number of PDB format text</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            start_index (int): Index of first residue</span>
+<span class="sd">            pdb_txt (str): Text of input PDB to be reindexed</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            str: Text of the reindexed PDB</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">pdb_txt_reindex</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+        <span class="n">current_old_index</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>  <span class="c1"># residue number in origin PDB</span>
+        <span class="n">warn_chain_id</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>  <span class="c1"># warning about new chain ID</span>
+
+        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">pdb_txt</span><span class="o">.</span><span class="n">splitlines</span><span class="p">():</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">line</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">27</span> <span class="ow">or</span> <span class="p">(</span><span class="ow">not</span> <span class="n">line</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;ATOM  &quot;</span><span class="p">)</span>\
+                    <span class="ow">and</span> <span class="ow">not</span> <span class="n">line</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;HETATM&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">line</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;TER&quot;</span><span class="p">)):</span>
+                <span class="n">pdb_txt_reindex</span> <span class="o">+=</span> <span class="n">line</span><span class="o">+</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span>
+                <span class="k">continue</span>
+            <span class="k">elif</span> <span class="ow">not</span> <span class="n">line</span><span class="p">[</span><span class="mi">16</span><span class="p">]</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;A&#39;</span><span class="p">,</span> <span class="s1">&#39; &#39;</span><span class="p">]:</span>  <span class="c1"># alternative location identifier</span>
+                <span class="k">continue</span>
+            <span class="n">res_seq</span> <span class="o">=</span> <span class="n">line</span><span class="p">[</span><span class="mi">22</span><span class="p">:</span><span class="mi">27</span><span class="p">]</span>  <span class="c1"># residue sequence number</span>
+            <span class="n">current_chain_id</span> <span class="o">=</span> <span class="n">line</span><span class="p">[</span><span class="mi">21</span><span class="p">]</span>  <span class="c1"># chain identifier</span>
+
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">current_old_index</span><span class="p">:</span>  <span class="c1"># first residue encountered</span>
+                <span class="n">current_old_index</span> <span class="o">=</span> <span class="n">res_seq</span>  <span class="c1"># residue number in origin PDB</span>
+                <span class="n">current_new_index</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">start_index</span><span class="p">)</span>
+                <span class="n">chain_id</span> <span class="o">=</span> <span class="n">current_chain_id</span>
+                <span class="n">res_seq_new</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">current_new_index</span><span class="p">)</span>
+                <span class="n">res_seq_new</span> <span class="o">=</span> <span class="s1">&#39; &#39;</span><span class="o">*</span><span class="p">(</span><span class="mi">4</span><span class="o">-</span><span class="nb">len</span><span class="p">(</span><span class="n">res_seq_new</span><span class="p">))</span><span class="o">+</span><span class="n">res_seq_new</span><span class="o">+</span><span class="s1">&#39; &#39;</span>
+            <span class="k">elif</span> <span class="n">current_chain_id</span> <span class="o">!=</span> <span class="n">chain_id</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">warn_chain_id</span> <span class="o">!=</span> <span class="n">current_chain_id</span><span class="p">:</span>
+                    <span class="n">logging</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Warning! Discarding chain &#39;</span><span class="si">%s</span><span class="s2">&#39; in template &#39;</span><span class="si">%s</span><span class="s2">&#39;.atm</span><span class="se">\n</span><span class="s2">&quot;</span>
+                                    <span class="o">%</span> <span class="p">(</span><span class="n">current_chain_id</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">pdb</span><span class="p">))</span>
+                    <span class="n">warn_chain_id</span> <span class="o">=</span> <span class="n">current_chain_id</span>
+                <span class="k">continue</span>
+            <span class="k">elif</span> <span class="n">res_seq</span> <span class="o">!=</span> <span class="n">current_old_index</span><span class="p">:</span>
+                <span class="n">current_new_index</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="n">current_old_index</span> <span class="o">=</span> <span class="n">res_seq</span>
+                <span class="n">res_seq_new</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">current_new_index</span><span class="p">)</span>
+                <span class="n">res_seq_new</span> <span class="o">=</span> <span class="s1">&#39; &#39;</span><span class="o">*</span><span class="p">(</span><span class="mi">4</span><span class="o">-</span><span class="nb">len</span><span class="p">(</span><span class="n">res_seq_new</span><span class="p">))</span><span class="o">+</span><span class="n">res_seq_new</span><span class="o">+</span><span class="s1">&#39; &#39;</span>
+            <span class="n">pdb_txt_reindex</span> <span class="o">+=</span> <span class="n">line</span><span class="p">[:</span><span class="mi">16</span><span class="p">]</span><span class="o">+</span><span class="s1">&#39; &#39;</span><span class="o">+</span><span class="n">line</span><span class="p">[</span><span class="mi">17</span><span class="p">:</span><span class="mi">22</span><span class="p">]</span><span class="o">+</span><span class="n">res_seq_new</span><span class="o">+</span><span class="n">line</span><span class="p">[</span><span class="mi">27</span><span class="p">:]</span><span class="o">+</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span>
+        <span class="k">return</span> <span class="n">pdb_txt_reindex</span></div>
+
+<div class="viewcode-block" id="Template.reindex_pdb"><a class="viewcode-back" href="../../template.html#src.template.Template.reindex_pdb">[docs]</a>    <span class="k">def</span> <span class="nf">reindex_pdb</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">start_index</span><span class="p">,</span> <span class="n">pdb_path</span><span class="p">,</span> <span class="n">clean</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">            Original code from: https://zhanglab.ccmb.med.umich.edu/reindex_pdb/reindex_pdb.py</span>
+<span class="sd">            * Parse PDB file</span>
+<span class="sd">            * Reindex it according to start index</span>
+<span class="sd">            * Write the new reindexed PDB</span>
+
+<span class="sd">            Args:</span>
+<span class="sd">                start_index (int): Index of first residue</span>
+<span class="sd">                pdb_path (str): Path to the directory containing the PDB to reindex</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">pdb_file</span> <span class="o">=</span> <span class="n">pdb_path</span> <span class="o">+</span> <span class="s2">&quot;/&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">pdb</span> <span class="o">+</span> <span class="s2">&quot;.atm&quot;</span>
+        <span class="n">f_in</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">pdb_file</span><span class="p">,</span> <span class="s1">&#39;rU&#39;</span><span class="p">)</span>
+        <span class="n">pdb_txt</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">f_in</span><span class="o">.</span><span class="n">read</span><span class="p">()</span><span class="o">.</span><span class="n">splitlines</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">line</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;END&quot;</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">clean</span><span class="p">:</span>
+                    <span class="n">line</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;ENDMDL&quot;</span><span class="p">,</span> <span class="s2">&quot;END   &quot;</span><span class="p">)</span>
+                <span class="n">pdb_txt</span> <span class="o">+=</span> <span class="n">line</span><span class="o">+</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span>
+                <span class="k">break</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">line</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;ATOM  &quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="n">line</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;TER&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="ow">not</span> <span class="n">clean</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">line</span><span class="p">[:</span><span class="mi">6</span><span class="p">]</span>\
+                <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;DBREF &quot;</span><span class="p">,</span> <span class="s2">&quot;SEQADV&quot;</span><span class="p">,</span> <span class="s2">&quot;MODRES&quot;</span><span class="p">,</span> <span class="s2">&quot;HELIX &quot;</span><span class="p">,</span> <span class="s2">&quot;SHEET &quot;</span><span class="p">,</span> <span class="s2">&quot;SSBOND&quot;</span><span class="p">,</span> <span class="s2">&quot;SITE  &quot;</span><span class="p">])):</span>
+                <span class="n">pdb_txt</span> <span class="o">+=</span> <span class="n">line</span><span class="o">+</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span>
+        <span class="n">f_in</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+        <span class="n">pdb_txt_reindex</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">reindex_pdb_by_index</span><span class="p">(</span><span class="n">start_index</span><span class="p">,</span> <span class="n">pdb_txt</span><span class="p">)</span>
+        <span class="c1"># Write the new PDB</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">reindexed_pdb</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pdb</span> <span class="o">+</span> <span class="s2">&quot;_reindexed&quot;</span>
+        <span class="c1"># Set the new name of the template&#39;s PDB</span>
+        <span class="n">pdb_file</span> <span class="o">=</span> <span class="n">pdb_path</span> <span class="o">+</span> <span class="s2">&quot;/&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">reindexed_pdb</span> <span class="o">+</span> <span class="s2">&quot;.atm&quot;</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">pdb_file</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f_out</span><span class="p">:</span>
+            <span class="n">f_out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">pdb_txt_reindex</span><span class="p">)</span></div></div>
 </pre></div>
 
            </div>
@@ -247,7 +358,7 @@
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2018, Gabriel Cretin, Hélène Kabbech, Tom Gutman, Flora Mikaeloff, Franz Arnold
+        &copy; Copyright 2018, Gabriel Cretin, Hélène Kabbech, Tom Gutman, Flora Mikaeloff, Franz Arnold.
 
     </p>
   </div>
@@ -266,14 +377,21 @@
 
   
 
-    
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
-        <script type="text/javascript" src="../../_static/jquery.js"></script>
-        <script type="text/javascript" src="../../_static/underscore.js"></script>
-        <script type="text/javascript" src="../../_static/doctools.js"></script>
-        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'2.0',
+            LANGUAGE:'None',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 
   
 

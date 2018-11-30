@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Fold U: A Protein Structure Prediction Program &mdash; Fold U 1.2 documentation</title>
+  <title>Fold U: A Protein Structure Prediction Program &mdash; Fold U 2.0 documentation</title>
   
 
   
@@ -57,7 +57,7 @@
             
             
               <div class="version">
-                1.2
+                2.0
               </div>
             
           
@@ -153,18 +153,51 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <a class="reference external image-reference" href="https://github.com/meetU-MasterStudents/Fold_U/releases/tag/1.2"><img alt="Fold-U release" src="https://img.shields.io/badge/fold--u-v1.2-blue.svg" /></a>
+  <a class="reference external image-reference" href="https://github.com/meetU-MasterStudents/Fold_U/releases/tag/v1.2"><img alt="Fold-U release" src="https://img.shields.io/badge/fold--u-v2.0-blue.svg" /></a>
 <a class="reference external image-reference" href="https://opensource.org/licenses/MIT"><img alt="License: MIT" src="https://img.shields.io/badge/License-MIT-yellow.svg" /></a>
 <a class="reference external image-reference" href="https://img.shields.io/badge/python-3-brightgreen.svg"><img alt="Python version" src="https://img.shields.io/badge/python-3-brightgreen.svg" /></a>
-<a class="reference external image-reference" href="https://meetu-masterstudents.github.io/Fold_U/"><img alt="Sphinx doc" src="https://img.shields.io/badge/doc-sphinx-brightgreen.svg" /></a>
+<a class="reference external image-reference" href="https://fold-u.readthedocs.io/en/latest/?badge=latest"><img alt="Documentation Status" src="https://readthedocs.org/projects/fold-u/badge/?version=latest" /></a>
 <p><span class="raw-html-m2r"><br></span></p>
 <div class="section" id="fold-u-a-protein-structure-prediction-program">
 <h1>Fold U: A Protein Structure Prediction Program<a class="headerlink" href="#fold-u-a-protein-structure-prediction-program" title="Permalink to this headline">¶</a></h1>
 <p align="center">
   <img width="400" src="img/logo_foldu.png" alt="logo_foldu"/>
-</p><p>This program is the second step (downstream) of a protein structure prediction project. This step consists of threading a query sequence on different given templates.</p>
-<p>Our project is part of the Meet-U 2018-2019 competition.
+</p><p>This program is the second step (downstream) of a <strong>protein structure prediction project</strong>. This step consists of threading a query sequence on different given templates.</p>
+<p>Our project is part of the <strong>Meet-U 2018-2019</strong> competition.
 Meet-U is a collaborative pedagogical and research initiative between several Universities of Paris area. The course is intended to Master students (2nd year) in Bioinformatics. For more details, please refer to <a class="reference external" href="http://www.meet-u.org/">http://www.meet-u.org/</a>.</p>
+<div class="section" id="implemented-strategy">
+<h2>Implemented Strategy<a class="headerlink" href="#implemented-strategy" title="Permalink to this headline">¶</a></h2>
+<p>The overall strategy implemented by our team is the following :</p>
+<ol class="arabic simple">
+<li>The <code class="docutils literal notranslate"><span class="pre">.foldrec</span></code> file resulting from a profile-profile alignment and generated during the first step (upstream) is parsed to extract relevant informations (query and template sequences, alignment score, etc.).</li>
+<li>For each alignment, <strong>the query sequence is threaded on the template</strong> and a <strong>threading score</strong> is generated using an energy DOPE matrix.</li>
+<li>Then, the program <strong>MODELLER</strong> generates a new 3D model by homology (alignment between query and template) and returns a high resolution (bin 0.125Å) DOPE score, which is a statistical potential implemented in MODELLER.
+This new model is then used to calculate several other scores (<strong>secondary structure</strong>, <strong>solvent accessibility</strong> and <strong>co-evolution scores</strong>).</li>
+<li>Each generated scores are <strong>normalized using the min-max scaling method</strong> (values between 0 and 1) in order to addition them.</li>
+<li>The scores are stored in <code class="docutils literal notranslate"><span class="pre">scores.csv</span></code> and the <strong>top N pdb structure</strong> are generated.</li>
+</ol>
+<div class="section" id="implemented-scores">
+<h3>Implemented scores<a class="headerlink" href="#implemented-scores" title="Permalink to this headline">¶</a></h3>
+<p>To improve the structure prediction of the query, several scores have been implemented :</p>
+<ul class="simple">
+<li><strong>Alignment score</strong> : Resulting from the profile-profile alignment during the first step (Upstream).</li>
+<li><strong>Threading score</strong> : Score based on the threading of the query on the template and the energy DOPE matrix.</li>
+<li><strong>Modeller score</strong> : Calculating the DOPE statistical potential score of the new model generated by homology modelling with MODELLER based on the alignment of the query and the template.</li>
+<li><strong>Co-evolution score</strong> : Co-evolution score measures co-occurence of a pair of amino acid in ortholog sequences using CCMpred program.</li>
+<li><strong>Secondary structure score</strong> : Based on the predicted secondary structure and associated confidence score generated by PSIPRED, query and template are compared and a score is generated.</li>
+<li><strong>Solvent accessibility score</strong> : DSSP generates a solvent accessibility value for each amino acid of
+the template and the new template generated by Modeller. Those two values are compared and a solvent accessibility score is generated.</li>
+<li><strong>Blosum score</strong> : Comparing amino acid sequence between the query and the template and generating a score based on the blosum62 matrix. This score is not used in the sum score because of its lack of prediction.</li>
+<li><strong>Sum score</strong> : The addition of all previously mentionned scores (without the blosum score)</li>
+</ul>
+</div>
+<div class="section" id="benchmarking">
+<h3>Benchmarking<a class="headerlink" href="#benchmarking" title="Permalink to this headline">¶</a></h3>
+<p>This program is also <strong>benchmarked</strong> using ROC style plots and <strong>Top N</strong> information to evaluate the power and the relevance of the different scores. The score results are generated for all queries (foldrec files). Each plot represents the cumulative sum of benchmarks encountered along the ranking (from rank 1 to rank 405) for each calculated scores and for a specific benchmark type (<strong>“Family”</strong>, <strong>“Superfamily”</strong> or <strong>“Fold”</strong>) which correspond to the degree of similarity with the query.</p>
+<p>A top N results table is also generated showing the number of <strong>“Family”</strong>, <strong>“Superfamily”</strong> and <strong>“Fold”</strong> benchmark found in the top N ranks.</p>
+<p>We used the <strong>new data</strong> and the <strong>new benchmark.list</strong>.</p>
+</div>
+</div>
 <div class="section" id="installation">
 <h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="clone-the-repository">
@@ -176,110 +209,153 @@ cd Fold_U
 </div>
 <div class="section" id="requirements">
 <h3>Requirements<a class="headerlink" href="#requirements" title="Permalink to this headline">¶</a></h3>
-<p>Install the few required packages / modules:</p>
+<p>Install the few required packages / modules :</p>
 <div class="highlight-guess notranslate"><div class="highlight"><pre><span></span>pip install -r requirements.txt
 </pre></div>
 </div>
-<p>&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD</p>
-</div>
-</div>
-</div>
-<div class="section" id="install-r-for-ubuntu-user">
-<h1>Install R (for Ubuntu user)<a class="headerlink" href="#install-r-for-ubuntu-user" title="Permalink to this headline">¶</a></h1>
-<p>Install R (for Ubuntu user) :</p>
-<blockquote>
-<div><blockquote>
-<div><blockquote>
-<div><blockquote>
-<div><blockquote>
-<div><blockquote>
-<div><blockquote>
-<div><p>dev</p>
-<div class="highlight-guess notranslate"><div class="highlight"><pre><span></span>sudo apt-get install r-base-score
+<p><strong>MODELLER</strong> is also required, and can be installed easily with Conda :</p>
+<div class="highlight-guess notranslate"><div class="highlight"><pre><span></span>conda install -c salilab modeller
 </pre></div>
 </div>
-</div></blockquote>
-</div></blockquote>
-</div></blockquote>
-</div></blockquote>
-</div></blockquote>
-</div></blockquote>
-</div></blockquote>
+<p>You need to register to get a license key <a class="reference external" href="https://salilab.org/modeller/registration.html">here</a>, and follow instructions during installation to insert license key in the program.</p>
+<p>To calculate the solvent accessibility score DSSP is also required:</p>
+<div class="highlight-guess notranslate"><div class="highlight"><pre><span></span>sudo apt-get install dssp
+</pre></div>
+</div>
+<p>Or you can download the <a class="reference external" href="https://github.com/cmbi/xssp/releases/latest">latest release</a> and install from source.</p>
+</div>
+</div>
 <div class="section" id="run-the-program">
 <h2>Run the program<a class="headerlink" href="#run-the-program" title="Permalink to this headline">¶</a></h2>
-<p>fold_u takes in input <strong>N profil-profil alignments and their corresponding score</strong> (foldrec file) and returns a <code class="docutils literal notranslate"><span class="pre">score.csv</span></code> file and the <strong>top N pdb structures</strong>.</p>
+<p><code class="docutils literal notranslate"><span class="pre">fold_u</span></code> takes in input a <strong>foldrec file</strong> and a <strong>multiple alignment file</strong> (fasta format). It returns a <code class="docutils literal notranslate"><span class="pre">score.csv</span></code> file and the <strong>top N pdb structures</strong>.</p>
 <div class="section" id="toy-example">
 <h3>Toy example<a class="headerlink" href="#toy-example" title="Permalink to this headline">¶</a></h3>
-<div class="section" id="generation-of-the-result-files">
-<h4>Generation of the result files<a class="headerlink" href="#generation-of-the-result-files" title="Permalink to this headline">¶</a></h4>
-<p>The <code class="docutils literal notranslate"><span class="pre">scores.csv</span></code> and the <strong>top 10 pdb structures</strong> of the His_biosynth query sequence are stored in <code class="docutils literal notranslate"><span class="pre">results/His_biosynth</span></code> folder.
-The alignment, threading and blosum scores are normalized using the <strong>min-max scaling method</strong> (values between 0 and 1). The last score represents the sum of these 3 scores. It has also been normalized.</p>
-<div class="highlight-guess notranslate"><div class="highlight"><pre><span></span>./fold_u data/foldrec/His_biosynth.foldrec -o results/His_biosynth
+<p>The <code class="docutils literal notranslate"><span class="pre">scores.csv</span></code> and the <strong>top 10 pdb structures</strong> of the His_biosynth query sequence are stored in <code class="docutils literal notranslate"><span class="pre">results/His_biosynth</span></code> folder.</p>
+<div class="highlight-guess notranslate"><div class="highlight"><pre><span></span>./fold_u data/foldrec/His_biosynth.foldrec data/aln/His_biosynth.fasta -o results/His_biosynth --dssp /usr/bin/mkdssp
 </pre></div>
-</div>
-</div>
-<div class="section" id="plot-of-the-different-scores">
-<h4>Plot of the different scores<a class="headerlink" href="#plot-of-the-different-scores" title="Permalink to this headline">¶</a></h4>
-<p>The <code class="docutils literal notranslate"><span class="pre">benchmark_rank.png</span></code> generated plot represents the cumulative sum of benchmarks encountered along the ranking (from rank 1 to rank 412). A cross means a family or superfamily type banchmark.</p>
-<div class="highlight-guess notranslate"><div class="highlight"><pre><span></span>./script/plot_scores.R results/His_biosynth
-</pre></div>
-</div>
-<p align="center">
-  <img width="450" src="img/His_biosynth_benchmark_rank.png" alt="benchmark_rank.png"/>
-</p></div>
 </div>
 <div class="section" id="get-help">
-<h3>Get help<a class="headerlink" href="#get-help" title="Permalink to this headline">¶</a></h3>
+<h4>Get help<a class="headerlink" href="#get-help" title="Permalink to this headline">¶</a></h4>
 <div class="highlight-guess notranslate"><div class="highlight"><pre><span></span>./fold_u -h
 
-    Usage:
-        ./fold_u FOLDREC_FILE [--nb_templates NUM] [--nb_pdb NUM] [--output PATH]
-                              [--metafold FILE] [--dope FILE] [--benchmark FILE] [--cpu NUM]
+Usage:
+    ./fold_u FOLDREC_FILE ALN_FILE [--nb_templates NUM] [--nb_pdb NUM] [--output PATH]
+                          [--metafold FILE] [--dope FILE] [--benchmark FILE] [--aln_file FILE]
+                          [--dssp PATH] [--cpu NUM]
 
-    Arguments:
-        FOLDREC_FILE                          N profile * profile alignment and
-                                              their corresponding score
+Arguments:
+    FOLDREC_FILE                          N profile * profile alignment and
+                                          their corresponding score
+    ALN_FILE                              Path to the alignment file
 
-    Options:
-        -h, --help                            Show this
-        -n NUM, --nb_templates NUM            First n templates to retrieve from
-                                              the foldrec file [default: 413]
-        -p NUM, --nb_pdb NUM                  Number of pdb to create
-                                              [default: 10]
-        -o PATH, --output PATH                Path to the directory containing
-                                              the result files (scores and pdb)
-                                              [default: ./results]
-        -m FILE, --metafold FILE              Path to the metafold.list file
-                                              [default: data/metafold.list]
-        -d FILE, --dope FILE                  Path to the dope.par file
-                                              [default: data/dope.par]
-        -b FILE, --benchmark FILE             Path to the benchmark.list file
-                                              [default: data/benchmark.list]
-        -c NUM, --cpu NUM                     Number of cpus to use for parallelisation
-                                              [default: 2]
+Options:
+    -h, --help                            Show this
+    -n NUM, --nb_templates NUM            First n templates to retrieve from
+                                          the foldrec file [default: 405]
+    -p NUM, --nb_pdb NUM                  Number of pdb to create
+                                          [default: 10]
+    -o PATH, --output PATH                Path to the directory containing
+                                          the result files (scores and pdb)
+                                          [default: ./results]
+    -a PATH, --dssp PATH                  Path to the dssp software
+                                          binary [default: /usr/local/bin/mkdssp]
+    -m FILE, --metafold FILE              Path to the metafold.list file
+                                          [default: data/metafold.list]
+    -d FILE, --dope FILE                  Path to the dope.par file
+                                          [default: data/dope.par]
+    -b FILE, --benchmark FILE             Path to the benchmark.list file
+                                          [default: data/benchmark.list]
+    -c NUM, --cpu NUM                     Number of cpus to use for parallelisation
+                                          [default: 0]
 </pre></div>
 </div>
+</div>
+</div>
+<div class="section" id="run-all-the-queries-benchmarking">
+<h3>Run all the queries + Benchmarking<a class="headerlink" href="#run-all-the-queries-benchmarking" title="Permalink to this headline">¶</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">script/benchmarking.py</span></code> runs the <code class="docutils literal notranslate"><span class="pre">fold_u</span></code> program for each foldrec if results are not still generated. It returns a <code class="docutils literal notranslate"><span class="pre">top_n</span></code> folder containing 3 <code class="docutils literal notranslate"><span class="pre">.png</span></code> plots and prints the <strong>top N tables</strong> in the terminal.</p>
+<div class="highlight-guess notranslate"><div class="highlight"><pre><span></span>./script/benchmarking.py --dssp /usr/bin/mkdssp
+</pre></div>
+</div>
+<div class="section" id="id1">
+<h4>Get help<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h4>
+<div class="highlight-guess notranslate"><div class="highlight"><pre><span></span>./script/benchmarking.py -h
+Usage:
+    ./script/benchmarking.py [--nb_templates NUM] [--output PATH] [--dssp PATH] [--sscore SCORE]
+                             [--cpu NUM]
+
+Options:
+    -h, --help                            Show this
+    -n NUM, --nb_templates NUM            First n templates with the best
+                                          score [default: 100]
+    -o PATH, --output PATH                Path to the directory containing
+                                          the result files (scores and plot)
+                                          [default: ./results/top_n]
+    -d PATH, --dssp PATH                  Path to the dssp software
+                                          binary [default: /usr/local/bin/mkdssp]
+    -s SCORE, --sscore SCORE              selected score to calculate top_N
+                                          [default: sum_scores]
+    -c NUM, --cpu NUM                     Number of cpus to use for parallelisation
+                                          [default: 0]
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="results">
+<h3>Results<a class="headerlink" href="#results" title="Permalink to this headline">¶</a></h3>
+<p><strong>! We used the new data !</strong></p>
+<div class="section" id="top-n-tables">
+<h4>Top N tables<a class="headerlink" href="#top-n-tables" title="Permalink to this headline">¶</a></h4>
+<div class="highlight-guess notranslate"><div class="highlight"><pre><span></span>        Family      Superfamily Fold
+
+top5    0.0/1.0     1.0/6.0     2.0/13.0
+         0.00 %     16.67 %      15.38 %
+
+----------------------------------------
+
+top10   0.0/1.0     2.0/6.0     2.0/13.0
+         0.00 %     33.33 %      15.38 %
+
+----------------------------------------
+
+top50   0.0/1.0     4.0/6.0     6.0/13.0
+         0.00 %     66.67 %      46.15 %
+
+----------------------------------------
+
+top100  0.0/1.0     4.0/6.0     8.0/13.0
+         0.00 %     66.67 %      61.54 %
+</pre></div>
+</div>
+</div>
+<div class="section" id="plots">
+<h4>Plots<a class="headerlink" href="#plots" title="Permalink to this headline">¶</a></h4>
+<p align="center">
+  <img width="425" src="results/top_n/Family_plot.png" alt="Family"/>
+  <img width="425" src="results/top_n/Superfamily_plot.png" alt="Superfamily"/>
+  <img width="425" src="results/top_n/Fold_plot.png" alt="Fold"/>
+</p></div>
 </div>
 </div>
 <div class="section" id="documentation">
 <h2>Documentation<a class="headerlink" href="#documentation" title="Permalink to this headline">¶</a></h2>
-<p>The documentation of our program is generated with Sphinx and Read The Docs theme and is accessible at the following address:
-<a class="reference external" href="https://meetu-masterstudents.github.io/Fold_U/">https://meetu-masterstudents.github.io/Fold_U/</a></p>
+<p>The documentation of our program is generated with Sphinx and and built on <a class="reference external" href="https://fold-u.readthedocs.io/en/latest">Read The Docs</a>.</p>
 </div>
 <div class="section" id="authors">
 <h2>Authors<a class="headerlink" href="#authors" title="Permalink to this headline">¶</a></h2>
 <p>We are master students in bioinformatics at Paris Diderot University.</p>
 <ul class="simple">
-<li><a class="reference external" href="https://github.com/gabrielctn">Gabriel Cretin</a></li>
-<li><a class="reference external" href="https://github.com/kabhel">Hélène Kabbech</a></li>
-<li><a class="reference external" href="https://github.com/tomgutman">Tom Gutman</a></li>
-<li><a class="reference external" href="https://github.com/FloraMika">Flora Mikaeloff</a></li>
 <li><a class="reference external" href="https://github.com/franzx5">Franz-Arnold Ake</a></li>
+<li><a class="reference external" href="https://github.com/gabrielctn">Gabriel Cretin</a></li>
+<li><a class="reference external" href="https://github.com/tomgutman">Tom Gutman</a></li>
+<li><a class="reference external" href="https://github.com/kabhel">Hélène Kabbech</a></li>
+<li><a class="reference external" href="https://github.com/FloraMika">Flora Mikaeloff</a></li>
 </ul>
 </div>
 <div class="section" id="acknowledgment">
 <h2>Acknowledgment<a class="headerlink" href="#acknowledgment" title="Permalink to this headline">¶</a></h2>
 <p>Thanks to <a class="reference external" href="https://www.linkedin.com/in/maitewho/">Maïté Cretin</a> for the nice logo.</p>
+<p>Thanks to team 1 and team 2 for generating to us multiple alignment files (<code class="docutils literal notranslate"><span class="pre">data/aln</span></code>)</p>
 </div>
 <div class="section" id="license">
 <h2>License<a class="headerlink" href="#license" title="Permalink to this headline">¶</a></h2>
@@ -316,7 +392,7 @@ The alignment, threading and blosum scores are normalized using the <strong>min-
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2018, Gabriel Cretin, Hélène Kabbech, Tom Gutman, Flora Mikaeloff, Franz Arnold
+        &copy; Copyright 2018, Gabriel Cretin, Hélène Kabbech, Tom Gutman, Flora Mikaeloff, Franz Arnold.
 
     </p>
   </div>
@@ -335,14 +411,21 @@ The alignment, threading and blosum scores are normalized using the <strong>min-
 
   
 
-    
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-        <script type="text/javascript" src="_static/jquery.js"></script>
-        <script type="text/javascript" src="_static/underscore.js"></script>
-        <script type="text/javascript" src="_static/doctools.js"></script>
-        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'2.0',
+            LANGUAGE:'None',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 
   
 

@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>src.residue &mdash; Fold U 1.2 documentation</title>
+  <title>src.residue &mdash; Fold U 2.0 documentation</title>
   
 
   
@@ -56,7 +56,7 @@
             
             
               <div class="version">
-                1.2
+                2.0
               </div>
             
           
@@ -177,12 +177,19 @@
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ca_atom</span> <span class="o">=</span> <span class="n">Atom</span><span class="p">(</span><span class="s2">&quot;CA&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cb_atom</span> <span class="o">=</span> <span class="n">Atom</span><span class="p">(</span><span class="s2">&quot;CB&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">c_atom</span> <span class="o">=</span> <span class="n">Atom</span><span class="p">(</span><span class="s2">&quot;C&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">n_atom</span> <span class="o">=</span> <span class="n">Atom</span><span class="p">(</span><span class="s2">&quot;N&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">secondary_struct</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ss_confidence</span> <span class="o">=</span> <span class="kc">None</span>
 
-<div class="viewcode-block" id="Residue.calculate_distance"><a class="viewcode-back" href="../../residue.html#src.residue.Residue.calculate_distance">[docs]</a>    <span class="k">def</span> <span class="nf">calculate_distance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">residue</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Residue.calculate_distance"><a class="viewcode-back" href="../../residue.html#src.residue.Residue.calculate_distance">[docs]</a>    <span class="k">def</span> <span class="nf">calculate_distance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">residue</span><span class="p">,</span> <span class="n">carbon</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">            Calculate Euclidian distance between two residues with THE most efficient method.</span>
 
@@ -190,11 +197,15 @@
 
 <span class="sd">            Args:</span>
 <span class="sd">                residue (object): An object of the Residue class.</span>
+<span class="sd">                carbon (str): Type of the carbon.</span>
 
 <span class="sd">            Returns:</span>
 <span class="sd">                float: The calculated distance.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">a_min_b</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ca_atom</span><span class="o">.</span><span class="n">coords</span> <span class="o">-</span> <span class="n">residue</span><span class="o">.</span><span class="n">ca_atom</span><span class="o">.</span><span class="n">coords</span>
+        <span class="k">if</span> <span class="n">carbon</span> <span class="o">==</span> <span class="s2">&quot;CA&quot;</span><span class="p">:</span>
+            <span class="n">a_min_b</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ca_atom</span><span class="o">.</span><span class="n">coords</span> <span class="o">-</span> <span class="n">residue</span><span class="o">.</span><span class="n">ca_atom</span><span class="o">.</span><span class="n">coords</span>
+        <span class="k">elif</span> <span class="n">carbon</span> <span class="o">==</span> <span class="s2">&quot;CB&quot;</span><span class="p">:</span>
+            <span class="n">a_min_b</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cb_atom</span><span class="o">.</span><span class="n">coords</span> <span class="o">-</span> <span class="n">residue</span><span class="o">.</span><span class="n">cb_atom</span><span class="o">.</span><span class="n">coords</span>
         <span class="c1"># The Numpy&#39;s &quot;einsum&quot; function is the most efficient way to calculate a distance</span>
         <span class="c1">#  accordingly to this benchmarking: https://stackoverflow.com/a/47775357/6401758</span>
         <span class="n">dist</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span><span class="s1">&#39;i,i-&gt;&#39;</span><span class="p">,</span> <span class="n">a_min_b</span><span class="p">,</span> <span class="n">a_min_b</span><span class="p">))</span>
@@ -211,7 +222,7 @@
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2018, Gabriel Cretin, Hélène Kabbech, Tom Gutman, Flora Mikaeloff, Franz Arnold
+        &copy; Copyright 2018, Gabriel Cretin, Hélène Kabbech, Tom Gutman, Flora Mikaeloff, Franz Arnold.
 
     </p>
   </div>
@@ -230,14 +241,21 @@
 
   
 
-    
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
-        <script type="text/javascript" src="../../_static/jquery.js"></script>
-        <script type="text/javascript" src="../../_static/underscore.js"></script>
-        <script type="text/javascript" src="../../_static/doctools.js"></script>
-        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'2.0',
+            LANGUAGE:'None',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 
   
 

@@ -3,34 +3,38 @@
 
 """
     Usage:
-        ./fold_u FOLDREC_FILE [--nb_templates NUM] [--nb_pdb NUM] [--output PATH]
-                              [--metafold FILE] [--dope FILE] [--benchmark FILE] [--cpu NUM]
+        ./fold_u FOLDREC_FILE ALN_FILE [--nb_templates NUM] [--nb_pdb NUM] [--output PATH]
+                              [--metafold FILE] [--dope FILE] [--benchmark FILE] [--aln_file FILE]
+                              [--dssp PATH] [--cpu NUM]
 
     Arguments:
         FOLDREC_FILE                          N profile * profile alignment and
                                               their corresponding score
+        ALN_FILE                              Path to the alignment file
 
     Options:
         -h, --help                            Show this
         -n NUM, --nb_templates NUM            First n templates to retrieve from
-                                              the foldrec file [default: 413]
+                                              the foldrec file [default: 405]
         -p NUM, --nb_pdb NUM                  Number of pdb to create
                                               [default: 10]
         -o PATH, --output PATH                Path to the directory containing
                                               the result files (scores and pdb)
                                               [default: ./results]
+        -a PATH, --dssp PATH                  Path to the dssp software
+                                              binary [default: /usr/local/bin/mkdssp]
         -m FILE, --metafold FILE              Path to the metafold.list file
                                               [default: data/metafold.list]
         -d FILE, --dope FILE                  Path to the dope.par file
                                               [default: data/dope.par]
         -b FILE, --benchmark FILE             Path to the benchmark.list file
                                               [default: data/benchmark.list]
-        -c NUM, --cpu NUM                     Number of cpus to use for parallelisation
-                                              [default: 2]
+        -c NUM, --cpu NUM                     Number of cpus to use for parallelisation. By default
+                                              using all available (0).
+                                              [default: 0]
 """
 
 # Third-party modules
-import os
 from multiprocessing import Pool, cpu_count
 from functools import partial
 from datetime import datetime
@@ -40,11 +44,11 @@ from schema import Schema, And, Use, SchemaError
 
 # Local modules
 import src.parsing as parsing
-from src.alignment import process
+from src.alignment import process, clean_modeller_outputs
 from src.score import Score
 
 DIST_RANGE = [5, 15]
-GAP_PENALTY = 0
+
 
 def check_args():
     """
@@ -52,15 +56,17 @@ def check_args():
     """
     schema = Schema({
         'FOLDREC_FILE': Use(open, error='FOLDREC_FILE should be readable'),
+        'ALN_FILE': Use(open, error='ALN_FILE should be readable'),
         '--metafold': Use(open, error='METAFOLD_FILE should be readable'),
-        '--nb_templates': And(Use(int), lambda n: 1 <= n <= 413,\
-                                error='--nb_templates=NUM should be integer 1 <= N <= 413'),
-        '--nb_pdb': And(Use(int), lambda n: 1 <= n <= 413,\
-                                error='--nb_pdb=NUM should be integer 1 <= N <= 413'),
-        '--dope': Use(open, error='DOPE_FILE should be readable'),
+        '--nb_templates': And(Use(int), lambda n: 1 <= n <= 405,
+                              error='--nb_templates=NUM should be integer 1 <= N <= 405'),
+        '--nb_pdb': And(Use(int), lambda n: 1 <= n <= 405,
+                        error='--nb_pdb=NUM should be integer 1 <= N <= 405'),
+        '--dssp': Use(open, error='dssp/mkdssp should be readable'),
+        '--dope': Use(open, error='dope file should be readable'),
         '--benchmark': Use(open, error='BENCHMARK_FILE should be readable'),
-        '--cpu': And(Use(int), lambda n: 1 <= n <= cpu_count(),\
-                                error='--cpus=NUM should be integer 1 <= N <= ' + str(cpu_count())),
+        '--cpu': And(Use(int), lambda n: 0 <= n <= cpu_count(),
+                     error='--cpus=NUM should be integer 1 <= N <= ' + str(cpu_count())),
         # The output PATH is created (if not exists) at the end of the program
         # so we skip the check.
         object: object})
@@ -76,11 +82,14 @@ if __name__ == "__main__":
 
     ### Parse command line
     ######################
-    ARGUMENTS = docopt(__doc__, version='fold_u 1.2')
+    ARGUMENTS = docopt(__doc__, version='fold_u 2.0')
     # Check the types and ranges of the command line arguments parsed by docopt
     check_args()
 
     FOLDREC_FILE = ARGUMENTS["FOLDREC_FILE"]
+    QUERY_NAME = FOLDREC_FILE.split("/")[-1].split(".")[0]
+    # Get the alignment file
+    ALN_FILE = ARGUMENTS["ALN_FILE"]
     # Process the first n templates only
     NB_TEMPLATES = int(ARGUMENTS["--nb_templates"])
     # Create the first n pdb templates
@@ -93,40 +102,54 @@ if __name__ == "__main__":
     BENCHMARK_FILE = ARGUMENTS["--benchmark"]
     # OUTPUT file
     OUTPUT_PATH = ARGUMENTS["--output"]
+    # DSSP path
+    DSSP_PATH = ARGUMENTS["--dssp"]
     # Number of cpus for parallelisation
-    NB_PROC = int(ARGUMENTS["--cpu"])
-
+    NB_PROC = cpu_count() if int(ARGUMENTS["--cpu"]) == 0 else int(ARGUMENTS["--cpu"])
 
     ### Parse data files
     ####################
 
     # Parse Metafold file
+    print("Parsing metafold (" + METAFOLD_FILE + ")")
     METAFOLD_DICT = parsing.parse_metafold(METAFOLD_FILE)
     # Parse Foldrec file
+    print("Parsing foldrec (" + FOLDREC_FILE + ")")
     ALIGNMENT_DICT = parsing.parse_foldrec(FOLDREC_FILE, NB_TEMPLATES, METAFOLD_DICT)
     # Set the benchmark of the query
-    parsing.parse_benchmark(BENCHMARK_FILE, FOLDREC_FILE, ALIGNMENT_DICT)
+    print("Parsing benchmark.list (" + BENCHMARK_FILE + ")")
+    parsing.parse_benchmark(QUERY_NAME, BENCHMARK_FILE, ALIGNMENT_DICT)
     # Parse DOPE file
+    print("Parsing DOPE (" + DOPE_FILE + ")")
     DOPE_DICT = parsing.parse_dope(DOPE_FILE)
-
+    # Path to the clustal file
+    ALN_FILE_CLUSTAL = "results/ccmpred/aln/" + QUERY_NAME + ".clustal"
+    # Convert multiple alignment file from fasta to clustal
+    INDEX_LIST = parsing.convert_aln_file(ALN_FILE, ALN_FILE_CLUSTAL)
+    # Parse contact.map file generated by CCMPRED
+    print("Parsing contact.map file generated by CCMPRED. This can take few moments ...")
+    TOP_COUPLINGS_DICT = parsing.predict_top_contacts(ALN_FILE_CLUSTAL, INDEX_LIST)
 
     ### Main calculations
     #####################
 
     # Parallelization of the main loop
     with Pool(processes=NB_PROC) as pool:
-        FUNC = partial(process, DIST_RANGE, GAP_PENALTY, DOPE_DICT)
+        FUNC = partial(process, DIST_RANGE, DOPE_DICT, OUTPUT_PATH, DSSP_PATH, INDEX_LIST,
+                       TOP_COUPLINGS_DICT)
         # tqdm module enables an ETA progress bar for each alignment processed
         # imap_unordered can smooth things out by yielding faster-calculated values
         # ahead of slower-calculated values.
-        os.system("clear")
-        print("\n" + str(cpu_count()) + " cpus detected, using " + str(NB_PROC))
+        print("\n\n" + str(cpu_count()) + " cpus detected, using " + str(NB_PROC))
         print("\n\nProcessing alignments ...\n")
-        RESULTS = Score([res_ali for res_ali in tqdm(pool.imap_unordered(FUNC,\
-                    ALIGNMENT_DICT.values()), total=len(ALIGNMENT_DICT.values()))])
+        RESULTS = Score([res_ali for res_ali in tqdm(pool.imap_unordered(FUNC,
+                                                                         ALIGNMENT_DICT.values()),
+                                                     total=len(ALIGNMENT_DICT.values()))])
+    # remove useless files generated by MODELLER
+    clean_modeller_outputs(OUTPUT_PATH + "/modeller/")
 
     ### Results : Score and PDB files
     #################################
     RESULTS.write_score(OUTPUT_PATH, NB_PDB, ALIGNMENT_DICT)
-    print("\n\nThe program ended successfully !\nThe results are stored in " + OUTPUT_PATH)
+    print("\nThe program ended successfully !\nThe results are stored in " + OUTPUT_PATH)
     print("\nTotal runtime: {} seconds".format(str(datetime.now() - START_TIME)))

@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>src.query &mdash; Fold U 1.2 documentation</title>
+  <title>src.query &mdash; Fold U 2.0 documentation</title>
   
 
   
@@ -56,7 +56,7 @@
             
             
               <div class="version">
-                1.2
+                2.0
               </div>
             
           
@@ -156,6 +156,7 @@
 <span class="sd">   :synopsis: This module implements the Query class.</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
+<span class="kn">from</span> <span class="nn">src.residue</span> <span class="k">import</span> <span class="n">Residue</span>
 
 <div class="viewcode-block" id="Query"><a class="viewcode-back" href="../../query.html#src.query.Query">[docs]</a><span class="k">class</span> <span class="nc">Query</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
@@ -172,8 +173,25 @@
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">residues</span><span class="p">,</span> <span class="n">first</span><span class="p">,</span> <span class="n">last</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">residues</span> <span class="o">=</span> <span class="n">residues</span>
+        <span class="c1"># This is a &quot;temporary&quot; list of residues for Modeller, which we will modify only</span>
+        <span class="c1"># in order to make the PIR alignment (by inserting gaps).</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">modeller_residues</span> <span class="o">=</span> <span class="n">residues</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">first</span> <span class="o">=</span> <span class="n">first</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">last</span> <span class="o">=</span> <span class="n">last</span>
+
+<div class="viewcode-block" id="Query.display"><a class="viewcode-back" href="../../query.html#src.query.Query.display">[docs]</a>    <span class="k">def</span> <span class="nf">display</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">modeller</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            This function prints the residues as a sequence</span>
+
+<span class="sd">            Args:</span>
+<span class="sd">                modeller (boolean): True/False</span>
+
+<span class="sd">            Returns:</span>
+<span class="sd">                str: Amino acid sequence.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">modeller</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">res</span><span class="o">.</span><span class="n">name</span><span class="p">)</span> <span class="k">for</span> <span class="n">res</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">modeller_residues</span><span class="p">)</span>
+        <span class="k">return</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">res</span><span class="o">.</span><span class="n">name</span><span class="p">)</span> <span class="k">for</span> <span class="n">res</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">residues</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="Query.get_size"><a class="viewcode-back" href="../../query.html#src.query.Query.get_size">[docs]</a>    <span class="k">def</span> <span class="nf">get_size</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -183,7 +201,20 @@
 <span class="sd">                int: The size of the query sequence.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">residues</span><span class="p">)</span></div></div>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">residues</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Query.add_gaps_in_query"><a class="viewcode-back" href="../../query.html#src.query.Query.add_gaps_in_query">[docs]</a>    <span class="k">def</span> <span class="nf">add_gaps_in_query</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">template</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This functions inserts the same gaps that occur in the template, in the query.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            template (Template object): The current alignment&#39;s template</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Find the indexes of gaps in the template</span>
+        <span class="n">occ_ind</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">res</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">template</span><span class="o">.</span><span class="n">residues</span><span class="p">)</span> <span class="k">if</span> <span class="n">res</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;-&quot;</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">occ_ind</span><span class="p">:</span>
+            <span class="c1"># Insert the gaps in the query</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">modeller_residues</span><span class="p">[</span><span class="n">i</span><span class="p">:</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">Residue</span><span class="p">(</span><span class="s2">&quot;-&quot;</span><span class="p">)]</span></div></div>
 </pre></div>
 
            </div>
@@ -196,7 +227,7 @@
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2018, Gabriel Cretin, Hélène Kabbech, Tom Gutman, Flora Mikaeloff, Franz Arnold
+        &copy; Copyright 2018, Gabriel Cretin, Hélène Kabbech, Tom Gutman, Flora Mikaeloff, Franz Arnold.
 
     </p>
   </div>
@@ -215,14 +246,21 @@
 
   
 
-    
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
-        <script type="text/javascript" src="../../_static/jquery.js"></script>
-        <script type="text/javascript" src="../../_static/underscore.js"></script>
-        <script type="text/javascript" src="../../_static/doctools.js"></script>
-        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'2.0',
+            LANGUAGE:'None',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 
   
 

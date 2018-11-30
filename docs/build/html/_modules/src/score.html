@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>src.score &mdash; Fold U 1.2 documentation</title>
+  <title>src.score &mdash; Fold U 2.0 documentation</title>
   
 
   
@@ -56,7 +56,7 @@
             
             
               <div class="version">
-                1.2
+                2.0
               </div>
             
           
@@ -171,7 +171,12 @@
 <span class="sd">        Returns:</span>
 <span class="sd">            Pandas Series: The score normalized</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">return</span><span class="p">((</span><span class="n">score_type</span> <span class="o">-</span> <span class="nb">min</span><span class="p">(</span><span class="n">score_type</span><span class="p">))</span> <span class="o">/</span> <span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="n">score_type</span><span class="p">)</span> <span class="o">-</span> <span class="nb">min</span><span class="p">(</span><span class="n">score_type</span><span class="p">)))</span></div>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">normalized</span> <span class="o">=</span> <span class="p">(</span><span class="n">score_type</span> <span class="o">-</span> <span class="nb">min</span><span class="p">(</span><span class="n">score_type</span><span class="p">))</span> <span class="o">/</span> <span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="n">score_type</span><span class="p">)</span> <span class="o">-</span> <span class="nb">min</span><span class="p">(</span><span class="n">score_type</span><span class="p">))</span>
+    <span class="k">except</span> <span class="ne">ZeroDivisionError</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Error: normalize_score: Division by 0</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">normalized</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">return</span> <span class="n">normalized</span></div>
     <span class="c1"># Use sklearn module instead</span>
     <span class="c1"># https://web.archive.org/web/20160520170701/http://chrisalbon.com:80/python/pandas_normalize_column.html</span>
 
@@ -192,7 +197,7 @@
 <div class="viewcode-block" id="Score.write_score"><a class="viewcode-back" href="../../score.html#src.score.Score.write_score">[docs]</a>    <span class="k">def</span> <span class="nf">write_score</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">res_path</span><span class="p">,</span> <span class="n">nb_pdb</span><span class="p">,</span> <span class="n">alignment_dict</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">            Creates a scores.csv file containing for each line a template&#39;s name and its different</span>
-<span class="sd">            scores. Creates the pdb files of the n best sum scores.</span>
+<span class="sd">            scores. Creates the pdb files of the n best sum_scores.</span>
 
 <span class="sd">            Args:</span>
 <span class="sd">                res_path (str): The path of the directory where to stock the created files.</span>
@@ -202,22 +207,28 @@
         <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">res_path</span><span class="o">+</span><span class="s2">&quot;/pdb&quot;</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
         <span class="c1"># A dataframe is created with pandas and elements of the iterator are stored</span>
-        <span class="n">scores_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;benchmark&#39;</span><span class="p">,</span> <span class="s1">&#39;alignment&#39;</span><span class="p">,</span> <span class="s1">&#39;threading&#39;</span><span class="p">,</span> <span class="s1">&#39;blosum&#39;</span><span class="p">])</span>
-        <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">ali_score</span><span class="p">,</span> <span class="n">thr_score</span><span class="p">,</span> <span class="n">blosum_score</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">benchmark</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">iterator</span><span class="p">):</span>
-            <span class="n">scores_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">benchmark</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">ali_score</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">thr_score</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">blosum_score</span><span class="p">)]</span>
+        <span class="n">scores_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;benchmark&#39;</span><span class="p">,</span> <span class="s1">&#39;alignment&#39;</span><span class="p">,</span> <span class="s1">&#39;threading&#39;</span><span class="p">,</span> <span class="s1">&#39;modeller&#39;</span><span class="p">,</span>\
+                                <span class="s1">&#39;secondary_structure&#39;</span><span class="p">,</span> <span class="s1">&#39;solvent_access&#39;</span><span class="p">,</span> <span class="s1">&#39;co_evolution&#39;</span><span class="p">])</span>
+        <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">ali_score</span><span class="p">,</span> <span class="n">thr_score</span><span class="p">,</span> <span class="n">modeller_score</span><span class="p">,</span> <span class="n">ss_score</span><span class="p">,</span>\
+           <span class="n">solvent_access_score</span><span class="p">,</span> <span class="n">ccmpred_score</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">benchmark</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">iterator</span><span class="p">):</span>
+            <span class="n">scores_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">benchmark</span><span class="p">,</span> <span class="n">ali_score</span><span class="p">,</span> <span class="n">thr_score</span><span class="p">,</span> <span class="n">modeller_score</span><span class="p">,</span>
+                                   <span class="n">ss_score</span><span class="p">,</span> <span class="n">solvent_access_score</span><span class="p">,</span> <span class="n">ccmpred_score</span><span class="p">]</span>
 
-        <span class="c1"># The first row is removed because it corresponds to the query</span>
-        <span class="n">scores_df</span> <span class="o">=</span> <span class="n">scores_df</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">scores_df</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-        <span class="c1"># Normalization of the scores</span>
-        <span class="k">for</span> <span class="n">index</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;alignment&#39;</span><span class="p">,</span> <span class="s1">&#39;threading&#39;</span><span class="p">,</span> <span class="s1">&#39;blosum&#39;</span><span class="p">]:</span>
+        <span class="c1"># Normalization of the scores.</span>
+        <span class="c1"># Not the ss_score neither solvent access_score because they are already between 0-1</span>
+        <span class="k">for</span> <span class="n">index</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;alignment&#39;</span><span class="p">,</span> <span class="s1">&#39;threading&#39;</span><span class="p">,</span> <span class="s1">&#39;modeller&#39;</span><span class="p">,</span> <span class="s1">&#39;co_evolution&#39;</span><span class="p">]:</span>
             <span class="n">scores_df</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="n">normalize_score</span><span class="p">(</span><span class="n">scores_df</span><span class="p">[</span><span class="n">index</span><span class="p">])</span>
         <span class="c1"># Sum of the different scores and normalization</span>
-        <span class="n">scores_df</span><span class="p">[</span><span class="s1">&#39;sum scores&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">normalize_score</span><span class="p">(</span><span class="n">scores_df</span><span class="p">[</span><span class="s1">&#39;alignment&#39;</span><span class="p">]</span> <span class="o">+</span>
-                                  <span class="n">scores_df</span><span class="p">[</span><span class="s1">&#39;threading&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="n">scores_df</span><span class="p">[</span><span class="s1">&#39;blosum&#39;</span><span class="p">])</span>
+        <span class="n">scores_df</span><span class="p">[</span><span class="s1">&#39;sum_scores&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">normalize_score</span><span class="p">(</span><span class="n">scores_df</span><span class="p">[</span><span class="s1">&#39;alignment&#39;</span><span class="p">]</span>
+                                                  <span class="o">+</span> <span class="n">scores_df</span><span class="p">[</span><span class="s1">&#39;threading&#39;</span><span class="p">]</span>
+                                                  <span class="o">+</span> <span class="n">scores_df</span><span class="p">[</span><span class="s1">&#39;modeller&#39;</span><span class="p">]</span>
+                                                  <span class="o">+</span> <span class="n">scores_df</span><span class="p">[</span><span class="s1">&#39;secondary_structure&#39;</span><span class="p">]</span>
+                                                  <span class="o">+</span> <span class="n">scores_df</span><span class="p">[</span><span class="s1">&#39;solvent_access&#39;</span><span class="p">]</span>
+                                                  <span class="o">+</span> <span class="n">scores_df</span><span class="p">[</span><span class="s1">&#39;co_evolution&#39;</span><span class="p">])</span>
         <span class="c1"># Sort of the templates according to the sum score</span>
-        <span class="n">scores_df</span> <span class="o">=</span> <span class="n">scores_df</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="s1">&#39;sum scores&#39;</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="n">scores_df</span> <span class="o">=</span> <span class="n">scores_df</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="s2">&quot;sum_scores&quot;</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
         <span class="c1"># A csv file containing the normalized scores is created</span>
-        <span class="n">scores_df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">res_path</span><span class="o">+</span><span class="s1">&#39;/scores.csv&#39;</span><span class="p">)</span>
+        <span class="n">scores_df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">res_path</span><span class="o">+</span><span class="s2">&quot;/scores.csv&quot;</span><span class="p">)</span>
 
         <span class="c1"># Only nb_pdb pdb files are created</span>
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nb_pdb</span><span class="p">):</span>
@@ -235,7 +246,7 @@
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2018, Gabriel Cretin, Hélène Kabbech, Tom Gutman, Flora Mikaeloff, Franz Arnold
+        &copy; Copyright 2018, Gabriel Cretin, Hélène Kabbech, Tom Gutman, Flora Mikaeloff, Franz Arnold.
 
     </p>
   </div>
@@ -254,14 +265,21 @@
 
   
 
-    
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
-        <script type="text/javascript" src="../../_static/jquery.js"></script>
-        <script type="text/javascript" src="../../_static/underscore.js"></script>
-        <script type="text/javascript" src="../../_static/doctools.js"></script>
-        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'2.0',
+            LANGUAGE:'None',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 
   
 

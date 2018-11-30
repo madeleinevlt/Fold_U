@@ -5,10 +5,13 @@
 """
 
 # Third-party modules
+import subprocess
 import re
+import os
+import pathlib
 import numpy as np
 from Bio.SeqUtils import seq1
-
+from conkit.applications import CCMpredCommandline
 # Local modules
 from src.residue import Residue
 from src.alignment import Alignment
@@ -18,81 +21,21 @@ from src.template import Template
 
 def parse_metafold(metafold_file):
     """
-        Extracts the name of the metafold as a key and the associated pdb as
-        a value in a dictionary
+        Extracts name of metafold as key and associated pdb as
+        value in dictionary.
 
         Args:
             metafold_file (str): A METAFOLD.list file containing for a given line a
-                           template name and a pdb file name associated
+                           template name and a pdb file name associated.
 
         Returns:
-            dict: A dictionary with key = template name and value = pdb file
+            dict: A dictionary with key = template name and value = pdb file.
     """
     metafold_dict = {}  # Initalization of the dictionary
     with open(metafold_file, "r") as file:
         for line in file:
             metafold_dict[line.split()[0]] = line.split()[1]
     return metafold_dict
-
-
-def parse_dope(dope_file):
-    """
-        Extracts 30 dope energy values for the 20*20 residus-CA pairs and stores it
-        in a dictionary with key = res_1-res_2 and value = an array of the 30 dope scores.
-
-        Args:
-            dope_file (str): The file dope.par containing energy values for each
-                       amino acid pair.
-
-        Returns:
-            dict: A dictionary with key = res_1-res_2 and value = an array of
-            the 30 dope energy values.
-    """
-    dope_dict = {}
-    with open(dope_file, "r") as file:
-        for line in file:
-            # get the line with C-alpha for both amino acids
-            if line[4:6] == "CA" and line[11:13] == "CA":
-                res_1 = seq1(line[0:3])
-                res_2 = seq1(line[7:10])
-                dope_dict[res_1+res_2] = np.fromstring(line[14:-1], dtype=float, sep=" ")
-    return dope_dict
-
-
-def parse_benchmark(benchmark_file, foldrec_file, alignment_dict):
-    """
-        Extract the line of the benchmark file containing the benchmarks of
-        the studied query. Each benchmark template have an assigned structure
-        corresponding to the degree of similarity with the query
-        ("Family", "Superfamily" or "Fold"). For a given benchmark template
-        object, the structure is stored in the benchmark item.
-
-        Args:
-            benchmark_file (str): The path to the benchmark file.
-            foldrec_file (str): The path to the foldrec file.
-            alignment_dict (dictionary): A dictionary with key = template name
-                                         and value = an Alignment object.
-    """
-    fold_type_dict = {"Family":3, "Superfamily":2, "Fold":1}
-    # The name of the query is retrieved from the foldrec file pathway
-    query_reg = re.compile("^.*\\/(\\w*)")
-    query_name = re.search(query_reg, foldrec_file)
-    with open(benchmark_file, "r") as file:
-        for line in file:
-            # Only the line containing the query name is extracted
-            if query_name.group(1) in line:
-                # List containing for each benchmark the template name and
-                # the associated fold_type
-                template_fold_type = line[0:-1].split(": ")[1].split(", ")
-                for i in template_fold_type:
-                    # The fold_type of the benchmark template is stored in
-                    # the benchmark item
-                    template = i.split(" ")[0]
-                    fold_type = i.split(" ")[1]
-                    if template in alignment_dict:
-                        alignment_dict[template].template.set_benchmark(fold_type_dict[fold_type])
-                # No need to continue because all benchmarks are stored
-                break
 
 
 def parse_foldrec(foldrec_file, nb_templates, metafold_dict):
@@ -107,7 +50,7 @@ def parse_foldrec(foldrec_file, nb_templates, metafold_dict):
                                 corresponding scores.
             nb_templates (int): Number of alignments to retrieve from the file and chosen
                                 by the user.
-            metafold_dict (dictionary): A dictionary with key = template name
+            metafold_dict (dict): A dictionary with key = template name
                                         and value = pdb file.
 
         Returns:
@@ -119,6 +62,7 @@ def parse_foldrec(foldrec_file, nb_templates, metafold_dict):
     score_reg = re.compile("^Score :\\s+([-0-9\\.]+)")
     query_seq_reg = re.compile("^Query\\s*([0-9]+)\\s*([A-Z0-9-]+)\\s*([0-9]+)")
     template_seq_reg = re.compile("^Template\\s*[0-9]+\\s*([A-Z-]+)")
+    empty_query_reg = re.compile("^Query\\s+\\d\\s-+\\s+\\d.*$")
 
     alignment_dict = {}
     count_templates = 0
@@ -136,15 +80,29 @@ def parse_foldrec(foldrec_file, nb_templates, metafold_dict):
             score_found = re.search(score_reg, line)
             query_seq_found = re.search(query_seq_reg, line)
             template_seq_found = re.search(template_seq_reg, line)
+            empty_query_found = re.search(empty_query_reg, line)
             # A num is found :
             if num_found:
                 num = int(num_found.group(1))
             # A template name is found :
             if template_name_found:
+                # These templates have more than 1 chain, so we must skip them
+                if template_name_found.group(1) in ["bromodomain", "rhv", "Peptidase_A6", "ins",
+                                                    "Arg_repressor_C", "SAM_decarbox", "prc",
+                                                    "Chorismate_mut"]:
+                    # We skip the alignment
+                    for _ in range(10):
+                        next(file)
                 template_name = template_name_found.group(1)
             # A score is found :
             if score_found:
                 score = float(score_found.group(1))
+            # Empty alignement (the query = gaps only)
+            if empty_query_found and query_reg_count == 2:
+                print("Skipping alignement "+str(num)+". The query is only composed of gaps.")
+                # We skip the alignment
+                for _ in range(5):
+                    next(file)
             # A query sequence is found :
             if query_seq_found:
                 if query_reg_count == 0:
@@ -176,7 +134,133 @@ def parse_foldrec(foldrec_file, nb_templates, metafold_dict):
                                     Query(query_seq, query_first, query_last),
                                     Template(template_name, template_seq))
                     ali.template.set_pdb_name(metafold_dict)
-                    ali.template.parse_pdb()
+                    ali.template.parse_pdb("data/pdb/"+ali.template.name+"/"+ali.template.pdb
+                                           +".atm")
                     alignment_dict[template_name] = ali
                     count_templates += 1
     return alignment_dict
+
+
+def parse_benchmark(query_name, benchmark_file, alignment_dict):
+    """
+        Extract the line of the benchmark file containing the benchmarks of
+        the studied query. Each benchmark template have an assigned structure
+        corresponding to the degree of similarity with the query
+        ("Family", "Superfamily" or "Fold"). For a given benchmark template
+        object, the structure is stored in the benchmark item.
+
+        Args:
+            query_name (str): Name of the query.
+            benchmark_file (str): The path to the benchmark file.
+            alignment_dict (dict): A dictionary with key = template name.
+                                   and value = an Alignment object.
+    """
+    with open(benchmark_file, "r") as file:
+        for line in file:
+            # Only the line containing the query name is extracted
+            if query_name in line:
+                # List containing for each benchmark the template name and
+                # the associated fold_type
+                template_fold_type = line[0:-1].split(": ")[1].split(", ")
+                for i in template_fold_type:
+                    # The fold_type of the benchmark template is stored in
+                    # the benchmark item
+                    template = i.split(" ")[0]
+                    fold_type = i.split(" ")[1]
+                    if template in alignment_dict:
+                        alignment_dict[template].template.set_benchmark(fold_type)
+                # No need to continue because all benchmarks are stored
+                break
+
+
+def parse_dope(dope_file):
+    """
+        Extracts 30 dope energy values for the 20*20 residus-CA pairs and stores it
+        in a dictionary with key = res_1-res_2 and value = an array of the 30 dope scores.
+
+        Args:
+            dope_file (str): The file dope.par containing energy values for each
+                       amino acid pair.
+
+        Returns:
+            dict: A dictionary with key = res_1-res_2 and value = an array of
+            the 30 dope energy values.
+    """
+    dope_dict = {}
+    with open(dope_file, "r") as file:
+        for line in file:
+            # get the line with C-alpha for both amino acids
+            if line[4:6] == "CA" and line[11:13] == "CA":
+                res_1 = seq1(line[0:3])
+                res_2 = seq1(line[7:10])
+                dope_dict[res_1+res_2] = np.fromstring(line[14:-1], dtype=float, sep=" ")
+    return dope_dict
+
+
+def convert_aln_file(aln_file, aln_file_clustal):
+    """
+        Convert a multiple alignment file from fasta to clustal.
+        The first sequence of this multiple alignment is kept and
+        a list of non-gaps position index of this sequence is then generated.
+
+        Args:
+            aln_file (str): Multiple alignement file (fasta format).
+            aln_file_clustal (str): Multiple alignemnt file (clustal format) to generated.
+
+        Returns:
+            list: List of indexes corresponding to amino acids positions in aln file.
+    """
+    pathlib.Path("results/ccmpred/aln/").mkdir(parents=True, exist_ok=True)
+    # Convertion from fasta to clustal
+    convert = subprocess.Popen(
+        ["./bin/CCMpred/scripts/convert_alignment.py", aln_file,
+         "fasta", aln_file_clustal], stdout=subprocess.PIPE).communicate()[0]
+    # First line of this multiple alignment
+    with open(aln_file_clustal, "r") as file:
+        query_seq = file.readline()[:-1]
+        # "non_gap" positions index are saved into a list
+        index_list = [i for i, ele in enumerate(query_seq) if ele != "-"]
+    return index_list
+
+
+def predict_top_contacts(aln_file, index_list):
+    """
+       Extract N tops couplings based on co_evolution score. co_evolution score
+       is calculated between two non-consecutive amino acids by ccmpred based on
+       MSA alignment. Co_evolution score measures co-occurence of a pair of amino
+       acid in ortholog sequences. Two amino acid have co-evoluated if the
+       occurence of one of this amino never occur whithout the other.
+       Nb top contacts = length(query)/2
+
+        Args:
+            aln_file (str): Multiple alignement file (clustal format).
+            index_list (list): List of indexes corresponding to amino acids positions in aln file.
+
+        Returns:
+            dict: A dictionary with key = ranking of coupling based on ss_confidence
+            and value = index aa1, index aa2
+    """
+    # Number of top coupling expected
+    ntops = int(len(index_list)/2)
+    contact_output = "data/ccmpred/contact.mat"
+    os.makedirs("data/ccmpred/", exist_ok=True)
+    # Run ccmpred : Prediction of contacts
+    ccmpred_cline = CCMpredCommandline(
+        cmd='./bin/CCMpred/bin/ccmpred', alnfile=aln_file, matfile=contact_output)
+    ccmpred_cline()
+
+    # Extract tops coupling
+    top_couplings = subprocess.check_output(
+        ["./bin/CCMpred/scripts/top_couplings.py -n {} {}".
+         format(str(ntops), contact_output)], shell=True).decode('utf-8').split('\n')[1:-1]
+
+    # Create a dictionary of top couplings
+    top_couplings_dict = {}
+    for k, value in enumerate(top_couplings):
+        values = value.split("\t")
+        index_i = int(values[0])
+        index_j = int(values[1])
+        # Do not parse gaps associated with top couplings
+        if (index_i in index_list) and (index_j in index_list):
+            top_couplings_dict[k] = (index_list.index(index_i), index_list.index(index_j))
+    return top_couplings_dict
