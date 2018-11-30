@@ -136,6 +136,7 @@ We are master students in bioinformatics at Paris Diderot University.
 ## Acknowledgment
 
 Thanks to [Maïté Cretin](https://www.linkedin.com/in/maitewho/) for the nice logo.
+And thanks to team 1 and team 2 for generating to us multiple alignment files (data/aln)
 
 ## License
 
