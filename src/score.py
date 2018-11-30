@@ -57,14 +57,14 @@ class Score:
         scores_df = pd.DataFrame(columns=['benchmark', 'alignment', 'threading', 'modeller',
                                 'secondary_structure', 'solvent_access', 'co_evolution'])
         for _, ali_score, thr_score, modeller_score, ss_score,\
-           access_score, ccmpred_score, name, benchmark in sorted(self.iterator):
+           solvent_access_score, ccmpred_score, name, benchmark in sorted(self.iterator):
             scores_df.loc[name] = [benchmark, ali_score, thr_score, modeller_score,
-                                   ss_score, solvent_access, ccmpred_score]
+                                   ss_score, solvent_access_score, ccmpred_score]
 
         # The first row is removed because it corresponds to the query
         scores_df = scores_df.drop(scores_df.index[0])
         # Normalization of the scores.
-        # Not the ss_score neither access_score because they are already between 0-1
+        # Not the ss_score neither solvent access_score because they are already between 0-1
         for index in ['alignment', 'threading', 'modeller', 'co_evolution']:
             scores_df[index] = normalize_score(scores_df[index])
         # Sum of the different scores and normalization

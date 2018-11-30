@@ -106,7 +106,7 @@ def plot_benchmark(output_path, struct, scores, rank, benchmarking_scores, selec
         plt.ylabel("Benchmark")
         plt.xlabel("rank")
         plt.legend(loc="lower right")
-        plt.savefig(output_path + "/" + struct + "_plot.png")
+        plt.savefig(output_path + "/" + "all_" + struct + "_plot.png")
     elif selected_score == "sum_scores":
         score_struct = benchmarking_scores[selected_score][struct].values
         plt.plot(rank, score_struct, "b", label=selected_score)
@@ -188,7 +188,7 @@ if __name__ == "__main__":
     # The 3 different structures from benchmark
     STRUCTURES = ["Family", "Superfamily", "Fold"]
     # all the possible scores useful for plots
-    SCORES = ["alignment", "threading", "modeller", "secondary_structure", "access_score",
+    SCORES = ["alignment", "threading", "modeller", "secondary_structure", "solvent_access",
               "co_evolution", "sum_scores"]
     # A dictionary of pandas DataFrames is created for each score
     # Each DataFrame will contain the cumulative sum of benchmarks for each structure (= 3 columns)
