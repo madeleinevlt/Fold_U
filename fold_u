@@ -89,7 +89,7 @@ if __name__ == "__main__":
     QUERY_NAME = FOLDREC_FILE.split("/")[-1].split(".")[0]
     # Get the alignment file
     ALN_FILE = ARGUMENTS["ALN_FILE"]
-    ALN_FILE_CLUSTAL = ALN_FILE.split(".")[0]+".clustal"
+    ALN_FILE_CLUSTAL = "results/ccmpred/aln" + QUERY_NAME + ".clustal"
     # Process the first n templates only
     NB_TEMPLATES = int(ARGUMENTS["--nb_templates"])
     # Create the first n pdb templates
