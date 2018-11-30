@@ -55,7 +55,7 @@ def check_args():
         '--dssp': Use(open, error='dssp/mkdssp should be readable'),
         '--sscore': And(Use(str), lambda s: s in ["alignment", "threading", "modeller",
                                                   "secondary_structure", "solvent_access",
-                                                  "sum_scores"],
+                                                  "sum_scores", "all"],
                         error='SCORES should be an existing score'),
         '--cpu': And(Use(int), lambda n: 1 <= n <= cpu_count(),
                      error='--cpus=NUM should be integer 1 <= N <= ' + str(cpu_count())),
@@ -235,11 +235,9 @@ if __name__ == "__main__":
     plt.rc('patch', edgecolor='#E6E6E6')
     plt.rc('lines', linewidth=1.5)
 
-    #OUTPUT_PATH = "results/plot/"
     for structure in STRUCTURES:
         plot_benchmark(OUTPUT_PATH, structure, SCORES, RANK, BENCHMARKING_SCORES, SELECTED_SCORE)
     print("\nThe plots are stored in " + OUTPUT_PATH + "\n")
-    #OUTPUT_PATH = "results/top_N/"
     n_top_n = [5]
     if NB_TEMPLATES <= 5:
         n_top_n = [5]
@@ -254,5 +252,3 @@ if __name__ == "__main__":
     for top in n_top_n:
         print(top_n(STRUCTURES, SELECTED_SCORE, top, BENCHMARKING_SCORES))
         print("\t----------------------------------------")
-    # with  open(output_path + "top_N_stats.txt", "w") as fileout:
-        # fileout.write(top_n_results)
