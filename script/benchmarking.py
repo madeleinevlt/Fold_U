@@ -22,7 +22,10 @@
                                               [default: ./results/top_n]
         -d PATH, --dssp PATH                  Path to the dssp software
                                               binary [default: /usr/local/bin/mkdssp]
-        -s SCORE, --sscore SCORE              selected score to calculate top_N
+        -s SCORE, --sscore SCORE              Score for which you wish to see the statistics:
+                                              "alignment", "threading", "modeller",
+                                              "secondary_structure", "solvent_access" or all of them
+                                              at once: "sum_scores".
                                               [default: sum_scores]
         -c NUM, --cpu NUM                     Number of cpus to use for parallelisation
                                               [default: 2]
@@ -49,7 +52,7 @@ def check_args():
                               error='--nb_templates=NUM should be integer 1 <= N <= 100'),
         '--dssp': Use(open, error='dssp/mkdssp should be readable'),
         '--sscore': And(Use(str), lambda s: s in ["alignment", "threading", "modeller",
-                                                  "secondary_structure", "access_score",
+                                                  "secondary_structure", "solvent_access",
                                                   "sum_scores"],
                         error='SCORES should be an existing score'),
         '--cpu': And(Use(int), lambda n: 1 <= n <= cpu_count(),
@@ -62,7 +65,7 @@ def check_args():
         exit(err)
 
 
-def plot_benchmark(output_path, struct, scores, rank, benchmarking_scores):
+def plot_benchmark(output_path, struct, scores, rank, benchmarking_scores, selected_score):
     """
         Create one plot for one benchmark type for all the foldrec files.
 
@@ -78,29 +81,40 @@ def plot_benchmark(output_path, struct, scores, rank, benchmarking_scores):
 
     """
     os.makedirs(output_path, exist_ok=True)
-
-    ali_struct = benchmarking_scores[scores[0]][struct].values
-    thr_struct = benchmarking_scores[scores[1]][struct].values
-    mod_struct = benchmarking_scores[scores[2]][struct].values
-    ss_struct = benchmarking_scores[scores[3]][struct].values
-    acc_struct = benchmarking_scores[scores[4]][struct].values
-    sum_struct = benchmarking_scores[scores[5]][struct].values
-
     plt.figure(num=struct)  # Window's name
-    plt.plot(rank, ali_struct, "b", label=scores[0])
-    plt.plot(rank, thr_struct, "#ffa201", label=scores[1])
-    plt.plot(rank, mod_struct, "#EE82EE", label=scores[2])
-    plt.plot(rank, ss_struct, "#00B200", label=scores[3])
-    plt.plot(rank, acc_struct, "#7a9a91", label=scores[4])
-    plt.plot(rank, sum_struct, "r", label=scores[5])
-    plt.plot([0, len(ali_struct)], [0, max(ali_struct)], "k", label="random")
-    plt.title("Global scores comparison using " + struct + " benchmarks")
-    plt.ylabel("benchmark")
-    plt.xlabel("rank")
-    plt.legend(loc="lower right")
-    plt.savefig(output_path + struct + "_plot.png")
+    # Plot all scores
+    if selected_score == "sum_scores":
+        ali_struct = benchmarking_scores[scores[0]][struct].values
+        thr_struct = benchmarking_scores[scores[1]][struct].values
+        mod_struct = benchmarking_scores[scores[2]][struct].values
+        ss_struct = benchmarking_scores[scores[3]][struct].values
+        acc_struct = benchmarking_scores[scores[4]][struct].values
+        sum_struct = benchmarking_scores[scores[5]][struct].values
+
+        plt.plot(rank, ali_struct, "b", label=scores[0])
+        plt.plot(rank, thr_struct, "#ffa201", label=scores[1])
+        plt.plot(rank, mod_struct, "#EE82EE", label=scores[2])
+        plt.plot(rank, ss_struct, "#00B200", label=scores[3])
+        plt.plot(rank, acc_struct, "#7a9a91", label=scores[4])
+        plt.plot(rank, sum_struct, "r", label=scores[5])
+        plt.plot([0, len(ali_struct)], [0, max(ali_struct)], "k", label="random")
+        plt.title("Global scores comparison using " + struct + " benchmarks")
+        plt.ylabel("Benchmark")
+        plt.xlabel("rank")
+        plt.legend(loc="lower right")
+        plt.savefig(output_path + "/" + struct + "_plot.png")
+    # Plot scores individually
+    else:
+        score_struct = benchmarking_scores[selected_score][struct].values
+        plt.plot(rank, score_struct, "b", label=selected_score)
+        plt.plot([0, len(score_struct)], [0, max(score_struct)], "k", label="random")
+        plt.title(selected_score + " score using " + struct + " benchmarks")
+        plt.ylabel("Benchmark")
+        plt.xlabel("rank")
+        plt.legend(loc="lower right")
+        plt.savefig(output_path + "/" + selected_score + "_" + struct + "_plot.png")
     plt.show()
-    print("The plot for '" + struct + "' is stored in " + output_path)
+
 
 
 def top_n(structures, scores, top_n, benchmarking_scores):
@@ -124,7 +138,7 @@ def top_n(structures, scores, top_n, benchmarking_scores):
     rank = {}
     max_rank = {}
     for struct in structures:
-        rank[struct] = benchmarking_scores[scores][struct][top_n]
+        rank[struct] = benchmarking_scores[scores][struct][top_n-1]
         max_rank[struct] = max(benchmarking_scores[scores][struct])
     line1 = "top{0}\t{1}/{2}\t\t{3}/{4}\t\t{5}/{6}\n".format(top_n,
                                                              rank["Family"],
@@ -161,7 +175,7 @@ if __name__ == "__main__":
     # The 3 different structures from benchmark
     STRUCTURES = ["Family", "Superfamily", "Fold"]
     # all the possible scores useful for plots
-    SCORES = ["alignment", "threading", "modeller", "secondary_structure", "access_score", "sum_scores"]
+    SCORES = ["alignment", "threading", "modeller", "secondary_structure", "solvent_access", "sum_scores"]
     # A dictionary of pandas DataFrames is created for each score
     # Each DataFrame will contain the cumulative sum of benchmarks for each structure (= 3 columns)
     BENCHMARKING_SCORES = {}
@@ -212,7 +226,7 @@ if __name__ == "__main__":
 
     #OUTPUT_PATH = "results/plot/"
     for structure in STRUCTURES:
-        plot_benchmark(OUTPUT_PATH, structure, SCORES, RANK, BENCHMARKING_SCORES)
+        plot_benchmark(OUTPUT_PATH, structure, SCORES, RANK, BENCHMARKING_SCORES, SELECTED_SCORE)
     print("\nThe plots are stored in " + OUTPUT_PATH + "\n")
     #OUTPUT_PATH = "results/top_N/"
     n_top_n = [5]
@@ -227,7 +241,7 @@ if __name__ == "__main__":
     print("Table summarizing the top {} results.\n".format(n_top_n))
     print("\tFamily\t\tSuperfamily\tFold\n")
     for top in n_top_n:
-        print(top_n(STRUCTURES, SELECTED_SCORE, top-1, BENCHMARKING_SCORES))
+        print(top_n(STRUCTURES, SELECTED_SCORE, top, BENCHMARKING_SCORES))
         print("\t----------------------------------------")
     # with  open(output_path + "top_N_stats.txt", "w") as fileout:
         # fileout.write(top_n_results)
