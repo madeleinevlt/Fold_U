@@ -48,9 +48,10 @@ def predict_top_contacts(aln_file, index_list):
     """
        Extract N tops couplings based on co_evolution score. co_evolution score
        is calculated between two non-consecutive amino acids by ccmpred based on
-       MSA alignment.co_evolution score measures co-occurence of a pair of amino
+       MSA alignment. Co_evolution score measures co-occurence of a pair of amino
        acid in ortholog sequences. Two amino acid have co-evoluated if the
        occurence of one of this amino never occur whithout the other.
+       Nb top contacts = length(query)/2
 
         Args:
             aln_file (str): Multiple alignement file, clustal format
@@ -58,7 +59,7 @@ def predict_top_contacts(aln_file, index_list):
 
         Returns:
             dict: A dictionary with key = ranking of coupling based on ss_confidence
-            and value = index aa1, index aa2, confidence
+            and value = index aa1, index aa2
     """
     # Number of top coupling expected
     ntops = int(len(index_list)/2)
@@ -70,7 +71,7 @@ def predict_top_contacts(aln_file, index_list):
     )
     ccmpred_cline()
 
-    # Extract ntops coupling
+    # Extract tops coupling
     top_couplings = subprocess.check_output(
         ["./CCMpred/scripts/top_couplings.py -n {} {}".
         format(str(ntops), contact_output)], shell=True
