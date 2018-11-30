@@ -51,7 +51,7 @@ def process(dist_range, dope_dict, output_path, dssp_bin_path, top_couplings_dic
     ss_score = ali.calculate_ss_score()
     access_score = ali.calculate_access_score(dssp_bin_path, 0.3)
     ccmpred_score = ali.calculate_coevolution_score(index_list, top_couplings_dict)
-    return ali.num, ali.score, threading_score, modeller_score, ss_score, access_score,\
+    return ali.num, ali.score, threading_score, modeller_score, ss_score, solvent_access,\
            ccmpred_score, ali.template.name, ali.template.benchmark
 
 
@@ -333,7 +333,7 @@ class Alignment:
         contact_score = np.log10(1+TP)
         return contact_score
 
-    def calculate_access_score(self, dssp_bin_path, threshold):
+    def calculate_solvent_access(self, dssp_bin_path, threshold):
         '''
             Calculate the accessibility score between the predicted model
             and the template pdb structure.

@@ -199,8 +199,8 @@
     <span class="n">modeller_score</span> <span class="o">=</span> <span class="n">ali</span><span class="o">.</span><span class="n">calculate_modeller_score</span><span class="p">(</span><span class="n">output_path</span><span class="p">)</span>
     <span class="c1"># Calculate secondary structure score</span>
     <span class="n">ss_score</span> <span class="o">=</span> <span class="n">ali</span><span class="o">.</span><span class="n">calculate_ss_score</span><span class="p">()</span>
-    <span class="n">access_score</span> <span class="o">=</span> <span class="n">ali</span><span class="o">.</span><span class="n">calculate_access_score</span><span class="p">(</span><span class="n">dssp_bin_path</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">ali</span><span class="o">.</span><span class="n">num</span><span class="p">,</span> <span class="n">ali</span><span class="o">.</span><span class="n">score</span><span class="p">,</span> <span class="n">threading_score</span><span class="p">,</span> <span class="n">modeller_score</span><span class="p">,</span> <span class="n">ss_score</span><span class="p">,</span> <span class="n">access_score</span><span class="p">,</span>\
+    <span class="n">solvent_access</span> <span class="o">=</span> <span class="n">ali</span><span class="o">.</span><span class="n">calculate_solvent_access</span><span class="p">(</span><span class="n">dssp_bin_path</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">ali</span><span class="o">.</span><span class="n">num</span><span class="p">,</span> <span class="n">ali</span><span class="o">.</span><span class="n">score</span><span class="p">,</span> <span class="n">threading_score</span><span class="p">,</span> <span class="n">modeller_score</span><span class="p">,</span> <span class="n">ss_score</span><span class="p">,</span> <span class="n">solvent_access</span><span class="p">,</span>\
         <span class="n">ali</span><span class="o">.</span><span class="n">template</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">ali</span><span class="o">.</span><span class="n">template</span><span class="o">.</span><span class="n">benchmark</span></div>
 
 
@@ -428,7 +428,7 @@
             <span class="c1"># The two last lines of the created pdb file (&quot;END&quot; and &quot;TER&quot; lines)</span>
             <span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;END</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Alignment.calculate_access_score"><a class="viewcode-back" href="../../alignment.html#src.alignment.Alignment.calculate_access_score">[docs]</a>    <span class="k">def</span> <span class="nf">calculate_access_score</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dssp_bin_path</span><span class="p">,</span> <span class="n">threshold</span><span class="p">):</span>
+<div class="viewcode-block" id="Alignment.calculate_solvent_access"><a class="viewcode-back" href="../../alignment.html#src.alignment.Alignment.calculate_solvent_access">[docs]</a>    <span class="k">def</span> <span class="nf">calculate_solvent_access</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dssp_bin_path</span><span class="p">,</span> <span class="n">threshold</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">            Calculate the accessibility score between the predicted model</span>
 <span class="sd">            and the template pdb structure.</span>
