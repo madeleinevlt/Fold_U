@@ -1,14 +1,17 @@
 #! /usr/bin/env python3
 # -*- coding: utf-8 -*-
-# """
-# .. module:: benchmarking
-#    :synopsis: This module runs the program "fold_u" on all of the benchmarks. It then generates
-#               plots to visualize the contribution of each and every score to the re-ranking of
-#               models/templates.
-#               Three plots are generated, one for each structure type of benchmark
-#               "Fold", "Superfamily" and "Family".
-# """
+
 """
+    This module runs the program "fold_u" on all of the benchmarks (data/foldrec/*) IF their results
+    do not already exist respectively (checks if scores.csv is generated in
+    results/foldrec_name/scores.csv). It then generates plots to visualize the contribution of each
+    and every score to the re-ranking of models/templates. Three plots are generated, one for each
+    structure type of benchmark "Fold", "Superfamily" and "Family". You can choose to see the
+    statistics for one particular score, or all scores combined (summed and normalized), or all the
+    scores at the same time.
+    A table is also printed in the terminal for the TOP N statistics, presenting the number and
+    percentage of benchmarks for the TOP N found.
+
     Usage:
         ./script/benchmarking.py [--nb_templates NUM] [--output PATH] [--dssp PATH] [--sscore SCORE]
                                  [--cpu NUM]
@@ -24,9 +27,8 @@
                                               binary [default: /usr/local/bin/mkdssp]
         -s SCORE, --sscore SCORE              Score for which you wish to see the statistics:
                                               "alignment", "threading", "modeller",
-                                              "secondary_structure", "solvent_access" or all of them
-                                              at once: "sum_scores".
-                                              [default: sum_scores]
+                                              "secondary_structure", "solvent_access", "sum_scores",
+                                              or all of them at once: "all" [default: all]
         -c NUM, --cpu NUM                     Number of cpus to use for parallelisation
                                               [default: 2]
 """
@@ -83,7 +85,7 @@ def plot_benchmark(output_path, struct, scores, rank, benchmarking_scores, selec
     os.makedirs(output_path, exist_ok=True)
     plt.figure(num=struct)  # Window's name
     # Plot all scores
-    if selected_score == "sum_scores":
+    if selected_score == "all":
         ali_struct = benchmarking_scores[scores[0]][struct].values
         thr_struct = benchmarking_scores[scores[1]][struct].values
         mod_struct = benchmarking_scores[scores[2]][struct].values
@@ -103,6 +105,15 @@ def plot_benchmark(output_path, struct, scores, rank, benchmarking_scores, selec
         plt.xlabel("rank")
         plt.legend(loc="lower right")
         plt.savefig(output_path + "/" + struct + "_plot.png")
+    elif selected_score == "sum_scores":
+        score_struct = benchmarking_scores[selected_score][struct].values
+        plt.plot(rank, score_struct, "b", label=selected_score)
+        plt.plot([0, len(score_struct)], [0, max(score_struct)], "k", label="random")
+        plt.title(selected_score + " score using " + struct + " benchmarks")
+        plt.ylabel("Benchmark")
+        plt.xlabel("rank")
+        plt.legend(loc="lower right")
+        plt.savefig(output_path + "/" + selected_score + "_" + struct + "_plot.png")
     # Plot scores individually
     else:
         score_struct = benchmarking_scores[selected_score][struct].values
