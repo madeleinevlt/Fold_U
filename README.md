@@ -183,7 +183,6 @@ top100  0.0/1.0     4.0/6.0     8.0/13.0
 
 #### Plots
 <p align="center">
-  <img width="425" src="results/top_n/all_Family_plot.png" alt="Family"/>
   <img width="425" src="results/top_n/all_Superfamily_plot.png" alt="Superfamily"/>
   <img width="425" src="results/top_n/all_Fold_plot.png" alt="Fold"/>
 </p>
@@ -208,7 +207,7 @@ We are master students in bioinformatics at Paris Diderot University.
 
 Thanks to [Maïté Cretin](https://www.linkedin.com/in/maitewho/) for the nice logo.
 
-Thanks to team 1 and team 2 for generating to us multiple alignment files (`data/aln`)
+Thanks to team 1 and team 2 for generating to us multiple alignment files (`data/aln`).
 
 ## License
 
