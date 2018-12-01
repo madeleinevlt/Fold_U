@@ -183,9 +183,9 @@ top100  0.0/1.0     4.0/6.0     8.0/13.0
 
 #### Plots
 <p align="center">
-  <img width="425" src="results/top_n/Family_plot.png" alt="Family"/>
-  <img width="425" src="results/top_n/Superfamily_plot.png" alt="Superfamily"/>
-  <img width="425" src="results/top_n/Fold_plot.png" alt="Fold"/>
+  <img width="425" src="results/top_n/all_Family_plot.png" alt="Family"/>
+  <img width="425" src="results/top_n/all_Superfamily_plot.png" alt="Superfamily"/>
+  <img width="425" src="results/top_n/all_Fold_plot.png" alt="Fold"/>
 </p>
 
 
