@@ -38,9 +38,12 @@ class Residue:
 
     def calculate_distance(self, residue, carbon):
         """
-            Calculate Euclidian distance between two residues with THE most efficient method.
+            Calculate Euclidian distance between two residues with THE most efficient method, the
+            Einstein summation convention with *numpy.einsum*.
 
-            :math: `distance = \\sqrt{(x_a-x_b)^2+(y_a-y_b)^2+(z_a-z_b)^2}`
+            .. math::
+
+               distance = \sqrt{(x_a-x_b)^2+(y_a-y_b)^2+(z_a-z_b)^2}
 
             Args:
                 residue (object): An object of the Residue class.

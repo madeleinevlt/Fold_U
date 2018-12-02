@@ -116,7 +116,7 @@ class Template:
                             nb_atoms = 0
 
     def reindex_pdb_by_index(self, start_index=1, pdb_txt=''):
-        '''
+        """
         Original code from: https://zhanglab.ccmb.med.umich.edu/reindex_pdb/reindex_pdb.py
         Reindex residue number of PDB format text
 
@@ -126,7 +126,7 @@ class Template:
 
         Returns:
             str: Text of the reindexed PDB
-        '''
+        """
         pdb_txt_reindex = ''
         current_old_index = ''  # residue number in origin PDB
         warn_chain_id = ''  # warning about new chain ID
@@ -162,8 +162,9 @@ class Template:
         return pdb_txt_reindex
 
     def reindex_pdb(self, start_index, pdb_path, clean=True):
-        '''
+        """
             Original code from: https://zhanglab.ccmb.med.umich.edu/reindex_pdb/reindex_pdb.py
+            
             * Parse PDB file
             * Reindex it according to start index
             * Write the new reindexed PDB
@@ -171,7 +172,7 @@ class Template:
             Args:
                 start_index (int): Index of first residue
                 pdb_path (str): Path to the directory containing the PDB to reindex
-        '''
+        """
         pdb_file = pdb_path + "/" + self.pdb + ".atm"
         f_in = open(pdb_file, 'rU')
         pdb_txt = ''

@@ -225,12 +225,15 @@ def convert_aln_file(aln_file, aln_file_clustal):
 
 def predict_top_contacts(aln_file, index_list):
     """
-       Extract N tops couplings based on co_evolution score. co_evolution score
-       is calculated between two non-consecutive amino acids by ccmpred based on
-       MSA alignment. Co_evolution score measures co-occurence of a pair of amino
-       acid in ortholog sequences. Two amino acid have co-evoluated if the
-       occurence of one of this amino never occur whithout the other.
-       Nb top contacts = length(query)/2
+        Extract N tops couplings based on co_evolution score. co_evolution score
+        is calculated between two non-consecutive amino acids by CCMPRED tool based on
+        MSA multiple alignment. Co_evolution score measures co-occurence of a pair of amino
+        acids in ortholog sequences. Two amino acids have co-evoluated if the
+        occurence of one of them never occur whithout the other.
+
+        .. math::
+
+          Nb\_top\_contacts = {length(query) \over 2}
 
         Args:
             aln_file (str): Multiple alignement file (clustal format).

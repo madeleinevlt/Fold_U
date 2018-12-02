@@ -191,9 +191,12 @@
 
 <div class="viewcode-block" id="Residue.calculate_distance"><a class="viewcode-back" href="../../residue.html#src.residue.Residue.calculate_distance">[docs]</a>    <span class="k">def</span> <span class="nf">calculate_distance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">residue</span><span class="p">,</span> <span class="n">carbon</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">            Calculate Euclidian distance between two residues with THE most efficient method.</span>
+<span class="sd">            Calculate Euclidian distance between two residues with THE most efficient method, the</span>
+<span class="sd">            Einstein summation convention with *numpy.einsum*.</span>
 
-<span class="sd">            :math: `distance = \\sqrt{(x_a-x_b)^2+(y_a-y_b)^2+(z_a-z_b)^2}`</span>
+<span class="sd">            .. math::</span>
+
+<span class="sd">               distance = \sqrt{(x_a-x_b)^2+(y_a-y_b)^2+(z_a-z_b)^2}</span>
 
 <span class="sd">            Args:</span>
 <span class="sd">                residue (object): An object of the Residue class.</span>

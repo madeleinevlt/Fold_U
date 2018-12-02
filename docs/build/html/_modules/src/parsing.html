@@ -378,12 +378,15 @@
 
 <div class="viewcode-block" id="predict_top_contacts"><a class="viewcode-back" href="../../parsing.html#src.parsing.predict_top_contacts">[docs]</a><span class="k">def</span> <span class="nf">predict_top_contacts</span><span class="p">(</span><span class="n">aln_file</span><span class="p">,</span> <span class="n">index_list</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">       Extract N tops couplings based on co_evolution score. co_evolution score</span>
-<span class="sd">       is calculated between two non-consecutive amino acids by ccmpred based on</span>
-<span class="sd">       MSA alignment. Co_evolution score measures co-occurence of a pair of amino</span>
-<span class="sd">       acid in ortholog sequences. Two amino acid have co-evoluated if the</span>
-<span class="sd">       occurence of one of this amino never occur whithout the other.</span>
-<span class="sd">       Nb top contacts = length(query)/2</span>
+<span class="sd">        Extract N tops couplings based on co_evolution score. co_evolution score</span>
+<span class="sd">        is calculated between two non-consecutive amino acids by CCMPRED tool based on</span>
+<span class="sd">        MSA multiple alignment. Co_evolution score measures co-occurence of a pair of amino</span>
+<span class="sd">        acids in ortholog sequences. Two amino acids have co-evoluated if the</span>
+<span class="sd">        occurence of one of them never occur whithout the other.</span>
+
+<span class="sd">        .. math::</span>
+
+<span class="sd">          Nb\_top\_contacts = {length(query) \over 2}</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            aln_file (str): Multiple alignement file (clustal format).</span>
