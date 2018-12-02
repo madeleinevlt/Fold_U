@@ -94,8 +94,8 @@ The `scores.csv` and the **top 10 pdb structures** of the His_biosynth query seq
 
 Usage:
     ./fold_u FOLDREC_FILE ALN_FILE [--nb_templates NUM] [--nb_pdb NUM] [--output PATH]
-                          [--metafold FILE] [--dope FILE] [--benchmark FILE] [--aln_file FILE]
-                          [--dssp PATH] [--cpu NUM]
+                                   [--metafold FILE] [--dope FILE] [--benchmark FILE] [--aln_file FILE]
+                                   [--dssp PATH] [--cpu NUM]
 
 Arguments:
     FOLDREC_FILE                          N profile * profile alignment and
@@ -191,7 +191,7 @@ top100  0.0/1.0     4.0/6.0     8.0/13.0
 
 ## Documentation
 
-The documentation of our program is generated with Sphinx and and built on [Read The Docs](https://fold-u.readthedocs.io/en/latest).
+The documentation of our program is generated with Sphinx and and built on [Read The Docs](https://fold-u.readthedocs.io/en/latest/?badge=latest).
 
 ## Authors
 
