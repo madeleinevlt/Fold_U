@@ -69,7 +69,7 @@ def check_args():
         exit(err)
 
 
-def plot_benchmark(output_path, scores, rank, benchmarking_scores, selected_score):
+def plot_benchmark(output_path, struct, scores, rank, benchmarking_scores, selected_score):
     """
         Create one plot for one benchmark type for all the foldrec files.
 
@@ -85,49 +85,49 @@ def plot_benchmark(output_path, scores, rank, benchmarking_scores, selected_scor
 
     """
     os.makedirs(output_path, exist_ok=True)
-    plt.figure(num="Enrichment")  # Window's name
+    plt.figure(num=struct)  # Window's name
     # Plot all scores
     if selected_score == "all":
-        ali = benchmarking_scores[scores[0]].values
-        thr = benchmarking_scores[scores[1]].values
-        mod = benchmarking_scores[scores[2]].values
-        ss = benchmarking_scores[scores[3]].values
-        acc = benchmarking_scores[scores[4]].values
-        co_ev = benchmarking_scores[scores[5]].values
-        sum = benchmarking_scores[scores[6]].values
+        ali_struct = benchmarking_scores[scores[0]][struct].values
+        thr_struct = benchmarking_scores[scores[1]][struct].values
+        mod_struct = benchmarking_scores[scores[2]][struct].values
+        ss_struct = benchmarking_scores[scores[3]][struct].values
+        acc_struct = benchmarking_scores[scores[4]][struct].values
+        co_ev_struct = benchmarking_scores[scores[5]][struct].values
+        sum_struct = benchmarking_scores[scores[6]][struct].values
 
-        plt.plot(rank, ali, "b", label=scores[0])
-        plt.plot(rank, thr, "#ffa201", label=scores[1])
-        plt.plot(rank, mod, "#EE82EE", label=scores[2])
-        plt.plot(rank, ss, "#00B200", label=scores[3])
-        plt.plot(rank, acc, "#7a9a91", label=scores[4])
-        plt.plot(rank, co_ev, "#660033", label=scores[5])
-        plt.plot(rank, sum, "r", label=scores[6])
-        plt.plot([0, len(ali)], [0, max(ali)], "k", label="random")
-        plt.title("Enrichment plot")
+        plt.plot(rank, ali_struct, "b", label=scores[0])
+        plt.plot(rank, thr_struct, "#ffa201", label=scores[1])
+        plt.plot(rank, mod_struct, "#EE82EE", label=scores[2])
+        plt.plot(rank, ss_struct, "#00B200", label=scores[3])
+        plt.plot(rank, acc_struct, "#7a9a91", label=scores[4])
+        plt.plot(rank, co_ev_struct, "#660033", label=scores[5])
+        plt.plot(rank, sum_struct, "r", label=scores[6])
+        plt.plot([0, len(ali_struct)], [0, max(ali_struct)], "k", label="random")
+        plt.title("Global scores comparison using " + struct + " benchmarks")
         plt.ylabel("Benchmark")
         plt.xlabel("rank")
         plt.legend(loc="lower right")
-        plt.savefig(output_path + "/" + "all_scores_plot.png")
+        plt.savefig(output_path + "/" + "all_" + struct + "_plot.png")
     elif selected_score == "sum_scores":
-        score = benchmarking_scores[selected_score].values
-        plt.plot(rank, score, "b", label=selected_score)
-        plt.plot([0, len(score)], [0, max(score)], "k", label="random")
-        plt.title("Enrichment plot of " + selected_score + " score")
+        score_struct = benchmarking_scores[selected_score][struct].values
+        plt.plot(rank, score_struct, "b", label=selected_score)
+        plt.plot([0, len(score_struct)], [0, max(score_struct)], "k", label="random")
+        plt.title(selected_score + " score using " + struct + " benchmarks")
         plt.ylabel("Benchmark")
         plt.xlabel("rank")
         plt.legend(loc="lower right")
-        plt.savefig(output_path + "/" + selected_score + "_plot.png")
+        plt.savefig(output_path + "/" + selected_score + "_" + struct + "_plot.png")
     # Plot scores individually
     else:
-        score = benchmarking_scores[selected_score].values
-        plt.plot(rank, score, "b", label=selected_score)
-        plt.plot([0, len(score)], [0, max(score)], "k", label="random")
-        plt.title("Enrichment plot of " + selected_score + " score")
+        score_struct = benchmarking_scores[selected_score][struct].values
+        plt.plot(rank, score_struct, "b", label=selected_score)
+        plt.plot([0, len(score_struct)], [0, max(score_struct)], "k", label="random")
+        plt.title(selected_score + " score using " + struct + " benchmarks")
         plt.ylabel("Benchmark")
         plt.xlabel("rank")
         plt.legend(loc="lower right")
-        plt.savefig(output_path + "/" + selected_score + "_plot.png")
+        plt.savefig(output_path + "/" + selected_score + "_" + struct + "_plot.png")
 
 
 def top_n(structures, scores, top, benchmarking_scores):
@@ -148,12 +148,13 @@ def top_n(structures, scores, top, benchmarking_scores):
             a str "top_results" table summarizing the top results
 
     """
-    rank = 0
-    max_rank = 0
+    rank = {}
+    max_rank = {}
     if scores == "all":
         scores = "sum_scores"
-    rank = benchmarking_scores[scores][top-1]
-    max_rank = max(benchmarking_scores[scores])
+    for struct in structures:
+        rank[struct] = benchmarking_scores[scores][struct][top-1]
+        max_rank[struct] = max(benchmarking_scores[scores][struct])
     line1 = "top{0}\t{1}/{2}\t\t{3}/{4}\t\t{5}/{6}\n".format(top,
                                                              rank["Family"],
                                                              max_rank["Family"],
@@ -195,9 +196,8 @@ if __name__ == "__main__":
     # A dictionary of pandas DataFrames is created for each score
     # Each DataFrame will contain the cumulative sum of benchmarks for each structure (= 3 columns)
     BENCHMARKING_SCORES = {}
-    N = 405
     for score in SCORES:
-        BENCHMARKING_SCORES[score] = pd.Series([0]*N)
+        BENCHMARKING_SCORES[score] = pd.DataFrame(np.zeros((405, 3)), columns=STRUCTURES)
     # For each query,
     ALL_FOLDRECS = os.listdir("data/foldrec")
     print("Processing all benchmarks ...\n")
@@ -218,16 +218,18 @@ if __name__ == "__main__":
         for score in SCORES:
             # The DataFrame is sorted by the current score
             query_score = query_scores.sort_values(by=score, ascending=False)
-            structures_count = 0
+            # Initialization of the dictionary of counts
+            structures_count = {}
+            for structure in STRUCTURES:
+                structures_count[structure] = 0
             # Cumulative sum of benchmark according to the structure
             for i, struct_type in enumerate(query_score["benchmark"]):
-                print(structures_count)
-                if struct_type in STRUCTURES:
-                    structures_count += 1
-                BENCHMARKING_SCORES[score][i+1] += structures_count
-            print('\n')
+                for structure in STRUCTURES:
+                    if struct_type == structure:
+                        structures_count[structure] += 1
+                    BENCHMARKING_SCORES[score][structure][i+1] += structures_count[structure]
 
-    RANK = [i for i in BENCHMARKING_SCORES[SCORES[0]].index]
+    RANK = [i for i in BENCHMARKING_SCORES[SCORES[0]][STRUCTURES[0]].index]
 
     # plot settings
     COLORS = cycler('color', ['#EE6666', '#3388BB', '#9988DD',
@@ -240,7 +242,8 @@ if __name__ == "__main__":
     plt.rc('patch', edgecolor='#E6E6E6')
     plt.rc('lines', linewidth=1.5)
     print("\nTotal runtime: {} seconds".format(str(datetime.now() - START_TIME)))
-    plot_benchmark(OUTPUT_PATH, SCORES, RANK, BENCHMARKING_SCORES, SELECTED_SCORE)
+    for structure in STRUCTURES:
+        plot_benchmark(OUTPUT_PATH, structure, SCORES, RANK, BENCHMARKING_SCORES, SELECTED_SCORE)
     plt.show()
     print("\nThe plots are stored in " + OUTPUT_PATH + "\n")
     N_TOP_N = [5]
