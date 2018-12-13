@@ -38,7 +38,7 @@ def parse_metafold(metafold_file):
     return metafold_dict
 
 
-def parse_foldrec(foldrec_file, nb_templates, metafold_dict):
+def parse_foldrec(foldrec_file, metafold_dict):
     """
         Extracts the score, the template name, the query and template sequences for
         the first n alignments from a file containing N profil-profil alignments and
@@ -48,8 +48,6 @@ def parse_foldrec(foldrec_file, nb_templates, metafold_dict):
         Args:
             foldrec_file (str): The file containing N profil-profil alignments and their
                                 corresponding scores.
-            nb_templates (int): Number of alignments to retrieve from the file and chosen
-                                by the user.
             metafold_dict (dict): A dictionary with key = template name
                                         and value = pdb file.
 
@@ -71,9 +69,6 @@ def parse_foldrec(foldrec_file, nb_templates, metafold_dict):
         query_reg_count = 0
         template_reg_count = 0
         for line in file:
-            # The loop is break when the required nb of templates is reached :
-            if count_templates == nb_templates:
-                break
             # Search a regex for the current line :
             num_found = re.search(num_reg, line)
             template_name_found = re.search(template_name_reg, line)
