@@ -3,9 +3,8 @@
 
 """
     Usage:
-        ./fold_u FOLDREC_FILE ALN_FILE [--nb_templates NUM] [--nb_pdb NUM] [--output PATH]
-                              [--metafold FILE] [--dope FILE] [--benchmark FILE] [--aln_file FILE]
-                              [--dssp PATH] [--cpu NUM]
+        ./fold_u FOLDREC_FILE ALN_FILE [--nb_pdb NUM] [--output PATH] [--dssp PATH] [--cpu NUM]
+                                       [--metafold FILE] [--dope FILE] [--benchmark FILE]
 
     Arguments:
         FOLDREC_FILE                          N profile * profile alignment and
@@ -14,24 +13,23 @@
 
     Options:
         -h, --help                            Show this
-        -n NUM, --nb_templates NUM            First n templates to retrieve from
-                                              the foldrec file [default: 405]
         -p NUM, --nb_pdb NUM                  Number of pdb to create
                                               [default: 10]
         -o PATH, --output PATH                Path to the directory containing
                                               the result files (scores and pdb)
                                               [default: ./results]
         -a PATH, --dssp PATH                  Path to the dssp software
-                                              binary [default: /usr/local/bin/mkdssp]
+                                              binary [default: /usr/bin/mkdssp]
+        -c NUM, --cpu NUM                     Number of cpus to use for parallelisation. By default
+                                              using all available (0).
+                                              [default: 0]                                              
         -m FILE, --metafold FILE              Path to the metafold.list file
                                               [default: data/metafold.list]
         -d FILE, --dope FILE                  Path to the dope.par file
                                               [default: data/dope.par]
         -b FILE, --benchmark FILE             Path to the benchmark.list file
                                               [default: data/benchmark.list]
-        -c NUM, --cpu NUM                     Number of cpus to use for parallelisation. By default
-                                              using all available (0).
-                                              [default: 0]
+
 """
 
 # Third-party modules
@@ -58,8 +56,6 @@ def check_args():
         'FOLDREC_FILE': Use(open, error='FOLDREC_FILE should be readable'),
         'ALN_FILE': Use(open, error='ALN_FILE should be readable'),
         '--metafold': Use(open, error='METAFOLD_FILE should be readable'),
-        '--nb_templates': And(Use(int), lambda n: 1 <= n <= 405,
-                              error='--nb_templates=NUM should be integer 1 <= N <= 405'),
         '--nb_pdb': And(Use(int), lambda n: 1 <= n <= 405,
                         error='--nb_pdb=NUM should be integer 1 <= N <= 405'),
         '--dssp': Use(open, error='dssp/mkdssp should be readable'),
@@ -90,8 +86,6 @@ if __name__ == "__main__":
     QUERY_NAME = FOLDREC_FILE.split("/")[-1].split(".")[0]
     # Get the alignment file
     ALN_FILE = ARGUMENTS["ALN_FILE"]
-    # Process the first n templates only
-    NB_TEMPLATES = int(ARGUMENTS["--nb_templates"])
     # Create the first n pdb templates
     NB_PDB = int(ARGUMENTS["--nb_pdb"])
     # METAFOLD file
@@ -115,7 +109,7 @@ if __name__ == "__main__":
     METAFOLD_DICT = parsing.parse_metafold(METAFOLD_FILE)
     # Parse Foldrec file
     print("Parsing foldrec (" + FOLDREC_FILE + ")")
-    ALIGNMENT_DICT = parsing.parse_foldrec(FOLDREC_FILE, NB_TEMPLATES, METAFOLD_DICT)
+    ALIGNMENT_DICT = parsing.parse_foldrec(FOLDREC_FILE, METAFOLD_DICT)
     # Set the benchmark of the query
     print("Parsing benchmark.list (" + BENCHMARK_FILE + ")")
     parsing.parse_benchmark(QUERY_NAME, BENCHMARK_FILE, ALIGNMENT_DICT)
