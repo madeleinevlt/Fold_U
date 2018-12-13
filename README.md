@@ -206,9 +206,9 @@ top 350   1/1       6/6           13/13      20/20
 ```
 
 
-#### Plots
+#### Plot
 <p align="center">
-  <img width="425" src="results/plots/all_scores_plot.png" alt="Enrichment"/>
+  <img width="500" src="results/plots/all_scores_plot.png" alt="Enrichment"/>
 </p>
 
 
