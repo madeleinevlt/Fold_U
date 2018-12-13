@@ -265,9 +265,10 @@ class Alignment:
         true_pos = 0
         for top_position in top_couplings_dict.values():
             dist = self.calculate_distance(top_position)
-            if (isinstance(dist, int) and dist < 8)\
-            or (isinstance(dist, float) and dist < 8):
-                true_pos += 1
+            if dist != -1:
+                if (isinstance(dist, int) and dist < 8)\
+                or (isinstance(dist, float) and dist < 8):
+                    true_pos += 1
         # Spread of the values
         contact_score = np.log10(1+true_pos)
         return contact_score
@@ -278,7 +279,7 @@ class Alignment:
             and the template pdb structure.
 
             Args:
-                naccess_bin (String): Path to the naccess binary.
+                dssp_bin (String): Path to the dssp binary.
                 threshold cutoff (int): Cutoff for relative accessibility residue values.
 
             Returns:
@@ -294,15 +295,18 @@ class Alignment:
         dssp_pred_model = DSSP(pred_model, pred_model_pdb, dssp=dssp_bin_path)
         dssp_template_model = DSSP(template_model, template_pdb, dssp=dssp_bin_path)
         # Parse the DSSP output to retrieve the relative % of solvant accessible area for each CA.
-        # Stock results in: dict = {res_index: res_rsa}
-        rsa_pred_model = {dssp_pred_model[key][0]: dssp_pred_model[key][3]
-                          for key in dssp_pred_model.keys()}
-        rsa_template_model = {dssp_template_model[key][0]: dssp_template_model[key][3]
-                              for key in dssp_template_model.keys()}
-
+        #get alignement index
+        query_index_ali = [index for index, residue in enumerate(self.query.residues) if str(residue) != "-"]
+        template_index_ali = [index for index, residue in enumerate(self.template.residues) if str(residue) != "-"]
+        #attribuate alignemnt index
+        rsa_pred_model = dict(zip(query_index_ali, [dssp_pred_model[key][3]
+            for key in dssp_pred_model.keys()]))
+        rsa_template_model = dict(zip(template_index_ali, [dssp_template_model[key][3]
+            for key in dssp_template_model.keys()]))
         # Keep only residues under a relative accessibilities threshold: buried residues
         pred_access_residues = keep_accessible_residues(rsa_pred_model, threshold)
         template_access_residues = keep_accessible_residues(rsa_template_model, threshold)
+
         # Get the common buried residues
         common_residues_len = len(set(pred_access_residues).intersection(template_access_residues))
         # Normalization
