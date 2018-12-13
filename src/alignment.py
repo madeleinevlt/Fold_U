@@ -310,7 +310,7 @@ class Alignment:
         # Get the common buried residues
         common_residues_len = len(set(pred_access_residues).intersection(template_access_residues))
         # Normalization
-        return common_residues_len/len(pred_access_residues)
+        return common_residues_len/len(query_index_ali)
 
     def write_alignment_for_modeller(self, ali_path):
         """
