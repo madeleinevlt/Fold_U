@@ -84,7 +84,7 @@ Or you can download the [latest release](https://github.com/cmbi/xssp/releases/l
 
 The `scores.csv` and the **top 10 pdb structures** of the His_biosynth query sequence are stored in `results/His_biosynth` folder.
 ```
-./fold_u data/foldrec/His_biosynth.foldrec data/aln/His_biosynth.fasta -o results/His_biosynth --dssp /usr/bin/mkdssp
+./fold_u data/foldrec/His_biosynth.foldrec data/aln/His_biosynth.fasta -o results/His_biosynth
 ```
 
 #### Get help
@@ -125,7 +125,7 @@ Options:
 `script/benchmarking.py` runs the `fold_u` program for each foldrec if results are not still generated. It returns a `results/plots` folder containing the generated plots and prints the **top N tables** in the terminal.
 
 ```
-./script/benchmarking.py --dssp /usr/bin/mkdssp
+./script/benchmarking.py
 ```
 
 #### Get help
