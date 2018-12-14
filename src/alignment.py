@@ -223,38 +223,68 @@ class Alignment:
             print(str(err), "\n\nError ss_score: the query seems to be of size null")
         return score
 
-    def calculate_distance(self, top_positions):
-        '''
-        Calculate distance for the residues at top_positions input
-        '''
-        query_nogaps_dict = {residue : position for position, residue in enumerate(self.query.residues) if str(residue) != "-"}
-        query_nogaps_dict_reindexed = dict(zip(list(range(self.query.first, self.query.first + len(query_nogaps_dict)+1)),
-         list(query_nogaps_dict.keys())))
-        template = self.template.residues
+        def calculate_distance_matrix(self, size):
+        """
+            Calculate the matrix of distances between the all residues (beta-carbon or alpha-carbon
+            otherwise) of the query sequence. Using the coordinates of the template sequence.
+            The distance calculation is optimized.
+            Args:
+                size (int): Real size of the query sequence.
+            Returns:
+                2D numpy matrix: The distance matrix between pairs of residue of the query sequence.
+        """
+        query_size = self.query.get_size()
+        distance = np.empty((size, size), dtype=object)
+        # We fill the matrix with "x" when the alignment between the query and the template is not
+        # starting by the first residue of the query sequence
+        pos = 0
+        while pos < self.query.first-1:
+            distance[pos, (pos+1):] = "x"
+            pos += 1
 
-
-        #find template index of top_couplings_positions
-        res_pos1 = query_nogaps_dict_reindexed.get(top_positions[0]) #get residue associated with top position 1
-        res_pos2 = query_nogaps_dict_reindexed.get(top_positions[1]) #get residue associated with top position 2
-        #if top_position exist in alignment, get index_template
-        if res_pos1 != None and res_pos2 != None:
-            index_pos1 = query_nogaps_dict.get(res_pos1)
-            index_pos2 = query_nogaps_dict.get(res_pos2)
-            #if top positions are not gaps, compute distance
-            if str(template[index_pos1]) != "-" and str(template[index_pos2]) != "-":
-                if template[index_pos1].cb_atom.coords != None\
-                    and template[index_pos2].cb_atom.coords != None:
-                    return(template[index_pos1].calculate_distance(template[index_pos2], "CB"))
-                else:
-                    return(template[index_pos1].calculate_distance(template[index_pos2], "CA"))
-        else:
-            return(-1)
+        index_i = 0
+        for dist_i in range(pos, self.query.last):
+            # Until there is a gap in the aligned query, we pass to the next index
+            while index_i < query_size and self.query.residues[index_i].name == "-":
+                index_i += 1
+            # If there is a gap in the aligned template, we put an "x" and pass to the next index
+            if index_i < query_size and self.template.residues[index_i].name == "-":
+                distance[dist_i, (dist_i+1):] = "x"
+                index_i += 1
+                continue
+            index_j = index_i + 1
+            for dist_j in range(dist_i+1, self.query.last):
+                # Until there is a gap in the aligned query, we pass to the next index
+                while index_j < query_size and self.query.residues[index_j].name == "-":
+                    index_j += 1
+                #If there is a gap in the aligned template, we put an "x" and pass to the next index
+                if index_j < query_size and self.template.residues[index_j].name == "-":
+                    distance[dist_j, (dist_j+1):] = "x"
+                    index_j += 1
+                    continue
+                if distance[dist_i, dist_j] != "x":
+                    # Distance between beta-carbon (alpha-carbon otherwise) is calculated
+                    if self.template.residues[index_i].cb_atom.coords != None\
+                            and self.template.residues[index_j].cb_atom.coords != None:
+                        distance[dist_i, dist_j] = self.template.residues[index_i]\
+                            .calculate_distance(self.template.residues[index_j], "CB")
+                    else:
+                        distance[dist_i, dist_j] = self.template.residues[index_i]\
+                            .calculate_distance(self.template.residues[index_j], "CA")
+                index_j += 1
+            index_i += 1
+        pos = dist_i
+        # As previously, we fill the matrix with "x" when the alignment between the query and
+        # the template is not ending by the last residue of the query sequence
+        while pos < size-1:
+            distance[:pos, (pos+1):] = "x"
+            pos += 1
+        return distance
 
     def calculate_coevolution_score(self, index_list, top_couplings_dict):
         """
             Compare top contacts calculated with ccmpred in the query with corresponding calculated
             distances.
-
             Args:
                 top_couplings_dict(dict): top ranking couplings indexes in the query
                 distance_matrix(float): distance matrix of the query against itself
@@ -262,14 +292,16 @@ class Alignment:
                 contact_score(float):log10(1+ number of true contacts between ccmpred/distance
                 matrix).
         """
+        distance_matrix = self.calculate_distance_matrix(len(index_list))
         true_pos = 0
         for top_position in top_couplings_dict.values():
-            dist = self.calculate_distance(top_position)
-            if dist != -1:
-                if (isinstance(dist, int) and dist < 8)\
-                or (isinstance(dist, float) and dist < 8):
-                    true_pos += 1
-        # Spread of the values
+            #as matrix is triange, get matrix [i,j]
+            dist = distance_matrix[top_position[0], top_position[1]]
+            dist_inv = distance_matrix[top_position[1], top_position[0]]
+            if (isinstance(dist, int) and dist < 8)\
+            or (isinstance(dist_inv, int) and dist_inv < 8):
+                true_pos += 1
+        # Spread of the values
         contact_score = np.log10(1+true_pos)
         return contact_score
 
