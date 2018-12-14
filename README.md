@@ -84,7 +84,7 @@ Or you can download the [latest release](https://github.com/cmbi/xssp/releases/l
 
 The `scores.csv` and the **top 10 pdb structures** of the His_biosynth query sequence are stored in `results/His_biosynth` folder.
 ```
-./fold_u data/foldrec/His_biosynth.foldrec data/aln/His_biosynth.fasta -o results/His_biosynth --dssp /usr/bin/mkdssp
+./fold_u data/foldrec/His_biosynth.foldrec data/aln/His_biosynth.fasta -o results/His_biosynth
 ```
 
 #### Get help
@@ -93,9 +93,8 @@ The `scores.csv` and the **top 10 pdb structures** of the His_biosynth query seq
 ./fold_u -h
 
 Usage:
-    ./fold_u FOLDREC_FILE ALN_FILE [--nb_templates NUM] [--nb_pdb NUM] [--output PATH]
-                                   [--metafold FILE] [--dope FILE] [--benchmark FILE] [--aln_file FILE]
-                                   [--dssp PATH] [--cpu NUM]
+    ./fold_u FOLDREC_FILE ALN_FILE [--nb_pdb NUM] [--output PATH] [--dssp PATH] [--cpu NUM]
+                                   [--metafold FILE] [--dope FILE] [--benchmark FILE]
 
 Arguments:
     FOLDREC_FILE                          N profile * profile alignment and
@@ -104,53 +103,54 @@ Arguments:
 
 Options:
     -h, --help                            Show this
-    -n NUM, --nb_templates NUM            First n templates to retrieve from
-                                          the foldrec file [default: 405]
     -p NUM, --nb_pdb NUM                  Number of pdb to create
                                           [default: 10]
     -o PATH, --output PATH                Path to the directory containing
                                           the result files (scores and pdb)
                                           [default: ./results]
     -a PATH, --dssp PATH                  Path to the dssp software
-                                          binary [default: /usr/local/bin/mkdssp]
+                                          binary [default: /usr/bin/mkdssp]
+    -c NUM, --cpu NUM                     Number of cpus to use for parallelisation. By default
+                                          using all available (0).
+                                          [default: 0]
     -m FILE, --metafold FILE              Path to the metafold.list file
                                           [default: data/metafold.list]
     -d FILE, --dope FILE                  Path to the dope.par file
                                           [default: data/dope.par]
     -b FILE, --benchmark FILE             Path to the benchmark.list file
                                           [default: data/benchmark.list]
-    -c NUM, --cpu NUM                     Number of cpus to use for parallelisation
-                                          [default: 0]
 ```
 ### Run all the queries + Benchmarking
 
-`script/benchmarking.py` runs the `fold_u` program for each foldrec if results are not still generated. It returns a `top_n` folder containing 3 `.png` plots and prints the **top N tables** in the terminal.
+`script/benchmarking.py` runs the `fold_u` program for each foldrec if results are not still generated. It returns a `results/plots` folder containing the generated plots and prints the **top N tables** in the terminal.
 
 ```
-./script/benchmarking.py --dssp /usr/bin/mkdssp
+./script/benchmarking.py
 ```
 
 #### Get help
 
 ```
 ./script/benchmarking.py -h
+
 Usage:
-    ./script/benchmarking.py [--nb_templates NUM] [--output PATH] [--dssp PATH] [--sscore SCORE]
-                             [--cpu NUM]
+    ./script/benchmarking.py [--selected_score SCORE] [--dssp PATH] [--cpu NUM] [--output PATH]   
 
 Options:
     -h, --help                            Show this
-    -n NUM, --nb_templates NUM            First n templates with the best
-                                          score [default: 100]
-    -o PATH, --output PATH                Path to the directory containing
-                                          the result files (scores and plot)
-                                          [default: ./results/top_n]
+    -s SCORE, --selected_score SCORE      Score for which you wish to see the statistics:
+                                          "alignment", "threading", "modeller",
+                                          "secondary_structure", "solvent_access"
+                                          or "sum_scores",
+                                          or all of them at once: "all" [default: all]
     -d PATH, --dssp PATH                  Path to the dssp software
                                           binary [default: /usr/local/bin/mkdssp]
-    -s SCORE, --sscore SCORE              selected score to calculate top_N
-                                          [default: sum_scores]
-    -c NUM, --cpu NUM                     Number of cpus to use for parallelisation
+    -c NUM, --cpu NUM                     Number of cpus to use for parallelisation. By default
+                                          using all available (0).
                                           [default: 0]
+    -o PATH, --output PATH                Path to the directory containing
+                                          the result files (scores and plot)
+                                          [default: ./results/plots]
 ```
 
 ### Results
@@ -159,32 +159,56 @@ Options:
 
 #### Top N tables
 ```
-        Family      Superfamily Fold
+Table summarizing the top N results.
 
-top5    0.0/1.0     1.0/6.0     2.0/13.0
-         0.00 %     16.67 %      15.38 %
+          Family    Superfamily   Fold       Total
 
-----------------------------------------
+top 5     0/1       1/6           2/13       3/20
+          0.0  %    16.7 %        15.4 %     15.0 %
+-----------------------------------------------------
+top 10    0/1       2/6           2/13       4/20
+          0.0  %    33.3 %        15.4 %     20.0 %
+-----------------------------------------------------
+top 15    0/1       3/6           2/13       5/20
+          0.0  %    50.0 %        15.4 %     25.0 %
+-----------------------------------------------------
+top 20    0/1       3/6           2/13       5/20
+          0.0  %    50.0 %        15.4 %     25.0 %
+-----------------------------------------------------
+top 25    0/1       3/6           3/13       6/20
+          0.0  %    50.0 %        23.1 %     30.0 %
+-----------------------------------------------------
+top 50    0/1       4/6           6/13       10/20
+          0.0  %    66.7 %        46.2 %     50.0 %
+-----------------------------------------------------
+top 75    0/1       4/6           7/13       11/20
+          0.0  %    66.7 %        53.8 %     55.0 %
+-----------------------------------------------------
+top 100   0/1       4/6           8/13       12/20
+          0.0  %    66.7 %        61.5 %     60.0 %
+-----------------------------------------------------
+top 150   0/1       5/6           8/13       13/20
+          0.0  %    83.3 %        61.5 %     65.0 %
+-----------------------------------------------------
+top 200   0/1       5/6           10/13      15/20
+          0.0  %    83.3 %        76.9 %     75.0 %
+-----------------------------------------------------
+top 250   0/1       6/6           11/13      17/20
+          0.0  %    100.0%        84.6 %     85.0 %
+-----------------------------------------------------
+top 300   0/1       6/6           13/13      19/20
+          0.0  %    100.0%        100.0%     95.0 %
+-----------------------------------------------------
+top 350   1/1       6/6           13/13      20/20
+          100.0%    100.0%        100.0%     100.0%
+-----------------------------------------------------
 
-top10   0.0/1.0     2.0/6.0     2.0/13.0
-         0.00 %     33.33 %      15.38 %
-
-----------------------------------------
-
-top50   0.0/1.0     4.0/6.0     6.0/13.0
-         0.00 %     66.67 %      46.15 %
-
-----------------------------------------
-
-top100  0.0/1.0     4.0/6.0     8.0/13.0
-         0.00 %     66.67 %      61.54 %
 ```
 
 
-#### Plots
+#### Plot
 <p align="center">
-  <img width="425" src="results/top_n/all_Superfamily_plot.png" alt="Superfamily"/>
-  <img width="425" src="results/top_n/all_Fold_plot.png" alt="Fold"/>
+  <img width="500" src="results/plots/all_scores_plot.png" alt="Enrichment"/>
 </p>
 
 
