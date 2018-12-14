@@ -105,7 +105,7 @@ def create_benchmarking_scores_dict(scores, structures, dssp_path, nb_proc):
             process = subprocess.Popen(["./fold_u", "data/foldrec/" + query + ".foldrec",
                                         "data/aln/" + query + ".fasta",
                                         "-o", "results/" + query, "--dssp", dssp_path,
-                                        "--cpu", nb_proc], stdout=subprocess.PIPE).communicate()[0]
+                                        "--cpu", str(nb_proc)], stdout=subprocess.PIPE).communicate()[0]
             rows, columns = os.popen('stty size', 'r').read().split()
             print("\n" + "-"*int(columns))
         # Score results are stored in a pandas DataFrame
