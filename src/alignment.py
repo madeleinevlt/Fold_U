@@ -223,7 +223,7 @@ class Alignment:
             print(str(err), "\n\nError ss_score: the query seems to be of size null")
         return score
 
-        def calculate_distance_matrix(self, size):
+    def calculate_distance_matrix(self, size):
         """
             Calculate the matrix of distances between the all residues (beta-carbon or alpha-carbon
             otherwise) of the query sequence. Using the coordinates of the template sequence.
