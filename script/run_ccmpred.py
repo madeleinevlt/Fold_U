@@ -37,7 +37,7 @@ def convert_aln_file(aln_file, aln_file_clustal):
         ["./bin/CCMpred/scripts/convert_alignment.py", aln_file,
          "fasta", aln_file_clustal], stdout=subprocess.PIPE).communicate()[0]
 
-def predict_top_contacts(aln_file, ccmpred_output):
+def generate_ccmpred_result(aln_file, ccmpred_output):
     """
         Extract N tops couplings based on co_evolution score. co_evolution score
         is calculated between two non-consecutive amino acids by CCMPRED tool based on
@@ -80,6 +80,6 @@ if __name__ == "__main__":
         print("Generation of .mat file by CCMPRED for the {} query.".format(query))
         # Convert multiple alignment file from fasta to clustal
         convert_aln_file(FASTA_ALN_FOLDER+"/"+ALN_FILE, ALN_FILE_CLUSTAL)
-        predict_top_contacts(ALN_FILE_CLUSTAL, CCMPRED_OUTPUT)
+        generate_ccmpred_result(ALN_FILE_CLUSTAL, CCMPRED_OUTPUT)
 
     print("\nTotal runtime: {} seconds".format(str(datetime.now() - START_TIME)))

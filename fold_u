@@ -120,7 +120,7 @@ if __name__ == "__main__":
     print("Parsing DOPE (" + DOPE_FILE + ")")
     DOPE_DICT = parsing.parse_dope(DOPE_FILE)
     # Parse CCMPRED result file
-    print("Parsing CCMPRED Top couplings result file (" + CCMPRED_FILE + ")")
+    print("Parsing CCMPRED result file (" + CCMPRED_FILE + ")")
     INDEX_LIST = parsing.get_index_list(CLUSTAL_FILE)
     TOP_COUPLINGS_DICT = parsing.parse_ccmpred_result(CCMPRED_FILE, INDEX_LIST)
 
