@@ -301,9 +301,10 @@ class Alignment:
             #as matrix is triange, get matrix [i,j]
             dist = distance_matrix[top_position[0], top_position[1]]
             dist_inv = distance_matrix[top_position[1], top_position[0]]
-            if (isinstance(dist, int) and dist < 8)\
-            or (isinstance(dist_inv, int) and dist_inv < 8):
+            if (isinstance(dist, float) and dist < 8)\
+            or (isinstance(dist_inv, float) and dist_inv < 8):
                 true_pos += 1
+        
         # Spread of the values
         contact_score = np.log10(1+true_pos)
         return contact_score

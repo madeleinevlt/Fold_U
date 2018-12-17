@@ -210,6 +210,8 @@ def convert_aln_file(aln_file, aln_file_clustal):
     convert = subprocess.Popen(
         ["./bin/CCMpred/scripts/convert_alignment.py", aln_file,
          "fasta", aln_file_clustal], stdout=subprocess.PIPE).communicate()[0]
+
+def get_index_list(aln_file_clustal):
     # First line of this multiple alignment
     with open(aln_file_clustal, "r") as file:
         query_seq = file.readline()[:-1]
@@ -217,8 +219,7 @@ def convert_aln_file(aln_file, aln_file_clustal):
         index_list = [i for i, ele in enumerate(query_seq) if ele != "-"]
     return index_list
 
-
-def predict_top_contacts(aln_file, index_list):
+def predict_top_contacts(aln_file, index_list, query_name):
     """
         Extract N tops couplings based on co_evolution score. co_evolution score
         is calculated between two non-consecutive amino acids by CCMPRED tool based on
@@ -233,6 +234,7 @@ def predict_top_contacts(aln_file, index_list):
         Args:
             aln_file (str): Multiple alignement file (clustal format).
             index_list (list): List of indexes corresponding to amino acids positions in aln file.
+            query_name (str): Name of the query
 
         Returns:
             dict: A dictionary with key = ranking of coupling based on ss_confidence
@@ -240,8 +242,8 @@ def predict_top_contacts(aln_file, index_list):
     """
     # Number of top coupling expected
     ntops = int(len(index_list)/2)
-    contact_output = "data/ccmpred/contact.mat"
-    os.makedirs("data/ccmpred/", exist_ok=True)
+    contact_output = "data/ccmpred/" + query_name + ".mat"
+    os.makedirs(os.path.dirname(contact_output), exist_ok=True)
     # Run ccmpred : Prediction of contacts
     ccmpred_cline = CCMpredCommandline(
         cmd='./bin/CCMpred/bin/ccmpred', alnfile=aln_file, matfile=contact_output)
