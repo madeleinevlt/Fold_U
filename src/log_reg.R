@@ -10,13 +10,18 @@
 # SCOP_C = c("His_biosynth", "Rib_hydrolayse", "LRR", "Lipoprotein_4", "ETF_alpha")
 # SCOP_D = c("UBQ", "PAC", "svmp", "FAD", "PCNA")
 
+
+
+library(boot)
+
+
 # Read the result scores for every classes of SCOP ids
-benchmark = read.table("SCOP_A/scores_scop_class_a.csv", sep=",", header = TRUE)
-benchmark = read.table("SCOP_B/scores_scop_class_b.csv", sep=",", header = TRUE)
-benchmark = read.table("SCOP_C/scores_scop_class_c.csv", sep=",", header = TRUE)
-benchmark = read.table("SCOP_D/scores_scop_class_d.csv", sep=",", header = TRUE)
+benchmark = read.table("./results/SCOP_A/scores_scop_class_a.csv", sep=",", header = TRUE)
+benchmark = read.table("./results/SCOP_B/scores_scop_class_b.csv", sep=",", header = TRUE)
+benchmark = read.table("./results/SCOP_C/scores_scop_class_c.csv", sep=",", header = TRUE)
+benchmark = read.table("./results/SCOP_D/scores_scop_class_d.csv", sep=",", header = TRUE)
 # All scores concatenated together
-benchmark = read.table("tous_les_scores.csv", sep=",", header = T)
+#benchmark = read.table("./results/tous_les_scores.csv", sep=",", header = T)
 
 # Visualize the distribution of scores values with boxplots
 boxplot(benchmark[,-c(1,2)], las=2)
@@ -51,7 +56,7 @@ test.mat = test.mat[,-c(1, 8)]
 fit = glm(benchmark ~ ., data = train.mat, family = "binomial")
 summary(fit)
 # Retrieve the new scores coefficients
-coefficients = coef(fit)[1,]
+coefficients = coef(fit)
 
 # Set the new global scores based on the calculated coefficients as:
 # sum_scores = intersect +
@@ -107,7 +112,6 @@ speciA = tableApp[1] / (tableApp[1] + tableApp[3])
 # vp+vn/tot
 tauxA = (tableApp[4] + tableApp[1]) / (tableApp[1] + tableApp[2] + tableApp[3] + tableApp[4])
 
-
 # TEST
 # vp/vp+fn
 sensiP = tableTest[4] / (tableTest[4] + tableTest[2])
@@ -122,48 +126,11 @@ tauxP = (tableTest[4] + tableTest[1]) / (tableTest[1] + tableTest[2] + tableTest
 
 
 
+# Cross Validation --------------------------------------------------------
 
-# ###################### SVM #####################
-# 
-# benchmark = read.table("tous_les_scores.csv", sep=",", header = T)
-# 
-# 
-# benchmark = benchmark[,-c(1, 9)]
-# benchmark[is.na(benchmark)] = 0
-# 
-# benchmark = benchmark[which(benchmark[,1] %in% c("Family", "Superfamily", "Fold")),]
-# 
-# # Echantillons d'apprentissage et test
-# v.ind.train = sample(1:nrow(benchmark), size=2/3*nrow(benchmark), replace=FALSE)
-# v.ind.test = (1:nrow(benchmark))[-v.ind.train]
-# train.mat = benchmark[v.ind.train,]
-# test.mat = benchmark[v.ind.test,]
-# # train.mat = train.mat[,-1]
-# # test.mat = test.mat[,-1]
-# 
-# # Construction du modèle
-# result = svm(benchmark~., data=benchmark, type="C-classification", kernel="radial")
-# 
-# # Performances du modèle en apprentissage
-# ypredApp = predict(result, train.mat[,-1])
-# table(train.mat[,1], ypredApp)
-# 
-# # Performances du modèle en test
-# ypredTest = predict(result, test.mat[,-1])
-# table(test.mat[,1], ypredTest)
-# 
-# 
-# tune.res = best.svm(benchmark~., data=benchmark, kernel="radial")
-# summary(tune.res)
-# plot(tune.res)
-# 
-# # Construction du modèle après tune
-# result = svm(as.matrix(train.mat[,-10]), train.mat[,10], type="C-classification", cost=1e05, gamma=1e-04)
-# 
-# # Performances du modèle en apprentissage
-# ypredApp = predict(result, train.mat[,-10])
-# table(train.mat[,10], ypredApp)
-# 
-# # Performances du modèle en test
-# ypredTest = predict(result, test.mat[,-10])
-# table(test.mat[,10], ypredTest)
+### leave-one-out ###
+# The first component is the raw cross-validation estimate of prediction error.
+# The second component is the adjusted cross-validation estimate.
+# The adjustment is designed to compensate for the bias introduced by not using
+# leave-one-out cross-validation.
+cv.err <- cv.glm(train.mat, fit)$delta
