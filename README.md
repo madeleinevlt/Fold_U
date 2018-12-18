@@ -70,15 +70,13 @@ conda install -c salilab modeller
 You need to register to get a license key [here](https://salilab.org/modeller/registration.html), and follow instructions during installation to insert license key in the program.
 
 
-To calculate the solvent accessibility score DSSP is also required:
+To calculate the solvent accessibility score **DSSP** is also required:
 ```
 sudo apt-get install dssp
 ```
 Or you can download the [latest release](https://github.com/cmbi/xssp/releases/latest) and install from source.
 
-### Run CCMpred
-
-In order to gain time, we have already run CCMpred with all the multiple alignment files to create the multiple alignment files in `clustal` format and the `.mat` files with the following script :
+In order to gain time, we have already **run CCMpred** with all the multiple alignment files to create the multiple alignment files in `.clustal` format and the `.mat` files with the following script :
 
 ```
 ./script/run_ccmpred.py
@@ -129,7 +127,6 @@ Options:
                                           [default: data/dope.par]
     -b PATH, --benchmark PATH             Path to the benchmark.list file
                                           [default: data/benchmark.list]
-
 ```
 ### Run all the queries + Benchmarking
 
@@ -217,7 +214,7 @@ top 350   1/1       6/6           13/13      20/20
 ```
 
 
-#### Plot
+#### Generated plot
 <p align="center">
   <img width="500" src="results/plots/all_scores_plot.png" alt="Enrichment"/>
 </p>
