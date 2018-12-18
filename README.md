@@ -84,7 +84,7 @@ In order to gain time, we have already **run CCMpred** with all the multiple ali
 
 ## Run the program
 
-`fold_u` takes in input a **foldrec file** and a **multiple alignment file** (fasta format). It returns a `score.csv` file and the **top N pdb structures**.
+`fold_u` takes in input a **foldrec file** and a **multiple alignment file** (clustal format) and the **CCMpred result** for the studied query. It returns a `score.csv` file and the **top N pdb structures**.
 
 ### Toy example
 
