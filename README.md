@@ -76,6 +76,14 @@ sudo apt-get install dssp
 ```
 Or you can download the [latest release](https://github.com/cmbi/xssp/releases/latest) and install from source.
 
+### Run CCMpred
+
+In order to gain time, we have already run CCMpred with all the multiple alignment files to create the multiple alignment files in `clustal` format and the `.mat` files with the following script :
+
+```
+./script/run_ccmpred.py
+```
+
 ## Run the program
 
 `fold_u` takes in input a **foldrec file** and a **multiple alignment file** (fasta format). It returns a `score.csv` file and the **top N pdb structures**.
@@ -84,7 +92,8 @@ Or you can download the [latest release](https://github.com/cmbi/xssp/releases/l
 
 The `scores.csv` and the **top 10 pdb structures** of the His_biosynth query sequence are stored in `results/His_biosynth` folder.
 ```
-./fold_u data/foldrec/His_biosynth.foldrec data/aln/His_biosynth.fasta -o results/His_biosynth
+./fold_u data/foldrec/His_biosynth.foldrec data/aln/clustal/His_biosynth.clustal\
+         data/ccmpred/His_biosynth.mat -o results/His_biosynth
 ```
 
 #### Get help
@@ -93,13 +102,14 @@ The `scores.csv` and the **top 10 pdb structures** of the His_biosynth query seq
 ./fold_u -h
 
 Usage:
-    ./fold_u FOLDREC_FILE ALN_FILE [--nb_pdb NUM] [--output PATH] [--dssp PATH] [--cpu NUM]
-                                   [--metafold FILE] [--dope FILE] [--benchmark FILE]
+      ./fold_u FOLDREC CLUSTAL CCMPRED [--nb_pdb NUM] [--output PATH] [--dssp PATH] [--cpu NUM]
+                                       [--metafold PATH] [--dope PATH] [--benchmark PATH]
 
 Arguments:
-    FOLDREC_FILE                          N profile * profile alignment and
-                                          their corresponding score
-    ALN_FILE                              Path to the alignment file
+    FOLDREC                               N profile * profile alignment and
+                                          their corresponding score.
+    CLUSTAL                               Path to the multiple alignment file (clustal format).
+    CCMPRED                               Path to the ccmpred result file.
 
 Options:
     -h, --help                            Show this
@@ -113,12 +123,13 @@ Options:
     -c NUM, --cpu NUM                     Number of cpus to use for parallelisation. By default
                                           using all available (0).
                                           [default: 0]
-    -m FILE, --metafold FILE              Path to the metafold.list file
+    -m PATH, --metafold PATH              Path to the metafold.list file
                                           [default: data/metafold.list]
-    -d FILE, --dope FILE                  Path to the dope.par file
+    -d PATH, --dope PATH                  Path to the dope.par file
                                           [default: data/dope.par]
-    -b FILE, --benchmark FILE             Path to the benchmark.list file
+    -b PATH, --benchmark PATH             Path to the benchmark.list file
                                           [default: data/benchmark.list]
+
 ```
 ### Run all the queries + Benchmarking
 
