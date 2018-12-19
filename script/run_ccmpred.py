@@ -77,9 +77,12 @@ if __name__ == "__main__":
         # Paths
         ALN_FILE_CLUSTAL = "data/aln/clustal/" + query + ".clustal"
         CCMPRED_OUTPUT = "data/ccmpred/" + query + ".mat"
-        print("Generation of .mat file by CCMPRED for the {} query.".format(query))
-        # Convert multiple alignment file from fasta to clustal
-        convert_aln_file(FASTA_ALN_FOLDER+"/"+ALN_FILE, ALN_FILE_CLUSTAL)
-        generate_ccmpred_result(ALN_FILE_CLUSTAL, CCMPRED_OUTPUT)
+        if not os.path.isfile(CCMPRED_OUTPUT):
+            print("Generation of .mat file by CCMPRED for the {} query.".format(query))
+            # Convert multiple alignment file from fasta to clustal
+            convert_aln_file(FASTA_ALN_FOLDER+"/"+ALN_FILE, ALN_FILE_CLUSTAL)
+            generate_ccmpred_result(ALN_FILE_CLUSTAL, CCMPRED_OUTPUT)
+        else:
+            print("The .mat file of the query {} already exist.".format(query))
 
     print("\nTotal runtime: {} seconds".format(str(datetime.now() - START_TIME)))
