@@ -71,19 +71,19 @@ def clean_modeller_outputs(modeller_out_dir):
         if re.search(pattern, file):
             os.remove(os.path.join(modeller_out_dir, file))
 
- def keep_accessible_residues(dssp_rsa, threshold):
-     """
-         From the output of DSSP we keep only accessible residues which have an RSA
-         value > threshold (arbitrary threshold).
- 
-         Args:
-             dssp_rsa (dict): A dictionary as keys = residue index and value = RSA.
-             threshold (int): Relative solvant accessibility threshold.
- 
-         Returns:
-             dict(dict): Keys are the residue ids and as value their solvant accessible area.
-     """
-     return {key: val for key, val in dssp_rsa.items() if val > threshold}
+def keep_accessible_residues(dssp_rsa, threshold):
+    """
+     From the output of DSSP we keep only accessible residues which have an RSA
+     value > threshold (arbitrary threshold).
+
+     Args:
+         dssp_rsa (dict): A dictionary as keys = residue index and value = RSA.
+         threshold (int): Relative solvant accessibility threshold.
+
+     Returns:
+         dict(dict): Keys are the residue ids and as value their solvant accessible area.
+    """
+    return {key: val for key, val in dssp_rsa.items() if val > threshold}
 
 
 class Alignment:
@@ -309,7 +309,7 @@ class Alignment:
         contact_score = np.log10(1+true_pos*(self.query.last - self.query.first))
         return contact_score
 
-     def calculate_solvent_access_score(self, dssp_bin_path, threshold):
+    def calculate_solvent_access_score(self, dssp_bin_path, threshold):
          '''
              Calculate the accessibility score between the predicted model
              and the template pdb structure.
