@@ -79,7 +79,7 @@ Or you can download the [latest release](https://github.com/cmbi/xssp/releases/l
 In order to gain time, we have already **run CCMpred** with all the multiple alignment files to create the multiple alignment files in `.clustal` format and the `.mat` files with the following script :
 
 ```
-./script/run_ccmpred.py
+./scripts/run_ccmpred.py
 ```
 
 ## Run the program
@@ -130,10 +130,10 @@ Options:
 ```
 ### Run all the queries + Benchmarking
 
-`script/benchmarking.py` runs the `fold_u` program for each foldrec if results are not still generated. It returns a `results/plots` folder containing the generated plots and prints the **top N tables** in the terminal.
+We wrote a script that runs the `fold_u` program for each foldrec if results are not still generated. It returns a `results/plots` folder containing the generated plots and prints the **top N tables** in the terminal.
 
 ```
-./script/benchmarking.py
+./scripts/benchmarking.py
 ```
 
 #### Get help
