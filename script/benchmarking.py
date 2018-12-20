@@ -103,7 +103,8 @@ def create_benchmarking_scores_dict(scores, structures, dssp_path, nb_proc):
         if not os.path.isfile("results/" + query + "/scores.csv"):
             print("\nProcessing query {} / {} : {}\n".format(ind, len(all_foldrecs), query))
             process = subprocess.Popen(["./fold_u", "data/foldrec/" + query + ".foldrec",
-                                        "data/aln/" + query + ".fasta",
+                                        "data/aln/clustal/" + query + ".clustal",
+                                        "data/ccmpred/" + query + ".mat",
                                         "-o", "results/" + query, "--dssp", dssp_path,
                                         "--cpu", str(nb_proc)], stdout=subprocess.PIPE).communicate()[0]
             rows, columns = os.popen('stty size', 'r').read().split()
@@ -237,7 +238,7 @@ if __name__ == "__main__":
     START_TIME = datetime.now()
     ### Parse command line
     ######################
-    ARGUMENTS = docopt(__doc__, version='fold_u 1.2')
+    ARGUMENTS = docopt(__doc__)
     # Check the types and ranges of the command line arguments parsed by docopt
     check_args()
 

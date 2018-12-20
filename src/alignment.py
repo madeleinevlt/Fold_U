@@ -71,19 +71,19 @@ def clean_modeller_outputs(modeller_out_dir):
         if re.search(pattern, file):
             os.remove(os.path.join(modeller_out_dir, file))
 
-def keep_accessible_residues(dssp_rsa, threshold):
-    """
-        From the output of DSSP we keep only accessible residues which have an RSA
-        value > threshold (arbitrary threshold).
-
-        Args:
-            dssp_rsa (dict): A dictionary as keys = residue index and value = RSA.
-            threshold (int): Relative solvant accessibility threshold.
-
-        Returns:
-            dict(dict): Keys are the residue ids and as value their solvant accessible area.
-    """
-    return {key: val for key, val in dssp_rsa.items() if val > threshold}
+ def keep_accessible_residues(dssp_rsa, threshold):
+     """
+         From the output of DSSP we keep only accessible residues which have an RSA
+         value > threshold (arbitrary threshold).
+ 
+         Args:
+             dssp_rsa (dict): A dictionary as keys = residue index and value = RSA.
+             threshold (int): Relative solvant accessibility threshold.
+ 
+         Returns:
+             dict(dict): Keys are the residue ids and as value their solvant accessible area.
+     """
+     return {key: val for key, val in dssp_rsa.items() if val > threshold}
 
 
 class Alignment:
@@ -306,44 +306,45 @@ class Alignment:
                 true_pos += 1
         
         # Spread of the values
-        contact_score = np.log10(1+true_pos)
+        contact_score = np.log10(1+true_pos*(self.query.last - self.query.first))
         return contact_score
 
-    def calculate_solvent_access_score(self, dssp_bin_path, threshold):
-        '''
-            Calculate the accessibility score between the predicted model
-            and the template pdb structure.
+     def calculate_solvent_access_score(self, dssp_bin_path, threshold):
+         '''
+             Calculate the accessibility score between the predicted model
+             and the template pdb structure.
+             Args:
+                 dssp_bin (String): Path to the dssp binary.
+                 threshold cutoff (int): Cutoff for relative accessibility residue values.
+             Returns:
+                 float: The Accessibility score calculated
+         '''
+         # Path to the PDBs of predicted and template models
+         pred_model_pdb = "data/pdb/"+self.template.name+"/"+self.template.modeller_pdb+".atm"
+         template_pdb = "data/pdb/"+self.template.name+"/"+self.template.reindexed_pdb+".atm"
+         # Parse PDBs
+         pred_model = PDBParser(QUIET=True).get_structure("pred_model", pred_model_pdb)[0]
+         template_model = PDBParser(QUIET=True).get_structure("template_model", template_pdb)[0]
+         # Run DSSP on both PDB files of the template and the Modeller's model
+         dssp_pred_model = DSSP(pred_model, pred_model_pdb, dssp=dssp_bin_path)
+         dssp_template_model = DSSP(template_model, template_pdb, dssp=dssp_bin_path)
+         # Parse the DSSP output to retrieve the relative % of solvant accessible area for each CA.
+         #get alignement index
+         query_index_ali = [index for index, residue in enumerate(self.query.residues) if str(residue) != "-"]
+         template_index_ali = [index for index, residue in enumerate(self.template.residues) if str(residue) != "-"]
+         #attribuate alignemnt index
+         rsa_pred_model = dict(zip(query_index_ali, [dssp_pred_model[key][3]
+             for key in dssp_pred_model.keys()]))
+         rsa_template_model = dict(zip(template_index_ali, [dssp_template_model[key][3]
+            for key in dssp_template_model.keys()]))
+         # Keep only residues under a relative accessibilities threshold: buried residues
+         pred_access_residues = keep_accessible_residues(rsa_pred_model, threshold)
+         template_access_residues = keep_accessible_residues(rsa_template_model, threshold)
 
-            Args:
-                naccess_bin (String): Path to the naccess binary.
-                threshold cutoff (int): Cutoff for relative accessibility residue values.
-
-            Returns:
-                float: The Accessibility score calculated
-        '''
-        # Path to the PDBs of predicted and template models
-        pred_model_pdb = "data/pdb/"+self.template.name+"/"+self.template.modeller_pdb+".atm"
-        template_pdb = "data/pdb/"+self.template.name+"/"+self.template.reindexed_pdb+".atm"
-        # Parse PDBs
-        pred_model = PDBParser(QUIET=True).get_structure("pred_model", pred_model_pdb)[0]
-        template_model = PDBParser(QUIET=True).get_structure("template_model", template_pdb)[0]
-        # Run DSSP on both PDB files of the template and the Modeller's model
-        dssp_pred_model = DSSP(pred_model, pred_model_pdb, dssp=dssp_bin_path)
-        dssp_template_model = DSSP(template_model, template_pdb, dssp=dssp_bin_path)
-        # Parse the DSSP output to retrieve the relative % of solvant accessible area for each CA.
-        # Stock results in: dict = {res_index: res_rsa}
-        rsa_pred_model = {dssp_pred_model[key][0]: dssp_pred_model[key][3]
-                          for key in dssp_pred_model.keys()}
-        rsa_template_model = {dssp_template_model[key][0]: dssp_template_model[key][3]
-                              for key in dssp_template_model.keys()}
-
-        # Keep only residues under a relative accessibilities threshold: buried residues
-        pred_access_residues = keep_accessible_residues(rsa_pred_model, threshold)
-        template_access_residues = keep_accessible_residues(rsa_template_model, threshold)
-        # Get the common buried residues
-        common_residues_len = len(set(pred_access_residues).intersection(template_access_residues))
-        # Normalization
-        return common_residues_len/len(pred_access_residues)
+         # Get the common buried residues
+         common_residues_len = len(set(pred_access_residues).intersection(template_access_residues))
+         # Normalization
+         return common_residues_len/len(query_index_ali)
 
     def write_alignment_for_modeller(self, ali_path):
         """
