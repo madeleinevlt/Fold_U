@@ -1,4 +1,7 @@
+#!/bin/bash
 
+rm -Rf log
+mkdir log tmp_homstrad pssm_homstrad
 
 #####PSSM sur HOMSTRAD#####
 
@@ -6,8 +9,7 @@ rm -f log/pssm_homstrad.log
 echo "Création des pssm pour les templates"
 for template in "$1"/* ; do
     nametemplate=`echo ${template##*/}`
-    ./bin/salut_1.0/src/pssm_homstrad.py $template/*.map $nametemplate &>> log/pssm_homstrad.log
-
+    python3 bin/salut_1.0/src/pssm_homstrad.py $template/*.map $nametemplate &>> log/pssm_homstrad.log
 done
 
 
@@ -22,7 +24,7 @@ for f in "$1"/*/*.atm ; do
         if [ "$pdb" == "${item%%.*}" ] ; then
             ./dssp-2.0.4-linux-amd64 -i ./$f -o dssp$template.out &>> log/tmp.log
             if [ -f "dssp$template.out" ] ; then
-                ./bin/salut_1.0/src/parse_dssp.py dssp$template.out &>> log/tmp.log
+                python3 bin/salut_1.0/src/parse_dssp.py dssp$template.out &>> log/tmp.log
             fi
         fi
     done
