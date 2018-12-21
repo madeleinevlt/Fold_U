@@ -10,10 +10,10 @@
 # NOTE: Script modified to be more cluster friendly (DTJ April 2008)
 
 # Where the PSIPRED V4 programs have been installed
-set execdir = ./bin
+set execdir = ~/merge/Fold_U/bin/psipred.4.02/psipred/bin
 
 # Where the PSIPRED V4 data files have been installed
-set datadir = ./data
+set datadir = ~/merge/Fold_U/bin/psipred.4.02/psipred/data
 
 set basename = $1:r
 set rootname = $basename:t
