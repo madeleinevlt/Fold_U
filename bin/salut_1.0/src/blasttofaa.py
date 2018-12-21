@@ -1,4 +1,5 @@
-# coding: utf-8
+#! /usr/bin/env python3
+# -*- coding: utf-8 -*-
 
 import sys
 import re
@@ -32,7 +33,7 @@ def main():
     re_query = re.compile("^Query")
     re_end = re.compile("^  Database|^Searching")  #Pour arrêter la lecture
 
-    with open (sys.argv[3]+'/'+sys.argv[1]+'.blast_out', 'r') as file1 :
+    with open (sys.argv[1]+'.blast_out', 'r') as file1 :
         line = file1.readline()
         
         #Lit jusqu'à trouver les résultats du round choisi
@@ -92,10 +93,10 @@ def main():
                 line = file1.readline()
 
     #Crée un fichier où tous les alignements récupérés sont ajoutés 
-    fileOut = open(sys.argv[3]+'/'+sys.argv[1]+'.faa', 'w')
+    fileOut = open(sys.argv[1]+'.faa', 'w')
 
     #Récupération de la sequence query
-    fileQuery = open(sys.argv[3]+'/'+sys.argv[1]+'.fasta','r')
+    fileQuery = open(sys.argv[1]+'.fasta','r')
     line1 = fileQuery.readline()
     line2 = fileQuery.readline()
     fileOut.write(line1 + line2)

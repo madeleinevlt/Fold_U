@@ -124,7 +124,7 @@ def crea_matrix(fileQ, fileT):
     Création et initialisation des matrices des matchs (M) et des insertions de gaps (Q et T)
     (Méthode affine)
     """
-    aa, blosum = bl.load_blosum("BLOSUM62.txt")
+    aa, blosum = bl.load_blosum("bin/salut_1.0/data/BLOSUM62.txt")
     nameQ, seqQ, pssmQ = load_pssm(fileQ, aa)
     nameT, seqT, pssmT = load_pssm(fileT, aa)
 
@@ -197,52 +197,43 @@ def align_matrix(M, Q, T, seqQ, seqT):
     return("".join(alignQ), "".join(alignT), score)
 
 
-def align_truncate(align, seq):
+
+def search_end(seq, align) :
     """
-    Fonction qui tronque un alignment (retire les gaps en amont + aval) et renvoie le résultat + l'intervalle des aa alignés
+    Fonction qui calcule les bornes début et fin d'une séquence alignées
     """
     interv = []
     tmp = align.find('-')
 
     if tmp == -1 or align[0] == seq[0]:
-        return(align, [1, len(seq)])
-    else:
-        interv.append(align.find(seq[0]) +1)
-        interv.append(align.rfind(seq[-1]))
+        return(1, len(seq))
 
-    trunc = align[interv[0]-1 : interv[1]]
+    tmp = align.replace("-", "")
+    for i in range(len(seq)):
+        if seq[i] == tmp[0] and seq[i+1] == tmp[1] and seq[i+2] == tmp[2]:
+            deb = i
+            break
+    
+    fin = deb + len(align.replace("-", ""))
 
-    return(trunc, interv)
+    return(deb+1, fin)  
 
-
-def search_end(seq, align) :
-    for i in range(0, len(align), 1):
-        for j in range(0, len(seq), 1) :
-            if(seq[j] == align[i]):
-                fin = j
-
-    for i in range(len(align)-1, 0, -1):
-        for j in range(len(seq)-1, 0, -1) :
-            if(seq[j] == align[i]):
-                deb = j
-
-    return([deb+1, fin+1])
 
 
 def crea_output(nameQ, nameT, truncQ, truncT, nq, nt, intervQ, intervT, scoreGlobal) :
     """
     Création et remplissage du fichier en output (query_name.aln)
     """
-    fd = open("alignments/{}.aln".format(nameQ), "a+")
+    fd = open("data/queries/{}/{}.aln".format(nameQ), "a+")
     fd.write("Query | {} | {:.3f} | {} | {} | {}-{} | {}-{}\n".format(nameT, scoreGlobal, nq, nt, intervQ[0], intervQ[1], intervT[0], intervT[1]))
     fd.write("{}\n{}\n".format(truncQ, truncT))
     fd.close()
 
-    fscore = open("alignments/{}_scores.txt".format(nameQ), "a+")
+    fscore = open("data/queries/{}/{}_scores.txt".format(nameQ), "a+")
     fscore.write("{} {:.3f}\n".format(nameT, scoreGlobal))
     fscore.close()
 
-    
+
 def main():
     # Fichiers input :
     if len(sys.argv) < 3 :
@@ -256,14 +247,14 @@ def main():
     nameQ, nameT, M, Q, T, seqQ, seqT, po, pe = crea_matrix(fileQ, fileT)
     print("Alignement : {} (Q) vs {} (T)".format(nameQ, nameT))
     print("Pénalités optimales : ouverture de gap = {:.2f}, extension de gap = {:.3f}".format(po, pe))
-
     alignQ, alignT, scoreGlobal = align_matrix(M, Q, T, seqQ, seqT)
-    truncT, intervT = align_truncate(alignT, seqT)
-    intervQ = search_end(seqQ, alignQ)
-    truncQ = alignQ[ intervT[0]-1 : intervQ[1] ]
 
+    # Calcule de l'intervalle (Q/T) de la section (Q/T) alignées
+    intervT = [ 1, len(seqT)]    
+    intervQ = search_end(seqQ, alignQ)
+    
     # Création de l'output
-    crea_output(nameQ, nameT, truncQ, truncT, len(seqQ), len(seqT), intervQ, intervT, scoreGlobal)
+    crea_output(nameQ, nameT, alignQ, alignT, len(seqQ), len(seqT), intervQ, intervT, scoreGlobal)
 
 
 

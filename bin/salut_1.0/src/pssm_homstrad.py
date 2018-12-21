@@ -19,7 +19,7 @@ import sys
 import re
 from pssm import *
 
-def pdb_code(namematrixhom):
+def pdb_code(template_name):
     """
     Recupere le code pdb du template HOMSTRAD voulu
     """
@@ -29,7 +29,7 @@ def pdb_code(namematrixhom):
     code_pdb = 0
     while flag == 0 and line != "":#tant qu'on ne l'a pas trouve on continue
         line = file.readline()
-        if namematrixhom == line.split(" ")[0] :
+        if template_name == line.split(" ")[0] :
             code_pdb = (line.split(" ")[1][:-1]).split(".")[0] #On obtient le code pdb
             flag = 1
     file.close()
@@ -40,7 +40,7 @@ def multi_from_map(seq_list, name):
     """
     Cree un fichier texte mfasta a partir d'une liste de sequences
     """
-    file = open("./tmp_homstrad/"+name+".mfasta", "w")
+    file = open("data/HOMSTRAD/"+name+"/"+name+".mfasta", "w")
     for seq in seq_list :
         file.write(">Sequence\n")
         file.write(str(seq))
@@ -88,31 +88,26 @@ def read_map(namefile, namematrix):
     return([seq_list, seq_principale])
 
 
-def create_hom_pssm(namehomstrad, namematrixhom, seq_listhom, aa, bg_freq, beta, seq, AA):
+def create_hom_pssm(map_path, template_name, seq_listhom, aa, bg_freq, beta, seq, AA):
     """
     Cree la PSSM de la seq HOMSTRAD en faisant appel aux fonctions
     du script pssm.py
     """
-    poids_list = poids_seq(namematrixhom+".mfasta", "./tmp_homstrad/")
-    #on utilise le fichier mfasta cree 
+    poids_list = poids_seq("data/HOMSTRAD/"+template_name+"/"+template_name+".mfasta", "data/HOMSTRAD/"+template_name+"/"+template_name)
+    #on utilise le fichier mfasta cree
     if len(poids_list) != 0 :
-        return(freq_matrix(namehomstrad, namematrixhom, seq_listhom, aa, bg_freq, beta, poids_list, "./pssm_homstrad/", seq, AA))
+        return(freq_matrix(map_path, template_name, seq_listhom, aa, bg_freq, beta, poids_list, "data/HOMSTRAD/", seq, AA))
     else :
-        print("non calculé : {}".format(namematrixhom))
-
-
-
+        print("non calculé : {}".format(template_name))
 
 def main():
-    namehomstrad = sys.argv[1]
+    map_path = sys.argv[1]
     #Map multi ali
-    namematrixhom = sys.argv[2]
-    read_out = read_map(namehomstrad, namematrixhom)
+    template_name = sys.argv[2]
+    read_out = read_map(map_path, template_name)
     seq_listhom = read_out[0]
     seq = read_out[1]
-    freq_matricehom = create_hom_pssm(namehomstrad, namematrixhom, seq_listhom, aa, bg_freq, BETA, seq, AA)
+    freq_matricehom = create_hom_pssm(map_path, template_name, seq_listhom, aa, bg_freq, BETA, seq, AA)
 
-
-    
 if __name__== "__main__":
     main()

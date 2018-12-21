@@ -41,8 +41,8 @@ def poids_seq(namefile, fold) :
     Utilise le script perl compute_weight_sequence_position.pl et recupere les poids
     associes a chaque sequence. Cree un fichier poids.out et le lit
     """
-    os.system("perl bin/salut_1.0/src/compute_weight_sequence_position.pl {}{} > {}poids.out".format(fold, namefile, fold))
-    file = open(fold+"poids.out", "r")
+    os.system("perl bin/salut_1.0/src/compute_weight_sequence_position.pl {} > {}.poids.out".format(namefile, fold))
+    file = open(fold+".poids.out", "r")
     poids_list = [float(line[18:-1]) for line in file if re.search("^Normalized_weight", line)]
     file.close()
     return(poids_list)
@@ -124,7 +124,7 @@ def freq_matrix(namefile, namematrix, seq_list, aa, bg_freq, beta, poids_list, f
         #Correction avec freq background 1/20
         #freq_matrice = freq_correctionbis(cpt_matrice, beta)
         #Ecriture du fichier aamtx
-        matrix = open(fold+namematrix+".aamtx", "w")
+        matrix = open(fold+"/"+namematrix+"/"+namematrix+".aamtx", "w")
         matrix.write(">"+namematrix+"\n")
         matrix.write(seq+"\n") #La premiere seq est la query ou template
         for i in range(freq_matrice.shape[0]) :

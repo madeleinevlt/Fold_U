@@ -27,7 +27,7 @@ def main():
 
     #Ouverture du fichier dans lequel sont ajoutées l'assignation de structure 
     #secondaire et l'accessibilité au solvant pour la template concernée
-    fileOut = open('dsspAll_out.txt', 'a')
+    fileOut = open('data/dsspAll_out.txt', 'a')
 
     #liste récupérant la structure secondaire de la template
     list_ss = []
