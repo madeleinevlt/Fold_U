@@ -1,4 +1,5 @@
-#!/usr/bin/env python
+#! /usr/bin/env python3
+# -*- coding: utf-8 -*-
 
 import sys
 import numpy as np
@@ -196,22 +197,36 @@ def align_matrix(M, Q, T, seqQ, seqT):
     return("".join(alignQ), "".join(alignT), score)
 
 
-def align_truncate(align, seq, deb, fin):
+def align_truncate(align, seq):
     """
     Fonction qui tronque un alignment (retire les gaps en amont + aval) et renvoie le résultat + l'intervalle des aa alignés
     """
     interv = []
     tmp = align.find('-')
 
-    if tmp == -1: 
-        return(align, [1, len(align)])
+    if tmp == -1 or align[0] == seq[0]:
+        return(align, [1, len(seq)])
     else:
-        interv.append(align.find(seq[deb]) +1)
-        interv.append(align.rfind(seq[fin]) +1)
+        interv.append(align.find(seq[0]) +1)
+        interv.append(align.rfind(seq[-1]))
 
     trunc = align[interv[0]-1 : interv[1]]
- 
+
     return(trunc, interv)
+
+
+def search_end(seq, align) :
+    for i in range(0, len(align), 1):
+        for j in range(0, len(seq), 1) :
+            if(seq[j] == align[i]):
+                fin = j
+
+    for i in range(len(align)-1, 0, -1):
+        for j in range(len(seq)-1, 0, -1) :
+            if(seq[j] == align[i]):
+                deb = j
+
+    return([deb+1, fin+1])
 
 
 def crea_output(nameQ, nameT, truncQ, truncT, nq, nt, intervQ, intervT, scoreGlobal) :
@@ -227,8 +242,7 @@ def crea_output(nameQ, nameT, truncQ, truncT, nq, nt, intervQ, intervT, scoreGlo
     fscore.write("{} {:.3f}\n".format(nameT, scoreGlobal))
     fscore.close()
 
-
-
+    
 def main():
     # Fichiers input :
     if len(sys.argv) < 3 :
@@ -244,9 +258,9 @@ def main():
     print("Pénalités optimales : ouverture de gap = {:.2f}, extension de gap = {:.3f}".format(po, pe))
 
     alignQ, alignT, scoreGlobal = align_matrix(M, Q, T, seqQ, seqT)
-    truncT, intervT = align_truncate(alignT, seqT, 0, -1)
-    truncQ = alignQ[ intervT[0]-1 : intervT[1] ]
-    intervQ = [ alignQ.find(seqQ[0])+1 ,  len(truncQ) - truncQ.count('-')]
+    truncT, intervT = align_truncate(alignT, seqT)
+    intervQ = search_end(seqQ, alignQ)
+    truncQ = alignQ[ intervT[0]-1 : intervQ[1] ]
 
     # Création de l'output
     crea_output(nameQ, nameT, truncQ, truncT, len(seqQ), len(seqT), intervQ, intervT, scoreGlobal)

@@ -1,5 +1,7 @@
-# coding: utf-8
-'''
+#! /usr/bin/env python3
+# -*- coding: utf-8 -*-
+
+"""
 Ce script cree un fichier .foldrec
 Il part d'un fichier d'alignement des profils (query vs homstrad)
 Il lit les scores et trie les alignements selon ces scores (ordre croissant)
@@ -13,7 +15,8 @@ La fonction cree deux fichiers :
 - .foldrec1
 - .foldrec2
 Ces deux fichiers seront concatenes en un fichier .foldrec
-'''
+"""
+
 import sys
 import re
 import os

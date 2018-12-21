@@ -1,5 +1,7 @@
-# coding: utf-8
-'''
+#! /usr/bin/env python3
+# -*- coding: utf-8 -*-
+
+"""
 Creation des matrices de frequences.
 Pour la query :
 - Lit le fichier de sortie de MUSCLE
@@ -16,7 +18,8 @@ Pour les deux :
 - Retire les gaps sur la sequence principale
 
 Ce script cree des matrices PSSM avec pour nom <nom>.aamtx
-'''
+"""
+
 import re
 import numpy as np
 import os
@@ -34,11 +37,11 @@ BETA = 1 #Parametre pour la correction des frequences, pourrait etre change
 
 
 def poids_seq(namefile, fold) :
-    '''
+    """
     Utilise le script perl compute_weight_sequence_position.pl et recupere les poids
     associes a chaque sequence. Cree un fichier poids.out et le lit
-    '''
-    os.system("perl bin/compute_weight_sequence_position.pl {}{} > {}poids.out".format(fold, namefile, fold))
+    """
+    os.system("perl bin/salut_1.0/src/compute_weight_sequence_position.pl {}{} > {}poids.out".format(fold, namefile, fold))
     file = open(fold+"poids.out", "r")
     poids_list = [float(line[18:-1]) for line in file if re.search("^Normalized_weight", line)]
     file.close()
@@ -46,11 +49,11 @@ def poids_seq(namefile, fold) :
 
 
 def gap_out(freq_matrice, seq_list, seq) :
-    '''
+    """
     Enleve les positions ou il a que des gap
     C'est a dire les positions avec que des 0'
     Et enleve les positions dans les sequences de seq_list aussi
-    '''
+    """
     cpt = 0
     for aa in seq :
         if aa == "-" : #il s'agit d'un gap
@@ -70,9 +73,9 @@ def gap_out(freq_matrice, seq_list, seq) :
 
 
 def freq_correction(freq_matrice, bg_freq, beta) :
-    '''
+    """
     Corrige les frequences brutes avec les frequences background
-    '''
+    """
     for i in range(freq_matrice.shape[0]) : #i est la position
         for j in range(freq_matrice.shape[1]) : #j est l'aa
             freq_matrice[i,j]=(freq_matrice[i,j]+(beta*bg_freq[j]))/(1+beta)
@@ -80,9 +83,9 @@ def freq_correction(freq_matrice, bg_freq, beta) :
 
 
 def freq_correctionbis(cpt_matrice, beta) :
-    '''
+    """
     Corrige les counts avec equiprobabilites
-    '''
+    """
     for i in range(cpt_matrice.shape[0]) :
         for j in range(cpt_matrice.shape[1]) :
             cpt_matrice[i,j] = ((cpt_matrice[i,j] + (1/20) )/(1+beta))
@@ -90,11 +93,11 @@ def freq_correctionbis(cpt_matrice, beta) :
 
 
 def freq_matrix(namefile, namematrix, seq_list, aa, bg_freq, beta, poids_list, fold, seq, AA) :
-    '''
+    """
     Calcule les frequences des aa a chaque position en commencant par les frequences brutes
     Puis en les corrigeant avec la fonction freq_correction
     Ecrit un fichier aamtx
-    '''
+    """
     cpt_matrice = np.zeros((len(seq_list[0]), 20)) #Matrice initialisee a 0 avec 
     if len(poids_list) == 0 :
         return(0)

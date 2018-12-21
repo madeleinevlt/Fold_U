@@ -1,10 +1,12 @@
-# coding: utf-8
-'''
+#! /usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
 Creation de la PSSM de la query
 Ce script fait appel a des fonctions du script pssm.py 
 D'abord il lit un fichier de sortie MUSCLE 
 Puis la pssm est calculee
-'''
+"""
+
 import sys
 import re
 from pssm import *
