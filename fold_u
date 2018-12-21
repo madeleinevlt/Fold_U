@@ -104,7 +104,7 @@ if __name__ == "__main__":
     ###1st Step : Run SALUT scrit on Query fasta
     ############################################
     #generate ~ foldrec file
-    subprocess.call("./salut2.sh", stdin=[QUERY_SEQUENCE_PATH, NB_PSIBLAST, UNIREF_DB], shell=True)
+    subprocess.call("./bin/salut_1.0/salut2.sh", stdin=[QUERY_SEQUENCE_PATH, NB_PSIBLAST, UNIREF_DB], shell=True)
 
     FOLDREC_FILE = QUERY_PATH + ".foldrec"
     ALN_FILE = QUERY_PATH + ".mfasta"
