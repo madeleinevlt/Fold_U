@@ -13,7 +13,10 @@
     percentage of benchmarks for the TOP N found.
 
     Usage:
-        ./script/benchmarking.py [--selected_score SCORE] [--dssp PATH] [--cpu NUM] [--output PATH]
+        ./script/benchmarking.py UNIREF_DB [--selected_score SCORE] [--dssp PATH] [--cpu NUM] [--output PATH]
+
+    Arguments:
+        UNIREF_DB                             Path to Uniref database.        
 
     Options:
         -h, --help                            Show this
@@ -73,7 +76,7 @@ def check_args():
     except SchemaError as err:
         exit(err)
 
-def create_benchmarking_scores_dict(scores, structures, dssp_path, nb_proc):
+def create_benchmarking_scores_dict(uniref, scores, structures, dssp_path, nb_proc):
     """
         Create a dictionary of scores with key = a score, value = a pandas dataframe
         which contains the cumulative sum of benchmark for each benchmark type and for
@@ -102,11 +105,10 @@ def create_benchmarking_scores_dict(scores, structures, dssp_path, nb_proc):
         # The Fold_U program is run on the current query if results are not already generated
         if not os.path.isfile("results/" + query + "/scores.csv"):
             print("\nProcessing query {} / {} : {}\n".format(ind, len(all_foldrecs), query))
-            process = subprocess.Popen(["./fold_u", "data/foldrec/" + query + ".foldrec",
-                                        "data/aln/clustal/" + query + ".clustal",
-                                        "data/ccmpred/" + query + ".mat",
+            process = subprocess.Popen(["./fold_u", "data/queries/" + query + "/"+ query + ".foldrec",
+                                        uniref,
                                         "-o", "results/" + query, "--dssp", dssp_path,
-                                        "--cpu", str(nb_proc)], stdout=subprocess.PIPE).communicate()[0]
+                                        ], stdout=subprocess.PIPE).communicate()[0]
             rows, columns = os.popen('stty size', 'r').read().split()
             print("\n" + "-"*int(columns))
         # Score results are stored in a pandas DataFrame
@@ -242,6 +244,8 @@ if __name__ == "__main__":
     # Check the types and ranges of the command line arguments parsed by docopt
     check_args()
 
+    # Uniref database
+    UNIREF = ARGUMENTS["UNIREF_DB"]
     # OUTPUT file
     OUTPUT_PATH = ARGUMENTS["--output"]
     # DSSP path
@@ -256,7 +260,7 @@ if __name__ == "__main__":
     SCORES = ["alignment", "threading", "modeller", "secondary_structure", "solvent_access",
               "co_evolution", "sum_scores"]
 
-    (BENCHMARKING_SCORES, MIN_RANK) = create_benchmarking_scores_dict(SCORES, STRUCTURES,
+    (BENCHMARKING_SCORES, MIN_RANK) = create_benchmarking_scores_dict(UNIREF, SCORES, STRUCTURES,
                                                                       DSSP_PATH, NB_PROC)
 
     print_table(SELECTED_SCORE, BENCHMARKING_SCORES)

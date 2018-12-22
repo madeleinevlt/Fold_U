@@ -101,7 +101,7 @@ def create_hom_pssm(template_name, seq_listhom, aa, bg_freq, beta, seq, AA):
         print("non calculé : {}".format(template_name))
 
 def main():
-    map_path = sys.argv[1]+."map"
+    map_path = sys.argv[1]+".map"
     #Map multi ali
     template_name = sys.argv[2]
     read_out = read_map(map_path, template_name)
