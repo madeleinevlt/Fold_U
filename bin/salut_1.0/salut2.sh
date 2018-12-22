@@ -24,7 +24,7 @@ echo "PSSM file creation"
 ./bin/salut_1.0/src/pssm_query.py $path_query $query &>> log/query.log
 
 echo "Secondary structure prediction using Psipred"
-./bin/psipred.4.02/psipred/runpsipred_single "$1" >> log/query.log
+./bin/psipred.4.02/runpsipred_single "$1" >> log/query.log
 mv -f $query.horiz data/queries/$query
 rm -f $query.ss2 $query.ss
 
@@ -41,7 +41,7 @@ else
     done
 fi
 
-# echo "Write foldrec file"
-# ./bin/salut_1.0/src/foldrec.py $path_query.aln $path_query.fasta $query
-# cat $path_query*part[0-9].foldrec > $path_query.foldrec
-# rm -f $path_query*part?.foldrec
+echo "Write foldrec file"
+./bin/salut_1.0/src/foldrec.py $path_query.aln $path_query.fasta $query
+cat $path_query*part[0-9].foldrec > $path_query.foldrec
+rm -f $path_query*part?.foldrec
