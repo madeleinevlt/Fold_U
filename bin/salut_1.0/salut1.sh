@@ -6,7 +6,7 @@ mkdir log
 #####PSSM sur HOMSTRAD#####
 
 rm -f log/pssm_homstrad.log
-echo "PSSM files creation"
+echo "PSSM files creation for each template"
 for template_path in "$1"/* ; do
     template_name=`echo ${template_path##*/}`
     file_name=`echo "$template_path/$template_name.map"`
@@ -17,7 +17,7 @@ done
 ######Assignation structure secondaire sur HOMSTRAD#####
 
 mkdir tmp_dssp
-echo "Secondary structures assignment"
+echo "Secondary structures assignment for each template"
 pdbMETAFOLD=`cut -d\  -f2 "$2"`
 for template_path in "$1"/*; do
     template=`echo "$template_path" | rev | cut -d'/' -f1 | rev`
