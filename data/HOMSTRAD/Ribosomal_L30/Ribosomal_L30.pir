@@ -1,0 +1,10 @@
+>P1;1bxya
+structureX:1bxy:   1 :A:  60 :A:50S ribosomal protein L30:Thermus aquaticus: 1.90: 20.3
+MPRLKVKLVKSPIGYPKDQKAALKALGLRRLQQERVLEDTPAIRGNVEKVAHLVRVEVVE---------------
+---------------------------------------------------------------------------
+------*
+>P1;1jj2v
+structureX:1jj2:   1 :V: 154 :V:50S ribosomal protein L30p:Haloarcula marismortui: 2.40: 18.9
+--MHALVQLRGEVNMHTDIQDTLEMLNIHHVNHCTLVPETDAYRGMVAKVNDFVAFGEPSQETLETVLATRAEPL
+EGDADVDDEWVAEHTDYDDISGLAFALLSEETTLREQGLSPTLRLHPPRGGHDGVKHPVKEGGQLGKHDTEGIDD
+LLEAMR*

@@ -1,0 +1,6 @@
+>P1;1tfi
+structureX:1tfi:   1 : :  50 : :transcription elongation factor S-II:Homo sapiens: -1: -1
+--------KTGGTQTDLFTCGKCKKKNCTYTQVQTRSADEPMTTFVVCNECGNRWKFC-*
+>P1;1qyp
+structureX:1qyp:   1 : :  57 : :rbp9 subunit of RNA polymerase II, C-terminal domain:Thermococcus celer: -1: -1
+GSHMEQDLKT-LPTTK-ITCPKCGNDTAYWWEMQTRAGDEPSTIFYKCTKCGHTWRSYE*

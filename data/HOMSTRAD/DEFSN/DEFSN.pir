@@ -1,0 +1,6 @@
+>P1;1dfna
+structureX:1dfn:   2 :A:  31 :A:neutrophil defensins 3 (HNP-3):Homo sapiens: 1.9: -1
+--------DCYCRIPACIAGERRYGTCIYQGRLWAFCC--*
+>P1;1bnb
+structureX:1bnb:   1 : :  38 : :beta-defensin 12 (bndb-12):Bos taurus: -1: -1
+APLSCGRNGGVCIPIRCPVPMRQIGTCFGR--PVKCCRSW*

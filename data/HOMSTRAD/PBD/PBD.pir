@@ -1,0 +1,8 @@
+>P1;1f3ma
+structureX:1f3m:  78 :A: 147 :A:serine-threonine-protein kinase PAK 1:Homo sapiens: 2.30: 23.7
+PSDFEHTIHVGFDAVTGEFT--GMPEQWARLLQTSNITKSEQKK--NPQAVLDVLEFY--NSKKTS---NSQKYM
+SFTD*
+>P1;1ej5a
+structureX:1ej5:   1 :A:  70 :A:autoinhibited conformation of WASP:Homo sapiens: -1: -1
+-SGFKHVSHVGWDPQNG-FDVNNLDPDLRSLFSRAGISEAQLTDAETSKLIYDFIEDQGGLEAVRQEMRRQG---
+----*

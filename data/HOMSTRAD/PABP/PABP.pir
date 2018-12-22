@@ -1,0 +1,6 @@
+>P1;1g9la
+structureX:1g9l:  66 :A: 126 :A:polyadenylate-binding protein 1:Homo sapiens: -1: -1
+QKQMLGERLFPLIQAMHPTLAGKITGMLLEIDNSELLHMLESPESLRSKVDEAVAVLQAHQ*
+>P1;1i2ta
+structureX:1i2t:1009 :A:1069 :A:human hyperplastic discs protein:Homo sapiens: 1.04: -1
+HRQALGERLYPRVQAMQPAFASKITGMLLELSPAQLLLLLASEDSLRARVDEAMELIIAHG*

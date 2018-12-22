@@ -1,0 +1,6 @@
+>P1;1kjs
+structureX:1kjs:   1 : :  74 : :complement C5a anaphylatoxin:Homo sapiens: -1: -1
+MLQKKIEEIAAKYKHSVVKKCCYDGACVNNDETCEQRAARISLGPRCIKAFTECCVVASQLRANISHKDMQLGR*
+>P1;1c5a
+structureX:1c5a:   1 : :  65 : :complement C5a anaphylatoxin:Sus scrofa: -1: -1
+MLQKKIEEEAAKYKYAMLKKCCYDGAYRNDDETCEERAARIKIGPKCVKAFKDCCYIANQVRAEQ---------*
