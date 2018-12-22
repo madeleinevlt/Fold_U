@@ -26,17 +26,17 @@ cd Fold_U
 ```
 
 ### Requirements
-1. Install the few required python packages :
+1. Install the few required **python packages** :
 ```
 pip3 install -r requirements.txt
 ```
 
-2. Download the uniref90 database [here](https://www.uniprot.org/downloads), put it in `data/databases` and run the following line :
+2. Download the **uniref90** database [here](https://www.uniprot.org/downloads), put it in `data/databases` and run the following line :
 ```
 makeblastdb -in databases/uniref90.fasta -dbtype prot
 ```
 
-3. Install **legacy-Blast** with conda :
+3. Install **blast-legacy** with conda :
 ```
 conda install -c bioconda blast-legacy 
 ```
@@ -63,8 +63,7 @@ Run the following script to generate the PSSM for each templates of the HOMSTRAD
 
 The `scores.csv` and the **top 10 pdb structures** of the His_biosynth query sequence are stored in `results/His_biosynth` folder.
 ```
-./fold_u data/foldrec/His_biosynth.foldrec data/aln/clustal/His_biosynth.clustal\
-         data/ccmpred/His_biosynth.mat -o results/His_biosynth
+./fold_u data/queries/Agglutinin/Agglutinin.fasta data/databases/uniref90/uniref
 ```
 
 #### Get help
