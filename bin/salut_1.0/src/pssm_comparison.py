@@ -224,12 +224,12 @@ def crea_output(nameQ, nameT, truncQ, truncT, nq, nt, intervQ, intervT, scoreGlo
     """
     Création et remplissage du fichier en output (query_name.aln)
     """
-    fd = open("data/queries/{}/{}.aln".format(nameQ), "a+")
+    fd = open("data/queries/{}/{}.aln".format(nameQ, nameQ), "a+")
     fd.write("Query | {} | {:.3f} | {} | {} | {}-{} | {}-{}\n".format(nameT, scoreGlobal, nq, nt, intervQ[0], intervQ[1], intervT[0], intervT[1]))
     fd.write("{}\n{}\n".format(truncQ, truncT))
     fd.close()
 
-    fscore = open("data/queries/{}/{}_scores.txt".format(nameQ), "a+")
+    fscore = open("data/queries/{}/{}_scores.txt".format(nameQ, nameQ), "a+")
     fscore.write("{} {:.3f}\n".format(nameT, scoreGlobal))
     fscore.close()
 

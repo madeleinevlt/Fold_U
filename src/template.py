@@ -8,7 +8,7 @@ import logging
 import numpy as np
 
 
-logging.basicConfig(filename="run_warnings.log", level=logging.WARNING)
+logging.basicConfig(filename="log/run_warnings.log", level=logging.WARNING)
 
 
 class Template:

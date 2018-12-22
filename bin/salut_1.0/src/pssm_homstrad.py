@@ -88,26 +88,26 @@ def read_map(namefile, namematrix):
     return([seq_list, seq_principale])
 
 
-def create_hom_pssm(map_path, template_name, seq_listhom, aa, bg_freq, beta, seq, AA):
+def create_hom_pssm(template_name, seq_listhom, aa, bg_freq, beta, seq, AA):
     """
     Cree la PSSM de la seq HOMSTRAD en faisant appel aux fonctions
     du script pssm.py
     """
-    poids_list = poids_seq("data/HOMSTRAD/"+template_name+"/"+template_name+".mfasta", "data/HOMSTRAD/"+template_name+"/"+template_name)
+    poids_list = poids_seq(sys.argv[1]+".mfasta", sys.argv[1])
     #on utilise le fichier mfasta cree
     if len(poids_list) != 0 :
-        return(freq_matrix(map_path, template_name, seq_listhom, aa, bg_freq, beta, poids_list, "data/HOMSTRAD/", seq, AA))
+        return(freq_matrix(template_name, seq_listhom, aa, bg_freq, beta, poids_list, "data/HOMSTRAD/", seq, AA))
     else :
         print("non calculé : {}".format(template_name))
 
 def main():
-    map_path = sys.argv[1]
+    map_path = sys.argv[1]+."map"
     #Map multi ali
     template_name = sys.argv[2]
     read_out = read_map(map_path, template_name)
     seq_listhom = read_out[0]
     seq = read_out[1]
-    freq_matricehom = create_hom_pssm(map_path, template_name, seq_listhom, aa, bg_freq, BETA, seq, AA)
+    freq_matricehom = create_hom_pssm(template_name, seq_listhom, aa, bg_freq, BETA, seq, AA)
 
 if __name__== "__main__":
     main()

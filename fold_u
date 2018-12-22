@@ -2,34 +2,43 @@
 # -*- coding: utf-8 -*-
 
 """
+
+This program is the second step (downstream) of a protein structure prediction project.
+This step consists of threading a query sequence on different given templates.
+Our project is part of the Meet-U 2018-2019 competition. Meet-U is a collaborative pedagogical
+and research initiative between several Universities of Paris area. The course is intended to
+Master students (2nd year) in Bioinformatics. For more details, please refer to :
+http://www.meet-u.org/
+
     Usage:
-        ./fold_u QUERY_SEQUENCE_PATH UNIREF_DB [--nb_pdb NUM] [--output PATH] [--nb_psiblast]
-                                               [--dssp PATH] [--cpu NUM] [--metafold FILE]
-                                               [--dope FILE] [--benchmark FILE]
+        ./fold_u QUERY_FASTA UNIREF_DB [--nb_pdb NUM] [--nb_psiblast NUM] [--cpu NUM] [--dope FILE]
+                                       [--metafold FILE] [--benchmark FILE] [--output PATH]
 
     Arguments:
-        QUERY_SEQUENCE_PATH                   Path to the QUERY sequence to predicted
-        UNIREF_DB                             Path to UNIREF90 Database
+        QUERY_FASTA                           Path to the QUERY fasta sequence to predicted.
+        UNIREF_DB                             Path to Uniref database.
 
     Options:
         -h, --help                            Show this
-        -t NUM, --nb_psiblast                 Round Number for PSI-BLAST
-                                              [default: 3]
         -p NUM, --nb_pdb NUM                  Number of pdb to create
                                               [default: 10]
-        -o PATH, --output PATH                Path to the directory containing
-                                              the result files (scores and pdb)
-                                              [default: ./results]
+        -t NUM, --nb_psiblast                 Round number for PSI-BLAST
+                                              [default: 3]
         -c NUM, --cpu NUM                     Number of cpus to use for parallelisation. By default
                                               using all available (0).
                                               [default: 0]
-        -m FILE, --metafold FILE              Path to the metafold.list file
-                                              [default: data/metafold.list]
         -d FILE, --dope FILE                  Path to the dope.par file
                                               [default: data/dope.par]
+        -m FILE, --metafold FILE              Path to the metafold.list file
+                                              [default: data/metafold.list]
         -b FILE, --benchmark FILE             Path to the benchmark.list file
                                               [default: data/benchmark.list]
+        -o PATH, --output PATH                Path to the directory containing
+                                              the result files (scores and pdb)
+                                              [default: ./results]
 """
+
+__authors__ = "Gabriel Cretin, Hélène Kabbech, Franz-Arnold Ake, Tom Gutman and Flora Mikaeloff"
 
 # Third-party modules
 import subprocess
@@ -40,23 +49,29 @@ from tqdm import tqdm
 from docopt import docopt
 from schema import Schema, And, Use, SchemaError
 
+# Local modules
+import src.parsing as parsing
+from src.alignment import process, clean_modeller_outputs
+from src.score import Score
+
+DIST_RANGE = [5, 15]
+
 
 def check_args():
     """
         Checks and validates the types of inputs parsed by docopt from command line.
     """
     schema = Schema({
-        'QUERY_SEQUENCE_PATH': Use(open, error='QUERY_SEQUENCE_PATH should be readable'),
-        'UNIREF_DB': Use(open, error='UNIREF_DB should be readable'),
+        'QUERY_FASTA': Use(open, error='QUERY_FASTA should be readable'),
+        '--nb_pdb': And(Use(int), lambda n: 1 <= n <= 100,
+                        error='--nb_pdb=NUM should be integer 1 <= N <= 100'),
         '--nb_psiblast': And(Use(int), lambda n: 1<= n <= 10,
                         error='--nb_psiblast shoud be integer 1<= N <= 10'),
-        '--metafold': Use(open, error='METAFOLD_FILE should be readable'),
-        '--nb_pdb': And(Use(int), lambda n: 1 <= n <= 405,
-                        error='--nb_pdb=NUM should be integer 1 <= N <= 405'),
-        '--dope': Use(open, error='dope file should be readable'),
-        '--benchmark': Use(open, error='BENCHMARK_FILE should be readable'),
         '--cpu': And(Use(int), lambda n: 0 <= n <= cpu_count(),
                      error='--cpus=NUM should be integer 1 <= N <= ' + str(cpu_count())),
+        '--dope': Use(open, error='dope file should be readable'),
+        '--metafold': Use(open, error='METAFOLD_FILE should be readable'),
+        '--benchmark': Use(open, error='BENCHMARK_FILE should be readable'),
         # The output PATH is created (if not exists) at the end of the program
         # so we skip the check.
         object: object})
@@ -71,21 +86,25 @@ if __name__ == "__main__":
 
     START_TIME = datetime.now()
 
-    ######################
     ### Parse command line
     ######################
-    ARGUMENTS = docopt(__doc__, version='fold_u 2.0')
+    ARGUMENTS = docopt(__doc__, version='fold_u 3.0')
     # Check the types and ranges of the command line arguments parsed by docopt
     check_args()
-
-    QUERY_SEQUENCE_PATH = ARGUMENTS["QUERY_SEQUENCE_PATH"]
-    QUERY_NAME = QUERY_SEQUENCE_PATH.split("/")[-1].split(".")[0]
-    QUERY_PATH = QUERY_SEQUENCE_PATH.split(".")[0]
-    NB_PSIBLAST = ARGUMENTS["--nb_psiblast"]
-    # Get the alignment file
-    UNIREF_DB = ARGUMENTS["UNIREF_DB"]
+    # FASTA sequence of the Query
+    FASTA = ARGUMENTS["QUERY_FASTA"] 
+    # Query name
+    QUERY_NAME = FASTA.split("/")[-1].split(".")[0]
+    # Path to the query folder
+    QUERY_PATH = FASTA.split(".")[0]
+    # Uniref database
+    UNIREF = ARGUMENTS["UNIREF_DB"]
     # Create the first n pdb templates
     NB_PDB = int(ARGUMENTS["--nb_pdb"])
+    # Round number for PSI-BLAST
+    NB_PSIBLAST = ARGUMENTS["--nb_psiblast"]
+    # Number of cpus for parallelisation
+    NB_PROC = cpu_count() if int(ARGUMENTS["--cpu"]) == 0 else int(ARGUMENTS["--cpu"])
     # METAFOLD file
     METAFOLD_FILE = ARGUMENTS["--metafold"]
     # DOPE file
@@ -94,28 +113,56 @@ if __name__ == "__main__":
     BENCHMARK_FILE = ARGUMENTS["--benchmark"]
     # OUTPUT file
     OUTPUT_PATH = ARGUMENTS["--output"]
-    # DSSP path
-    DSSP_PATH = ARGUMENTS["--dssp"]
-    # Number of cpus for parallelisation
-    NB_PROC = cpu_count() if int(ARGUMENTS["--cpu"]) == 0 else int(ARGUMENTS["--cpu"])
 
 
+    ### Run Uptream step from SALUT program (Team 1)
     ############################################
-    ###1st Step : Run SALUT scrit on Query fasta
-    ############################################
-    #generate ~ foldrec file
-    subprocess.call("./bin/salut_1.0/salut2.sh", stdin=[QUERY_SEQUENCE_PATH, NB_PSIBLAST, UNIREF_DB], shell=True)
 
+    # profile-profile comparison of a query sequence and template with known structures
+    print("Run Upstream step (SALUT program): profile-profile comparison :")
+    subprocess.Popen(["./bin/salut_1.0/salut2.sh", FASTA, str(NB_PSIBLAST), UNIREF]).communicate()[0]
+    # Output files generated
     FOLDREC_FILE = QUERY_PATH + ".foldrec"
     ALN_FILE = QUERY_PATH + ".mfasta"
 
-    #######################
-    ### Scores calculations
-    #######################
+
+    ### Run CCMpred
+    ###############
+
+    print("Run CCMpred")
+    subprocess.Popen(["./scripts/run_ccmpred.py", ALN_FILE]).communicate()[0]
+    # Output files generated
+    CLUSTAL_FILE = QUERY_PATH + ".clustal"
+    CCMPRED_FILE = QUERY_PATH + ".mat"
+
+
+    ### Parse data files
+    ####################
+
+    # Parse Metafold file
+    print("Parsing metafold (" + METAFOLD_FILE + ")")
+    METAFOLD_DICT = parsing.parse_metafold(METAFOLD_FILE)
+    # Parse Foldrec file
+    print("Parsing foldrec (" + FOLDREC_FILE + ")")
+    ALIGNMENT_DICT = parsing.parse_foldrec(FOLDREC_FILE, METAFOLD_DICT)
+    # Set the benchmark of the query
+    print("Parsing benchmark.list (" + BENCHMARK_FILE + ")")
+    parsing.parse_benchmark(QUERY_NAME, BENCHMARK_FILE, ALIGNMENT_DICT)
+    # Parse DOPE file
+    print("Parsing DOPE (" + DOPE_FILE + ")")
+    DOPE_DICT = parsing.parse_dope(DOPE_FILE)
+    # Parse CCMPRED result file
+    print("Parsing CCMPRED result file (" + CCMPRED_FILE + ")")
+    INDEX_LIST = parsing.get_index_list(CLUSTAL_FILE)
+    TOP_COUPLINGS_DICT = parsing.parse_ccmpred_result(CCMPRED_FILE, INDEX_LIST)
+
+
+    ### Threading & Scores calculations
+    ###################################
 
     # Parallelization of the main loop
     with Pool(processes=NB_PROC) as pool:
-        FUNC = partial(process, DIST_RANGE, DOPE_DICT, OUTPUT_PATH, DSSP_PATH, INDEX_LIST,
+        FUNC = partial(process, DIST_RANGE, DOPE_DICT, OUTPUT_PATH, INDEX_LIST,
                        TOP_COUPLINGS_DICT)
         # tqdm module enables an ETA progress bar for each alignment processed
         # imap_unordered can smooth things out by yielding faster-calculated values
@@ -128,8 +175,8 @@ if __name__ == "__main__":
     # remove useless files generated by MODELLER
     clean_modeller_outputs(OUTPUT_PATH + "/modeller/")
 
-    ### Results : Score and PDB files
-    #################################
+    ### Results : Score and top N PDB files
+    #######################################
     RESULTS.write_score(OUTPUT_PATH, NB_PDB, ALIGNMENT_DICT)
     print("\nThe program ended successfully !\nThe results are stored in " + OUTPUT_PATH)
     print("\nTotal runtime: {} seconds".format(str(datetime.now() - START_TIME)))

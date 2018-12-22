@@ -122,6 +122,9 @@ def parse_foldrec(foldrec_file, metafold_dict):
                     template_reg_count += 1
                 elif template_reg_count == 1:
                     for ind, sec_struct in enumerate(list(template_seq_found.group(1))):
+                        print(sec_struct, end="")
+                        if sec_struct == "X":
+                            sec_struct = None
                         template_seq[ind].secondary_struct = sec_struct
                     template_reg_count = 0
                     # Add a new alignment object in the list :
@@ -129,7 +132,7 @@ def parse_foldrec(foldrec_file, metafold_dict):
                                     Query(query_seq, query_first, query_last),
                                     Template(template_name, template_seq))
                     ali.template.set_pdb_name(metafold_dict)
-                    ali.template.parse_pdb("data/pdb/"+ali.template.name+"/"+ali.template.pdb
+                    ali.template.parse_pdb("data/HOMSTRAD/"+ali.template.name+"/"+ali.template.pdb
                                            +".atm")
                     alignment_dict[template_name] = ali
                     count_templates += 1

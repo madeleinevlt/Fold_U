@@ -171,7 +171,7 @@ def secondary_structure_homstrad(dico_score) :
     le score de confiance (9) et l'accessibilite au solvent
     '''
     #Lecture fichier dssp
-    dsspfile = open("dsspAll_out.txt","r")
+    dsspfile = open("bin/salut_1.0/data/dsspAll_out.txt","r")
     dssp = {}
     for line in dsspfile :
         if re.search(">", line) :
@@ -218,7 +218,7 @@ def calc_similarity(alignQ, alignT):
     n = len(alignT)
     cpt = 0
     sim = 0
-    aa, blosum = bl.load_blosum("BLOSUM62.txt")
+    aa, blosum = bl.load_blosum("bin/salut_1.0/data/BLOSUM62.txt")
 
     for i in range(n):
         if alignQ[i] in aa and alignT[i] in aa:
@@ -275,13 +275,13 @@ def foldrec(name, query_len, dico_score, dico_align, query_prediction, template_
     '''
     Ecrit un fichier foldrec en deux parties
     '''
-    fold = open("foldrec/"+name+"part1.foldrec", "w")
+    fold = open("data/queries/"+name+"/"+name+"part1.foldrec", "w")
     fold.write("*** HITS RANKED ***\n\n")
     fold.write("SEQUENCE QUERY FILE : {}, {} aa\n\n".format(name, query_len))
     fold.write("#| Score | Normalized score | Q. Length | T. Length | Q. begin-end |  T. begin-end | HITS\n")
     fold.write("---------------------------------------------------------\n")
 
-    align = open("foldrec/"+name+"part2.foldrec", "w")
+    align = open("data/queries/"+name+"/"+name+"part2.foldrec", "w")
     align.write("\n\n\n*** ALIGNMENTS DETAILS ***\n\n")
     numero = 1
     for i in range((len(dico_score["info"])-1), -1, -1) : #On parcourt tous les alignements a l'envers
@@ -293,7 +293,7 @@ def foldrec(name, query_len, dico_score, dico_align, query_prediction, template_
         T_BE = dico_score["info"][i].split(" | ")[6] #debut et fin de la template
         fold.write("{0:>5}{1:>9}{2:>9}{3:>6}{4:>6}{5:>9}{6:>9}".format(numero, round(score, 3), round(norm, 3), Q_len, T_len, Q_BE, T_BE))
         hit = dico_score["info"][i].split(" | ")[1]
-        scop = open("./HOMSTRAD/{}/{}.scop_id".format(hit, hit), "r")
+        scop = open("data/HOMSTRAD/{}/{}.scop_id".format(hit, hit), "r")
         hit = hit +" :  " + scop.readline() #il y a le \n dans la ligne
         fold.write("   {}".format(hit))
 
@@ -326,7 +326,7 @@ def main() :
     name = sys.argv[3]
 
     #psi-pred sur la query
-    query_pred = horiz_lecture("tmp_query/"+name+".horiz")
+    query_pred = horiz_lecture("data/queries/"+name+"/"+name+".horiz")
 
     #Gerer l'information sur la longueur de la query
     f = open(fasta, "r") 

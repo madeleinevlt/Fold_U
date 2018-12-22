@@ -27,7 +27,7 @@ def main():
 
     #Ouverture du fichier dans lequel sont ajoutées l'assignation de structure 
     #secondaire et l'accessibilité au solvant pour la template concernée
-    fileOut = open('data/dsspAll_out.txt', 'a')
+    fileOut = open('bin/salut_1.0/data/dsspAll_out.txt', 'a')
 
     #liste récupérant la structure secondaire de la template
     list_ss = []
@@ -38,7 +38,7 @@ def main():
 
     #fichier de sortie dssp : dssp<nom_query>.out
     #récupère juste le nom de la query
-    template = sys.argv[1][4:-4]
+    template = sys.argv[1][13:-4]
 
     #Ecriture du nom de la template dans le fichier dsspAll_out.txt
     fileOut.write('>' + template + '\n') 

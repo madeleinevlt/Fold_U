@@ -46,7 +46,7 @@ def create_quer_pssm(namefile, namematrix, seq_list, aa, bg_freq, beta, seq, AA)
     poids_list = poids_seq(namefile, sys.argv[1])
     if len(poids_list) != 0 :
         print("PSSM calculée")
-        return(freq_matrix(namefile, namematrix, seq_list, aa, bg_freq, beta, poids_list, "./pssm_query/", seq, AA))
+        return(freq_matrix(namematrix, seq_list, aa, bg_freq, beta, poids_list, "data/queries/", seq, AA))
     else :
         print("PSSM non calculée")
 

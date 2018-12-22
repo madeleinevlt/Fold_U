@@ -18,11 +18,11 @@ import modeller as m
 import modeller.automodel as am
 from modeller.automodel import assess
 
-logging.basicConfig(filename="run_warnings.log", level=logging.WARNING)
+logging.basicConfig(filename="log/run_warnings.log", level=logging.WARNING)
 logging.captureWarnings(True)
 
 
-def process(dist_range, dope_dict, output_path, dssp_bin_path, index_list, top_couplings_dict, ali):
+def process(dist_range, dope_dict, output_path, index_list, top_couplings_dict, ali):
     """
         Generates the threading, modeller, secondary structure, solvent accessibility and
         co-evolution scores for a given Alignment.
@@ -33,7 +33,6 @@ def process(dist_range, dope_dict, output_path, dssp_bin_path, index_list, top_c
             dope_dict (dict): Dictionnary structure storing the DOPE energy values according to
                               residues distances.
             output_path (str): The path to the results directory.
-            dssp_bin_path (str): Path to the dssp/mkdssp binary file.
             index_list (list): A list of gapless position indexes
             top_couplings_dict (dict): A dictionary with key = ranking of ccmpred top couple based
                                        on ss_confidence and value = index aa1, index aa2
@@ -51,7 +50,7 @@ def process(dist_range, dope_dict, output_path, dssp_bin_path, index_list, top_c
     # Calculate secondary structure score
     ss_score = ali.calculate_ss_score()
     # Calculate solvent accessibility score
-    solvent_access_score = ali.calculate_solvent_access_score(dssp_bin_path, 0.25)
+    solvent_access_score = ali.calculate_solvent_access_score(0.25)
     # Calculate co-evolution score
     ccmpred_score = ali.calculate_coevolution_score(index_list, top_couplings_dict)
     return ali.num, ali.score, threading_score, modeller_score, ss_score, solvent_access_score,\
@@ -200,6 +199,9 @@ class Alignment:
         ind = 0
         query_len = self.query.get_size()
         while ind < query_len:
+            # No secondary structures assigned (previous bug with DSSP)
+            if (self.template.residues[templ_ind].secondary_struct == None):
+                return None
             # Skip gaps in secondary structure predictions
             while query_ind < query_len and self.query.residues[query_ind].secondary_struct == "-":
                 query_ind += 1
@@ -309,25 +311,24 @@ class Alignment:
         contact_score = np.log10(1+true_pos*(self.query.last - self.query.first))
         return contact_score
 
-    def calculate_solvent_access_score(self, dssp_bin_path, threshold):
+    def calculate_solvent_access_score(self, threshold):
          '''
              Calculate the accessibility score between the predicted model
              and the template pdb structure.
              Args:
-                 dssp_bin (String): Path to the dssp binary.
                  threshold cutoff (int): Cutoff for relative accessibility residue values.
              Returns:
                  float: The Accessibility score calculated
          '''
          # Path to the PDBs of predicted and template models
-         pred_model_pdb = "data/pdb/"+self.template.name+"/"+self.template.modeller_pdb+".atm"
-         template_pdb = "data/pdb/"+self.template.name+"/"+self.template.reindexed_pdb+".atm"
+         pred_model_pdb = "data/HOMSTRAD/"+self.template.name+"/"+self.template.modeller_pdb+".atm"
+         template_pdb = "data/HOMSTRAD/"+self.template.name+"/"+self.template.reindexed_pdb+".atm"
          # Parse PDBs
          pred_model = PDBParser(QUIET=True).get_structure("pred_model", pred_model_pdb)[0]
          template_model = PDBParser(QUIET=True).get_structure("template_model", template_pdb)[0]
          # Run DSSP on both PDB files of the template and the Modeller's model
-         dssp_pred_model = DSSP(pred_model, pred_model_pdb, dssp=dssp_bin_path)
-         dssp_template_model = DSSP(template_model, template_pdb, dssp=dssp_bin_path)
+         dssp_pred_model = DSSP(pred_model, pred_model_pdb, dssp="bin/dssp-2.0.4-linux-amd64")
+         dssp_template_model = DSSP(template_model, template_pdb, dssp="bin/dssp-2.0.4-linux-amd64")
          # Parse the DSSP output to retrieve the relative % of solvant accessible area for each CA.
          #get alignement index
          query_index_ali = [index for index, residue in enumerate(self.query.residues) if str(residue) != "-"]
@@ -403,7 +404,7 @@ class Alignment:
         # MODELLER generates the result files in his current directory, so we must
         # go to the results directory and come back to root dir afterwards.
         os.chdir(modeller_out_dir)
-        path_to_atm = root_dir + "/data/pdb/" + self.template.name
+        path_to_atm = root_dir + "/data/HOMSTRAD/" + self.template.name
         # We reindex all the PDB files to avoid any problem with modeller
         self.template.reindex_pdb(1, path_to_atm, True)
         # Parse the new PDB to get new residues and their coordinates generated by MODELLER

@@ -92,7 +92,7 @@ def freq_correctionbis(cpt_matrice, beta) :
     return(cpt_matrice)
 
 
-def freq_matrix(namefile, namematrix, seq_list, aa, bg_freq, beta, poids_list, fold, seq, AA) :
+def freq_matrix(namematrix, seq_list, aa, bg_freq, beta, poids_list, fold, seq, AA) :
     """
     Calcule les frequences des aa a chaque position en commencant par les frequences brutes
     Puis en les corrigeant avec la fonction freq_correction
