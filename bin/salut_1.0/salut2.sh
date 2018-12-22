@@ -1,7 +1,5 @@
 #!/bin/bash
 
-#####Traitements sur les queries#####
-
 fasta_query=`echo "$1"`
 query=`echo ${fasta_query##*/} | cut -d. -f1`
 path_query=`echo "data/queries/$query/$query"`
