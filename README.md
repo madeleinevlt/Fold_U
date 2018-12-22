@@ -31,7 +31,7 @@ cd Fold_U
 pip3 install -r requirements.txt
 ```
 
-2. Download the **uniref90** database [here](https://www.uniprot.org/downloads), put it in `data/databases` and run the following line :
+2. Download the **uniref90** database [here](https://www.uniprot.org/downloads), put it in `data/databases/uniref90` and run the following line :
 ```
 makeblastdb -in databases/uniref90.fasta -dbtype prot
 ```
