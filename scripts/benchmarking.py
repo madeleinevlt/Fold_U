@@ -2,18 +2,16 @@
 # -*- coding: utf-8 -*-
 
 """
-    This module runs the program "fold_u" on all of the benchmarks (data/foldrec/*) IF their results
-    do not already exist respectively (checks if scores.csv is generated in
-    results/foldrec_name/scores.csv). It then generates plots to visualize the contribution of each
-    and every score to the re-ranking of models/templates. Three plots are generated, one for each
-    structure type of benchmark "Fold", "Superfamily" and "Family". You can choose to see the
-    statistics for one particular score, or all scores combined (summed and normalized), or all the
-    scores at the same time.
+    This module runs the program "fold_u" on all of the queries IF their results do not already
+    exist respectively (checks if scores.csv is generated in results/foldrec_name/scores.csv).
+    It then generates a plot to visualize the contribution of each and every score to the
+    re-ranking of models/templates. You can choose to see the statistics for one particular score,
+    or all scores combined (summed and normalized), or all the scores at the same time.
     A table is also printed in the terminal for the TOP N statistics, presenting the number and
     percentage of benchmarks for the TOP N found.
 
     Usage:
-        ./script/benchmarking.py UNIREF_DB [--selected_score SCORE] [--dssp PATH] [--cpu NUM] [--output PATH]
+        ./script/benchmarking.py UNIREF_DB [--selected_score SCORE] [--cpu NUM] [--output PATH]
 
     Arguments:
         UNIREF_DB                             Path to Uniref database.        
@@ -25,8 +23,6 @@
                                               "secondary_structure", "solvent_access"
                                               or "sum_scores",
                                               or all of them at once: "all" [default: all]
-        -d PATH, --dssp PATH                  Path to the dssp software
-                                              binary [default: /usr/local/bin/mkdssp]
         -c NUM, --cpu NUM                     Number of cpus to use for parallelisation. By default
                                               using all available (0).
                                               [default: 0]
@@ -105,9 +101,8 @@ def create_benchmarking_scores_dict(uniref, scores, structures, dssp_path, nb_pr
         # The Fold_U program is run on the current query if results are not already generated
         if not os.path.isfile("results/" + query + "/scores.csv"):
             print("\nProcessing query {} / {} : {}\n".format(ind, len(all_foldrecs), query))
-            process = subprocess.Popen(["./fold_u", "data/queries/" + query + "/"+ query + ".foldrec",
-                                        uniref,
-                                        "-o", "results/" + query, "--dssp", dssp_path,
+            process = subprocess.Popen(["./fold_u", "data/queries/" + query + "/"+ query + ".fasta",
+                                        uniref, "-o", "results/" + query,
                                         ], stdout=subprocess.PIPE).communicate()[0]
             rows, columns = os.popen('stty size', 'r').read().split()
             print("\n" + "-"*int(columns))
