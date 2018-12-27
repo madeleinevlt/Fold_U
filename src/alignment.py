@@ -199,9 +199,6 @@ class Alignment:
         ind = 0
         query_len = self.query.get_size()
         while ind < query_len:
-            # No secondary structures assigned (previous bug with DSSP)
-            if (self.template.residues[templ_ind].secondary_struct == None):
-                return None
             # Skip gaps in secondary structure predictions
             while query_ind < query_len and self.query.residues[query_ind].secondary_struct == "-":
                 query_ind += 1
@@ -306,7 +303,7 @@ class Alignment:
             if (isinstance(dist, float) and dist < 8)\
             or (isinstance(dist_inv, float) and dist_inv < 8):
                 true_pos += 1
-        
+
         # Spread of the values
         contact_score = np.log10(1+true_pos*(self.query.last - self.query.first))
         return contact_score
