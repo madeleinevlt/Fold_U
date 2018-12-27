@@ -10,17 +10,22 @@
 
 # NOTE: Script modified to be more cluster friendly (DTJ April 2008)
 
+# These lines ensure the script will work anywhere
+set TMP_PSIPRED_DIR = `readlink -f $0`
+set PSIPRED_DIR = `echo $TMP_PSIPRED_DIR | sed 's/\(psipred\.4\.02\).*/\1/g'`
+set FOLD_U_DIR = `echo $PSIPRED_DIR | sed 's/\(Fold_U\).*/\1/g'`
+
 # The name of the BLAST data bank
-set dbname = ~/Fold_U/data/databases/uniref90_blast/uniref
+set dbname = $FOLD_U_DIR/data/databases/uniref90_blast/uniref
 
 # Where the NCBI programs have been installed
-set ncbidir = ~/Fold_U/bin/psipred.4.02/bin
+set ncbidir = $PSIPRED_DIR/bin
 
 # Where the PSIPRED V4 programs have been installed
-set execdir = ~/Fold_U/bin/psipred.4.02/bin
+set execdir = $PSIPRED_DIR/bin
 
 # Where the PSIPRED V4 data files have been installed
-set datadir = ~/Fold_U/bin/psipred.4.02/data
+set datadir = $PSIPRED_DIR/data
 
 set basename = $1:r
 set rootname = $basename:t
