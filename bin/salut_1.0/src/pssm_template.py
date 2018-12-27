@@ -2,10 +2,10 @@
 # -*- coding: utf-8 -*-
 
 # """
-# Creation des PSSM pour la base de donnees HOMSTRAD
+# Creation des PSSM pour la base de donnees templates/
 # Ce script fait appel a des fonctions du script pssm.py 
 # D'abord il lit un fichier map et le transforme en mfasta qu'il met dans 
-# un le dossier tmp_homstrad
+# un le dossier tmp_template
 # Puis la pssm est calculee
 # Dans les fichiers map, la sequence d'interet n'est pas forcement la 1ere,
 # ce script va donc chercher la sequence d'interet correspondant au
@@ -21,7 +21,7 @@ from pssm import *
 
 def pdb_code(template_name):
     """
-    Recupere le code pdb du template HOMSTRAD voulu
+    Recupere le code pdb du template voulu
     """
     file = open("data/metafold.list", "r")
     flag = 0
@@ -40,7 +40,7 @@ def multi_from_map(seq_list, name):
     """
     Cree un fichier texte mfasta a partir d'une liste de sequences
     """
-    file = open("data/HOMSTRAD/"+name+"/"+name+".mfasta", "w")
+    file = open("data/templates/"+name+"/"+name+".mfasta", "w")
     for seq in seq_list :
         file.write(">Sequence\n")
         file.write(str(seq))
@@ -50,7 +50,7 @@ def multi_from_map(seq_list, name):
 
 def read_map(namefile, namematrix):
     """
-    Lit un fichier map de la database HOMSTRAD et donne le nom de
+    Lit un fichier map de la database templates/ et donne le nom de
     la proteine  et une liste des sequences alignees
     """
     file = open(namefile, "r")
@@ -90,13 +90,13 @@ def read_map(namefile, namematrix):
 
 def create_hom_pssm(template_name, seq_listhom, aa, bg_freq, beta, seq, AA):
     """
-    Cree la PSSM de la seq HOMSTRAD en faisant appel aux fonctions
+    Cree la PSSM de la seq template en faisant appel aux fonctions
     du script pssm.py
     """
     poids_list = poids_seq(sys.argv[1]+".mfasta", sys.argv[1])
     #on utilise le fichier mfasta cree
     if len(poids_list) != 0 :
-        return(freq_matrix(template_name, seq_listhom, aa, bg_freq, beta, poids_list, "data/HOMSTRAD/", seq, AA))
+        return(freq_matrix(template_name, seq_listhom, aa, bg_freq, beta, poids_list, "data/templates/", seq, AA))
     else :
         print("non calculé : {}".format(template_name))
 

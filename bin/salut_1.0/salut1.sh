@@ -3,18 +3,18 @@
 rm -Rf log
 mkdir log
 
-#####PSSM sur HOMSTRAD#####
+#####PSSM sur TEMPLATES#####
 
-rm -f log/pssm_homstrad.log
+rm -f log/pssm_template.log
 echo "PSSM files creation for each template"
 for template_path in "$1"/* ; do
     template_name=`echo ${template_path##*/}`
     file_name=`echo "$template_path/$template_name.map"`
-    ./bin/salut_1.0/src/pssm_homstrad.py $template_path/$template_name $template_name &>> log/pssm_homstrad.log
+    ./bin/salut_1.0/src/pssm_template.py $template_path/$template_name $template_name &>> log/pssm_template.log
 done
 
 
-######Assignation structure secondaire sur HOMSTRAD#####
+######Assignation structure secondaire sur TEMPLATES#####
 
 mkdir tmp_dssp
 echo "Secondary structures assignment for each template"

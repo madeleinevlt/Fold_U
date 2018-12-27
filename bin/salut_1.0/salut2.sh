@@ -31,7 +31,7 @@ mquery=`echo $path_query.aamtx`
 if [ -f $path_query.aln ] ; then
     echo "  File $path_query.aln already exists"
 else
-    for mtemplate in data/HOMSTRAD/*/*.aamtx ; do
+    for mtemplate in data/templates/*/*.aamtx ; do
         nametemplate=`echo ${mtemplate##*/} | cut -d. -f1`
         echo "  "$query" <---> "$nametemplate" comparaison"
         ./bin/salut_1.0/src/pssm_comparison.py $mquery $mtemplate >> log/comparaison.log

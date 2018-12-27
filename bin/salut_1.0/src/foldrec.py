@@ -3,7 +3,7 @@
 
 """
 Ce script cree un fichier .foldrec
-Il part d'un fichier d'alignement des profils (query vs homstrad)
+Il part d'un fichier d'alignement des profils (query vs template)
 Il lit les scores et trie les alignements selon ces scores (ordre croissant)
 Il lance un psi-pred sur la query entiere qui ensuite sera decoupee selon l'alignement
 et ajout les gaps
@@ -161,10 +161,10 @@ def secondary_structure_query(dico_score, query_pred) :
     return(query_prediction)
 
 
-################################  secondary structure homstrad  #####################################
+################################  secondary structure template  #####################################
 
 
-def secondary_structure_homstrad(dico_score) :
+def secondary_structure_template(dico_score) :
     '''
     Decoupe les assignations dssp et ajoute les gaps selon les templates alignees    
     On aura une liste de listes avec pour chaque liste la pred,
@@ -293,7 +293,7 @@ def foldrec(name, query_len, dico_score, dico_align, query_prediction, template_
         T_BE = dico_score["info"][i].split(" | ")[6] #debut et fin de la template
         fold.write("{0:>5}{1:>9}{2:>9}{3:>6}{4:>6}{5:>9}{6:>9}".format(numero, round(score, 3), round(norm, 3), Q_len, T_len, Q_BE, T_BE))
         hit = dico_score["info"][i].split(" | ")[1]
-        scop = open("data/HOMSTRAD/{}/{}.scop_id".format(hit, hit), "r")
+        scop = open("data/templates/{}/{}.scop_id".format(hit, hit), "r")
         hit = hit +" :  " + scop.readline() #il y a le \n dans la ligne
         fold.write("   {}".format(hit))
 
@@ -341,7 +341,7 @@ def main() :
 
     #Structures secondaires de la query
     query_prediction = secondary_structure_query(dico, query_pred)
-    template_prediction = secondary_structure_homstrad(dico)
+    template_prediction = secondary_structure_template(dico)
 
     #Calcul des informations concernant l'alignement
     dico_align = calcul_information(dico, query_len)

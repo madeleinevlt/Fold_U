@@ -47,9 +47,9 @@ conda install -c salilab modeller
 ```
 You need to register to get a license key [here](https://salilab.org/modeller/registration.html), and follow instructions during installation to insert license key in the program.
 
-Run the following script to generate the PSSM for each templates of the HOMSTRAD folder :
+Run the following script to generate the PSSM for each templates of the `data/templates` folder :
 ```
-./bin/salut_1.0/salut1.sh data/HOMSTRAD/ data/metafold.list
+./bin/salut_1.0/salut1.sh data/templates/ data/metafold.list
 ```
 
 5. If necessary, change the paths in the header of the following scripts : `bin/psipred.4.02/runpsipred` and `bin/psipred.4.02/runpsipred_single`
