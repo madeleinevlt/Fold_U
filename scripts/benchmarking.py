@@ -14,7 +14,7 @@
         ./script/benchmarking.py UNIREF_DB [--selected_score SCORE] [--cpu NUM] [--output PATH]
 
     Arguments:
-        UNIREF_DB                             Path to Uniref database.        
+        UNIREF_DB                             Path to Uniref database.
 
     Options:
         -h, --help                            Show this
@@ -58,7 +58,6 @@ def check_args():
         Checks and validates the types of inputs parsed by docopt from command line.
     """
     schema = Schema({
-        '--dssp': Use(open, error='dssp/mkdssp should be readable'),
         '--selected_score': And(Use(str), lambda s: s in ["alignment", "threading",
                                                           "modeller", "secondary_structure",
                                                           "solvent_access", "sum_scores", "all"],
@@ -72,18 +71,35 @@ def check_args():
     except SchemaError as err:
         exit(err)
 
-def create_benchmarking_scores_dict(uniref, scores, structures, dssp_path, nb_proc):
+def run_command(command):
+    """
+        Run the FOLD_U program. It keeps on reading the stdout, checks for the return code and
+        displays the output messages and the progress bar in real time.
+
+        Args:
+            command (str): The command line to run
+    """
+    # Run the command
+    process = subprocess.Popen(command, stdout=subprocess.PIPE)
+    # This part is to print the running program messages
+    while True:
+        line = process.stdout.readline()
+        if not line:
+            break
+        else:
+            print(line.decode('utf-8').strip())
+
+def create_benchmarking_scores_dict(uniref, scores, structures, nb_proc):
     """
         Create a dictionary of scores with key = a score, value = a pandas dataframe
         which contains the cumulative sum of benchmark for each benchmark type and for
         all benchmarks (=4 columns).
 
         Args:
+            uniref (str): Path to the uniref90 database
             scores (list): A list of score name
             structures (list): List containing fold types: "Family", "Superfamily", "Fold"
-            dssp_path (str): Path to the installed dssp program.
             nb_proc (int): Number of processors.
-
 
         Returns:
             dict: The dictionary of scores with key = a score, value = a pandas dataframe.
@@ -94,18 +110,17 @@ def create_benchmarking_scores_dict(uniref, scores, structures, dssp_path, nb_pr
     for score in scores:
         benchmarking_scores[score] = pd.DataFrame(np.zeros((405, 3), dtype=int), columns=structures)
     # For each query,
-    all_foldrecs = os.listdir("data/foldrec")
+    all_foldrecs = os.listdir("data/queries")
     print("\n\nProcessing all benchmarks ...\n")
     for ind, query in enumerate(all_foldrecs, 1):
         query = query.split(".")[0]
         # The Fold_U program is run on the current query if results are not already generated
         if not os.path.isfile("results/" + query + "/scores.csv"):
             print("\nProcessing query {} / {} : {}\n".format(ind, len(all_foldrecs), query))
-            process = subprocess.Popen(["./fold_u", "data/queries/" + query + "/"+ query + ".fasta",
-                                        uniref, "-o", "results/" + query,
-                                        ], stdout=subprocess.PIPE).communicate()[0]
-            rows, columns = os.popen('stty size', 'r').read().split()
-            print("\n" + "-"*int(columns))
+            run_command(["./fold_u", "data/queries/" + query + "/"+ query + ".fasta", uniref, "-o",
+                         "results/" + query, "-c", nb_proc])
+            _, columns = os.popen('stty size', 'r').read().split()
+            print("\n" + "-" * int(columns))
         # Score results are stored in a pandas DataFrame
         query_scores = pd.read_csv("results/" + query + "/scores.csv", index_col=0)
         if len(query_scores) < min_rank:
@@ -243,8 +258,6 @@ if __name__ == "__main__":
     UNIREF = ARGUMENTS["UNIREF_DB"]
     # OUTPUT file
     OUTPUT_PATH = ARGUMENTS["--output"]
-    # DSSP path
-    DSSP_PATH = ARGUMENTS["--dssp"]
     # Number of cpus for parallelisation
     NB_PROC = cpu_count() if int(ARGUMENTS["--cpu"]) == 0 else int(ARGUMENTS["--cpu"])
     # Selected score you want to have info about
@@ -256,7 +269,7 @@ if __name__ == "__main__":
               "co_evolution", "sum_scores"]
 
     (BENCHMARKING_SCORES, MIN_RANK) = create_benchmarking_scores_dict(UNIREF, SCORES, STRUCTURES,
-                                                                      DSSP_PATH, NB_PROC)
+                                                                      NB_PROC)
 
     print_table(SELECTED_SCORE, BENCHMARKING_SCORES)
     plot_benchmark(OUTPUT_PATH, MIN_RANK, SCORES, BENCHMARKING_SCORES, SELECTED_SCORE)
