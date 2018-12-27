@@ -92,7 +92,7 @@ if __name__ == "__main__":
     # Check the types and ranges of the command line arguments parsed by docopt
     check_args()
     # FASTA sequence of the Query
-    FASTA = ARGUMENTS["QUERY_FASTA"] 
+    FASTA = ARGUMENTS["QUERY_FASTA"]
     # Query name
     QUERY_NAME = FASTA.split("/")[-1].split(".")[0]
     # Path to the query folder
@@ -161,14 +161,15 @@ if __name__ == "__main__":
     ###################################
 
     # Parallelization of the main loop
+    print("\n\n" + str(cpu_count()) + " cpus detected, using " + str(NB_PROC))
+    print("Run Downstream step")
+    print("Processing alignments ...\n")
     with Pool(processes=NB_PROC) as pool:
         FUNC = partial(process, DIST_RANGE, DOPE_DICT, OUTPUT_PATH, INDEX_LIST,
                        TOP_COUPLINGS_DICT)
         # tqdm module enables an ETA progress bar for each alignment processed
         # imap_unordered can smooth things out by yielding faster-calculated values
         # ahead of slower-calculated values.
-        print("\n\n" + str(cpu_count()) + " cpus detected, using " + str(NB_PROC))
-        print("\n\nProcessing alignments ...\n")
         RESULTS = Score([res_ali for res_ali in tqdm(pool.imap_unordered(FUNC,
                                                                          ALIGNMENT_DICT.values()),
                                                      total=len(ALIGNMENT_DICT.values()))])
