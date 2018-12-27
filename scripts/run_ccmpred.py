@@ -54,7 +54,7 @@ def generate_ccmpred_result(aln_file, ccmpred_output):
     """
     os.makedirs(os.path.dirname(ccmpred_output), exist_ok=True)
     # Run ccmpred : Prediction of contacts
-    ccmpred_cline = subprocess.Popen(["./bin/CCMpred/bin/ccmpred", "-t", cpu_count(), aln_file,
+    ccmpred_cline = subprocess.Popen(["./bin/CCMpred/bin/ccmpred", "-t", str(cpu_count()), aln_file,
                                       ccmpred_output], stdout=subprocess.PIPE).communicate()[0]
 
 if __name__ == "__main__":

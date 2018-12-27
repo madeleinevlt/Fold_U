@@ -118,7 +118,7 @@ def create_benchmarking_scores_dict(uniref, scores, structures, nb_proc):
         if not os.path.isfile("results/" + query + "/scores.csv"):
             print("\nProcessing query {} / {} : {}\n".format(ind, len(all_foldrecs), query))
             run_command(["./fold_u", "data/queries/" + query + "/"+ query + ".fasta", uniref, "-o",
-                         "results/" + query, "-c", nb_proc])
+                         "results/" + query, "-c", str(nb_proc)])
             _, columns = os.popen('stty size', 'r').read().split()
             print("\n" + "-" * int(columns))
         # Score results are stored in a pandas DataFrame
