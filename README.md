@@ -11,10 +11,10 @@
   <img width="400" src="img/logo_foldu.png" alt="logo_foldu"/>
 </p>
 
-This program is the second step (downstream) of a **protein structure prediction project**. This step consists of threading a query sequence on different given templates.
+Our program is the second step (downstream) of a **protein structure prediction project**. This step consists of threading a query sequence on different given templates.
 
 
-Our project is part of the **Meet-U 2018-2019** competition.
+This project is part of the **Meet-U 2018-2019** competition.
 Meet-U is a collaborative pedagogical and research initiative between several Universities of Paris area. The course is intended to Master students (2nd year) in Bioinformatics. For more details, please refer to [http://www.meet-u.org/](http://www.meet-u.org/).
 
 ## Installation
@@ -41,12 +41,10 @@ makeblastdb -in databases/uniref90.fasta -dbtype prot
 conda install -c bioconda blast-legacy 
 ```
 
-4. **MODELLER** is also required, and can be installed easily with Conda :
+4. **MODELLER** is also required, and can be installed easily with Conda. You need to register to get a license key [here](https://salilab.org/modeller/registration.html), and follow instructions during installation to insert license key in the program.
 ```
 conda install -c salilab modeller
 ```
-You need to register to get a license key [here](https://salilab.org/modeller/registration.html), and follow instructions during installation to insert license key in the program.
-
 
 5. If necessary, change the paths in the header of the following scripts : `bin/psipred.4.02/runpsipred` and `bin/psipred.4.02/runpsipred_single`
 
@@ -61,9 +59,8 @@ You need to register to get a license key [here](https://salilab.org/modeller/re
 
 ### Toy example
 
-The `scores.csv` and the **top 10 pdb structures** of the His_biosynth query sequence are stored in `results/His_biosynth` folder.
 ```
-./fold_u data/queries/Agglutinin/Agglutinin.fasta data/databases/uniref90/uniref
+./fold_u data/queries/Agglutinin/Agglutinin.fasta data/databases/uniref90/uniref -o results/Agglutinin
 ```
 
 #### Get help
@@ -106,7 +103,7 @@ This program is also **benchmarked** using ROC style plots and **Top N** informa
 We wrote a script that runs the `fold_u` program for each query if results are not still generated. It returns a `results/plots` folder containing the generated plots and prints the **top N tables** in the terminal.
 
 ```
-./scripts/benchmarking.py
+./scripts/benchmarking.py data/databases/uniref90/uniref
 ```
 
 #### Get help
@@ -114,24 +111,25 @@ We wrote a script that runs the `fold_u` program for each query if results are n
 ```
 ./script/benchmarking.py -h
 
-Usage:
-    ./script/benchmarking.py [--selected_score SCORE] [--dssp PATH] [--cpu NUM] [--output PATH]   
+    Usage:
+        ./script/benchmarking.py UNIREF_DB [--selected_score SCORE] [--cpu NUM] [--output PATH]
 
-Options:
-    -h, --help                            Show this
-    -s SCORE, --selected_score SCORE      Score for which you wish to see the statistics:
-                                          "alignment", "threading", "modeller",
-                                          "secondary_structure", "solvent_access"
-                                          or "sum_scores",
-                                          or all of them at once: "all" [default: all]
-    -d PATH, --dssp PATH                  Path to the dssp software
-                                          binary [default: /usr/local/bin/mkdssp]
-    -c NUM, --cpu NUM                     Number of cpus to use for parallelisation. By default
-                                          using all available (0).
-                                          [default: 0]
-    -o PATH, --output PATH                Path to the directory containing
-                                          the result files (scores and plot)
-                                          [default: ./results/plots]
+    Arguments:
+        UNIREF_DB                             Path to Uniref database.        
+
+    Options:
+        -h, --help                            Show this
+        -s SCORE, --selected_score SCORE      Score for which you wish to see the statistics:
+                                              "alignment", "threading", "modeller",
+                                              "secondary_structure", "solvent_access"
+                                              or "sum_scores",
+                                              or all of them at once: "all" [default: all]
+        -c NUM, --cpu NUM                     Number of cpus to use for parallelisation. By default
+                                              using all available (0).
+                                              [default: 0]
+        -o PATH, --output PATH                Path to the directory containing
+                                              the result files (scores and plot)
+                                              [default: ./results/plots]
 ```
 
 ### Results
