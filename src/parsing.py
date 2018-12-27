@@ -122,8 +122,6 @@ def parse_foldrec(foldrec_file, metafold_dict):
                     template_reg_count += 1
                 elif template_reg_count == 1:
                     for ind, sec_struct in enumerate(list(template_seq_found.group(1))):
-                        if sec_struct == "X":
-                            sec_struct = None
                         template_seq[ind].secondary_struct = sec_struct
                     template_reg_count = 0
                     # Add a new alignment object in the list :
