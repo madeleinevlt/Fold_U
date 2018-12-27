@@ -54,7 +54,7 @@ def parse_foldrec(foldrec_file, metafold_dict):
     """
     # Regex :
     num_reg = re.compile("^No\\s*([0-9]+)")
-    template_name_reg = re.compile("Alignment :.*vs\\s+([A-Za-z0-9-_]+)")
+    template_name_reg = re.compile("^Alignment :.*vs\\s+([A-Za-z0-9-_]+)")
     score_reg = re.compile("^Score :\\s+([-0-9\\.]+)")
     query_seq_reg = re.compile("^Query\\s*([0-9]+)\\s*([A-Z0-9-]+)\\s*([0-9]+)")
     template_seq_reg = re.compile("^Template\\s*[0-9]+\\s*([A-Z-]+)")
