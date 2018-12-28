@@ -58,10 +58,31 @@ cd Fold_U
 ```
 
 ### Requirements
-Install the few required packages / modules :
+
+A linux distribution.
+
+Install the few required Python packages / modules :
 ```
 pip install -r requirements.txt
+# This command will install the following modules:
+# docopt==0.6.2
+# numpy==1.15.2
+# biopython==1.72
+# pandas==0.23.4
+# schema==0.6.8
+# tqdm==4.28.1
+# matplotlib==2.2.2
+# m2r # for Sphinx
 ```
+
+**R** software environment:
+```
+sudo apt-get install r-base
+```
+The full procedure is described [here](https://www.digitalocean.com/community/tutorials/how-to-install-r-on-ubuntu-18-04)  
+
+R is used for the Machine Learning step.  
+The required packages *boot*, *dplyr* and *readr* will be automatically installed if not already, you have nothing to do.
 
 **MODELLER** is also required, and can be installed easily with Conda :
 ```
